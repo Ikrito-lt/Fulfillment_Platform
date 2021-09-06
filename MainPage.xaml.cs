@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using Ikrito_Fulfillment_Platform.Utils;
 using Ikrito_Fulfillment_Platform.Modules;
 using Newtonsoft.Json;
+using Ikrito_Fulfillment_Platform.Models;
 
 namespace Ikrito_Fulfillment_Platform {
     /// <summary>
@@ -26,9 +27,9 @@ namespace Ikrito_Fulfillment_Platform {
 
             OrderGetter orderGetter = new();
 
-            dynamic orders = JsonConvert.DeserializeObject(orderGetter.getOrders());
+            List<Order> orders = JsonConvert.DeserializeObject<List<Order>>(orderGetter.getOrders());
 
-            testLabel.Content = orders["orders"];
+            testLabel.Content = orders.Count.ToString();
             
 
         }
