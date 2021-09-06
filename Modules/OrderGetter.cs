@@ -22,6 +22,11 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
             if (response.IsSuccessful) {
                 string content = response.Content; // Raw content as string
+
+                content = content.Substring(content.IndexOf("["));
+                content = content.Remove(content.Length - 1, 1);
+
+
                 return content;
             } else {
                 return null;
