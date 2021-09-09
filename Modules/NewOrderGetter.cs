@@ -9,7 +9,7 @@ using Ikrito_Fulfillment_Platform.Utils;
 using Newtonsoft.Json;
 
 namespace Ikrito_Fulfillment_Platform.Modules {
-    class OrderGetter {
+    class NewOrderGetter {
         private readonly string getOrdersEndPoint = "https://real-europe-corp.myshopify.com/admin/api/2021-07/orders.json";
         
         public string getOrders() {

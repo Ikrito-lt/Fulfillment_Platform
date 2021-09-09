@@ -27,6 +27,18 @@ namespace Ikrito_Fulfillment_Platform.Models {
         public List<Product> line_items { set; get; }
         public Address shipping_address { set; get; }
 
+        public string Item_count => line_items.Count == 1 ? line_items.Count.ToString() + " Item" : line_items.Count.ToString() + " Items";
+        public string Full_price_formated => currency == "EUR" ? $"€ {current_total_price:0.00}" : $"{current_total_price:0.00}";
+
+        public string Created_date {
+            get {
+                DateTime createdDate = DateTime.Parse(created_at);
+                return createdDate.ToString("MM/dd/yyyy HH:mm");
+            }
+        }
+
+        
+
     }
 
 

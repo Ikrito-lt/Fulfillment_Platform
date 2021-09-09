@@ -22,16 +22,34 @@ namespace Ikrito_Fulfillment_Platform {
     /// Interaction logic for MainPage.xaml
     /// </summary>
     public partial class MainPage : Page {
+
+        private List<Order> newOrders = new();
+        private NewOrderGetter newOrderGetter = new();
+
         public MainPage() {
             InitializeComponent();
+            RefreshNewOrderDG();
+        }
 
-            OrderGetter orderGetter = new();
+        private void UpdateNewOrderLabel(int count) { 
+            newOrderCountL.Content = "Current Orders: " + count.ToString();
+        } 
 
-            List<Order> orders = JsonConvert.DeserializeObject<List<Order>>(orderGetter.getOrders());
+        private void RefreshNewOrderDG() {
 
-            testLabel.Content = orders.Count.ToString();
-            
+            newOrderDG.ItemsSource = null;
+            newOrders.Clear();
+            newOrders.AddRange(JsonConvert.DeserializeObject<List<Order>>(newOrderGetter.getOrders()));
 
+            UpdateNewOrderLabel(newOrders.Count);
+
+            newOrderDG.ItemsSource = newOrders;
+
+        }
+
+        private void ShowOrderInfo(object sender, RoutedEventArgs e) {
+
+            UpdateNewOrderLabel(2);
         }
     }
 }

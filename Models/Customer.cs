@@ -21,5 +21,11 @@ namespace Ikrito_Fulfillment_Platform.Models {
         public string phone { set; get; }
         public string last_order_name { set; get; }
 
+        public string full_name {
+            get {
+                return first_name + " " + last_name;
+            }
+        }
+
     }
 }
