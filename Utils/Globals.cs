@@ -6,6 +6,7 @@ namespace Ikrito_Fulfillment_Platform.Utils {
         // Shopify app creds
         private static readonly string shopifyAPIKey = "40a65778e811be7da9d06d9dcc6d7e8e";
         private static readonly string shopifyAPIPass = "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";
+        public static readonly string DBsource = "";
 
         public static string getBase64ShopifyCreds() {
             string preEncodeCreds = shopifyAPIKey + ":" + shopifyAPIPass;
