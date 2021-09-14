@@ -18,12 +18,25 @@ namespace Ikrito_Fulfillment_Platform {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
-        public MainWindow() {
-            InitializeComponent();
 
-            MainPage mainPage = new();
-            setFrame(mainPage);
+        public static MainWindow Instance { get; private set; }
+
+        static MainWindow() {
+            Instance = new MainWindow();
         }
+
+        private MainWindow() {
+            InitializeComponent();
+            setFrame(MainPage.Instance);
+        }
+
+
+        //public MainWindow() {
+        //    InitializeComponent();
+
+        //    MainPage mainPage = new();
+        //    setFrame(mainPage);
+        //}
 
         public void setFrame(Page page) {
             mainFrame.Content = page;

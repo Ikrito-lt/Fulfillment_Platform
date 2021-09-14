@@ -1,0 +1,386 @@
+﻿{
+"orders": [
+  {
+    "id": 3998441341119,
+    "admin_graphql_api_id": "gid://shopify/Order/3998441341119",
+    "app_id": 580111,
+    "browser_ip": "90.131.46.115",
+    "buyer_accepts_marketing": false,
+    "cancel_reason": null,
+    "cancelled_at": null,
+    "cart_token": "81cf08fcf2241fe9d7663949eb96ba26",
+    "checkout_id": 21318914441407,
+    "checkout_token": "7782766210308038cd51a7023aa75206",
+    "client_details": {
+      "accept_language": "en-US,en;q=0.9",
+      "browser_height": 821,
+      "browser_ip": "90.131.46.115",
+      "browser_width": 1679,
+      "session_hash": null,
+      "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36 Edg/92.0.902.84"
+    },
+    "closed_at": null,
+    "confirmed": true,
+    "contact_email": "dtvorogal@gmail.com",
+    "created_at": "2021-08-30T15:30:00+03:00",
+    "currency": "EUR",
+    "current_subtotal_price": "0.00",
+    "current_subtotal_price_set": {
+      "shop_money": {
+        "amount": "0.00",
+        "currency_code": "EUR"
+      },
+      "presentment_money": {
+        "amount": "0.00",
+        "currency_code": "EUR"
+      }
+    },
+    "current_total_discounts": "173.99",
+    "current_total_discounts_set": {
+      "shop_money": {
+        "amount": "173.99",
+        "currency_code": "EUR"
+      },
+      "presentment_money": {
+        "amount": "173.99",
+        "currency_code": "EUR"
+      }
+    },
+    "current_total_duties_set": null,
+    "current_total_price": "0.00",
+    "current_total_price_set": {
+      "shop_money": {
+        "amount": "0.00",
+        "currency_code": "EUR"
+      },
+      "presentment_money": {
+        "amount": "0.00",
+        "currency_code": "EUR"
+      }
+    },
+    "current_total_tax": "0.00",
+    "current_total_tax_set": {
+      "shop_money": {
+        "amount": "0.00",
+        "currency_code": "EUR"
+      },
+      "presentment_money": {
+        "amount": "0.00",
+        "currency_code": "EUR"
+      }
+    },
+    "customer_locale": "en",
+    "device_id": null,
+    "discount_codes": [
+      {
+        "code": "TEST",
+        "amount": "173.99",
+        "type": "percentage"
+      }
+    ],
+    "email": "dtvorogal@gmail.com",
+    "estimated_taxes": false,
+    "financial_status": "paid",
+    "fulfillment_status": null,
+    "gateway": null,
+    "landing_site": "/",
+    "landing_site_ref": null,
+    "location_id": null,
+    "name": "#1005",
+    "note": null,
+    "note_attributes": [],
+    "number": 5,
+    "order_number": 1005,
+    "order_status_url": "https://ikrito.lt/53225128127/orders/91de9bf92ca1dcb9d7e9bdec0e265447/authenticate?key=d5d8e085f83e090be6b78ea70f1bc56b",
+    "original_total_duties_set": null,
+    "payment_gateway_names": [],
+    "phone": null,
+    "presentment_currency": "EUR",
+    "processed_at": "2021-08-30T15:29:59+03:00",
+    "processing_method": "free",
+    "reference": null,
+    "referring_site": "",
+    "source_identifier": null,
+    "source_name": "web",
+    "source_url": null,
+    "subtotal_price": "0.00",
+    "subtotal_price_set": {
+      "shop_money": {
+        "amount": "0.00",
+        "currency_code": "EUR"
+      },
+      "presentment_money": {
+        "amount": "0.00",
+        "currency_code": "EUR"
+      }
+    },
+    "tags": "",
+    "tax_lines": [],
+    "taxes_included": false,
+    "test": false,
+    "token": "91de9bf92ca1dcb9d7e9bdec0e265447",
+    "total_discounts": "173.99",
+    "total_discounts_set": {
+      "shop_money": {
+        "amount": "173.99",
+        "currency_code": "EUR"
+      },
+      "presentment_money": {
+        "amount": "173.99",
+        "currency_code": "EUR"
+      }
+    },
+    "total_line_items_price": "173.99",
+    "total_line_items_price_set": {
+      "shop_money": {
+        "amount": "173.99",
+        "currency_code": "EUR"
+      },
+      "presentment_money": {
+        "amount": "173.99",
+        "currency_code": "EUR"
+      }
+    },
+    "total_outstanding": "0.00",
+    "total_price": "0.00",
+    "total_price_set": {
+      "shop_money": {
+        "amount": "0.00",
+        "currency_code": "EUR"
+      },
+      "presentment_money": {
+        "amount": "0.00",
+        "currency_code": "EUR"
+      }
+    },
+    "total_price_usd": "0.00",
+    "total_shipping_price_set": {
+      "shop_money": {
+        "amount": "0.00",
+        "currency_code": "EUR"
+      },
+      "presentment_money": {
+        "amount": "0.00",
+        "currency_code": "EUR"
+      }
+    },
+    "total_tax": "0.00",
+    "total_tax_set": {
+      "shop_money": {
+        "amount": "0.00",
+        "currency_code": "EUR"
+      },
+      "presentment_money": {
+        "amount": "0.00",
+        "currency_code": "EUR"
+      }
+    },
+    "total_tip_received": "0.00",
+    "total_weight": 4500,
+    "updated_at": "2021-08-30T15:30:02+03:00",
+    "user_id": null,
+    "billing_address": {
+      "first_name": "Darius",
+      "address1": "Aukstoji g 55",
+      "phone": null,
+      "city": "Vilnius",
+      "zip": "13129",
+      "province": null,
+      "country": "Lithuania",
+      "last_name": "Tvorogal",
+      "address2": "",
+      "company": null,
+      "latitude": 54.6703015,
+      "longitude": 25.439578,
+      "name": "Darius Tvorogal",
+      "country_code": "LT",
+      "province_code": null
+    },
+    "customer": {
+      "id": 5545748988095,
+      "email": "dtvorogal@gmail.com",
+      "accepts_marketing": false,
+      "created_at": "2021-08-30T10:17:32+03:00",
+      "updated_at": "2021-09-01T14:22:58+03:00",
+      "first_name": "Darius",
+      "last_name": "Tvorogal",
+      "orders_count": 2,
+      "state": "enabled",
+      "total_spent": "23.99",
+      "last_order_id": 4003285434559,
+      "note": null,
+      "verified_email": false,
+      "multipass_identifier": null,
+      "tax_exempt": false,
+      "phone": null,
+      "tags": "",
+      "last_order_name": "#1006",
+      "currency": "EUR",
+      "accepts_marketing_updated_at": "2021-08-30T10:17:32+03:00",
+      "marketing_opt_in_level": null,
+      "tax_exemptions": [],
+      "admin_graphql_api_id": "gid://shopify/Customer/5545748988095",
+      "default_address": {
+        "id": 6911639093439,
+        "customer_id": 5545748988095,
+        "first_name": "Darius",
+        "last_name": "Tvorogal",
+        "company": null,
+        "address1": "Aukstoji g 55",
+        "address2": "",
+        "city": "Vilnius",
+        "province": null,
+        "country": "Lithuania",
+        "zip": "13129",
+        "phone": null,
+        "name": "Darius Tvorogal",
+        "province_code": null,
+        "country_code": "LT",
+        "country_name": "Lithuania",
+        "default": true
+      }
+    },
+    "discount_applications": [
+      {
+        "target_type": "line_item",
+        "type": "discount_code",
+        "value": "100.0",
+        "value_type": "percentage",
+        "allocation_method": "across",
+        "target_selection": "all",
+        "code": "TEST"
+      }
+    ],
+    "fulfillments": [],
+    "line_items": [
+      {
+        "id": 10252863570111,
+        "admin_graphql_api_id": "gid://shopify/LineItem/10252863570111",
+        "fulfillable_quantity": 1,
+        "fulfillment_service": "manual",
+        "fulfillment_status": null,
+        "gift_card": false,
+        "grams": 4500,
+        "name": "„Dell 27“ monitorius E2720HS 68,58 cm (27 colių) juodas",
+        "origin_location": {
+          "id": 2931134791871,
+          "country_code": "LT",
+          "province_code": "",
+          "name": "Ikrito.lt",
+          "address1": "Iesmininku street 5",
+          "address2": "5",
+          "city": "Vilnius",
+          "zip": "LT02151"
+        },
+        "price": "173.99",
+        "price_set": {
+          "shop_money": {
+            "amount": "173.99",
+            "currency_code": "EUR"
+          },
+          "presentment_money": {
+            "amount": "173.99",
+            "currency_code": "EUR"
+          }
+        },
+        "product_exists": true,
+        "product_id": 6874858946751,
+        "properties": [],
+        "quantity": 1,
+        "requires_shipping": true,
+        "sku": "TDB-210-AURH/P1",
+        "taxable": true,
+        "title": "„Dell 27“ monitorius E2720HS 68,58 cm (27 colių) juodas",
+        "total_discount": "0.00",
+        "total_discount_set": {
+          "shop_money": {
+            "amount": "0.00",
+            "currency_code": "EUR"
+          },
+          "presentment_money": {
+            "amount": "0.00",
+            "currency_code": "EUR"
+          }
+        },
+        "variant_id": 40411562213567,
+        "variant_inventory_management": "shopify",
+        "variant_title": "",
+        "vendor": "DELL",
+        "tax_lines": [],
+        "duties": [],
+        "discount_allocations": [
+          {
+            "amount": "173.99",
+            "amount_set": {
+              "shop_money": {
+                "amount": "173.99",
+                "currency_code": "EUR"
+              },
+              "presentment_money": {
+                "amount": "173.99",
+                "currency_code": "EUR"
+              }
+            },
+            "discount_application_index": 0
+          }
+        ]
+      }
+    ],
+    "refunds": [],
+    "shipping_address": {
+      "first_name": "Darius",
+      "address1": "Aukstoji g 55",
+      "phone": null,
+      "city": "Vilnius",
+      "zip": "13129",
+      "province": null,
+      "country": "Lithuania",
+      "last_name": "Tvorogal",
+      "address2": "",
+      "company": null,
+      "latitude": 54.6703015,
+      "longitude": 25.439578,
+      "name": "Darius Tvorogal",
+      "country_code": "LT",
+      "province_code": null
+    },
+    "shipping_lines": [
+      {
+        "id": 3382367977663,
+        "carrier_identifier": null,
+        "code": "Standard",
+        "delivery_category": null,
+        "discounted_price": "0.00",
+        "discounted_price_set": {
+          "shop_money": {
+            "amount": "0.00",
+            "currency_code": "EUR"
+          },
+          "presentment_money": {
+            "amount": "0.00",
+            "currency_code": "EUR"
+          }
+        },
+        "phone": null,
+        "price": "0.00",
+        "price_set": {
+          "shop_money": {
+            "amount": "0.00",
+            "currency_code": "EUR"
+          },
+          "presentment_money": {
+            "amount": "0.00",
+            "currency_code": "EUR"
+          }
+        },
+        "requested_fulfillment_service_id": null,
+        "source": "shopify",
+        "title": "Standard",
+        "tax_lines": [],
+        "discount_allocations": []
+      }
+    ]
+  }
+]
+
+}
