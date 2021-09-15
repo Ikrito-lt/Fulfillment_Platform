@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ikrito_Fulfillment_Platform.Modules;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,6 +30,12 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         // solution make pages a singelton
         private void backButton_Click(object sender, RoutedEventArgs e) {
             MainWindow.Instance.mainFrame.Content = MainPage.Instance;
+        }
+
+        private void migrateButton_Click(object sender, RoutedEventArgs e) {
+            TDBModule tdb = new();
+            tdb.PushToDB();
+
         }
     }
 }
