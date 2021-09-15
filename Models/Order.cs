@@ -24,7 +24,7 @@ namespace Ikrito_Fulfillment_Platform.Models {
         public string phone { set; get; }
         public Address billing_address { set; get; }
         public Customer customer { set; get; }
-        public List<Product> line_items { set; get; }
+        public List<OrderProduct> line_items { set; get; }
         public Address shipping_address { set; get; }
 
         public string Item_count => line_items.Count == 1 ? line_items.Count.ToString() + " Item" : line_items.Count.ToString() + " Items";
@@ -36,9 +36,6 @@ namespace Ikrito_Fulfillment_Platform.Models {
                 return createdDate.ToString("MM/dd/yyyy HH:mm");
             }
         }
-
-        
-
     }
 
 
@@ -58,6 +55,5 @@ namespace Ikrito_Fulfillment_Platform.Models {
         public string name { set; get; }
         public string country_code { set; get; }
         public string province_code { set; get; }
-
     }
 }

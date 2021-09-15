@@ -21,5 +21,6 @@
         </Grid.RowDefinitions>
 
         <Button x:Name="backButton" Click="backButton_Click" Content="Back" Padding="5" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10"/>
+        <Button x:Name="migrateButton" Click="migrateButton_Click" Content="MIgrate TDB" Padding="5" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10"/>
     </Grid>
 </Page>
