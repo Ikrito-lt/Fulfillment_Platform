@@ -27,7 +27,7 @@ namespace Ikrito_Fulfillment_Platform {
         }
 
         private List<Order> newOrders = new();
-        private NewOrderGetter newOrderGetter = new();
+        private NewOrderManager newOrderGetter = new();
 
         private MainPage() {
             InitializeComponent();

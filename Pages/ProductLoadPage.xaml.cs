@@ -1,6 +1,8 @@
-﻿using Ikrito_Fulfillment_Platform.Modules;
+﻿using Ikrito_Fulfillment_Platform.Models;
+using Ikrito_Fulfillment_Platform.Modules;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,9 +35,15 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         }
 
         private void migrateButton_Click(object sender, RoutedEventArgs e) {
-            TDBModule tdb = new();
-            tdb.PushToDB();
+            //TDBModule tdb = new();
+            //tdb.PushToDB();
 
+            //Product product = new();
+            //Debug.WriteLine(product.GetImportJsonString());
+
+            var tdbM = new TDBModule();
+            //tdbM.insertCategoriesToDB();
+            //tdbM.CreateProductList();
         }
     }
 }
