@@ -10,32 +10,31 @@ namespace Ikrito_Fulfillment_Platform.Modules {
     class DataBaseInterface {
 
         //todo: add db source
-        static private string dataSource = Globals.DBsource;
+        private readonly string dataSource;
         public SQLiteConnection SQLiteConnection;
         public SQLiteCommand SQLiteCommand;
         public SQLiteDataReader SQLiteDataReader;
 
-        public string CommandText { get; set; }
-
-        public DataBaseInterface() {
-
+        public DataBaseInterface(string source) {
+            dataSource = source;
             SQLiteConnection = new SQLiteConnection(dataSource);
             SQLiteConnection.Open();
         }
 
-        public void execCommand() {
+        public int ExecNonQuery(string CommandText) {
 
             SQLiteCommand = SQLiteConnection.CreateCommand();
             SQLiteCommand.CommandText = CommandText;
-            SQLiteDataReader = SQLiteCommand.ExecuteReader();
-
+            return SQLiteCommand.ExecuteNonQuery();
         }
 
-        public void closeConnection() {
+        public void CloseConnection() {
             this.SQLiteConnection.Close();
         }
 
-
+        ~DataBaseInterface() {
+            this.SQLiteConnection.Close();
+        }
 
     }
 }

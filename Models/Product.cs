@@ -56,100 +56,109 @@ namespace Ikrito_Fulfillment_Platform.Models {
         //}
 
         //TODO: think about adding SEO shit
-        public string title;
-        public string body_html;    //desc
-        public string vendor;
-        public string product_type; //category
-        public double price;
-        public string sku;
-        public int stock;
-        public string barcode;
-        public double vendor_price; //TODO: https://community.shopify.com/c/shopify-apis-and-sdks/setting-cost-per-item-via-api/m-p/803984
-        public double weight;       //in kg
-        public int height;       //in mm
-        public int lenght;       //in mm
-        public int width;        //in mm
+        public string title { set; get; }
+        public string body_html { set; get; }    //desc
+        public string vendor { set; get; }
+        public string product_type { set; get; } //category
+        public double price { set; get; }
+        public string sku { set; get; }
+        public int stock { set; get; }
+        public string barcode { set; get; }
+        public double vendor_price { set; get; } //TODO: https://community.shopify.com/c/shopify-apis-and-sdks/setting-cost-per-item-via-api/m-p/803984
+        public double weight { set; get; }       //in kg
+        public int height { set; get; }       //in mm
+        public int lenght { set; get; }       //in mm
+        public int width { set; get; }        //in mm
 
         public List<string> tags = new();
         public List<string> images = new();
 
         public Product() {
             //TODO: testing change it
-            title = "Burton Custom Freestyle 1512smeta";
-            body_html = "<strong>Good snowboard!</strong>";
-            vendor = "burton";
-            product_type = "Snowboard";
-            price = 23.99;
+            title = "test";
+            body_html = "test";
+            vendor = "test";
+            product_type = "test";
+            price = 69.69;
             sku = "kill me";
-            stock = 24;
+            stock = 69;
             barcode = "kill me too";
-            weight = 420.5;
-            height = 24;
-            lenght = 23;
-            width = 22;
+            weight = 0;
+            height = 0;
+            lenght = 0;
+            width = 0;
 
-            tags.Add("Barnes & Noble");
-            tags.Add("Noble");
+            tags.Add("test tag1");
+            tags.Add("test tag2");
 
             images.Add("http://www.tdbaltic.ee/images/ds/BEU3088P-2.jpg");
             images.Add("http://www.tdbaltic.ee/images/ds/BEU3088P-3.jpg");
         }
 
+
+
         public string GetImportJsonString() {
 
-            string 
+            string imagesStr = "";
+            foreach (var image in images) {
+                imagesStr += $@"{{""src"": ""{image}""}},";
+            }
+            imagesStr = imagesStr.Remove(imagesStr.Length - 1);
 
-            //        ""images"": [
-            //            {{
-            //                ""src"": ""http://www.tdbaltic.ee/images/ds/BEU3088P-2.jpg""
-            //            }}
-            //        ],
-            //        ""tags"": [
-            //            ""Barnes & Noble"",
-            //            ""Big Air"",
-            //            ""John's Fav""
-            //        ],
+            string tagsStr = "";
+            foreach (var tag in tags) {
+                tagsStr += $@"""{tag}"",";
+            }
+            tagsStr = tagsStr.Remove(tagsStr.Length - 1);
 
-            string retString = 
+
+            string retString =
             @$"{{
                 ""product"": {{
-                    ""title"": {title},
-                    ""body_html"": {body_html},
-                    ""vendor"": {vendor},
-                    ""product_type"": {product_type},
+                    ""title"": ""{title}"",
+                    ""body_html"": ""{body_html}"",
+                    ""vendor"": ""{vendor}"",
+                    ""product_type"": ""{product_type}"",
                     ""variants"": [
                         {{
-                            ""price"": {price},
-                            ""sku"": {sku},
-                            ""weight"": {weight},
-                            ""inventory_quantity"": {stock},
-                            ""barcode"": {barcode}
+                            ""price"": ""{price}"",
+                            ""sku"": ""{sku}"",
+                            ""weight"": ""{weight}"",
+                            ""inventory_quantity"": ""{stock}"",
+                            ""barcode"": ""{barcode}""
                         }}
                     ],
                     ""metafields"": [
                         {{
                             ""key"": ""height"",
-                            ""value"": {height},
+                            ""value"": ""{height}"",
                             ""value_type"": ""string"",
                             ""namespace"": ""dimensions""
                         }},
                         {{
                             ""key"": ""width"",
-                            ""value"": {width},
+                            ""value"": ""{width}"",
                             ""value_type"": ""string"",
                             ""namespace"": ""dimensions""
                         }},
                         {{
                             ""key"": ""lenght"",
-                            ""value"": {lenght},
+                            ""value"": ""{lenght}"",
                             ""value_type"": ""string"",
                             ""namespace"": ""dimensions""
                         }}
                     ],
+                    ""images"": [
+                        {imagesStr}
+                    ],
+                    ""tags"": [
+                        {tagsStr}
+                    ]
                 }}
-            }}";
+            }}";    
 
             return retString;
         }
     }
+
 }
