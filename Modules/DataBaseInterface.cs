@@ -13,7 +13,6 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         private readonly string dataSource;
         public SQLiteConnection SQLiteConnection;
         public SQLiteCommand SQLiteCommand;
-        public SQLiteDataReader SQLiteDataReader;
 
         public DataBaseInterface(string source) {
             dataSource = source;
@@ -27,6 +26,16 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             SQLiteCommand.CommandText = CommandText;
             return SQLiteCommand.ExecuteNonQuery();
         }
+
+        public SQLiteDataReader ExecQuery(string CommandText) {
+
+            SQLiteCommand = SQLiteConnection.CreateCommand();
+            SQLiteCommand.CommandText = CommandText;
+            var QueryReader = SQLiteCommand.ExecuteReader();
+
+            return QueryReader;
+        }
+
 
         public void CloseConnection() {
             this.SQLiteConnection.Close();
