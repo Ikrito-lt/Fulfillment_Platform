@@ -1,6 +1,7 @@
 ﻿using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,31 +9,33 @@ using System.Threading.Tasks;
 namespace Ikrito_Fulfillment_Platform.Modules {
     class RESTClient {
 
-        //private readonly string translateEndPoint = "https://nlp-translation.p.rapidapi.com/v1/translate";
+        private readonly string BaseUrl;
 
-        //public string translateText(string input) {
+        public RESTClient(string url) {
+            BaseUrl = url;
+        }
 
-        //    var client = new RestClient(translateEndPoint);
-        //    var request = new RestRequest();
-        //    request.AddParameter("text", input);
-        //    request.AddParameter("to", "lt");
-        //    request.AddHeader("x-rapidapi-key", "b146e783ccmsh15dcb72a5602a39p1dd3a7jsn09c539fa9bbd");
-        //    request.AddHeader("x-rapidapi-host", "nlp-translation.p.rapidapi.com");
+        public string ExecGet(string Endpoint, Dictionary<string, string> Params) {
 
-        //    var response = client.Post(request);
+            //setup
+            string RequestUrl = BaseUrl + Endpoint;
+            RestClient client = new(RequestUrl);
+            RestRequest request = new();
 
-        //    if (response.IsSuccessful) {
-        //        var content = response.Content; // Raw content as string
-        //        //Console.WriteLine(content);
+            //adding params to request
+            foreach (KeyValuePair<string, string> pair in Params) {
+                request.AddParameter(pair.Key, pair.Value);
+            }
 
-        //        dynamic dynamic = JsonConvert.DeserializeObject(content);
-        //        return dynamic["translated_text"]["lt"];
-        //    } else {
-        //        return translateText(input);
-        //    }
+            //executing request and checking for response
+            var response = client.Execute(request);
+            if (response.IsSuccessful) {
 
-        //}
-
-
+                string responseContent = response.Content;
+                return responseContent;
+            } else {
+                return ExecGet(Endpoint, Params);
+            }
+        }
     }
 }

@@ -87,12 +87,6 @@ namespace Ikrito_Fulfillment_Platform.Models {
             height = 0;
             lenght = 0;
             width = 0;
-
-            tags.Add("test tag1");
-            tags.Add("test tag2");
-
-            images.Add("http://www.tdbaltic.ee/images/ds/BEU3088P-2.jpg");
-            images.Add("http://www.tdbaltic.ee/images/ds/BEU3088P-3.jpg");
         }
 
 
