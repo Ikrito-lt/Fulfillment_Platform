@@ -29,17 +29,17 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         private readonly string TDBCat_location = @"C:\Users\Luke\Desktop\Ikrito_Fulfillment_Platform\Files\TDB\TDB_cat2.xml";
         private readonly string TDBCategoriesJson = @"C:\Users\Luke\Desktop\Ikrito_Fulfillment_Platform\Files\TDB\TDBCategories.json";
 
-        private Dictionary<int, string> GetCategoriesDictionary() {
+        private Dictionary<string, int> GetCategoriesDictionary() {
 
             //getting category KVP from database
-            Dictionary<int, string> categoriesKVP = new();
+            Dictionary<string, int> categoriesKVP = new();
             DataBaseInterface dataBaseInterface = new(DBsource);
 
             string cmdText = "select ID, ProductType from ProductTypes;";
 
             using (var QueryReader = dataBaseInterface.ExecQuery(cmdText)) {
                 while (QueryReader.Read()) {
-                    categoriesKVP.Add(QueryReader.GetInt32(0), QueryReader.GetString(1));
+                    categoriesKVP.Add(QueryReader.GetString(1), QueryReader.GetInt32(0));
                 }
             }
             return categoriesKVP;
@@ -47,43 +47,65 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
         //downloads Catalogue from TDB API
         private string GetAPICatalogue() {
-
             Dictionary<string, string> catalogueParams = APIParams;
             RESTClient restClient = new(BaseUrl);
             return restClient.ExecGet(CataloguePath, catalogueParams);
         }
 
-        ////must be one time use 
-        //private void InsertCategoriesToDB() {
+        //get productID by SKU
+        public int GetID(string sku) {
+            int id = new();
+            string cmdText = $"SELECT ID from Products where SKU = '{sku}' limit 1;";
 
-        //    //getting category KVP from json
-        //    Dictionary<string, string> categoriesKVP;
-        //    using (StreamReader r = new StreamReader(TDBCategoriesJson)) {
-        //        string json = r.ReadToEnd();
-        //        categoriesKVP = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
-        //    }
-
-        //    //inserting pairs into database
-        //    DataBaseInterface dataBaseInterface = new(DBsource);
-        //    foreach (var pair in categoriesKVP) {
-        //        dataBaseInterface.ExecNonQuery($"insert into ProductTypes(ProductType, ProductTypeVendor) VALUES('{pair.Value}', '{pair.Key}');");
-
-        //    }
-        //}
+            DataBaseInterface dataBaseInterface = new(DBsource);
+            using (var QueryReader = dataBaseInterface.ExecQuery(cmdText)) {
+                while (QueryReader.Read()) {
+                    id = QueryReader.GetInt32(0);
+                }
+            }
+            return id;
+        }
 
         //must be used one time
         public void InsertProductsToDB() {
 
             List<Product> products = CreateProductList();
+            Dictionary<string, int> categoriesKVP = GetCategoriesDictionary();
 
-            foreach (Product product in products) { 
-            
-                
+            for (int i = 0; i < products.Count; i++) {
+                Product product = products[i];
+
+                //inserting product 
+                string priceStr = product.price.ToString();
+                string stockStr = product.stock.ToString();
+                string vendor_priceStr = product.vendor_price.ToString();
+                string weightStr = product.weight.ToString();
+                string heightStr = product.height.ToString();
+                string lenghtStr = product.lenght.ToString();
+                string widthStr = product.width.ToString();
+
+                int productTypeID = categoriesKVP[product.product_type];
+
+                string insertCmd = $"insert into Products(Title, Body, Vendor, ProductType, Price, SKU, Stock, Barcode, PriceVendor, Weight, Height, Lenght, Width) " +
+                    $"VALUES('{product.title}', '{product.body_html}', '{product.vendor}', '{productTypeID}', '{priceStr}', '{product.sku}', '{stockStr}', '{product.barcode}', '{vendor_priceStr}', '{weightStr}', '{heightStr}', '{lenghtStr}', '{widthStr}');";
+
+
+                DataBaseInterface dataBaseInterface = new(DBsource);
+                dataBaseInterface.ExecNonQuery(insertCmd);
+                int prodDBID = GetID(product.sku);
+
+                //inserting product images
+                foreach (string img in product.images) {
+                    string insertImgCmd = $"insert into Images(ProductID, ImgUrl) VALUES('{prodDBID}', '{img}');";
+                    dataBaseInterface.ExecNonQuery(insertImgCmd);
+                }
+
+                //todo:inserting product tags
+                foreach (string tag in product.tags) {
+                    string insertImgCmd = $"insert into Tags(ProductID, Tag) VALUES('{prodDBID}', '{tag}');";
+                    dataBaseInterface.ExecNonQuery(insertImgCmd);
+                }
             }
-            
-
-
-
         }
 
         //must be one time use
@@ -158,6 +180,24 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             }
 
             return products;
+        }
+
+        //must be one time use 
+        public void InsertCategoriesToDB() {
+
+            //getting category KVP from json
+            Dictionary<string, string> categoriesKVP;
+            using (StreamReader r = new StreamReader(TDBCategoriesJson)) {
+                string json = r.ReadToEnd();
+                categoriesKVP = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+            }
+
+            //inserting pairs into database
+            DataBaseInterface dataBaseInterface = new(DBsource);
+            foreach (var pair in categoriesKVP) {
+                dataBaseInterface.ExecNonQuery($"insert into ProductTypes(ProductType, ProductTypeVendor) VALUES('{pair.Value}', '{pair.Key}');");
+
+            }
         }
 
     }
