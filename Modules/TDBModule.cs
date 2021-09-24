@@ -105,6 +105,8 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                     string insertImgCmd = $"insert into Tags(ProductID, Tag) VALUES('{prodDBID}', '{tag}');";
                     dataBaseInterface.ExecNonQuery(insertImgCmd);
                 }
+
+                Debug.WriteLine($"{i}/{products.Count}");
             }
         }
 
