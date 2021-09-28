@@ -34,19 +34,21 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             MainWindow.Instance.mainFrame.Content = MainPage.Instance;
         }
 
-        private void migrateButton_Click(object sender, RoutedEventArgs e) {
-            //TDBModule tdb = new();
-            //tdb.PushToDB();
+        private void ViewTDBProducts_Click(object sender, RoutedEventArgs e) {
 
-            //Product product = new();
-            //Debug.WriteLine(product.GetImportJsonString());
+        }
 
-            var tdbM = new TDBModule();
-            tdbM.getProductsFromDB();
-            //tdbM.InsertCategoriesToDB();
-            //tdbM.InsertProductsToDB();
-            //tdbM.insertCategoriesToDB();
-            //tdbM.CreateProductList();
+        private void UpdateTDBProducts_Click(object sender, RoutedEventArgs e) {
+            var TDBModule = new TDBModule();
+            var productExporter = new ProductExporter(TDBModule.getProductsFromDB(), TDBModule.);
+
+
+            //delegate (string msg, int val) {
+            //    loadingBar.Value = val;
+            //    loadingBar.co
+            //    }
+
+
         }
     }
 }

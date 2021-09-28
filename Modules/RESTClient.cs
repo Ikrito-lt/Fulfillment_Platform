@@ -37,5 +37,32 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 return ExecGet(Endpoint, Params);
             }
         }
+
+        public string ExecPost(string Endpoint, Dictionary<string, string> Params, string requestBody) {
+
+            //setup
+            string RequestUrl = BaseUrl + Endpoint;
+            RestClient client = new(RequestUrl);
+            RestRequest request = new(Method.POST);
+
+            //adding params to request
+            foreach (KeyValuePair<string, string> pair in Params) {
+                request.AddParameter(pair.Key, pair.Value);
+            }
+
+            //adding body to request
+            request.AddHeader("Content-Type", "application/json");
+            request.AddJsonBody(requestBody);
+
+            //executing request and checking for response
+            var response = client.Post(request);
+            if (response.IsSuccessful) {
+
+                string responseContent = response.Content;
+                return responseContent;
+            } else {
+                return ExecGet(Endpoint, Params);
+            }
+        }
     }
 }

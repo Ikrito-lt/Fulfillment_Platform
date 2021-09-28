@@ -8,19 +8,34 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ProductLoadPage">
 
-    <Grid Margin="0"   Background="LightBlue">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
+    
 
-        <Button x:Name="backButton" Click="backButton_Click" Content="Back" Padding="5" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10"/>
-        <Button x:Name="migrateButton" Click="migrateButton_Click" Content="MIgrate TDB" Padding="5" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10"/>
+    <Grid Margin="0"   Background="LightBlue">
+
+        <StackPanel Orientation="Vertical" Margin="15,0,15,15">
+
+            <Grid Margin="10"   Background="Wheat" Grid.ColumnSpan="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Button x:Name="ViewTDBProducts" Click="ViewTDBProducts_Click" Content="TDB Products" Padding="5" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"/>
+                <Button x:Name="UpdateTDBProducts" Click="UpdateTDBProducts_Click" Content="Update TDB Products" Padding="5" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"/>
+
+            </Grid>
+
+            <ProgressBar x:Name="loadingBar" Minimum="0" Maximum="100" Height="25" Margin="10" VerticalAlignment="Bottom" />
+            <Button x:Name="backButton" Click="backButton_Click" Content="Back" Padding="5" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10"/>
+        </StackPanel>
+
     </Grid>
 </Page>
