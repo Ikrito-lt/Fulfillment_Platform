@@ -42,8 +42,9 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             //Debug.WriteLine(product.GetImportJsonString());
 
             var tdbM = new TDBModule();
+            tdbM.getProductsFromDB();
             //tdbM.InsertCategoriesToDB();
-            tdbM.InsertProductsToDB();
+            //tdbM.InsertProductsToDB();
             //tdbM.insertCategoriesToDB();
             //tdbM.CreateProductList();
         }

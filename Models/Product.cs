@@ -7,55 +7,7 @@ using System.Threading.Tasks;
 namespace Ikrito_Fulfillment_Platform.Models {
     class Product {
 
-        //{
-        //    "product": {
-        //        "title": "Burton Custom Freestyle 1512smeta",
-        //        "body_html": "<strong>Good snowboard!</strong>",
-        //        "vendor": "Burton",
-        //        "product_type": "Snowboard",
-        //        "variants": [
-        //            {
-        //                "price": "10.00",
-        //                "sku": "123",
-        //                "weight": "20",
-        //                "inventory_quantity": "20",
-        //                "barcode": "sas"
-        //            }
-        //        ],
-        //        "images": [
-        //            {
-        //                "src": "http://www.tdbaltic.ee/images/ds/BEU3088P-2.jpg"
-        //            }
-        //        ],
-        //        "tags": [
-        //            "Barnes & Noble",
-        //            "Big Air",
-        //            "John's Fav"
-        //        ],
-        //        "metafields": [
-        //            {
-        //                "key": "height",
-        //                "value": "newvalue",
-        //                "value_type": "string",
-        //                "namespace": "dimensions"
-        //            },
-        //            {
-        //                "key": "width",
-        //                "value": "newvalue",
-        //                "value_type": "string",
-        //                "namespace": "dimensions"
-        //            },
-        //            {
-        //                "key": "lenght",
-        //                "value": "newvalue",
-        //                "value_type": "string",
-        //                "namespace": "dimensions"
-        //            }
-        //        ]
-        //    }
-        //}
-
-        //TODO: think about adding SEO shit
+        public int BDID { set; get; }
         public string title { set; get; }
         public string body_html { set; get; }    //desc
         public string vendor { set; get; }
@@ -88,8 +40,6 @@ namespace Ikrito_Fulfillment_Platform.Models {
             lenght = 0;
             width = 0;
         }
-
-
 
         public string GetImportJsonString() {
 
@@ -154,5 +104,55 @@ namespace Ikrito_Fulfillment_Platform.Models {
             return retString;
         }
     }
+
+    //{
+    //    "product": {
+    //        "title": "Burton Custom Freestyle 1512smeta",
+    //        "body_html": "<strong>Good snowboard!</strong>",
+    //        "vendor": "Burton",
+    //        "product_type": "Snowboard",
+    //        "variants": [
+    //            {
+    //                "price": "10.00",
+    //                "sku": "123",
+    //                "weight": "20",
+    //                "inventory_quantity": "20",
+    //                "barcode": "sas"
+    //            }
+    //        ],
+    //        "images": [
+    //            {
+    //                "src": "http://www.tdbaltic.ee/images/ds/BEU3088P-2.jpg"
+    //            }
+    //        ],
+    //        "tags": [
+    //            "Barnes & Noble",
+    //            "Big Air",
+    //            "John's Fav"
+    //        ],
+    //        "metafields": [
+    //            {
+    //                "key": "height",
+    //                "value": "newvalue",
+    //                "value_type": "string",
+    //                "namespace": "dimensions"
+    //            },
+    //            {
+    //                "key": "width",
+    //                "value": "newvalue",
+    //                "value_type": "string",
+    //                "namespace": "dimensions"
+    //            },
+    //            {
+    //                "key": "lenght",
+    //                "value": "newvalue",
+    //                "value_type": "string",
+    //                "namespace": "dimensions"
+    //            }
+    //        ]
+    //    }
+    //}
+
+    //TODO: think about adding SEO shit
 
 }
