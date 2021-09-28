@@ -19,9 +19,9 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             ["ean"] = "y"
         };
 
-        private const string BaseUrl = "http://tdonline.tdbaltic.net/pls/PROD/";
-        private const string CataloguePath = "ixml.ProdCatExt";
-        private const string DataSheetsPath = "ixml.DSheets";
+        public static string BaseUrl = "http://tdonline.tdbaltic.net/pls/PROD/";
+        public static string CataloguePath = "ixml.ProdCatExt";
+        public static string DataSheetsPath = "ixml.DSheets";
 
         public static readonly string DBsource = @"Data Source=C:\Users\Luke\Desktop\Ikrito_Fulfillment_Platform\TDB.db;Version=3;";
 
@@ -122,6 +122,8 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
             return products;
         }
+
+
 
         ////must be used one time
         //public void InsertProductsToDB() {
