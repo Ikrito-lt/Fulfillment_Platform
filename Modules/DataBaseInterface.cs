@@ -17,13 +17,11 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         }
 
         public void ExecNonQuery(string CommandText) {
-            using (SQLiteConnection c = new SQLiteConnection(dataSource)) {
-                c.Open();
-                using (SQLiteCommand cmd = new SQLiteCommand(CommandText, c)) {
-                    cmd.ExecuteNonQuery();
-                }
-                c.Close();
+            using SQLiteConnection c = new(dataSource); c.Open();
+            using (SQLiteCommand cmd = new(CommandText, c)) {
+                cmd.ExecuteNonQuery();
             }
+            c.Close();
         }
 
         public SQLiteDataReader ExecQuery(string CommandText) {

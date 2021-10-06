@@ -52,6 +52,8 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             return restClient.ExecGet(CataloguePath, catalogueParams);
         }
 
+
+
         //get productID by SKU
         public static int GetID(string sku) {
             int id = new();

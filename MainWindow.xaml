@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Ikrito_Fulfillment_Platform"
         mc:Ignorable="d"
-        Title="Ikrito Fulfillment Platform" ResizeMode="CanResize">
+        Title="Ikrito Fulfillment Platform" ResizeMode="CanResize"
+        WindowStartupLocation="CenterScreen" WindowState="Maximized">
     <Grid>
         <Frame x:Name="mainFrame"  NavigationUIVisibility="Hidden" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
     </Grid>
