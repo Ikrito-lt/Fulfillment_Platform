@@ -11,9 +11,9 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         private readonly string getOrdersEndPoint = "https://real-europe-corp.myshopify.com/admin/api/2021-07/orders.json";
 
         public void ImportProducts() {
-            List<Product> importProducts = new();
-            importProducts.Add(new Product());
-            importProducts.Add(new Product());
+            //List<Product> importProducts = new();
+            //importProducts.Add(new Product());
+            //importProducts.Add(new Product());
 
 
 

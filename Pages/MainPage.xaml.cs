@@ -52,8 +52,8 @@ namespace Ikrito_Fulfillment_Platform {
         private void ShowOrderInfo(object sender, RoutedEventArgs e) {
         }
 
-        private void openImporterPage(object sender, RoutedEventArgs e) {
-            MainWindow.Instance.mainFrame.Content = ProductLoadPage.Instance;
+        private void openBrowserPage(object sender, RoutedEventArgs e) {
+            MainWindow.Instance.mainFrame.Content = ProductBrowsePage.Instance;
         }
     }
 }

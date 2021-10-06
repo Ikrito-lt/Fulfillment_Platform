@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Ikrito_Fulfillment_Platform.Models {
-    class Product {
+    public class Product {
 
         public int BDID { set; get; }
         public string title { set; get; }
@@ -41,26 +41,57 @@ namespace Ikrito_Fulfillment_Platform.Models {
             width = 0;
         }
 
+        private string ShortTitle(string title) {
+            // max product name lebht in shopify is 255
+            //TODO: remove this hack
+            if (title.Length > 255) {
+                return title.Trim().Substring(0, 255);
+            } else {
+                return title;
+            }
+        }
+
+        private string repairHTLMBody(string body) {
+
+            StringBuilder builder = new StringBuilder(body);
+            builder.Replace("&#xA;", "\\n");
+            builder.Replace("\n", "\\n");
+            builder.Replace("\"", "\\\"");
+
+            return builder.ToString();
+        }
+
+        private string repairTitle(string title) {
+
+            StringBuilder builder = new StringBuilder(title);
+            builder.Replace("\"", "\\\"");
+
+            return builder.ToString();
+        }
+
         public string GetImportJsonString() {
 
             string imagesStr = "";
-            foreach (var image in images) {
-                imagesStr += $@"{{""src"": ""{image}""}},";
+            if (images.Count != 0) {
+                foreach (var image in images) {
+                    imagesStr += $@"{{""src"": ""{image}""}},";
+                }
+                imagesStr = imagesStr.Remove(imagesStr.Length - 1);
             }
-            imagesStr = imagesStr.Remove(imagesStr.Length - 1);
 
             string tagsStr = "";
-            foreach (var tag in tags) {
-                tagsStr += $@"""{tag}"",";
+            if (tags.Count != 0) {
+                foreach (var tag in tags) {
+                    tagsStr += $@"""{tag}"",";
+                }
+                tagsStr = tagsStr.Remove(tagsStr.Length - 1);
             }
-            tagsStr = tagsStr.Remove(tagsStr.Length - 1);
-
 
             string retString =
             @$"{{
                 ""product"": {{
-                    ""title"": ""{title}"",
-                    ""body_html"": ""{body_html}"",
+                    ""title"": ""{ShortTitle(repairTitle(title))}"",
+                    ""body_html"": ""{repairHTLMBody(body_html)}"",
                     ""vendor"": ""{vendor}"",
                     ""product_type"": ""{product_type}"",
                     ""variants"": [
@@ -99,7 +130,7 @@ namespace Ikrito_Fulfillment_Platform.Models {
                         {tagsStr}
                     ]
                 }}
-            }}";    
+            }}";
 
             return retString;
         }

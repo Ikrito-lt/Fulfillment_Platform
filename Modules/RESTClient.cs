@@ -47,21 +47,22 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
             //adding params to request
             foreach (KeyValuePair<string, string> pair in Params) {
-                request.AddParameter(pair.Key, pair.Value);
+                request.AddHeader(pair.Key, pair.Value);
             }
 
             //adding body to request
             request.AddHeader("Content-Type", "application/json");
-            request.AddJsonBody(requestBody);
+            request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
 
             //executing request and checking for response
             var response = client.Post(request);
+
             if (response.IsSuccessful) {
 
                 string responseContent = response.Content;
                 return responseContent;
             } else {
-                return ExecGet(Endpoint, Params);
+                throw response.ErrorException;
             }
         }
     }

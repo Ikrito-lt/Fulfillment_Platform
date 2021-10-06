@@ -2,6 +2,7 @@
 using Ikrito_Fulfillment_Platform.Modules;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -28,7 +29,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             InitializeComponent();
         }
 
-        // todo: memory leak proble when changing pages
+        // todo: memory leak proble when changing pages DONE
         // solution make pages a singelton
         private void backButton_Click(object sender, RoutedEventArgs e) {
             MainWindow.Instance.mainFrame.Content = MainPage.Instance;
@@ -39,16 +40,23 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         }
 
         private void UpdateTDBProducts_Click(object sender, RoutedEventArgs e) {
+            //init
             var TDBModule = new TDBModule();
-            var productExporter = new ProductExporter(TDBModule.getProductsFromDB(), TDBModule.);
+            List<Product> TDBproducts = TDBModule.getProductsFromDB();
+            var productExporter = new ProductExporter(TDBproducts);
 
+            //running export products in background
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.WorkerReportsProgress = true;
+            worker.DoWork += productExporter.exportProducts;
+            worker.ProgressChanged += worker_ProgressChanged;
 
-            //delegate (string msg, int val) {
-            //    loadingBar.Value = val;
-            //    loadingBar.co
-            //    }
+            worker.RunWorkerAsync();
 
+        }
 
+        void worker_ProgressChanged(object sender, ProgressChangedEventArgs e) {
+            loadingBar.Value = e.ProgressPercentage;
         }
     }
 }
