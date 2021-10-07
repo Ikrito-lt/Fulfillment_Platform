@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Ikrito_Fulfillment_Platform.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+
       Title="ProductBrowsePage">
 
     <Page.Resources>
@@ -19,10 +19,9 @@
             <Setter Property="CanUserAddRows" Value="False"/>
             <Setter Property="CanUserDeleteRows" Value="False"/>
             <Setter Property="ColumnWidth" Value="Auto"/>
-            <Setter Property="MinColumnWidth" Value="75"/>
+            <Setter Property="MinColumnWidth" Value="100"/>
             <Setter Property="RowBackground" Value="White" />
             <Setter Property="AlternatingRowBackground" Value="WhiteSmoke"/>
-            <Setter Property="RowHeight" Value="25"/>
         </Style>
 
         <!-- DataGridColumnHeader style -->
@@ -65,69 +64,84 @@
 
                 <DataGrid.Columns>
 
-                    <DataGridTextColumn Header="SKU" Binding="{Binding sku}">
+                    <DataGridTextColumn Header="SKU" Binding="{Binding sku}" Width="200">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Left" />
                                 <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="TextWrapping" Value="Wrap" />
+                                <Setter Property="TextAlignment" Value="Left"/>
+                                <Setter Property="Padding" Value="5"/>
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Header="Title" Binding="{Binding title}">
+                    <DataGridTextColumn Header="Title" Binding="{Binding title}" Width="970">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Left" />
                                 <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="TextWrapping" Value="Wrap" />
+                                <Setter Property="TextAlignment" Value="Left"/>
+                                <Setter Property="Padding" Value="5"/>
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Header="Vendor" Binding="{Binding vendor}">
+                    <DataGridTextColumn Header="Vendor" Binding="{Binding vendor}" Width="150">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Left" />
                                 <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-
-                    <DataGridTextColumn Header="Type" Binding="{Binding product_type}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="HorizontalAlignment" Value="Left" />
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-
-                    <DataGridTextColumn Header="Stock" Binding="{Binding stock}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="HorizontalAlignment" Value="Center" />
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-
-                    <DataGridTextColumn Header="Price" Binding="{Binding price}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="HorizontalAlignment" Value="Center" />
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-
-                    <DataGridTextColumn Header="Vendor Price" Binding="{Binding vendor_price}">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="HorizontalAlignment" Value="Center" />
-                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="TextWrapping" Value="Wrap" />
+                                <Setter Property="TextAlignment" Value="Left"/>
+                                <Setter Property="Padding" Value="5"/>
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     
+                    <DataGridTextColumn Header="Type" Binding="{Binding product_type}" Width="250">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Left" />
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="TextWrapping" Value="Wrap" />
+                                <Setter Property="TextAlignment" Value="Left"/>
+                                <Setter Property="Padding" Value="5"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    
+                    <DataGridTextColumn Header="Stock" Binding="{Binding stock}" Width="100">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Padding" Value="5"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    
+                    <DataGridTextColumn Header="Price" Binding="{Binding price}" Width="100">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Padding" Value="5"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    
+                    <DataGridTextColumn Header="Vendor Price" Binding="{Binding vendor_price}" Width="100">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Padding" Value="5"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
                 </DataGrid.Columns>
             </DataGrid>
 
