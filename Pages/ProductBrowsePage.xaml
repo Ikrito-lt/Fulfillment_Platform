@@ -2,16 +2,17 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Ikrito_Fulfillment_Platform.Pages"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:emoji1="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
       mc:Ignorable="d" 
+      Language="it-IT"
 
       Title="ProductBrowsePage">
 
     <Page.Resources>
         <!-- DataGrid style -->
         <Style x:Key="DataGridStyle1" TargetType="{x:Type DataGrid}">
-            <Setter Property="ColumnHeaderStyle" Value="{DynamicResource ColumnHeaderStyle1}"/>
+            <!--<Setter Property="ColumnHeaderStyle" Value="{DynamicResource ColumnHeaderStyle1}"/>-->
             <Setter Property="CanUserResizeColumns" Value="False"/>
             <Setter Property="CanUserSortColumns" Value="False" />
             <Setter Property="CanUserResizeColumns" Value="True" />
@@ -64,7 +65,7 @@
 
                 <DataGrid.Columns>
 
-                    <DataGridTextColumn Header="SKU" Binding="{Binding sku}" Width="200">
+                    <DataGridTextColumn Binding="{Binding sku}" Width="200">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Left" />
@@ -74,9 +75,28 @@
                                 <Setter Property="Padding" Value="5"/>
                             </Style>
                         </DataGridTextColumn.ElementStyle>
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                        <DataGridTextColumn.Header>
+                            <Grid Margin="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="4*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="SKU" Margin="3" Padding="1"/>
+                                <TextBox Grid.Column="1" x:Name="SKUFilterSBox" Visibility="Visible" VerticalAlignment="Center"/>
+                                <Button Grid.Column="2" x:Name="SKUFilterButton" Margin="3" Padding="1"  HorizontalAlignment="Right">
+                                    <emoji1:TextBlock Text="🔎"/>
+                                </Button>
+                            </Grid>
+                        </DataGridTextColumn.Header>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Header="Title" Binding="{Binding title}" Width="970">
+                    <DataGridTextColumn Binding="{Binding title}" Width="970">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Left" />
@@ -86,9 +106,28 @@
                                 <Setter Property="Padding" Value="5"/>
                             </Style>
                         </DataGridTextColumn.ElementStyle>
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                        <DataGridTextColumn.Header>
+                            <Grid Margin="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="4*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Title" Margin="3" Padding="1"/>
+                                <TextBox Grid.Column="1" x:Name="TitleFilterSBox" Visibility="Visible" VerticalAlignment="Center"/>
+                                <Button Grid.Column="2" x:Name="TitleFilterButton" Margin="3" Padding="1"  HorizontalAlignment="Right">
+                                    <emoji1:TextBlock Text="🔎"/>
+                                </Button>
+                            </Grid>
+                        </DataGridTextColumn.Header>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Header="Vendor" Binding="{Binding vendor}" Width="150">
+                    <DataGridTextColumn Binding="{Binding vendor}" Width="150">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Left" />
@@ -98,9 +137,28 @@
                                 <Setter Property="Padding" Value="5"/>
                             </Style>
                         </DataGridTextColumn.ElementStyle>
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                        <DataGridTextColumn.Header>
+                            <Grid Margin="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="4*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Vendor" Margin="3" Padding="1"/>
+                                <TextBox Grid.Column="1" x:Name="VendorFilterSBox" Visibility="Visible" VerticalAlignment="Center"/>
+                                <Button Grid.Column="2" x:Name="VendorFilterButton" Margin="3" Padding="1"  HorizontalAlignment="Right">
+                                    <emoji1:TextBlock Text="🔎"/>
+                                </Button>
+                            </Grid>
+                        </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                     
-                    <DataGridTextColumn Header="Type" Binding="{Binding product_type}" Width="250">
+                    <DataGridTextColumn Binding="{Binding product_type}" Width="250">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Left" />
@@ -110,6 +168,25 @@
                                 <Setter Property="Padding" Value="5"/>
                             </Style>
                         </DataGridTextColumn.ElementStyle>
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                        <DataGridTextColumn.Header>
+                            <Grid Margin="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="4*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Type" Margin="3" Padding="1"/>
+                                <TextBox Grid.Column="1" x:Name="TypeFilterSBox" Visibility="Visible" VerticalAlignment="Center"/>
+                                <Button Grid.Column="2" x:Name="TypeFilterButton" Margin="3" Padding="1"  HorizontalAlignment="Right">
+                                    <emoji1:TextBlock Text="🔎"/>
+                                </Button>
+                            </Grid>
+                        </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                     
                     <DataGridTextColumn Header="Stock" Binding="{Binding stock}" Width="100">
@@ -121,8 +198,8 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    
-                    <DataGridTextColumn Header="Price" Binding="{Binding price}" Width="100">
+
+                    <DataGridTextColumn Header="Price" Binding="{Binding price, StringFormat='\{0:€ #,##0.00\}'}" Width="100">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
@@ -131,8 +208,8 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    
-                    <DataGridTextColumn Header="Vendor Price" Binding="{Binding vendor_price}" Width="100">
+
+                    <DataGridTextColumn Header="Vendor Price" Binding="{Binding vendor_price, StringFormat='\{0:€ #,##0.00\}'}" Width="100">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Center" />
