@@ -1,4 +1,5 @@
 ﻿using Ikrito_Fulfillment_Platform.Models;
+using Ikrito_Fulfillment_Platform.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
         private readonly Product editableProduct;
         private bool productSaved = false;
+        private bool productNeedsSaving = false;
 
         public ProductEditPage(Product product) {
             editableProduct = product;
@@ -26,9 +28,23 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         }
 
         private void backButton_Click(object sender, RoutedEventArgs e) {
+            DialogueYN dialog = new("Save product?");
+            bool answer = dialog.ShowDialog() ?? false;
 
+            if (answer) {
+                saveProduct();
+                exitPage();
+            } else {
+                exitPage();
+            }
+        }
 
-            MainWindow.Instance.mainFrame.Content = MainPage.Instance;
+        private void saveProduct() { 
+        
+        }
+
+        private void exitPage() {
+            MainWindow.Instance.mainFrame.Content = ProductBrowsePage.Instance;
         }
     }
 }

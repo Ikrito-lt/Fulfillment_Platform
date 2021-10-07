@@ -32,6 +32,8 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
             //init DataGrid
             productDG.ItemsSource = products;
+            //init label
+            productCountL.Content = "Product Count: " + products.Count.ToString();
         }
 
         private List<Product> loadProdList() {

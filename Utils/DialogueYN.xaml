@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Ikrito_Fulfillment_Platform.Utils"
         mc:Ignorable="d"
-        Title="DialogueYN" Height="130" Width="250">
+        Title="" Height="130" Width="250">
     
     <Grid Margin="0"   Background="LightBlue">
         <StackPanel Orientation="Vertical" Margin="15,15,15,0">
@@ -18,8 +18,8 @@
         </StackPanel>
         <Grid Margin="0" VerticalAlignment="Bottom">
 
-            <Button x:Name="YesButton" Click="YesButton_Click" Content="Yes" Padding="5" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10"/>
-            <Button x:Name="NoButton" Click="NoButton_Click" Content="No" Padding="5" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10"/>
+            <Button x:Name="YesButton" Click="YesButton_Click" Content="Yes" Padding="15,5,15,5" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10"/>
+            <Button x:Name="NoButton" Click="NoButton_Click" Content="No" Padding="15,5,15,5" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10"/>
         </Grid>
     </Grid>
 </Window>
