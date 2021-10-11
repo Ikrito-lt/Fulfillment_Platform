@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Ikrito_Fulfillment_Platform.Models {
     public class Product {
 
-        public int BDID { set; get; }
+        public int DBID { set; get; }
         public string title { set; get; }
         public string body_html { set; get; }    //desc
         public string vendor { set; get; }
@@ -21,6 +18,7 @@ namespace Ikrito_Fulfillment_Platform.Models {
         public int height { set; get; }       //in mm
         public int lenght { set; get; }       //in mm
         public int width { set; get; }        //in mm
+        public bool needsUpdate { set; get; }
 
         public List<string> tags = new();
         public List<string> images = new();

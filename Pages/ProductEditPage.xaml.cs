@@ -23,11 +23,63 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         private bool productNeedsSaving = false;
 
         public ProductEditPage(Product product) {
-            editableProduct = product;
             InitializeComponent();
+            editableProduct = product;
+            ProductFieldInit();
         }
 
-        private void backButton_Click(object sender, RoutedEventArgs e) {
+        /// <summary>
+        /// method to add all vals to page forms on init
+        /// </summary>
+        private void ProductFieldInit() {
+
+            TitleBox.Text = editableProduct.title;
+            DescBox.Text = editableProduct.body_html;
+            VendorBox.Text = editableProduct.vendor;
+            ProductTypeBox.Text = editableProduct.product_type;
+            BarcodeBox.Text = editableProduct.barcode;
+            SKUBox.Text = editableProduct.sku;
+
+            //todo: make only numeric with .
+            PriceBox.Text = editableProduct.price.ToString();
+            VendorPriceBox.Text = editableProduct.vendor_price.ToString();
+            WeightBox.Text = editableProduct.weight.ToString();
+
+            //todo: make only numeric
+            StockBox.Text = editableProduct.stock.ToString();
+            HeightBox.Text = editableProduct.height.ToString();
+            WidthBox.Text = editableProduct.width.ToString();
+            LenghtBox.Text = editableProduct.lenght.ToString();
+
+            //Adding images
+            ImageListBox.ItemsSource = editableProduct.images;
+
+            //adding tags
+            TagListBox.ItemsSource = editableProduct.tags;
+
+        }
+
+        private void AddImageButton_Click(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void AddTagButton_Click(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void saveProduct() {
+
+        }
+
+        private void exitPage() {
+            MainWindow.Instance.mainFrame.Content = ProductBrowsePage.Instance;
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e) {
             DialogueYN dialog = new("Save product?");
             bool answer = dialog.ShowDialog() ?? false;
 
@@ -39,12 +91,5 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             }
         }
 
-        private void saveProduct() { 
-        
-        }
-
-        private void exitPage() {
-            MainWindow.Instance.mainFrame.Content = ProductBrowsePage.Instance;
-        }
     }
 }

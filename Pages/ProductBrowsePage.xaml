@@ -84,14 +84,10 @@
                             <Grid Margin="0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="4*"/>
-                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="5*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" Text="SKU" Margin="3" Padding="1"/>
-                                <TextBox Grid.Column="1" x:Name="SKUFilterSBox" Visibility="Visible" VerticalAlignment="Center"/>
-                                <Button Grid.Column="2" x:Name="SKUFilterButton" Margin="3" Padding="1"  HorizontalAlignment="Right">
-                                    <emoji1:TextBlock Text="🔎"/>
-                                </Button>
+                                <TextBox Grid.Column="1" x:Name="SKUFilterSBox" Visibility="Visible" VerticalAlignment="Center" TextChanged="SKUFilterSBox_TextChanged"/>
                             </Grid>
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
@@ -115,14 +111,10 @@
                             <Grid Margin="0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="4*"/>
-                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="5*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" Text="Title" Margin="3" Padding="1"/>
-                                <TextBox Grid.Column="1" x:Name="TitleFilterSBox" Visibility="Visible" VerticalAlignment="Center"/>
-                                <Button Grid.Column="2" x:Name="TitleFilterButton" Margin="3" Padding="1"  HorizontalAlignment="Right">
-                                    <emoji1:TextBlock Text="🔎"/>
-                                </Button>
+                                <TextBox Grid.Column="1" x:Name="TitleFilterSBox" Visibility="Visible" VerticalAlignment="Center" TextChanged="TitleFilterSBox_TextChanged"/>
                             </Grid>
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
@@ -146,14 +138,10 @@
                             <Grid Margin="0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="4*"/>
-                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="2*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" Text="Vendor" Margin="3" Padding="1"/>
-                                <TextBox Grid.Column="1" x:Name="VendorFilterSBox" Visibility="Visible" VerticalAlignment="Center"/>
-                                <Button Grid.Column="2" x:Name="VendorFilterButton" Margin="3" Padding="1"  HorizontalAlignment="Right">
-                                    <emoji1:TextBlock Text="🔎"/>
-                                </Button>
+                                <TextBox Grid.Column="1" x:Name="VendorFilterSBox" Visibility="Visible" VerticalAlignment="Center" HorizontalAlignment="Stretch" TextChanged="VendorFilterSBox_TextChanged"/>
                             </Grid>
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
@@ -177,14 +165,10 @@
                             <Grid Margin="0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="4*"/>
-                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="5*"/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Grid.Column="0" Text="Type" Margin="3" Padding="1"/>
-                                <TextBox Grid.Column="1" x:Name="TypeFilterSBox" Visibility="Visible" VerticalAlignment="Center"/>
-                                <Button Grid.Column="2" x:Name="TypeFilterButton" Margin="3" Padding="1"  HorizontalAlignment="Right">
-                                    <emoji1:TextBlock Text="🔎"/>
-                                </Button>
+                                <TextBox Grid.Column="1" x:Name="TypeFilterSBox" Visibility="Visible" VerticalAlignment="Center" TextChanged="TypeFilterSBox_TextChanged"/>
                             </Grid>
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
@@ -222,7 +206,7 @@
                 </DataGrid.Columns>
             </DataGrid>
 
-            <Button x:Name="backButton" Click="backButton_Click" Content="Back" Padding="5" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,10,0,0"/>
+            <Button x:Name="BackButton" Click="BackButton_Click" Content="Back" Padding="5" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,10,0,0"/>
 
         </StackPanel>
 

@@ -79,7 +79,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             using (var QueryReader = dataBaseInterface.ExecQuery(cmdText)) {
                 while (QueryReader.Read()) {
                     Product NewProduct = new();
-                    NewProduct.BDID = QueryReader.GetInt32(0);
+                    NewProduct.DBID = QueryReader.GetInt32(0);
                     NewProduct.title = QueryReader.GetString(1);
                     NewProduct.body_html = QueryReader.GetString(2);
                     NewProduct.vendor = QueryReader.GetString(3);
@@ -106,7 +106,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                     int productID = QueryReader.GetInt32(1);
                     string imageUrl = QueryReader.GetString(2);
 
-                    products.Find(x => x.BDID == productID).images.Add(imageUrl);
+                    products.Find(x => x.DBID == productID).images.Add(imageUrl);
                 }
             }
 
@@ -118,7 +118,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                     int productID = QueryReader.GetInt32(1);
                     string tag = QueryReader.GetString(2);
 
-                    products.Find(x => x.BDID == productID).tags.Add(tag);
+                    products.Find(x => x.DBID == productID).tags.Add(tag);
                 }
             }
 

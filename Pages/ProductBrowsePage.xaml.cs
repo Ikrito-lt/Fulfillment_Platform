@@ -18,7 +18,9 @@ using System.Windows.Shapes;
 namespace Ikrito_Fulfillment_Platform.Pages {
     public partial class ProductBrowsePage : Page {
 
-        private readonly List<Product> products;
+        private readonly List<Product> allProducts;
+
+        private List<Product> filteredProducts;
 
         //shit that makes this a singelton
         public static ProductBrowsePage Instance { get; private set; }
@@ -27,13 +29,15 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         }
 
         private ProductBrowsePage() {
-            products = loadProdList();
+            allProducts = loadProdList();
             InitializeComponent();
 
+            filteredProducts = allProducts;
+
             //init DataGrid
-            productDG.ItemsSource = products;
+            productDG.ItemsSource = filteredProducts;
             //init label
-            productCountL.Content = "Product Count: " + products.Count.ToString();
+            ChangeCountLabel(filteredProducts.Count);
         }
 
         private List<Product> loadProdList() {
@@ -48,7 +52,11 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             return prodList;
         }
 
-        private void backButton_Click(object sender, RoutedEventArgs e) {
+        private void ChangeCountLabel(int count) {
+            productCountL.Content = "Product Count: " + count.ToString();
+        }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e) {
             MainWindow.Instance.mainFrame.Content = MainPage.Instance;
         }
 
@@ -56,6 +64,91 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             DataGridRow row = sender as DataGridRow;
             Product product = row.Item as Product;
             MainWindow.Instance.mainFrame.Content = new ProductEditPage(product);
+        }
+
+        //method for filtering by vendor
+        private void VendorFilterSBox_TextChanged(object sender, TextChangedEventArgs e) {
+            TextBox textBox = sender as TextBox;
+            if (textBox.Text.Length >= 2) {
+
+                string query = textBox.Text.ToLower();
+
+                if (productDG.ItemsSource == filteredProducts) {
+                    filteredProducts = filteredProducts.Where(p => p.vendor.ToLower().Contains(query)).ToList();
+                    ChangeCountLabel(filteredProducts.Count);
+                    productDG.ItemsSource = filteredProducts;
+                } else {
+                    filteredProducts = allProducts.Where(p => p.vendor.ToLower().Contains(query)).ToList();
+                    ChangeCountLabel(filteredProducts.Count);
+                    productDG.ItemsSource = filteredProducts;
+                }
+            } else if (textBox.Text.Length == 0) {
+                ChangeCountLabel(allProducts.Count);
+                productDG.ItemsSource = allProducts;
+            }
+        }
+
+        private void SKUFilterSBox_TextChanged(object sender, TextChangedEventArgs e) {
+            TextBox textBox = sender as TextBox;
+            if (textBox.Text.Length >= 2) {
+
+                string query = textBox.Text.ToLower();
+
+                if (productDG.ItemsSource == filteredProducts) {
+                    filteredProducts = filteredProducts.Where(p => p.sku.ToLower().Contains(query)).ToList();
+                    ChangeCountLabel(filteredProducts.Count);
+                    productDG.ItemsSource = filteredProducts;
+                } else {
+                    filteredProducts = allProducts.Where(p => p.sku.ToLower().Contains(query)).ToList();
+                    ChangeCountLabel(filteredProducts.Count);
+                    productDG.ItemsSource = filteredProducts;
+                }
+            } else if (textBox.Text.Length == 0) {
+                ChangeCountLabel(allProducts.Count);
+                productDG.ItemsSource = allProducts;
+            }
+        }
+
+        private void TitleFilterSBox_TextChanged(object sender, TextChangedEventArgs e) {
+            TextBox textBox = sender as TextBox;
+            if (textBox.Text.Length >= 2) {
+
+                string query = textBox.Text.ToLower();
+
+                if (productDG.ItemsSource == filteredProducts) {
+                    filteredProducts = filteredProducts.Where(p => p.title.ToLower().Contains(query)).ToList();
+                    ChangeCountLabel(filteredProducts.Count);
+                    productDG.ItemsSource = filteredProducts;
+                } else {
+                    filteredProducts = allProducts.Where(p => p.title.ToLower().Contains(query)).ToList();
+                    ChangeCountLabel(filteredProducts.Count);
+                    productDG.ItemsSource = filteredProducts;
+                }
+            } else if (textBox.Text.Length == 0) {
+                ChangeCountLabel(allProducts.Count);
+                productDG.ItemsSource = allProducts;
+            }
+        }
+
+        private void TypeFilterSBox_TextChanged(object sender, TextChangedEventArgs e) {
+            TextBox textBox = sender as TextBox;
+            if (textBox.Text.Length >= 2) {
+
+                string query = textBox.Text.ToLower();
+
+                if (productDG.ItemsSource == filteredProducts) {
+                    filteredProducts = filteredProducts.Where(p => p.product_type.ToLower().Contains(query)).ToList();
+                    ChangeCountLabel(filteredProducts.Count);
+                    productDG.ItemsSource = filteredProducts;
+                } else {
+                    filteredProducts = allProducts.Where(p => p.product_type.ToLower().Contains(query)).ToList();
+                    ChangeCountLabel(filteredProducts.Count);
+                    productDG.ItemsSource = filteredProducts;
+                }
+            } else if (textBox.Text.Length == 0) {
+                ChangeCountLabel(allProducts.Count);
+                productDG.ItemsSource = allProducts;
+            }
         }
     }
 }
