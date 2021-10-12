@@ -19,6 +19,7 @@
             <Setter Property="CanUserResizeRows" Value="False" />
             <Setter Property="CanUserAddRows" Value="False"/>
             <Setter Property="CanUserDeleteRows" Value="False"/>
+            <Setter Property="CanUserSortColumns" Value="True"/>
             <Setter Property="ColumnWidth" Value="Auto"/>
             <Setter Property="MinColumnWidth" Value="100"/>
             <Setter Property="RowBackground" Value="White" />

@@ -1,7 +1,11 @@
 ﻿using Ikrito_Fulfillment_Platform.Models;
 using Ikrito_Fulfillment_Platform.Utils;
+using Ikrito_Fulfillment_Platform.ViewModels;
+using Microsoft.VisualStudio.PlatformUI;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,8 +26,17 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         private bool productSaved = false;
         private bool productNeedsSaving = false;
 
+        public ObservableCollection<string> imgListBoxDataSource;
+        public ICommand DeleteImageCommand { get; set; }
+        public ICommand ShowImageCommand { get; set; }
+        
+        public ObservableCollection<string> tagListBoxDataSource;
+        public ICommand DeleteTagCommand { get; set; }
+
         public ProductEditPage(Product product) {
             InitializeComponent();
+            DataContext = this;
+
             editableProduct = product;
             ProductFieldInit();
         }
@@ -51,21 +64,21 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             WidthBox.Text = editableProduct.width.ToString();
             LenghtBox.Text = editableProduct.lenght.ToString();
 
-            //Adding images
-            ImageListBox.ItemsSource = editableProduct.images;
+            //Image listBox init
+            imgListBoxDataSource = new ObservableCollection<string>(editableProduct.images);
+            ImageListBox.ItemsSource = imgListBoxDataSource;
+            DeleteImageCommand = new DelegateCommand<object>(DeleteImage);
+            ShowImageCommand = new DelegateCommand<object>(ShowImage);
 
             //adding tags
-            TagListBox.ItemsSource = editableProduct.tags;
-
+            tagListBoxDataSource = new ObservableCollection<string>(editableProduct.tags);
+            TagListBox.ItemsSource = tagListBoxDataSource;
+            DeleteTagCommand = new DelegateCommand<object>(DeleteTag);
         }
 
-        private void AddImageButton_Click(object sender, RoutedEventArgs e) {
 
-        }
 
-        private void AddTagButton_Click(object sender, RoutedEventArgs e) {
 
-        }
 
         private void saveProduct() {
 
@@ -89,6 +102,40 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             } else {
                 exitPage();
             }
+        }
+
+        //on button click method that adds linkt to product.tags
+        private void AddTagButton_Click(object sender, RoutedEventArgs e) {
+            string newTag = TagBox.Text;
+            tagListBoxDataSource.Add(newTag);
+            editableProduct.images.Add(newTag);
+            TagBox.Text = null;
+        }
+
+        //method deletes image link from list box
+        private void DeleteTag(object item) {
+            tagListBoxDataSource.Remove(item as string);
+            editableProduct.tags.Remove(item as string);
+        }
+
+        //on button click method that adds linkt to product.images
+        private void AddImageButton_Click(object sender, RoutedEventArgs e) {
+            string newImageLink = ImageBox.Text;
+            imgListBoxDataSource.Add(newImageLink);
+            editableProduct.images.Add(newImageLink);
+            ImageBox.Text = null;
+        }
+
+        //method deletes image link from list box
+        private void DeleteImage(object item) {
+            imgListBoxDataSource.Remove(item as string);
+            editableProduct.images.Remove(item as string);
+        }
+
+        //method opens image in default browser
+        private void ShowImage(object item) {
+            string imgLink = item as string;
+            SiteNav.GoToSite(imgLink);
         }
 
     }

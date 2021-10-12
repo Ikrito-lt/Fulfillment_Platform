@@ -121,18 +121,49 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
+                
                 <TextBlock Grid.Column="0" Text="Images: " Margin="5" Padding="3"/>
                 <TextBox Grid.Column="1" x:Name="ImageBox" Visibility="Visible" VerticalAlignment="Center" Padding="3"/>
-                <ListBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" Name="ImageListBox" MaxHeight="100"/>
-                <Button x:Name="AddImageButton" Grid.Column="2" Click="AddImageButton_Click" Content="+" Padding="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
+                <Button x:Name="AddImageButton" Grid.Column="2" Click="AddImageButton_Click" Content="+" Padding="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,5"/>
+                <ListBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" Name="ImageListBox" MaxHeight="150" SelectionMode="Single" HorizontalContentAlignment="Stretch">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="40"></ColumnDefinition>
+                                    <ColumnDefinition Width="40"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
 
+                                <TextBlock Text="{Binding}" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <Button Content="[x]" Command="{Binding ElementName=ImageListBox, Path=DataContext.DeleteImageCommand}" CommandParameter="{Binding}" Grid.Column="2" Margin="5" Padding="3" />
+                                <Button Content="🔎︎" Command="{Binding ElementName=ImageListBox, Path=DataContext.ShowImageCommand}" CommandParameter="{Binding}" Grid.Column="1" Margin="5" Padding="3" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
 
                 <TextBlock Grid.Column="3" Text="Tags: " Margin="5" Padding="3"/>
                 <TextBox Grid.Column="4" x:Name="TagBox" Visibility="Visible" VerticalAlignment="Center" Padding="3"/>
-                <ListBox Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="1" Name="TagListBox" MaxHeight="100"/>
-                <Button x:Name="AddTagButton" Grid.Column="5" Click="AddTagButton_Click" Content="+" Padding="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"/>
+                <Button x:Name="AddTagButton" Grid.Column="5" Click="AddTagButton_Click" Content="+" Padding="3" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,5,0,5"/>
+                <ListBox Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="1" Name="TagListBox"  MaxHeight="150" SelectionMode="Single" HorizontalContentAlignment="Stretch">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="40"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="{Binding}" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <Button Content="[x]" Command="{Binding ElementName=TagListBox, Path=DataContext.DeleteTagCommand}" CommandParameter="{Binding}" Grid.Column="1" Margin="5" Padding="3" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                
             </Grid>
-            
+
             <Grid Margin="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="100"/>
@@ -141,7 +172,7 @@
                 <Button x:Name="BackButton" Grid.Column="0" Click="BackButton_Click" Content="Back" Padding="15,5,15,5" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,10,0,0"/>
                 <Button x:Name="SaveButton" Grid.Column="1" Click="SaveButton_Click" Content="Save" Padding="15,5,15,5" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,10,0,0"/>
             </Grid>
-            
+
         </StackPanel>
     </Grid>
 </Page>
