@@ -1,7 +1,7 @@
 ﻿using Ikrito_Fulfillment_Platform.Models;
 using Ikrito_Fulfillment_Platform.Utils;
-using Ikrito_Fulfillment_Platform.ViewModels;
 using Microsoft.VisualStudio.PlatformUI;
+using System.Text.RegularExpressions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -76,12 +76,31 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             DeleteTagCommand = new DelegateCommand<object>(DeleteTag);
         }
 
-
-
-
-
         private void saveProduct() {
+            Product newProduct = new();
 
+            //adding string values
+            newProduct.title = TitleBox.Text;
+            newProduct.body_html = DescBox.Text;
+            newProduct.vendor = VendorBox.Text;
+            newProduct.product_type = ProductTypeBox.Text;
+            newProduct.barcode = BarcodeBox.Text;
+            newProduct.sku = SKUBox.Text;
+
+            //adding doubles
+            newProduct.price = double.Parse(PriceBox.Text);
+            newProduct.vendor_price = double.Parse(VendorPriceBox.Text);
+            newProduct.weight = double.Parse(WeightBox.Text);
+
+            //adding ints
+            newProduct.stock = int.Parse(StockBox.Text);
+            newProduct.height = int.Parse(HeightBox.Text);
+            newProduct.width = int.Parse(WidthBox.Text);
+            newProduct.lenght = int.Parse(LenghtBox.Text);
+
+            //adding tad and images;
+            newProduct.images = editableProduct.images;
+            newProduct.tags = editableProduct.tags;
         }
 
         private void exitPage() {
@@ -91,6 +110,8 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         private void SaveButton_Click(object sender, RoutedEventArgs e) {
 
         }
+
+
 
         private void BackButton_Click(object sender, RoutedEventArgs e) {
             DialogueYN dialog = new("Save product?");
@@ -138,5 +159,14 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             SiteNav.GoToSite(imgLink);
         }
 
+        private void DoublePreviewTextInput(object sender, TextCompositionEventArgs e) {
+            Regex DoubleRegex = new Regex("[^0-9.]+");
+            e.Handled = DoubleRegex.IsMatch(e.Text);
+        }
+
+        private void IntPreviewTextInput(object sender, TextCompositionEventArgs e) {
+            Regex IntRegex = new Regex("[^0-9]+");
+            e.Handled = IntRegex.IsMatch(e.Text);
+        }
     }
 }
