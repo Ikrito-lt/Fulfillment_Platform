@@ -15,7 +15,12 @@ namespace Ikrito_Fulfillment_Platform.Utils {
             return "Basic " + encodedCreds;
         }
 
-
+        // AWS mySQL DB creds
+        public const string endpoint = "ikrito-db.c175yaycfw7i.eu-central-1.rds.amazonaws.com";
+        public const string port = "3306";
+        public const string user = "admin";
+        public const string pass = "p3gD2Z5fbztX8Uh";
+        public const string db = "main";
 
     }
 }

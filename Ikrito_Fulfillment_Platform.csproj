@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Utilities" Version="16.10.31321.278" />
+    <PackageReference Include="MySql.Data" Version="8.0.27" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="RestSharp" Version="106.12.0" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.115" />
