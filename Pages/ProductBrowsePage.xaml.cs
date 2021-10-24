@@ -60,6 +60,10 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             MainWindow.Instance.mainFrame.Content = MainPage.Instance;
         }
 
+        private void SyncButton_Click(object sender, RoutedEventArgs e) {
+            MainWindow.Instance.mainFrame.Content = ProductSyncPage.Instance;
+        }
+
         private void Row_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
             DataGridRow row = sender as DataGridRow;
             Product product = row.Item as Product;

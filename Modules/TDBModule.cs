@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using Ikrito_Fulfillment_Platform.Utils;
 
 namespace Ikrito_Fulfillment_Platform.Modules {
     class TDBModule {
@@ -23,25 +24,26 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         public static string CataloguePath = "ixml.ProdCatExt";
         public static string DataSheetsPath = "ixml.DSheets";
 
-        public static readonly string DBsource = @"Data Source=C:\Users\Luke\Desktop\Ikrito_Fulfillment_Platform\TDB.db;Version=3;";
+        //private readonly string TDBDesc_location = @"C:\Users\Luke\Desktop\Ikrito_Fulfillment_Platform\Files\TDB\TDB_cat.xml";
+        //private readonly string TDBCat_location = @"C:\Users\Luke\Desktop\Ikrito_Fulfillment_Platform\Files\TDB\TDB_cat2.xml";
+        //private readonly string TDBCategoriesJson = @"C:\Users\Luke\Desktop\Ikrito_Fulfillment_Platform\Files\TDB\TDBCategories.json";
 
-        private readonly string TDBDesc_location = @"C:\Users\Luke\Desktop\Ikrito_Fulfillment_Platform\Files\TDB\TDB_cat.xml";
-        private readonly string TDBCat_location = @"C:\Users\Luke\Desktop\Ikrito_Fulfillment_Platform\Files\TDB\TDB_cat2.xml";
-        private readonly string TDBCategoriesJson = @"C:\Users\Luke\Desktop\Ikrito_Fulfillment_Platform\Files\TDB\TDBCategories.json";
-
-        private static Dictionary<string, int> GetCategoriesDictionary() {
+        public static Dictionary<string, string> GetCategoriesDictionary() {
 
             //getting category KVP from database
-            Dictionary<string, int> categoriesKVP = new();
-            DataBaseInterface dataBaseInterface = new(DBsource);
+            Dictionary<string, string> categoriesKVP = new();
+            DataBaseInterface db = new();
 
-            string cmdText = "select ID, ProductType from ProductTypes;";
+            var result = db.Table("ProductTypes").Get("ID, ProductType");
 
-            using (var QueryReader = dataBaseInterface.ExecQuery(cmdText)) {
-                while (QueryReader.Read()) {
-                    categoriesKVP.Add(QueryReader.GetString(1), QueryReader.GetInt32(0));
-                }
+            foreach (var cat in result.Values) {
+
+                var id = cat["ID"];
+                var type = cat["ProductType"];
+
+                categoriesKVP.Add(id, type);
             }
+
             return categoriesKVP;
         }
 
@@ -57,69 +59,73 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         //get productID by SKU
         public static int GetID(string sku) {
             int id = new();
-            string cmdText = $"SELECT ID from Products where SKU = '{sku}' limit 1;";
 
-            DataBaseInterface dataBaseInterface = new(DBsource);
-            using (var QueryReader = dataBaseInterface.ExecQuery(cmdText)) {
-                while (QueryReader.Read()) {
-                    id = QueryReader.GetInt32(0);
+            var whereQuery = new Dictionary<string, Dictionary<string, string>> {
+                ["SKU"] = new Dictionary<string, string> {
+                    ["="] = sku
                 }
+            };
+
+            DataBaseInterface db = new();
+            var result = db.Table("TDB_Products").Where(whereQuery).Get(fields:"ID", rowLimit: 1);
+
+            foreach (var prod in result.Values) {
+
+                id = int.Parse(prod["ID"]);
             }
+
             return id;
         }
 
         public List<Product> getProductsFromDB() {
             List<Product> products = new();
             string cmdText = $"SELECT * from Products";
-            Dictionary<string, int> categoriesKVP = GetCategoriesDictionary();
-            Dictionary<int, string> categoriesKVPR = categoriesKVP.ToDictionary(x => x.Value, x => x.Key);
+            Dictionary<string, string> categoriesKVP = GetCategoriesDictionary();
 
             //getting main product info
-            DataBaseInterface dataBaseInterface = new(DBsource);
-            using (var QueryReader = dataBaseInterface.ExecQuery(cmdText)) {
-                while (QueryReader.Read()) {
-                    Product NewProduct = new();
-                    NewProduct.DBID = QueryReader.GetInt32(0);
-                    NewProduct.title = QueryReader.GetString(1);
-                    NewProduct.body_html = QueryReader.GetString(2);
-                    NewProduct.vendor = QueryReader.GetString(3);
-                    NewProduct.product_type = categoriesKVPR[QueryReader.GetInt32(4)];
-                    NewProduct.price = double.Parse(QueryReader.GetString(5));
-                    NewProduct.sku = QueryReader.GetString(6);
-                    NewProduct.stock = QueryReader.GetInt32(7);
-                    NewProduct.barcode = QueryReader.GetString(8);
-                    NewProduct.vendor_price = double.Parse(QueryReader.GetString(9));
-                    NewProduct.weight = double.Parse(QueryReader.GetString(10));
-                    NewProduct.height = QueryReader.GetInt32(11);
-                    NewProduct.lenght = QueryReader.GetInt32(12);
-                    NewProduct.width = QueryReader.GetInt32(13);
+            DataBaseInterface db = new();
+            var result = db.Table("TDB_Products").Get();
+            foreach (var prod in result.Values) {
 
-                    products.Add(NewProduct);
-                }
+                Product NewProduct = new();
+                NewProduct.DBID = int.Parse(prod["ID"]);
+                NewProduct.title = prod["Title"];
+                NewProduct.body_html = prod["Body"];
+                NewProduct.vendor = prod["Vendor"];
+                NewProduct.product_type = categoriesKVP[prod["ProductType"]];
+                NewProduct.price = double.Parse(prod["Price"]);
+                NewProduct.sku = prod["SKU"];
+                NewProduct.stock = int.Parse(prod["Stock"]);
+                NewProduct.barcode = prod["Barcode"];
+                NewProduct.vendor_price = double.Parse(prod["PriceVendor"]);
+                NewProduct.weight = double.Parse(prod["Weight"]);
+                NewProduct.height = int.Parse(prod["Height"]);
+                NewProduct.lenght = int.Parse(prod["Lenght"]);
+                NewProduct.width = int.Parse(prod["Width"]);
+
+                products.Add(NewProduct);
             }
 
             //getting images faster
-            cmdText = $"select * from Images";
-            dataBaseInterface = new(DBsource);
-            using (var QueryReader = dataBaseInterface.ExecQuery(cmdText)) {
-                while (QueryReader.Read()) {
-                    int productID = QueryReader.GetInt32(1);
-                    string imageUrl = QueryReader.GetString(2);
+            db = new();
+            result = db.Table("TDB_Images").Get();
+            foreach (var imgRow in result.Values) {
 
-                    products.Find(x => x.DBID == productID).images.Add(imageUrl);
-                }
+                int productID = int.Parse(imgRow["ProductID"]);
+                string imageUrl = imgRow["ImgUrl"];
+
+                products.Find(x => x.DBID == productID).images.Add(imageUrl);
             }
 
             //getting tags faster
-            cmdText = $"select * from Tags";
-            dataBaseInterface = new(DBsource);
-            using (var QueryReader = dataBaseInterface.ExecQuery(cmdText)) {
-                while (QueryReader.Read()) {
-                    int productID = QueryReader.GetInt32(1);
-                    string tag = QueryReader.GetString(2);
+            db = new();
+            result = db.Table("TDB_Tags").Get();
+            foreach (var tagRow in result.Values) {
 
-                    products.Find(x => x.DBID == productID).tags.Add(tag);
-                }
+                int productID = int.Parse(tagRow["ProductID"]);
+                string tag = tagRow["Tag"];
+
+                products.Find(x => x.DBID == productID).tags.Add(tag);
             }
 
             return products;

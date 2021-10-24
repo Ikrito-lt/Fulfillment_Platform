@@ -22,6 +22,7 @@ namespace Ikrito_Fulfillment_Platform {
         void App_Startup(object sender, StartupEventArgs e) {
 
 
+
             Ikrito_Fulfillment_Platform.MainWindow.Instance.Show();
         }
     }

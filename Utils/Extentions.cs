@@ -12,6 +12,29 @@ namespace Ikrito_Fulfillment_Platform.Utils {
             return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
         }
 
+        public static void AddRange<T>(this ICollection<T> target, IEnumerable<T> source) {
+            if (target == null)
+                throw new ArgumentNullException(nameof(target));
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            foreach (var element in source)
+                target.Add(element);
+        }
+
+        public static void AddRange<T, S>(this Dictionary<T, S> source, Dictionary<T, S> collection) {
+            if (collection == null) {
+                throw new ArgumentNullException("Collection is null");
+            }
+
+            foreach (var item in collection) {
+                if (!source.ContainsKey(item.Key)) {
+                    source.Add(item.Key, item.Value);
+                } else {
+                    throw new Exception($"Dublicate Key: {item.Key} val: {item.Value}");
+                }
+            }
+        }
+
     }
 
 

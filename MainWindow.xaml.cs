@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ikrito_Fulfillment_Platform.Modules;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,15 +29,13 @@ namespace Ikrito_Fulfillment_Platform {
         private MainWindow() {
             InitializeComponent();
             setFrame(MainPage.Instance);
+
+            //test();
         }
 
-
-        //public MainWindow() {
-        //    InitializeComponent();
-
-        //    MainPage mainPage = new();
-        //    setFrame(mainPage);
-        //}
+        public void test() {
+            TDBModule.GetID("TDB-CD974AE");
+        }
 
         public void setFrame(Page page) {
             mainFrame.Content = page;
