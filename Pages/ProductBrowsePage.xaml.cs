@@ -29,7 +29,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         }
 
         private ProductBrowsePage() {
-            allProducts = loadProdList();
+            allProducts = GetProdList();
             InitializeComponent();
 
             filteredProducts = allProducts;
@@ -40,10 +40,10 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             ChangeCountLabel(filteredProducts.Count);
         }
 
-        private List<Product> loadProdList() {
+        private static List<Product> GetProdList() {
             //getting products from TDB Module
             var TDBModule = new TDBModule();
-            List<Product> TDBproducts = TDBModule.getProductsFromDB();
+            List<Product> TDBproducts = Modules.TDBModule.getProductsFromDB();
 
             // adding all products to one list
             List<Product> prodList = new();

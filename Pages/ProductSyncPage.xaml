@@ -20,7 +20,7 @@
             <Setter Property="CanUserDeleteRows" Value="False"/>
             <Setter Property="CanUserSortColumns" Value="True"/>
             <Setter Property="ColumnWidth" Value="Auto"/>
-            <Setter Property="MinColumnWidth" Value="100"/>
+            <Setter Property="MinColumnWidth" Value="150"/>
             <Setter Property="RowBackground" Value="White" />
             <Setter Property="AlternatingRowBackground" Value="WhiteSmoke"/>
         </Style>
@@ -39,7 +39,7 @@
     </Page.Resources>
 
     <Grid Margin="0"   Background="LightBlue">
-        <Grid Background="Wheat" Margin="15,15,15,15" VerticalAlignment="Stretch">
+        <Grid Margin="15,15,15,15" VerticalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="1*"/>
@@ -51,15 +51,15 @@
             </Grid.RowDefinitions>
 
             <Grid Margin="0">
-                <ProgressBar x:Name="loadingBar"  Minimum="0" Maximum="100" Height="30" Margin="5" VerticalAlignment="Bottom" Visibility="Visible" IsEnabled="true" />
-                <TextBlock Text="{Binding ElementName=loadingBar, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <ProgressBar x:Name="loadingBar"  Minimum="0" Maximum="100" Height="30" VerticalAlignment="Top" Visibility="Visible" IsEnabled="true" Margin="5"/>
+                <TextBlock Text="{Binding ElementName=loadingBar, Path=Value, StringFormat={}{0:0}%}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="5" Padding="5"/>
             </Grid>
 
             <Button x:Name="UpdateProductsBtn" Click="UpdateProducts_Click" Content="Update Products" Padding="5" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"/>
             <Button x:Name="BackBtn" Click="BackButton_Click" Content="Back" Padding="5" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"/>
 
             <DataGrid x:Name="productSyncDG" Margin="0,0,0,0" SelectionMode="Single" CanUserAddRows="False" HeadersVisibility="Column" HorizontalAlignment="Stretch"
-                          VerticalAlignment="Stretch" AutoGenerateColumns="False" Style="{DynamicResource DataGridStyle1}" ItemsSource="{Binding}" Grid.Column="1" Grid.Row="1" >
+                          VerticalAlignment="Stretch" AutoGenerateColumns="False" Style="{DynamicResource DataGridStyle1}" ItemsSource="{Binding}" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" >
                 <DataGrid.Columns>
 
                     <DataGridTextColumn Binding="{Binding sku}" Header="SKU">
@@ -79,7 +79,41 @@
                         </DataGridTextColumn.HeaderStyle>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Binding="{Binding title}" Header="Title">
+                    <DataGridTextColumn Binding="{Binding status}" Header="Status">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Left" />
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="TextWrapping" Value="Wrap" />
+                                <Setter Property="TextAlignment" Value="Left"/>
+                                <Setter Property="Padding" Value="5"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Binding="{Binding lastUpdateTime}" Header="Last Update">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Left" />
+                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="TextWrapping" Value="Wrap" />
+                                <Setter Property="TextAlignment" Value="Left"/>
+                                <Setter Property="Padding" Value="5"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                        <DataGridTextColumn.HeaderStyle>
+                            <Style TargetType="{x:Type DataGridColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </DataGridTextColumn.HeaderStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Binding="{Binding lastSyncTime}" Header="Last Sync">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="HorizontalAlignment" Value="Left" />

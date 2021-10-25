@@ -7,26 +7,6 @@ using MySql.Data.MySqlClient;
 namespace Ikrito_Fulfillment_Platform.Modules {
     class DataBaseInterface {
 
-        //todo: add db source
-        //private readonly string dataSource;
-
-        //public void ExecNonQuery(string CommandText) {
-        //    using (SQLiteCommand cmd = new(CommandText, c)) {
-        //        cmd.ExecuteNonQuery();
-        //    }
-        //    c.Close();
-        //}
-
-        //public SQLiteDataReader ExecQuery(string CommandText) {
-        //    SQLiteConnection connection = new(dataSource);
-        //    connection.Open();
-        //    SQLiteCommand cmd = connection.CreateCommand();
-        //    var QueryReader = cmd.ExecuteReader();
-        //    cmd.CommandText = CommandText;
-        //    return QueryReader;
-        //}
-
-
         /*
          * Hold active MySql connection.
          */

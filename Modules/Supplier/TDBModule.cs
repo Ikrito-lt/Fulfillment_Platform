@@ -77,7 +77,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             return id;
         }
 
-        public List<Product> getProductsFromDB() {
+        public static List<Product> getProductsFromDB() {
             List<Product> products = new();
             string cmdText = $"SELECT * from Products";
             Dictionary<string, string> categoriesKVP = GetCategoriesDictionary();
