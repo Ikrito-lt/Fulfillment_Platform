@@ -35,6 +35,14 @@ namespace Ikrito_Fulfillment_Platform.Utils {
             }
         }
 
+        public static string UnixTimeToSrt(this string unixTime) {
+
+            DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            dateTime = dateTime.AddSeconds(int.Parse(unixTime)).ToLocalTime();
+            return dateTime.ToString("MM/dd/yyyy HH:mm");
+        }
+
+
     }
 
 
