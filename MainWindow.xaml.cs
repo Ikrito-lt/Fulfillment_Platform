@@ -1,19 +1,6 @@
-﻿using Ikrito_Fulfillment_Platform.Modules;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Ikrito_Fulfillment_Platform.Utils;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Ikrito_Fulfillment_Platform {
     /// <summary>
@@ -31,12 +18,11 @@ namespace Ikrito_Fulfillment_Platform {
             InitializeComponent();
             setFrame(MainPage.Instance);
 
-            test();
+            //test();
         }
 
         public void test() {
-            ProductSyncModule m = new();
-            m.
+            Test t = new();
         }
 
         public void setFrame(Page page) {

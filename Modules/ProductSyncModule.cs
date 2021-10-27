@@ -8,6 +8,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RestSharp;
+using System.Threading;
 
 namespace Ikrito_Fulfillment_Platform.Modules {
     class ProductSyncModule {
@@ -96,15 +98,117 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         }
 
         private void UpdateShopifyProduct(Product p, SyncProduct sync) {
-
             //updating product in shopify
-            bool updateRes = ProductClient.ExecPostProd(ProductPath, mainHeaders, p.GetImportJsonString(), sync);
-            if (creationRes == "503 and DeleteFail") {
-                //NewShopifyProduct(p, sync);
-                return;
+            IRestResponse updateRes = ProductClient.ExecPutProd($"products/{sync.shopifyID}.json", mainHeaders, p.GetImportJsonString());
+            if (!updateRes.IsSuccessful) {
+                if (updateRes.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable) {
+                    Thread.Sleep(5000);
+
+                    UpdateShopifyProduct(p, sync);
+                    return;
+                } else {
+                    throw updateRes.ErrorException;
+                }
             }
 
-            dynamic data = JsonConvert.DeserializeObject<dynamic>(creationRes);
+            //to update metafields i need to get metafield IDs
+            string getMetaRes = ProductClient.ExecGet($"products/{sync.shopifyID}/metafields.json", mainHeaders);
+            var ids = ExtractMetafieldIDs(getMetaRes);
+
+            //updating height metafield
+            string heightVal = $"\"{{\\\"unit\\\": \\\"cm\\\",\\\"value\\\": {p.height}}}";
+            string heightBody = $@"{{""metafield"": {{""value"": {heightVal} }}}}";
+            IRestResponse heightRes = ProductClient.ExecPutProd($"products/{sync.shopifyID}/metafields/{ids["height"]}.json", mainHeaders, heightBody);
+            if (!heightRes.IsSuccessful) {
+                if (heightRes.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable) {
+                    Thread.Sleep(5000);
+
+                    UpdateShopifyProduct(p, sync);
+                    return;
+                } else {
+                    throw heightRes.ErrorException;
+                }
+            }
+
+            //updating lenght metafield
+            string lenghtVal = $"\"{{\\\"unit\\\": \\\"cm\\\",\\\"value\\\": {p.lenght}}}";
+            string lenghtBody = $@"{{""metafield"": {{""value"": {lenghtVal} }}}}";
+            IRestResponse lenghtRes = ProductClient.ExecPutProd($"products/{sync.shopifyID}/metafields/{ids["lenght"]}.json", mainHeaders, lenghtBody);
+            if (!lenghtRes.IsSuccessful) {
+                if (lenghtRes.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable) {
+                    Thread.Sleep(5000);
+
+                    UpdateShopifyProduct(p, sync);
+                    return;
+                } else {
+                    throw lenghtRes.ErrorException;
+                }
+            }
+
+            //updating width metafield
+            string widthVal = $"\"{{\\\"unit\\\": \\\"cm\\\",\\\"value\\\": {p.width}}}";
+            string widthBody = $@"{{""metafield"": {{""value"": {widthVal} }}}}";
+            IRestResponse widthRes = ProductClient.ExecPutProd($"products/{sync.shopifyID}/metafields/{ids["width"]}.json", mainHeaders, widthBody);
+            if (!widthRes.IsSuccessful) {
+                if (widthRes.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable) {
+                    Thread.Sleep(5000);
+
+                    UpdateShopifyProduct(p, sync);
+                    return;
+                } else {
+                    throw widthRes.ErrorException;
+                }
+            }
+
+            //updating vendor price
+            IRestResponse vendorPriceRes = ProductClient.ExecPutProd($"inventory_items/{sync.inventoryItemID}.json", mainHeaders, p.GetVendorPriceBody());
+            if (!vendorPriceRes.IsSuccessful) {
+                if (vendorPriceRes.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable) {
+                    Thread.Sleep(5000);
+
+                    UpdateShopifyProduct(p, sync);
+                    return;
+                } else {
+                    throw vendorPriceRes.ErrorException;
+                }
+            }
+
+            //updating product status
+            DataBaseInterface db = new();
+            var updateData = new Dictionary<string, string> {
+                ["Status"] = ProductStatus.Ok,
+                ["LastSyncTime"] = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString()
+            };
+            var whereUpdate = new Dictionary<string, Dictionary<string, string>> {
+                ["SKU"] = new Dictionary<string, string> {
+                    ["="] = sync.sku
+                }
+            };
+            db.Table("Products").Where(whereUpdate).Update(updateData);
+
+        }
+
+        private void NewShopifyProduct(Product p, SyncProduct sync) {
+
+            //adding product to shopify
+            IRestResponse creationRes = ProductClient.ExecAddProd(ProductPath, mainHeaders, p.GetImportJsonString());
+            if (!creationRes.IsSuccessful) {
+                if (creationRes.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable) {
+                    Thread.Sleep(5000);
+
+                    bool deleted = ProductClient.ExecDeleteProd(mainHeaders, sync.shopifyID);
+                    if (deleted == false) {
+                        throw new Exception($"SKU: {sync.sku} >> 503 and DeleteFail (NewShopifyProduct createProd)");
+                    } else {
+                        NewShopifyProduct(p, sync);
+                        return;
+                    }
+                } else {
+                    throw creationRes.ErrorException;
+                }
+            }
+
+            dynamic data = JsonConvert.DeserializeObject<dynamic>(creationRes.Content);
             string shopifyID = data["product"]["variants"].First["product_id"].Value.ToString();
             string shopifyVariantID = data["product"]["variants"].First["id"].Value.ToString();
             string inventoryItemID = data["product"]["variants"].First["inventory_item_id"].Value.ToString();
@@ -113,30 +217,76 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             sync.shopifyVariantID = shopifyVariantID;
             sync.inventoryItemID = inventoryItemID;
 
-            //adding dimensions
-            bool heightRes = ProductClient.ExecPostProdBool($"products/{shopifyID}/metafields.json", mainHeaders, p.GetHeightMetaBody(), sync);
-            if (heightRes == false) {
-                //NewShopifyProduct(p, sync);
-                return;
+            //adding height metafield
+            IRestResponse heightRes = ProductClient.ExecAddProd($"products/{shopifyID}/metafields.json", mainHeaders, p.GetHeightMetaBody());
+            if (!heightRes.IsSuccessful) {
+                if (heightRes.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable) {
+                    Thread.Sleep(5000);
+
+                    bool deleted = ProductClient.ExecDeleteProd(mainHeaders, sync.shopifyID);
+                    if (deleted == false) {
+                        throw new Exception($"SKU: {sync.sku} >> 503 and DeleteFail (NewShopifyProduct height)");
+                    } else {
+                        NewShopifyProduct(p, sync);
+                        return;
+                    }
+                } else {
+                    throw heightRes.ErrorException;
+                }
             }
 
-            bool lenghtRes = ProductClient.ExecPostProdBool($"products/{shopifyID}/metafields.json", mainHeaders, p.GetLenghtMetaBody(), sync);
-            if (lenghtRes == false) {
-                //NewShopifyProduct(p, sync);
-                return;
+            //adding lenght metafield
+            IRestResponse lenghtRes = ProductClient.ExecAddProd($"products/{shopifyID}/metafields.json", mainHeaders, p.GetLenghtMetaBody());
+            if (!lenghtRes.IsSuccessful) {
+                if (lenghtRes.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable) {
+                    Thread.Sleep(5000);
+
+                    bool deleted = ProductClient.ExecDeleteProd(mainHeaders, sync.shopifyID);
+                    if (deleted == false) {
+                        throw new Exception($"SKU: {sync.sku} >> 503 and DeleteFail (NewShopifyProduct lenght)");
+                    } else {
+                        NewShopifyProduct(p, sync);
+                        return;
+                    }
+                } else {
+                    throw lenghtRes.ErrorException;
+                }
             }
 
-            bool widthRes = ProductClient.ExecPostProdBool($"products/{shopifyID}/metafields.json", mainHeaders, p.GetWidthMetaBody(), sync);
-            if (widthRes == false) {
-                //NewShopifyProduct(p, sync);
-                return;
+            //adding width metafield
+            IRestResponse widthRes = ProductClient.ExecAddProd($"products/{shopifyID}/metafields.json", mainHeaders, p.GetWidthMetaBody());
+            if (!widthRes.IsSuccessful) {
+                if (widthRes.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable) {
+                    Thread.Sleep(5000);
+
+                    bool deleted = ProductClient.ExecDeleteProd(mainHeaders, sync.shopifyID);
+                    if (deleted == false) {
+                        throw new Exception($"SKU: {sync.sku} >> 503 and DeleteFail (NewShopifyProduct width)");
+                    } else {
+                        NewShopifyProduct(p, sync);
+                        return;
+                    }
+                } else {
+                    throw widthRes.ErrorException;
+                }
             }
 
             //adding vendor price
-            bool vendorPriceRes = ProductClient.ExecPutProd($"inventory_items/{inventoryItemID}.json", mainHeaders, p.GetVendorPriceBody(), sync);
-            if (vendorPriceRes == false) {
-                //NewShopifyProduct(p, sync);
-                return;
+            IRestResponse vendorPriceRes = ProductClient.ExecPutProd($"inventory_items/{inventoryItemID}.json", mainHeaders, p.GetVendorPriceBody());
+            if (!vendorPriceRes.IsSuccessful) {
+                if (vendorPriceRes.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable) {
+                    Thread.Sleep(5000);
+
+                    bool deleted = ProductClient.ExecDeleteProd(mainHeaders, sync.shopifyID);
+                    if (deleted == false) {
+                        throw new Exception($"SKU: {sync.sku} >> 503 and DeleteFail (NewShopifyProduct vendorPrice)");
+                    } else {
+                        NewShopifyProduct(p, sync);
+                        return;
+                    }
+                } else {
+                    throw vendorPriceRes.ErrorException;
+                }
             }
 
             //adding new shopify id to
@@ -157,66 +307,25 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
         }
 
-        private void NewShopifyProduct(Product p, SyncProduct sync) {
+        public Dictionary<string, string> ExtractMetafieldIDs(string json) {
 
-            //adding product to shopify
-            string creationRes = ProductClient.ExecPostProd(ProductPath, mainHeaders, p.GetImportJsonString(), sync);
-            if (creationRes == "503 and DeleteFail") {
-                NewShopifyProduct(p, sync);
-                return;
-            }
+            Dictionary<string, string> ids = new();
 
-            dynamic data = JsonConvert.DeserializeObject<dynamic>(creationRes);
-            string shopifyID = data["product"]["variants"].First["product_id"].Value.ToString();
-            string shopifyVariantID = data["product"]["variants"].First["id"].Value.ToString();
-            string inventoryItemID = data["product"]["variants"].First["inventory_item_id"].Value.ToString();
+            dynamic dJson = JsonConvert.DeserializeObject(json);
+            var metaFields = dJson["metafields"];
 
-            sync.shopifyID = shopifyID;
-            sync.shopifyVariantID = shopifyVariantID;
-            sync.inventoryItemID = inventoryItemID;
+            foreach (var field in metaFields) {
+                string key = Convert.ToString(field["key"]);
+                string id = Convert.ToString(field["id"]);
+                string nameSpace = Convert.ToString(field["namespace"]);
 
-            //adding dimensions
-            bool heightRes = ProductClient.ExecPostProdBool($"products/{shopifyID}/metafields.json", mainHeaders, p.GetHeightMetaBody(), sync);
-            if (heightRes == false) {
-                NewShopifyProduct(p, sync);
-                return;
-            }
-
-            bool lenghtRes = ProductClient.ExecPostProdBool($"products/{shopifyID}/metafields.json", mainHeaders, p.GetLenghtMetaBody(), sync);
-            if (lenghtRes == false) {
-                NewShopifyProduct(p, sync);
-                return;
-            }
-
-            bool widthRes = ProductClient.ExecPostProdBool($"products/{shopifyID}/metafields.json", mainHeaders, p.GetWidthMetaBody(), sync);
-            if (widthRes == false) {
-                NewShopifyProduct(p, sync);
-                return;
-            }
-
-            //adding vendor price
-            bool vendorPriceRes = ProductClient.ExecPutProd($"inventory_items/{inventoryItemID}.json", mainHeaders, p.GetVendorPriceBody(), sync);
-            if (vendorPriceRes == false) {
-                NewShopifyProduct(p, sync);
-                return;
-            }
-
-            //adding new shopify id to
-            DataBaseInterface db = new();
-            var updateData = new Dictionary<string, string> {
-                ["ShopifyID"] = sync.shopifyID,
-                ["ShopifyVariantID"] = sync.shopifyVariantID,
-                ["ShopifyInventoryItemID"] = sync.inventoryItemID,
-                ["Status"] = ProductStatus.Ok,
-                ["LastSyncTime"] = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString()
-            };
-            var whereUpdate = new Dictionary<string, Dictionary<string, string>> {
-                ["SKU"] = new Dictionary<string, string> {
-                    ["="] = sync.sku
+                if (nameSpace == "my_fields") {
+                    if (key == "lenght" || key == "height" || key == "width") {
+                        ids.Add(key, id);
+                    }
                 }
-            };
-            db.Table("Products").Where(whereUpdate).Update(updateData);
-
+            }
+            return ids;
         }
     }
 }
