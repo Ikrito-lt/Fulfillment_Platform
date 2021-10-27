@@ -11,7 +11,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
     public partial class ProductSyncPage : Page {
 
         private readonly ProductSyncModule Sync;
-        private readonly List<SyncProduct> SyncProducts;
+        private List<SyncProduct> SyncProducts;
         private List<SyncProduct> FilteredSyncProducts;
 
         private int queryLenght = 0;
@@ -88,6 +88,15 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
         private void BackButton_Click(object sender, RoutedEventArgs e) {
             MainWindow.Instance.mainFrame.Content = ProductBrowsePage.Instance;
+        }
+
+        private void RefreshButton_Click(object sender, RoutedEventArgs e) {
+            deleteFilters();
+            //getting SyncProducts
+            SyncProducts = Sync.RefreshSyncProducts();
+            FilteredSyncProducts = SyncProducts;
+            productSyncDG.ItemsSource = FilteredSyncProducts;
+            ChangeCountLabel(FilteredSyncProducts.Count);
         }
 
         private void UpdateProducts_Click(object sender, RoutedEventArgs e) {

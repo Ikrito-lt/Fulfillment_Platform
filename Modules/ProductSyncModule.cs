@@ -27,6 +27,11 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             ProductClient = new(BaseUrl);
         }
 
+        public List<SyncProduct> RefreshSyncProducts() {
+            syncProducts = GetSyncProducts();
+            return syncProducts;
+        }
+
         private List<SyncProduct> GetSyncProducts(string status = null) {
             List<SyncProduct> p = new();
             DataBaseInterface db = new();
@@ -59,6 +64,8 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 product.lastSyncTime = row["LastSyncTime"].UnixTimeToSrt();
                 product.lastUpdateTime = row["LastUpdateTime"].UnixTimeToSrt();
                 product.shopifyID = row["ShopifyID"];
+                product.inventoryItemID = row["ShopifyInventoryItemID"];
+                product.shopifyVariantID = row["ShopifyVariantID"];
                 p.Add(product);
             }
             return p;
@@ -77,16 +84,77 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
         //method decides what to do with syncProduct
         private void ExportShopifyProduct(SyncProduct sync) {
-            ProductModule pm = new();
-            Product p = pm.GetProduct(sync.sku);
+            Product p = ProductModule.GetProduct(sync.sku);
 
             if (sync.status == ProductStatus.New) {
                 NewShopifyProduct(p, sync);
             } else if (sync.status == ProductStatus.WaitingShopSync) {
-                //todo: product update
+                UpdateShopifyProduct(p, sync);
             } else {
                 throw new Exception($"No Product Status - {sync.status}");
             }
+        }
+
+        private void UpdateShopifyProduct(Product p, SyncProduct sync) {
+
+            //updating product in shopify
+            bool updateRes = ProductClient.ExecPostProd(ProductPath, mainHeaders, p.GetImportJsonString(), sync);
+            if (creationRes == "503 and DeleteFail") {
+                //NewShopifyProduct(p, sync);
+                return;
+            }
+
+            dynamic data = JsonConvert.DeserializeObject<dynamic>(creationRes);
+            string shopifyID = data["product"]["variants"].First["product_id"].Value.ToString();
+            string shopifyVariantID = data["product"]["variants"].First["id"].Value.ToString();
+            string inventoryItemID = data["product"]["variants"].First["inventory_item_id"].Value.ToString();
+
+            sync.shopifyID = shopifyID;
+            sync.shopifyVariantID = shopifyVariantID;
+            sync.inventoryItemID = inventoryItemID;
+
+            //adding dimensions
+            bool heightRes = ProductClient.ExecPostProdBool($"products/{shopifyID}/metafields.json", mainHeaders, p.GetHeightMetaBody(), sync);
+            if (heightRes == false) {
+                //NewShopifyProduct(p, sync);
+                return;
+            }
+
+            bool lenghtRes = ProductClient.ExecPostProdBool($"products/{shopifyID}/metafields.json", mainHeaders, p.GetLenghtMetaBody(), sync);
+            if (lenghtRes == false) {
+                //NewShopifyProduct(p, sync);
+                return;
+            }
+
+            bool widthRes = ProductClient.ExecPostProdBool($"products/{shopifyID}/metafields.json", mainHeaders, p.GetWidthMetaBody(), sync);
+            if (widthRes == false) {
+                //NewShopifyProduct(p, sync);
+                return;
+            }
+
+            //adding vendor price
+            bool vendorPriceRes = ProductClient.ExecPutProd($"inventory_items/{inventoryItemID}.json", mainHeaders, p.GetVendorPriceBody(), sync);
+            if (vendorPriceRes == false) {
+                //NewShopifyProduct(p, sync);
+                return;
+            }
+
+            //adding new shopify id to
+            DataBaseInterface db = new();
+            var updateData = new Dictionary<string, string> {
+                ["ShopifyID"] = sync.shopifyID,
+                ["ShopifyVariantID"] = sync.shopifyVariantID,
+                ["ShopifyInventoryItemID"] = sync.inventoryItemID,
+                ["Status"] = ProductStatus.Ok,
+                ["LastSyncTime"] = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString()
+            };
+            var whereUpdate = new Dictionary<string, Dictionary<string, string>> {
+                ["SKU"] = new Dictionary<string, string> {
+                    ["="] = sync.sku
+                }
+            };
+            db.Table("Products").Where(whereUpdate).Update(updateData);
+
         }
 
         private void NewShopifyProduct(Product p, SyncProduct sync) {
@@ -139,7 +207,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 ["ShopifyID"] = sync.shopifyID,
                 ["ShopifyVariantID"] = sync.shopifyVariantID,
                 ["ShopifyInventoryItemID"] = sync.inventoryItemID,
-                ["Status"] = "Ok",
+                ["Status"] = ProductStatus.Ok,
                 ["LastSyncTime"] = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString()
             };
             var whereUpdate = new Dictionary<string, Dictionary<string, string>> {

@@ -11,7 +11,6 @@ using System.Windows.Input;
 namespace Ikrito_Fulfillment_Platform.Pages {
     public partial class ProductBrowsePage : Page {
         
-        private readonly ProductModule ProdM;
         private readonly List<Product> allProducts;
         private List<Product> filteredProducts;
 
@@ -37,8 +36,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         private ProductBrowsePage() {
             InitializeComponent();
             //getting products
-            ProdM = new();
-            allProducts = ProdM.GetProducts();
+            allProducts = ProductModule.GetAllProducts();
             filteredProducts = allProducts;
 
             //init DataGrid
