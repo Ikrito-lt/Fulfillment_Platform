@@ -1,6 +1,7 @@
 ﻿using Ikrito_Fulfillment_Platform.Modules;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,13 +31,12 @@ namespace Ikrito_Fulfillment_Platform {
             InitializeComponent();
             setFrame(MainPage.Instance);
 
-            //test();
+            test();
         }
 
         public void test() {
-            //ProductSyncModule Sync = new();
-            //Sync.ExportShopifyProducts();
-
+            ProductSyncModule m = new();
+            m.
         }
 
         public void setFrame(Page page) {
