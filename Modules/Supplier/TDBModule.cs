@@ -28,33 +28,12 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         //private readonly string TDBCat_location = @"C:\Users\Luke\Desktop\Ikrito_Fulfillment_Platform\Files\TDB\TDB_cat2.xml";
         //private readonly string TDBCategoriesJson = @"C:\Users\Luke\Desktop\Ikrito_Fulfillment_Platform\Files\TDB\TDBCategories.json";
 
-        public static Dictionary<string, string> GetCategoriesDictionary() {
-
-            //getting category KVP from database
-            Dictionary<string, string> categoriesKVP = new();
-            DataBaseInterface db = new();
-
-            var result = db.Table("ProductTypes").Get("ID, ProductType");
-
-            foreach (var cat in result.Values) {
-
-                var id = cat["ID"];
-                var type = cat["ProductType"];
-
-                categoriesKVP.Add(id, type);
-            }
-
-            return categoriesKVP;
-        }
-
         //downloads Catalogue from TDB API
         private string GetAPICatalogue() {
             Dictionary<string, string> catalogueParams = APIParams;
             RESTClient restClient = new(BaseUrl);
             return restClient.ExecGet(CataloguePath, catalogueParams);
         }
-
-
 
         //get productID by SKU
         public static int GetID(string sku) {
@@ -80,7 +59,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         public static List<Product> getProductsFromDB() {
             List<Product> products = new();
             string cmdText = $"SELECT * from Products";
-            Dictionary<string, string> categoriesKVP = GetCategoriesDictionary();
+            Dictionary<string, string> categoriesKVP = ProductModule.GetCategoriesDictionary();
 
             //getting main product info
             DataBaseInterface db = new();
@@ -130,52 +109,6 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
             return products;
         }
-
-
-
-        ////must be used one time
-        //public void InsertProductsToDB() {
-
-        //    List<Product> products = CreateProductList();
-        //    Dictionary<string, int> categoriesKVP = GetCategoriesDictionary();
-
-        //    for (int i = 0; i < products.Count; i++) {
-        //        Product product = products[i];
-
-        //        //inserting product 
-        //        string priceStr = product.price.ToString();
-        //        string stockStr = product.stock.ToString();
-        //        string vendor_priceStr = product.vendor_price.ToString();
-        //        string weightStr = product.weight.ToString();
-        //        string heightStr = product.height.ToString();
-        //        string lenghtStr = product.lenght.ToString();
-        //        string widthStr = product.width.ToString();
-
-        //        int productTypeID = categoriesKVP[product.product_type];
-
-        //        string insertCmd = $"insert into Products(Title, Body, Vendor, ProductType, Price, SKU, Stock, Barcode, PriceVendor, Weight, Height, Lenght, Width) " +
-        //            $"VALUES('{product.title}', '{product.body_html}', '{product.vendor}', '{productTypeID}', '{priceStr}', '{product.sku}', '{stockStr}', '{product.barcode}', '{vendor_priceStr}', '{weightStr}', '{heightStr}', '{lenghtStr}', '{widthStr}');";
-
-
-        //        DataBaseInterface dataBaseInterface = new(DBsource);
-        //        dataBaseInterface.ExecNonQuery(insertCmd);
-        //        int prodDBID = GetID(product.sku);
-
-        //        //inserting product images
-        //        foreach (string img in product.images) {
-        //            string insertImgCmd = $"insert into Images(ProductID, ImgUrl) VALUES('{prodDBID}', '{img}');";
-        //            dataBaseInterface.ExecNonQuery(insertImgCmd);
-        //        }
-
-        //        //todo:inserting product tags
-        //        foreach (string tag in product.tags) {
-        //            string insertImgCmd = $"insert into Tags(ProductID, Tag) VALUES('{prodDBID}', '{tag}');";
-        //            dataBaseInterface.ExecNonQuery(insertImgCmd);
-        //        }
-
-        //        Debug.WriteLine($"{i}/{products.Count}");
-        //    }
-        //}
 
         ////must be one time use
         //private List<Product> CreateProductList() {
