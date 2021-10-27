@@ -24,6 +24,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 {"Authorization", Globals.getBase64ShopifyCreds()}
             };
 
+
         public ProductSyncModule() {
             syncProducts = GetSyncProducts();
             ProductClient = new(BaseUrl);
@@ -111,53 +112,72 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 }
             }
 
+            dynamic data = JsonConvert.DeserializeObject<dynamic>(updateRes.Content);
+            string shopifyVariantID = data["product"]["variants"].First["id"].Value.ToString();
+            string inventoryItemID = data["product"]["variants"].First["inventory_item_id"].Value.ToString();
+
+            sync.shopifyVariantID = shopifyVariantID;
+            sync.inventoryItemID = inventoryItemID;
+
             //to update metafields i need to get metafield IDs
             string getMetaRes = ProductClient.ExecGet($"products/{sync.shopifyID}/metafields.json", mainHeaders);
             var ids = ExtractMetafieldIDs(getMetaRes);
 
             //updating height metafield
-            string heightVal = $"\"{{\\\"unit\\\": \\\"cm\\\",\\\"value\\\": {p.height}}}";
-            string heightBody = $@"{{""metafield"": {{""value"": {heightVal} }}}}";
-            IRestResponse heightRes = ProductClient.ExecPutProd($"products/{sync.shopifyID}/metafields/{ids["height"]}.json", mainHeaders, heightBody);
-            if (!heightRes.IsSuccessful) {
-                if (heightRes.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable) {
-                    Thread.Sleep(5000);
+            if (ids.ContainsKey("dimensions")) {
+                string heightVal = $"\"{{\\\"unit\\\": \\\"cm\\\",\\\"value\\\": {p.height}}}\"";
+                string heightBody = $@"{{""metafield"": {{""value"": {heightVal} }}}}";
+                IRestResponse heightRes = ProductClient.ExecPutProd($"products/{sync.shopifyID}/metafields/{ids["dimensions"]}.json", mainHeaders, heightBody);
+                if (!heightRes.IsSuccessful) {
+                    if (heightRes.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable) {
+                        Thread.Sleep(5000);
 
-                    UpdateShopifyProduct(p, sync);
-                    return;
-                } else {
-                    throw heightRes.ErrorException;
+                        UpdateShopifyProduct(p, sync);
+                        return;
+                    } else {
+                        throw heightRes.ErrorException;
+                    }
                 }
+            } else {
+                throw new Exception($"SKU: {sync.sku} >> UpdateFail no heightMeta");
             }
 
             //updating lenght metafield
-            string lenghtVal = $"\"{{\\\"unit\\\": \\\"cm\\\",\\\"value\\\": {p.lenght}}}";
-            string lenghtBody = $@"{{""metafield"": {{""value"": {lenghtVal} }}}}";
-            IRestResponse lenghtRes = ProductClient.ExecPutProd($"products/{sync.shopifyID}/metafields/{ids["lenght"]}.json", mainHeaders, lenghtBody);
-            if (!lenghtRes.IsSuccessful) {
-                if (lenghtRes.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable) {
-                    Thread.Sleep(5000);
+            if (ids.ContainsKey("lenght")) {
+                string lenghtVal = $"\"{{\\\"unit\\\": \\\"cm\\\",\\\"value\\\": {p.lenght}}}\"";
+                string lenghtBody = $@"{{""metafield"": {{""value"": {lenghtVal} }}}}";
+                IRestResponse lenghtRes = ProductClient.ExecPutProd($"products/{sync.shopifyID}/metafields/{ids["lenght"]}.json", mainHeaders, lenghtBody);
+                if (!lenghtRes.IsSuccessful) {
+                    if (lenghtRes.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable) {
+                        Thread.Sleep(5000);
 
-                    UpdateShopifyProduct(p, sync);
-                    return;
-                } else {
-                    throw lenghtRes.ErrorException;
+                        UpdateShopifyProduct(p, sync);
+                        return;
+                    } else {
+                        throw lenghtRes.ErrorException;
+                    }
                 }
+            } else {
+                throw new Exception($"SKU: {sync.sku} >> UpdateFail no lenghtMeta");
             }
 
             //updating width metafield
-            string widthVal = $"\"{{\\\"unit\\\": \\\"cm\\\",\\\"value\\\": {p.width}}}";
-            string widthBody = $@"{{""metafield"": {{""value"": {widthVal} }}}}";
-            IRestResponse widthRes = ProductClient.ExecPutProd($"products/{sync.shopifyID}/metafields/{ids["width"]}.json", mainHeaders, widthBody);
-            if (!widthRes.IsSuccessful) {
-                if (widthRes.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable) {
-                    Thread.Sleep(5000);
+            if (ids.ContainsKey("width")) {
+                string widthVal = $"\"{{\\\"unit\\\": \\\"cm\\\",\\\"value\\\": {p.width}}}\"";
+                string widthBody = $@"{{""metafield"": {{""value"": {widthVal} }}}}";
+                IRestResponse widthRes = ProductClient.ExecPutProd($"products/{sync.shopifyID}/metafields/{ids["width"]}.json", mainHeaders, widthBody);
+                if (!widthRes.IsSuccessful) {
+                    if (widthRes.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable) {
+                        Thread.Sleep(5000);
 
-                    UpdateShopifyProduct(p, sync);
-                    return;
-                } else {
-                    throw widthRes.ErrorException;
+                        UpdateShopifyProduct(p, sync);
+                        return;
+                    } else {
+                        throw widthRes.ErrorException;
+                    }
                 }
+            } else {
+                throw new Exception($"SKU: {sync.sku} >> UpdateFail no widthMeta");
             }
 
             //updating vendor price
@@ -320,7 +340,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 string nameSpace = Convert.ToString(field["namespace"]);
 
                 if (nameSpace == "my_fields") {
-                    if (key == "lenght" || key == "height" || key == "width") {
+                    if (key == "lenght" || key == "dimensions" || key == "width") {
                         ids.Add(key, id);
                     }
                 }

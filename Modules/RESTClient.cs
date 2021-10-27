@@ -20,7 +20,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
             //adding params to request
             foreach (KeyValuePair<string, string> pair in Params) {
-                request.AddParameter(pair.Key, pair.Value);
+                request.AddHeader(pair.Key, pair.Value);
             }
 
             //executing request and checking for response
