@@ -1,37 +1,44 @@
 ﻿using Ikrito_Fulfillment_Platform.Models;
 using Ikrito_Fulfillment_Platform.Modules;
-using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 
 namespace Ikrito_Fulfillment_Platform.Pages {
     public partial class ProductBrowsePage : Page {
-
+        
+        private readonly ProductModule ProdM;
         private readonly List<Product> allProducts;
-
         private List<Product> filteredProducts;
 
+        private int queryLenght = 0;
+        private bool _clearFilters;
+        public bool clearFilters {
+            get { return _clearFilters; }
+            set {
+                _clearFilters = value;
+                if (value == true) {
+                    deleteFilters();
+                }
+            }
+        }
+        
         //shit that makes this a singelton
         public static ProductBrowsePage Instance { get; private set; }
         static ProductBrowsePage() {
             Instance = new ProductBrowsePage();
         }
 
-        private ProductBrowsePage() {
-            allProducts = GetProdList();
-            InitializeComponent();
 
+        private ProductBrowsePage() {
+            InitializeComponent();
+            //getting products
+            ProdM = new();
+            allProducts = ProdM.GetProducts();
             filteredProducts = allProducts;
 
             //init DataGrid
@@ -40,16 +47,14 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             ChangeCountLabel(filteredProducts.Count);
         }
 
-        private static List<Product> GetProdList() {
-            //getting products from TDB Module
-            var TDBModule = new TDBModule();
-            List<Product> TDBproducts = Modules.TDBModule.getProductsFromDB();
+        private void deleteFilters() {
+            TypeFilterSBox.Clear();
+            TitleFilterSBox.Clear();
+            SKUFilterSBox.Clear();
+            VendorFilterSBox.Clear();
 
-            // adding all products to one list
-            List<Product> prodList = new();
-            prodList.AddRange(TDBproducts);
-
-            return prodList;
+            queryLenght = 0;
+            filteredProducts = allProducts;
         }
 
         private void ChangeCountLabel(int count) {
@@ -73,6 +78,13 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         //method for filtering by vendor
         private void VendorFilterSBox_TextChanged(object sender, TextChangedEventArgs e) {
             TextBox textBox = sender as TextBox;
+            int currentQueryLenght = textBox.Text.Length;
+            if (currentQueryLenght < queryLenght) {
+                clearFilters = true;
+            } else {
+                queryLenght = currentQueryLenght;
+            }
+
             if (textBox.Text.Length >= 2) {
 
                 string query = textBox.Text.ToLower();
@@ -91,11 +103,18 @@ namespace Ikrito_Fulfillment_Platform.Pages {
                 productDG.ItemsSource = allProducts;
             }
         }
-
+        //method for filtering by sku
         private void SKUFilterSBox_TextChanged(object sender, TextChangedEventArgs e) {
             TextBox textBox = sender as TextBox;
-            if (textBox.Text.Length >= 2) {
 
+            int currentQueryLenght = textBox.Text.Length;
+            if (currentQueryLenght < queryLenght) {
+                clearFilters = true;
+            } else {
+                queryLenght = currentQueryLenght;
+            }
+
+            if (textBox.Text.Length >= 2) {
                 string query = textBox.Text.ToLower();
 
                 if (productDG.ItemsSource == filteredProducts) {
@@ -112,11 +131,18 @@ namespace Ikrito_Fulfillment_Platform.Pages {
                 productDG.ItemsSource = allProducts;
             }
         }
-
+        //method for filtering by title
         private void TitleFilterSBox_TextChanged(object sender, TextChangedEventArgs e) {
             TextBox textBox = sender as TextBox;
-            if (textBox.Text.Length >= 2) {
 
+            int currentQueryLenght = textBox.Text.Length;
+            if (currentQueryLenght < queryLenght) {
+                clearFilters = true;
+            } else {
+                queryLenght = currentQueryLenght;
+            }
+
+            if (textBox.Text.Length >= 2) {
                 string query = textBox.Text.ToLower();
 
                 if (productDG.ItemsSource == filteredProducts) {
@@ -133,11 +159,18 @@ namespace Ikrito_Fulfillment_Platform.Pages {
                 productDG.ItemsSource = allProducts;
             }
         }
-
+        //method for filtering by type
         private void TypeFilterSBox_TextChanged(object sender, TextChangedEventArgs e) {
             TextBox textBox = sender as TextBox;
-            if (textBox.Text.Length >= 2) {
+            
+            int currentQueryLenght = textBox.Text.Length;
+            if (currentQueryLenght < queryLenght) {
+                clearFilters = true;
+            } else {
+                queryLenght = currentQueryLenght;
+            }
 
+            if (textBox.Text.Length >= 2) {
                 string query = textBox.Text.ToLower();
 
                 if (productDG.ItemsSource == filteredProducts) {

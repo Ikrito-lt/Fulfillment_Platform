@@ -22,6 +22,8 @@ using System.Windows.Shapes;
 namespace Ikrito_Fulfillment_Platform.Pages {
     public partial class ProductEditPage : Page {
 
+        //todo: save product to db after edit
+
         private readonly Product editableProduct;
         private bool productSaved = false;
         private bool productNeedsSaving = false;
@@ -110,8 +112,6 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         private void SaveButton_Click(object sender, RoutedEventArgs e) {
 
         }
-
-
 
         private void BackButton_Click(object sender, RoutedEventArgs e) {
             DialogueYN dialog = new("Save product?");

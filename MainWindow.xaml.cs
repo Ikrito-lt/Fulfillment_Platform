@@ -34,7 +34,9 @@ namespace Ikrito_Fulfillment_Platform {
         }
 
         public void test() {
-            TDBModule.GetID("TDB-CD974AE");
+            //ProductSyncModule Sync = new();
+            //Sync.ExportShopifyProducts();
+
         }
 
         public void setFrame(Page page) {

@@ -50,12 +50,11 @@ namespace Ikrito_Fulfillment_Platform.Models {
         }
 
         private string repairHTLMBody(string body) {
-
             StringBuilder builder = new StringBuilder(body);
             builder.Replace("&#xA;", "\\n");
+            builder.Replace("\r\n", "\\n");
             builder.Replace("\n", "\\n");
             builder.Replace("\"", "\\\"");
-
             return builder.ToString();
         }
 
@@ -101,26 +100,6 @@ namespace Ikrito_Fulfillment_Platform.Models {
                             ""barcode"": ""{barcode}""
                         }}
                     ],
-                    ""metafields"": [
-                        {{
-                            ""key"": ""height"",
-                            ""value"": ""{height}"",
-                            ""value_type"": ""string"",
-                            ""namespace"": ""dimensions""
-                        }},
-                        {{
-                            ""key"": ""width"",
-                            ""value"": ""{width}"",
-                            ""value_type"": ""string"",
-                            ""namespace"": ""dimensions""
-                        }},
-                        {{
-                            ""key"": ""lenght"",
-                            ""value"": ""{lenght}"",
-                            ""value_type"": ""string"",
-                            ""namespace"": ""dimensions""
-                        }}
-                    ],
                     ""images"": [
                         {imagesStr}
                     ],
@@ -132,56 +111,62 @@ namespace Ikrito_Fulfillment_Platform.Models {
 
             return retString;
         }
+
+        public string GetHeightMetaBody() {
+
+            string value = $"{{\\\"unit\\\": \\\"mm\\\",\\\"value\\\": {this.height}}}";
+
+            string metaBody =
+            @$"{{
+                ""metafield"": {{
+                    ""namespace"": ""my_fields"",
+                    ""key"": ""dimensions"",
+                    ""value"": ""{value}"",
+                    ""type"": ""dimension""
+                }}
+            }}";
+            return metaBody;
+        }
+
+        public string GetLenghtMetaBody() {
+
+            string value = $"{{\\\"unit\\\": \\\"mm\\\",\\\"value\\\": {this.lenght}}}";
+
+            string metaBody =
+            @$"{{
+                ""metafield"": {{
+                    ""namespace"": ""my_fields"",
+                    ""key"": ""lenght"",
+                    ""value"": ""{value}"",
+                    ""type"": ""dimension""
+                }}
+            }}";
+            return metaBody;
+        }
+
+        public string GetWidthMetaBody() {
+
+            string value = $"{{\\\"unit\\\": \\\"mm\\\",\\\"value\\\": {this.width}}}";
+
+            string metaBody =
+            @$"{{
+                ""metafield"": {{
+                    ""namespace"": ""my_fields"",
+                    ""key"": ""width"",
+                    ""value"": ""{value}"",
+                    ""type"": ""dimension""
+                }}
+            }}";
+            return metaBody;
+        }
+
+        public string GetVendorPriceBody() {
+            string vendorPriceBody = $"{{\"inventory_item\": {{\"cost\": \"{vendor_price.ToString()}\"}}}}";
+
+            return vendorPriceBody;
+        }
+
     }
 
-    //{
-    //    "product": {
-    //        "title": "Burton Custom Freestyle 1512smeta",
-    //        "body_html": "<strong>Good snowboard!</strong>",
-    //        "vendor": "Burton",
-    //        "product_type": "Snowboard",
-    //        "variants": [
-    //            {
-    //                "price": "10.00",
-    //                "sku": "123",
-    //                "weight": "20",
-    //                "inventory_quantity": "20",
-    //                "barcode": "sas"
-    //            }
-    //        ],
-    //        "images": [
-    //            {
-    //                "src": "http://www.tdbaltic.ee/images/ds/BEU3088P-2.jpg"
-    //            }
-    //        ],
-    //        "tags": [
-    //            "Barnes & Noble",
-    //            "Big Air",
-    //            "John's Fav"
-    //        ],
-    //        "metafields": [
-    //            {
-    //                "key": "height",
-    //                "value": "newvalue",
-    //                "value_type": "string",
-    //                "namespace": "dimensions"
-    //            },
-    //            {
-    //                "key": "width",
-    //                "value": "newvalue",
-    //                "value_type": "string",
-    //                "namespace": "dimensions"
-    //            },
-    //            {
-    //                "key": "lenght",
-    //                "value": "newvalue",
-    //                "value_type": "string",
-    //                "namespace": "dimensions"
-    //            }
-    //        ]
-    //    }
-    //}
-
     //TODO: think about adding SEO shit
-
 }
