@@ -34,7 +34,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             }
         }
 
-        public string ExecPostProd(string Endpoint, Dictionary<string, string> Params, string requestBody, SyncProduct sync) {
+        public IRestResponse ExecAddProd(string Endpoint, Dictionary<string, string> Params, string requestBody) {
             //setup
             string RequestUrl = BaseUrl + Endpoint;
             RestClient client = new(RequestUrl);
@@ -51,64 +51,10 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             //executing request and checking for response
             var response = client.Post(request);
 
-            if (response.IsSuccessful) {
-
-                string responseContent = response.Content;
-                return responseContent;
-            } else {
-                if (response.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable) {
-                    Thread.Sleep(5000);
-
-                    bool deleted = ExecDeleteProd(Params, sync.shopifyID);
-                    if (deleted == false) {
-                        return "503 and DeleteFail";
-                    }
-
-                    return ExecPostProd(Endpoint, Params, requestBody, sync);
-                } else {
-                    throw response.ErrorException;
-                }
-            }
+            return response;
         }
 
-        public bool ExecPostProdBool(string Endpoint, Dictionary<string, string> Params, string requestBody, SyncProduct sync) {
-            //setup
-            string RequestUrl = BaseUrl + Endpoint;
-            RestClient client = new(RequestUrl);
-            RestRequest request = new(Method.POST);
-
-            //adding params to request
-            foreach (KeyValuePair<string, string> pair in Params) {
-                request.AddHeader(pair.Key, pair.Value);
-            }
-
-            //adding body to request
-            request.AddHeader("Content-Type", "application/json");
-            request.AddParameter("application/json", requestBody, ParameterType.RequestBody);
-            //executing request and checking for response
-            var response = client.Post(request);
-
-            if (response.IsSuccessful) {
-
-                return true;
-            } else {
-                if (response.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable) {
-                    Thread.Sleep(5000);
-
-                    bool deleted = ExecDeleteProd(Params, sync.shopifyID);
-                    if (deleted == false) {
-                        throw new System.Exception($"Couldnt delete {sync.shopifyID}");
-                    } else {
-                        return false;
-                    }
-
-                } else {
-                    throw response.ErrorException;
-                }
-            }
-        }
-
-        public bool ExecPutProd(string Endpoint, Dictionary<string, string> Params, string requestBody, SyncProduct sync) {
+        public IRestResponse ExecPutProd(string Endpoint, Dictionary<string, string> Params, string requestBody) {
             //setup
             string RequestUrl = BaseUrl + Endpoint;
             RestClient client = new(RequestUrl);
@@ -125,24 +71,8 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             //executing request and checking for response
             var response = client.Put(request);
 
-            if (response.IsSuccessful) {
+            return response;
 
-                return true;
-            } else {
-                if (response.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable) {
-                    Thread.Sleep(5000);
-
-                    bool deleted = ExecDeleteProd(Params, sync.shopifyID);
-                    if (deleted == false) {
-                        throw new System.Exception($"Couldnt delete {sync.shopifyID}");
-                    } else {
-                        return false;
-                    }
-
-                } else {
-                    throw response.ErrorException;
-                }
-            }
         }
 
         public bool ExecDeleteProd(Dictionary<string, string> Params, string shopifyID) {

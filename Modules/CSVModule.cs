@@ -54,15 +54,6 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         }
 
         public void ImportTagsToDB() {
-            //var sku = "TDB-210-AXNT";
-            //foreach (var c in csvArchive) {
-            //    if (sku == (c.Variant_SKU as string)) {
-            //        Debug.WriteLine(sku);
-            //    } else {
-            //        continue;
-            //    }
-            //}
-
             List<Product> products = ProductModule.GetAllProducts();
 
             foreach (var p in products) {
