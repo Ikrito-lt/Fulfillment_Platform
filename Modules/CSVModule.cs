@@ -15,7 +15,6 @@ namespace Ikrito_Fulfillment_Platform.Modules {
     class CSVModule {
 
         private readonly List<dynamic> csvArchive;
-        private int lastTagID = 1;
         public CSVModule() {
             csvArchive = GetCSV();
         }

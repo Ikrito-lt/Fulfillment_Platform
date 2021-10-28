@@ -1,0 +1,24 @@
+﻿<Window x:Class="Ikrito_Fulfillment_Platform.Utils.DialogueOK"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Ikrito_Fulfillment_Platform.Utils"
+        mc:Ignorable="d"
+        Title="" Height="130" Width="250">
+    
+    <Grid Margin="0"   Background="LightBlue">
+        <StackPanel Orientation="Vertical" Margin="15,15,15,0">
+
+            <Label x:Name="Label" Width="200" HorizontalAlignment="Center" HorizontalContentAlignment="Center" >
+                <TextBlock x:Name="LabelText" TextWrapping="WrapWithOverflow" TextAlignment="Center" FontSize="16" Text="lol test text">
+                </TextBlock>
+            </Label>
+            
+        </StackPanel>
+        <Grid Margin="0" VerticalAlignment="Bottom">
+
+            <Button x:Name="OkButton" Click="OkButton_Click" Content="OK" Padding="15,5,15,5" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10"/>
+        </Grid>
+    </Grid>
+</Window>

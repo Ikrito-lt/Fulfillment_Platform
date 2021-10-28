@@ -18,15 +18,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Ikrito_Fulfillment_Platform.Modules;
 
 namespace Ikrito_Fulfillment_Platform.Pages {
     public partial class ProductEditPage : Page {
 
-        //todo: save product to db after edit
-
         private readonly Product editableProduct;
-        private bool productSaved = false;
-        private bool productNeedsSaving = false;
+
+        //todo:something interesting with refresh and buttons
+        private bool productSaved = true;
 
         public ObservableCollection<string> imgListBoxDataSource;
         public ICommand DeleteImageCommand { get; set; }
@@ -55,12 +55,10 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             BarcodeBox.Text = editableProduct.barcode;
             SKUBox.Text = editableProduct.sku;
 
-            //todo: make only numeric with .
             PriceBox.Text = editableProduct.price.ToString();
             VendorPriceBox.Text = editableProduct.vendor_price.ToString();
             WeightBox.Text = editableProduct.weight.ToString();
 
-            //todo: make only numeric
             StockBox.Text = editableProduct.stock.ToString();
             HeightBox.Text = editableProduct.height.ToString();
             WidthBox.Text = editableProduct.width.ToString();
@@ -76,18 +74,36 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             tagListBoxDataSource = new ObservableCollection<string>(editableProduct.tags);
             TagListBox.ItemsSource = tagListBoxDataSource;
             DeleteTagCommand = new DelegateCommand<object>(DeleteTag);
+
+            // adding on change text flip product saved bool
+            TitleBox.TextChanged += SaveFlip_TextChanged;
+            DescBox.TextChanged += SaveFlip_TextChanged;
+            VendorBox.TextChanged += SaveFlip_TextChanged;
+            BarcodeBox.TextChanged += SaveFlip_TextChanged;
+
+            PriceBox.TextChanged += SaveFlip_TextChanged;
+            VendorPriceBox.TextChanged += SaveFlip_TextChanged;
+            WeightBox.TextChanged += SaveFlip_TextChanged;
+
+            StockBox.TextChanged += SaveFlip_TextChanged;
+            HeightBox.TextChanged += SaveFlip_TextChanged;
+            WidthBox.TextChanged += SaveFlip_TextChanged;
+            LenghtBox.TextChanged += SaveFlip_TextChanged;
         }
 
-        private void saveProduct() {
+        private Product saveProduct() {
             Product newProduct = new();
 
             //adding string values
+            newProduct.DBID = editableProduct.DBID;
             newProduct.title = TitleBox.Text;
             newProduct.body_html = DescBox.Text;
             newProduct.vendor = VendorBox.Text;
-            newProduct.product_type = ProductTypeBox.Text;
             newProduct.barcode = BarcodeBox.Text;
             newProduct.sku = SKUBox.Text;
+
+            //todo:repair this
+            //newProduct.product_type = ProductTypeBox.Text;
 
             //adding doubles
             newProduct.price = double.Parse(PriceBox.Text);
@@ -103,25 +119,39 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             //adding tad and images;
             newProduct.images = editableProduct.images;
             newProduct.tags = editableProduct.tags;
+
+            ProductModule.SaveProductToDB(newProduct);
+
+            return newProduct;
         }
 
         private void exitPage() {
             MainWindow.Instance.mainFrame.Content = ProductBrowsePage.Instance;
         }
 
-        private void SaveButton_Click(object sender, RoutedEventArgs e) {
+        private void RefreshPage(Product p) {
+            MainWindow.Instance.mainFrame.Content = new ProductEditPage(p);
+        }
 
+        private void SaveButton_Click(object sender, RoutedEventArgs e) {
+            Product newProduct = saveProduct();
+            //RefreshPage(newProduct);
+            productSaved = true;
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e) {
-            DialogueYN dialog = new("Save product?");
-            bool answer = dialog.ShowDialog() ?? false;
-
-            if (answer) {
-                saveProduct();
+            if (productSaved) {
                 exitPage();
             } else {
-                exitPage();
+                DialogueYN dialog = new("Save product?");
+                bool answer = dialog.ShowDialog() ?? false;
+
+                if (answer) {
+                    saveProduct();
+                    exitPage();
+                } else {
+                    exitPage();
+                }
             }
         }
 
@@ -129,7 +159,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         private void AddTagButton_Click(object sender, RoutedEventArgs e) {
             string newTag = TagBox.Text;
             tagListBoxDataSource.Add(newTag);
-            editableProduct.images.Add(newTag);
+            editableProduct.tags.Add(newTag);
             TagBox.Text = null;
         }
 
@@ -167,6 +197,10 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         private void IntPreviewTextInput(object sender, TextCompositionEventArgs e) {
             Regex IntRegex = new Regex("[^0-9]+");
             e.Handled = IntRegex.IsMatch(e.Text);
+        }
+
+        private void SaveFlip_TextChanged(object sender, TextChangedEventArgs e) {
+            productSaved = false;
         }
     }
 }
