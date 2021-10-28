@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Ikrito_Fulfillment_Platform.Models {
     public class Product {
@@ -13,7 +14,7 @@ namespace Ikrito_Fulfillment_Platform.Models {
         public string sku { set; get; }
         public int stock { set; get; }
         public string barcode { set; get; }
-        public double vendor_price { set; get; } //TODO: https://community.shopify.com/c/shopify-apis-and-sdks/setting-cost-per-item-via-api/m-p/803984
+        public double vendor_price { set; get; } 
         public double weight { set; get; }       //in kg
         public int height { set; get; }       //in mm
         public int lenght { set; get; }       //in mm
@@ -24,38 +25,29 @@ namespace Ikrito_Fulfillment_Platform.Models {
         public List<string> images = new();
 
         public Product() {
-            //TODO: testing change it
+            //to detect unassigned fields
             title = "test";
             body_html = "test";
             vendor = "test";
-            product_type = "test";
+            product_type = "22";
             price = 69.69;
-            sku = "kill me";
+            sku = "test420";
             stock = 69;
-            barcode = "kill me too";
-            weight = 0;
-            height = 0;
-            lenght = 0;
-            width = 0;
-        }
-
-        private string ShortTitle(string title) {
-            // max product name lebht in shopify is 255
-            //TODO: remove this hack
-            if (title.Length > 255) {
-                return title.Trim().Substring(0, 255);
-            } else {
-                return title;
-            }
+            barcode = "test 420.69";
+            weight = 1;
+            height = 1;
+            lenght = 1;
+            width = 1;
         }
 
         private string repairHTLMBody(string body) {
             StringBuilder builder = new StringBuilder(body);
             builder.Replace("&#xA;", "\\n");
-            builder.Replace("\r\n", "\\n");
-            builder.Replace("\n", "\\n");
             builder.Replace("\"", "\\\"");
-            return builder.ToString();
+            string s = builder.ToString();
+
+            s = Regex.Replace(s, @"\r\n?|\n", "");
+            return s;
         }
 
         private string repairTitle(string title) {
@@ -87,7 +79,7 @@ namespace Ikrito_Fulfillment_Platform.Models {
             string retString =
             @$"{{
                 ""product"": {{
-                    ""title"": ""{ShortTitle(repairTitle(title))}"",
+                    ""title"": ""{repairTitle(title)}"",
                     ""body_html"": ""{repairHTLMBody(body_html)}"",
                     ""vendor"": ""{vendor}"",
                     ""product_type"": ""{product_type}"",

@@ -16,7 +16,8 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="Title: " Margin="5" Padding="3"/>
-                <TextBox Grid.Column="1" x:Name="TitleBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" MaxLength="255"/>
+                <TextBox Grid.Column="1" x:Name="TitleBox" Visibility="Visible" VerticalAlignment="Center" Padding="3"
+                         MaxLength="255"/>
             </Grid>
 
             <Grid Margin="0">
@@ -26,7 +27,7 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="Description: " Margin="5" Padding="3"/>
                 <TextBox Grid.Column="1" x:Name="DescBox" Visibility="Visible" VerticalAlignment="Center" Padding="3"
-                         AcceptsReturn="True" TextWrapping="Wrap"/>
+                         AcceptsReturn="True" TextWrapping="Wrap" MaxHeight="500"/>
             </Grid>
 
             <Grid Margin="0">
@@ -44,7 +45,8 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="ProductType: " Margin="5" Padding="3"/>
-                <TextBox Grid.Column="1" x:Name="ProductTypeBox" Visibility="Visible" VerticalAlignment="Center" Padding="3"/>
+                <TextBox Grid.Column="1" x:Name="ProductTypeBox" Visibility="Visible" VerticalAlignment="Center" 
+                         Padding="3"/>
             </Grid>
 
             <Grid Margin="0">
@@ -64,9 +66,11 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="Price (€): " Margin="5" Padding="3"/>
-                <TextBox Grid.Column="1" x:Name="PriceBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" PreviewTextInput="DoublePreviewTextInput"/>
+                <TextBox Grid.Column="1" x:Name="PriceBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" 
+                         PreviewTextInput="DoublePreviewTextInput"/>
                 <TextBlock Grid.Column="2" Text="Vendor Price (€): " Margin="5" Padding="3"/>
-                <TextBox Grid.Column="3" x:Name="VendorPriceBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" PreviewTextInput="DoublePreviewTextInput"/>
+                <TextBox Grid.Column="3" x:Name="VendorPriceBox" Visibility="Visible" VerticalAlignment="Center" 
+                         Padding="3" PreviewTextInput="DoublePreviewTextInput"/>
             </Grid>
 
             <Grid Margin="0">
@@ -77,9 +81,10 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="Stock: " Margin="5" Padding="3"/>
-                <TextBox Grid.Column="1" x:Name="StockBox" Visibility="Visible" VerticalAlignment="Center" Padding="3"  PreviewTextInput="IntPreviewTextInput"/>
+                <TextBox Grid.Column="1" x:Name="StockBox" Visibility="Visible" VerticalAlignment="Center" Padding="3"  
+                         PreviewTextInput="IntPreviewTextInput"/>
                 <TextBlock Grid.Column="2" Text="SKU: " Margin="5" Padding="3"/>
-                <TextBox Grid.Column="3" x:Name="SKUBox" Visibility="Visible" VerticalAlignment="Center" Padding="3"/>
+                <TextBox Grid.Column="3" x:Name="SKUBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" IsEnabled="False" IsReadOnly="True"/>
             </Grid>
 
             <Grid Margin="0">
@@ -90,9 +95,11 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="Weight (kg): " Margin="5" Padding="3"/>
-                <TextBox Grid.Column="1" x:Name="WeightBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" PreviewTextInput="DoublePreviewTextInput"/>
+                <TextBox Grid.Column="1" x:Name="WeightBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" 
+                         PreviewTextInput="DoublePreviewTextInput"/>
                 <TextBlock Grid.Column="2" Text="Height (mm): " Margin="5" Padding="3"/>
-                <TextBox Grid.Column="3" x:Name="HeightBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" PreviewTextInput="IntPreviewTextInput"/>
+                <TextBox Grid.Column="3" x:Name="HeightBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" 
+                         PreviewTextInput="IntPreviewTextInput"/>
             </Grid>
 
             <Grid Margin="0">
@@ -103,9 +110,11 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="Lenght (mm): " Margin="5" Padding="3"/>
-                <TextBox Grid.Column="1" x:Name="LenghtBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" PreviewTextInput="IntPreviewTextInput"/>
+                <TextBox Grid.Column="1" x:Name="LenghtBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" 
+                         PreviewTextInput="IntPreviewTextInput"/>
                 <TextBlock Grid.Column="2" Text="Width (mm): " Margin="5" Padding="3"/>
-                <TextBox Grid.Column="3" x:Name="WidthBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" PreviewTextInput="IntPreviewTextInput"/>
+                <TextBox Grid.Column="3" x:Name="WidthBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" 
+                         PreviewTextInput="IntPreviewTextInput"/>
             </Grid>
 
             <Grid Margin="0">

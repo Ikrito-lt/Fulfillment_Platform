@@ -17,6 +17,8 @@ using Ikrito_Fulfillment_Platform.Modules;
 using Newtonsoft.Json;
 using Ikrito_Fulfillment_Platform.Models;
 using Ikrito_Fulfillment_Platform.Pages;
+using System.ComponentModel;
+using System.Diagnostics;
 
 namespace Ikrito_Fulfillment_Platform {
     public partial class MainPage : Page {
@@ -28,10 +30,12 @@ namespace Ikrito_Fulfillment_Platform {
 
         private List<Order> newOrders = new();
         private NewOrderModule newOrderGetter = new();
+        private List<Product> AllProducts;
 
         private MainPage() {
             InitializeComponent();
             RefreshNewOrderDG();
+            PreloadAllProducts();
         }
 
         private void UpdateNewOrderLabel(int count) { 
@@ -50,10 +54,34 @@ namespace Ikrito_Fulfillment_Platform {
         }
 
         private void ShowOrderInfo(object sender, RoutedEventArgs e) {
+            ///button asdsadasdasd
+        }
+
+        private void PreloadAllProducts() {
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.WorkerReportsProgress = false;
+            worker.DoWork += BGW_PreloadAllProducts;
+            worker.RunWorkerCompleted += BGW_PreloadAllProductsCompleted;
+            worker.RunWorkerAsync();
+        }
+
+        private void BGW_PreloadAllProducts(object sender, DoWorkEventArgs e) {
+            List<Product> products = ProductModule.GetAllProducts();
+            e.Result = products;
+        }
+
+        private void BGW_PreloadAllProductsCompleted(object sender, RunWorkerCompletedEventArgs e) {
+            AllProducts = (List<Product>)e.Result;
+            Debug.WriteLine("BGW_PreloadAllProducts Finished");
         }
 
         private void openBrowserPage(object sender, RoutedEventArgs e) {
-            MainWindow.Instance.mainFrame.Content = ProductBrowsePage.Instance;
+            if (AllProducts == null) {
+
+            } else {
+
+                MainWindow.Instance.mainFrame.Content = ProductBrowsePage.Instance;
+            }
         }
     }
 }

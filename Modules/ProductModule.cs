@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Ikrito_Fulfillment_Platform.Modules {
-    class ProductModule {
+    static class ProductModule {
 
         public static Dictionary<string, string> GetCategoriesDictionary() {
 
@@ -46,6 +46,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             if (result.Count != 1) {
                 throw new Exception("Double SKUs");
             }
+
             foreach (var row in result.Values) {
 
                 prod.DBID = int.Parse(row["ID"]);
@@ -93,6 +94,92 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             }
 
             return prod;
+        }
+
+        public static void SaveProductToDB(Product p) {
+            DataBaseInterface db = new();
+            string tablePrefix = p.sku.GetUntilOrEmpty();
+
+            //updating *_Products table
+            var updateData = new Dictionary<string, string> {
+                ["Title"] = p.title,
+                ["Body"] = p.body_html,
+                ["Vendor"] = p.vendor,
+                //todo: i need to pass int to DB here p has string in it
+                //["ProductType"] = p.product_type, 
+                ["Price"] = p.price.ToString(),
+                ["Stock"] = p.stock.ToString(),
+                ["Barcode"] = p.barcode,
+                ["PriceVendor"] = p.vendor_price.ToString(),
+                ["Weight"] = p.weight.ToString(),
+                ["Height"] = p.height.ToString(),
+                ["Lenght"] = p.lenght.ToString(),
+                ["Width"] = p.width.ToString()
+            };
+            var whereUpdate = new Dictionary<string, Dictionary<string, string>> {
+                ["SKU"] = new Dictionary<string, string> {
+                    ["="] = p.sku
+                }
+            };
+            db.Table($"{tablePrefix}_Products").Where(whereUpdate).Update(updateData);
+
+            //load all images of the product
+            var whereQ = new Dictionary<string, Dictionary<string, string>> {
+                ["ProductID"] = new Dictionary<string, string> {
+                    ["="] = p.DBID.ToString()
+                }
+            };
+            var oldImages = db.Table($"{tablePrefix}_Images").Where(whereQ).Get();
+            
+            //delete all images
+            foreach (var img in oldImages.Values) {
+                var whereDelete = new Dictionary<string, Dictionary<string, string>> {
+                    ["ID"] = new Dictionary<string, string> {
+                        ["="] = img["ID"]
+                    }
+                };
+
+                db.Table($"{tablePrefix}_Images").Where(whereDelete).Delete();
+            }
+
+            //add new images
+            foreach (var img in p.images) {
+                var insertData = new Dictionary<string, string> {
+                    ["ProductID"] = p.DBID.ToString(),
+                    ["ImgUrl"] = img
+                };
+                db.Table($"{tablePrefix}_Images").Insert(insertData);
+            }
+
+            //load all tags of the product
+            whereQ = new Dictionary<string, Dictionary<string, string>> {
+                ["ProductID"] = new Dictionary<string, string> {
+                    ["="] = p.DBID.ToString()
+                }
+            };
+            var oldTags = db.Table($"{tablePrefix}_Tags").Where(whereQ).Get();
+
+            //delete all tags
+            foreach (var tag in oldTags.Values) {
+                var whereDelete = new Dictionary<string, Dictionary<string, string>> {
+                    ["ID"] = new Dictionary<string, string> {
+                        ["="] = tag["ID"]
+                    }
+                };
+
+                db.Table($"{tablePrefix}_Tags").Where(whereDelete).Delete();
+            }
+
+            //add new tags
+            foreach (var tag in p.tags) {
+                var insertData = new Dictionary<string, string> {
+                    ["ProductID"] = p.DBID.ToString(),
+                    ["Tag"] = tag
+                };
+                db.Table($"{tablePrefix}_Tags").Insert(insertData);
+            }
+
+            MarkProductForShopSync(p.sku);
         }
 
         public static void MarkProductForShopSync(string sku) {

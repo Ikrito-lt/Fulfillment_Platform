@@ -57,7 +57,7 @@
 
             <Label x:Name="productCountL" Content="Product Count: " HorizontalAlignment="Left"  Margin="0" VerticalAlignment="Top"/>
 
-            <DataGrid x:Name="productDG" Margin="0,0,0,0" SelectionMode="Single" CanUserAddRows="False" HeadersVisibility="Column" Height="300" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" AutoGenerateColumns="False" Style="{DynamicResource DataGridStyle1}" ItemsSource="{Binding}" >
+            <DataGrid x:Name="productDG" Margin="0,0,0,0" SelectionMode="Single" CanUserAddRows="False" HeadersVisibility="Column" Height="850" HorizontalAlignment="Stretch" VerticalAlignment="Top" AutoGenerateColumns="False" Style="{DynamicResource DataGridStyle1}" ItemsSource="{Binding}" >
                 <DataGrid.Resources>
                     <Style TargetType="DataGridRow">
                         <EventSetter Event="MouseDoubleClick" Handler="Row_MouseDoubleClick"/>
