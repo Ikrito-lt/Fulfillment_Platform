@@ -43,19 +43,24 @@
 
         <StackPanel Orientation="Vertical" Margin="15,15,15,15">
 
-            <!--<Grid Margin="0">
+            <Grid Margin="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="0.5*"/>
                 </Grid.ColumnDefinitions>
 
+                <Label x:Name="productCountL" Content="Product Count: " HorizontalAlignment="Left"  Margin="0" VerticalAlignment="Center"
+                       Grid.Column="0"/>
 
-                <Label x:Name="newOrderCountL" Content="Current Orders: " HorizontalAlignment="Left"  Margin="10" VerticalAlignment="Top" Grid.Column="0"/>
-                <Button x:Name="browseProductButton" Content="Browse Products" Grid.Column="1" HorizontalAlignment="Right" Margin="10" Click="openBrowserPage"/>
+                <ProgressBar x:Name="loadingBar"  Minimum="0" Maximum="1000" Height="30" VerticalAlignment="Center" Visibility="Visible" 
+                             IsEnabled="True" Margin="5" Grid.Column="1"/>
+                <!--<TextBlock Text="{Binding ElementName=loadingBar, Path=Value, StringFormat={}{0:0}‰}" HorizontalAlignment="Center" 
+                           VerticalAlignment="Center" Margin="5" Padding="5" Grid.Column="1"/>-->
 
-            </Grid>--> 
-
-            <Label x:Name="productCountL" Content="Product Count: " HorizontalAlignment="Left"  Margin="0" VerticalAlignment="Top"/>
+                <Button x:Name="RefreshButton" Click="RefreshButton_Click" Content="Refresh" Padding="5" HorizontalAlignment="Right" 
+                        VerticalAlignment="Center" Margin="10" Grid.Column="2"/>
+            </Grid>
 
             <DataGrid x:Name="productDG" Margin="0,0,0,0" SelectionMode="Single" CanUserAddRows="False" HeadersVisibility="Column" Height="850" HorizontalAlignment="Stretch" VerticalAlignment="Top" AutoGenerateColumns="False" Style="{DynamicResource DataGridStyle1}" ItemsSource="{Binding}" >
                 <DataGrid.Resources>
