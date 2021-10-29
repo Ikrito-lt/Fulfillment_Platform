@@ -1,6 +1,7 @@
 ﻿using Ikrito_Fulfillment_Platform.Models;
 using Ikrito_Fulfillment_Platform.Modules;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
@@ -11,7 +12,7 @@ using System.Windows.Input;
 namespace Ikrito_Fulfillment_Platform.Pages {
     public partial class ProductBrowsePage : Page {
         
-        private readonly List<Product> allProducts;
+        private List<Product> allProducts;
         private List<Product> filteredProducts;
 
         private int queryLenght = 0;
@@ -32,17 +33,41 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             Instance = new ProductBrowsePage();
         }
 
-
         private ProductBrowsePage() {
             InitializeComponent();
-            //getting products
-            allProducts = ProductModule.GetAllProducts();
+            LoadAllProducts();
+        }
+
+        private void LoadAllProducts() {
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.WorkerReportsProgress = false;
+            worker.DoWork += BGW_PreloadAllProducts;
+            worker.RunWorkerCompleted += BGW_PreloadAllProductsCompleted;
+
+            //blocking refresh button and animating loading bar
+            loadingBar.IsIndeterminate = true;
+            RefreshButton.IsEnabled = false;
+
+            worker.RunWorkerAsync();
+        }
+
+        private void BGW_PreloadAllProducts(object sender, DoWorkEventArgs e) {
+            List<Product> products = ProductModule.GetAllProducts();
+            e.Result = products;
+        }
+
+        private void BGW_PreloadAllProductsCompleted(object sender, RunWorkerCompletedEventArgs e) {
+            allProducts = (List<Product>)e.Result;
             filteredProducts = allProducts;
 
             //init DataGrid
             productDG.ItemsSource = filteredProducts;
             //init label
             ChangeCountLabel(filteredProducts.Count);
+            //unblocking refresh button and unanimating loading bar
+            loadingBar.IsIndeterminate = false;
+            RefreshButton.IsEnabled = true;
+            Debug.WriteLine("BGW_PreloadAllProducts Finished");
         }
 
         private void deleteFilters() {
@@ -59,14 +84,22 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             productCountL.Content = "Product Count: " + count.ToString();
         }
 
+        //refreshes Product datagrid
+        private void RefreshButton_Click(object sender, RoutedEventArgs e) {
+            LoadAllProducts();
+        }
+
+        //goes back to main page
         private void BackButton_Click(object sender, RoutedEventArgs e) {
             MainWindow.Instance.mainFrame.Content = MainPage.Instance;
         }
 
+        //opens sync page
         private void SyncButton_Click(object sender, RoutedEventArgs e) {
             MainWindow.Instance.mainFrame.Content = ProductSyncPage.Instance;
         }
 
+        //opens Product Edit page
         private void Row_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
             DataGridRow row = sender as DataGridRow;
             Product product = row.Item as Product;
@@ -185,5 +218,6 @@ namespace Ikrito_Fulfillment_Platform.Pages {
                 productDG.ItemsSource = allProducts;
             }
         }
+
     }
 }
