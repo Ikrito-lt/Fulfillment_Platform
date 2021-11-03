@@ -129,13 +129,8 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             MainWindow.Instance.mainFrame.Content = ProductBrowsePage.Instance;
         }
 
-        private void RefreshPage(Product p) {
-            MainWindow.Instance.mainFrame.Content = new ProductEditPage(p);
-        }
-
         private void SaveButton_Click(object sender, RoutedEventArgs e) {
             Product newProduct = saveProduct();
-            //RefreshPage(newProduct);
             productSaved = true;
         }
 

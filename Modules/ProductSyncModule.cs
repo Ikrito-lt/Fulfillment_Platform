@@ -328,7 +328,6 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         }
 
         public Dictionary<string, string> ExtractMetafieldIDs(string json) {
-
             Dictionary<string, string> ids = new();
 
             dynamic dJson = JsonConvert.DeserializeObject(json);

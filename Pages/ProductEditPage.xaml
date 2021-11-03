@@ -145,8 +145,10 @@
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock Text="{Binding}" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                <Button Content="[x]" Command="{Binding ElementName=ImageListBox, Path=DataContext.DeleteImageCommand}" CommandParameter="{Binding}" Grid.Column="2" Margin="5" Padding="3" />
-                                <Button Content="🔎︎" Command="{Binding ElementName=ImageListBox, Path=DataContext.ShowImageCommand}" CommandParameter="{Binding}" Grid.Column="1" Margin="5" Padding="3" />
+                                <Button Content="[x]" Command="{Binding ElementName=ImageListBox, Path=DataContext.DeleteImageCommand}"
+                                        CommandParameter="{Binding}" Grid.Column="2" Margin="5" Padding="3" />
+                                <Button Content="🔎︎" Command="{Binding ElementName=ImageListBox, Path=DataContext.ShowImageCommand}"
+                                        CommandParameter="{Binding}" Grid.Column="1" Margin="5" Padding="3" />
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

@@ -17,7 +17,6 @@ namespace Ikrito_Fulfillment_Platform {
         private MainWindow() {
             InitializeComponent();
             setFrame(MainPage.Instance);
-
             //test();
         }
 

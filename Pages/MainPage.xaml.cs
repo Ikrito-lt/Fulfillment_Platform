@@ -1,24 +1,9 @@
-﻿using System;
+﻿using Ikrito_Fulfillment_Platform.Models;
+using Ikrito_Fulfillment_Platform.Modules;
+using Ikrito_Fulfillment_Platform.Pages;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Ikrito_Fulfillment_Platform.Utils;
-using Ikrito_Fulfillment_Platform.Modules;
-using Newtonsoft.Json;
-using Ikrito_Fulfillment_Platform.Models;
-using Ikrito_Fulfillment_Platform.Pages;
-using System.ComponentModel;
-using System.Diagnostics;
 
 namespace Ikrito_Fulfillment_Platform {
     public partial class MainPage : Page {
@@ -41,7 +26,6 @@ namespace Ikrito_Fulfillment_Platform {
         } 
 
         private void RefreshNewOrderDG() {
-
             newOrderDG.ItemsSource = null;
             newOrders.Clear();
             newOrders.AddRange(newOrderGetter.getOrders());
@@ -52,7 +36,7 @@ namespace Ikrito_Fulfillment_Platform {
         }
 
         private void ShowOrderInfo(object sender, RoutedEventArgs e) {
-            ///button asdsadasdasd
+            //Todo: redo button
         }
 
         private void openBrowserPage(object sender, RoutedEventArgs e) {
