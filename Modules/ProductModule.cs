@@ -10,13 +10,11 @@ namespace Ikrito_Fulfillment_Platform.Modules {
     static class ProductModule {
 
         public static Dictionary<string, string> GetCategoriesDictionary() {
-
             //getting category KVP from database
             Dictionary<string, string> categoriesKVP = new();
             DataBaseInterface db = new();
 
             var result = db.Table("ProductTypes").Get("ID, ProductType");
-
             foreach (var cat in result.Values) {
 
                 var id = cat["ID"];
@@ -24,14 +22,12 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
                 categoriesKVP.Add(id, type);
             }
-
             return categoriesKVP;
         }
 
         public static Product GetProduct(string sku) {
             Product prod = new();
             var categoriesKVP = GetCategoriesDictionary();
-
             string tablePrefix = sku.GetUntilOrEmpty();
 
             DataBaseInterface db = new();
@@ -41,12 +37,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                     ["="] = sku
                 }
             };
-
             var result = db.Table(tablePrefix+"_Products").Where(whereCond).Get();
-            if (result.Count != 1) {
-                throw new Exception("Double SKUs");
-            }
-
             foreach (var row in result.Values) {
 
                 prod.DBID = int.Parse(row["ID"]);
@@ -64,7 +55,6 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 prod.lenght = int.Parse(row["Lenght"]);
                 prod.width = int.Parse(row["Width"]);
             }
-
 
             //getting images faster
             db = new();
@@ -92,7 +82,6 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
                 prod.tags.Add(tag);
             }
-
             return prod;
         }
 

@@ -8,6 +8,7 @@
     <StartupObject />
     <Configurations>Debug;Release;Build+</Configurations>
     <Platforms>AnyCPU;x64</Platforms>
+    <UserSecretsId>19b393f6-a8d9-4b31-bdf3-bf89fa480c60</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -16,6 +17,7 @@
 
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="27.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="5.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Utilities" Version="16.10.31321.278" />
     <PackageReference Include="MySql.Data" Version="8.0.27" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />

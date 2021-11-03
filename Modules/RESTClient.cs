@@ -72,7 +72,6 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             var response = client.Put(request);
 
             return response;
-
         }
 
         public bool ExecDeleteProd(Dictionary<string, string> Params, string shopifyID) {

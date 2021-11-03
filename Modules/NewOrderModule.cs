@@ -32,7 +32,5 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 return null;
             }
         }
-
-
     }
 }
