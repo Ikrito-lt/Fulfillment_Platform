@@ -86,17 +86,13 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
         //refreshes Product datagrid
         private void RefreshButton_Click(object sender, RoutedEventArgs e) {
+            deleteFilters();
             LoadAllProducts();
         }
 
         //goes back to main page
         private void BackButton_Click(object sender, RoutedEventArgs e) {
             MainWindow.Instance.mainFrame.Content = MainPage.Instance;
-        }
-
-        //opens sync page
-        private void SyncButton_Click(object sender, RoutedEventArgs e) {
-            MainWindow.Instance.mainFrame.Content = ProductSyncPage.Instance;
         }
 
         //opens Product Edit page

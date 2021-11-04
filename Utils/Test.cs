@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Ikrito_Fulfillment_Platform.Modules;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,42 +15,8 @@ namespace Ikrito_Fulfillment_Platform.Utils {
         }
 
         private void foo() {
-            string d = $"\"{{\\\"unit\\\": \\\"cm\\\",\\\"value\\\": {11}}}";
-
-            string heightBody = $@"{{""metafield"": {{""value"": {d} }}}}";
-            Debug.WriteLine(heightBody);
+            TDBModule TDBUpdater = new();
+            TDBUpdater.updateTDBProducts();
         }
-
-        //private void foo() {
-        //    string json;
-        //    using (StreamReader r = new StreamReader("C:\\Users\\Luke\\Desktop\\Ikrito_Fulfillment_Platform\\Files\\metaRes.json")) {
-        //        json = r.ReadToEnd();
-        //    }
-
-        //    bar(json);
-        //}
-
-
-        //public Dictionary<string, string> bar(string json) {
-
-        //    Dictionary<string, string> ids = new();
-
-        //    dynamic dJson = JsonConvert.DeserializeObject(json);
-        //    var metaFields = dJson["metafields"];
-
-        //    foreach (var field in metaFields) {
-        //        string key = Convert.ToString(field["key"]);
-        //        string id = Convert.ToString(field["id"]);
-        //        string nameSpace = Convert.ToString(field["namespace"]);
-
-        //        if (nameSpace == "my_fields") {
-        //            if (key == "lenght" || key == "height" || key == "width") {
-        //                ids.Add(key, id);
-        //            }
-        //        }
-        //    }
-        //    return ids;
-        //}
-
     }
 }
