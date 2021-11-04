@@ -42,12 +42,15 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
+                    <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 
                 <Label x:Name="newOrderCountL" Content="Current Orders: " HorizontalAlignment="Left"  Margin="5" 
                        VerticalAlignment="Top" Grid.Column="0"/>
                 <Button x:Name="browseProductButton" Content="Browse Products" Grid.Column="1" 
                         HorizontalAlignment="Right" Margin="5" Padding="5" Click="openBrowserPage"/>
+                <Button x:Name="syncBtn" Click="openSyncPage" Content="Sync Products" Padding="5"
+                        HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="5" Grid.Column="2"/>
             </Grid>
             
             <DataGrid x:Name="newOrderDG" SelectionMode="Single" CanUserAddRows="False" HeadersVisibility="Column" 

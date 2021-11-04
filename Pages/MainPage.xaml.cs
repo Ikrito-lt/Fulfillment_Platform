@@ -42,5 +42,10 @@ namespace Ikrito_Fulfillment_Platform {
         private void openBrowserPage(object sender, RoutedEventArgs e) {
             MainWindow.Instance.mainFrame.Content = ProductBrowsePage.Instance;
         }
+
+        //opens sync page
+        private void openSyncPage(object sender, RoutedEventArgs e) {
+            MainWindow.Instance.mainFrame.Content = ProductSyncPage.Instance;
+        }
     }
 }

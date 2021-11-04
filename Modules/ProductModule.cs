@@ -186,6 +186,21 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             db.Table("Products").Where(whereUpdate).Update(updateData);
         }
 
+        public static void ChangeProductStatus(string sku, string status) {
+
+            DataBaseInterface db = new();
+            var updateData = new Dictionary<string, string> {
+                ["LastUpdateTime"] = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString(),
+                ["Status"] = status
+            };
+            var whereUpdate = new Dictionary<string, Dictionary<string, string>> {
+                ["SKU"] = new Dictionary<string, string> {
+                    ["="] = sku
+                }
+            };
+            db.Table("Products").Where(whereUpdate).Update(updateData);
+        }
+
         private static List<Product> GetTDBProducts() {
             List<Product> products = new();
             Dictionary<string, string> categoriesKVP = GetCategoriesDictionary();

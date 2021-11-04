@@ -1,14 +1,10 @@
 ﻿using Ikrito_Fulfillment_Platform.Models;
 using Ikrito_Fulfillment_Platform.Utils;
+using Newtonsoft.Json;
+using RestSharp;
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using RestSharp;
 using System.Threading;
 
 namespace Ikrito_Fulfillment_Platform.Modules {
@@ -24,9 +20,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 {"Authorization", Globals.getBase64ShopifyCreds()}
             };
 
-
         public ProductSyncModule() {
-            syncProducts = GetSyncProducts();
             ProductClient = new(BaseUrl);
         }
 
@@ -35,7 +29,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             return syncProducts;
         }
 
-        private List<SyncProduct> GetSyncProducts(string status = null) {
+        public static List<SyncProduct> GetSyncProducts(string status = null) {
             List<SyncProduct> p = new();
             DataBaseInterface db = new();
             Dictionary<string, Dictionary<string, string>> whereCond;

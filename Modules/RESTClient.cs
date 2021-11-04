@@ -1,7 +1,5 @@
-﻿using Ikrito_Fulfillment_Platform.Models;
-using RestSharp;
+﻿using RestSharp;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace Ikrito_Fulfillment_Platform.Modules {
     class RESTClient {
@@ -31,6 +29,29 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 return responseContent;
             } else {
                 return ExecGet(Endpoint, Params);
+            }
+        }
+
+        public string ExecGetParams(string Endpoint, Dictionary<string, string> Params) {
+            //setup
+            string RequestUrl = BaseUrl + Endpoint;
+            RestClient client = new(RequestUrl);
+            RestRequest request = new();
+
+            //adding params to request
+            foreach (KeyValuePair<string, string> pair in Params) {
+                request.AddParameter(pair.Key, pair.Value);
+            }
+
+            //executing request and checking for response
+            var response = client.Execute(request);
+            if (response.IsSuccessful) {
+
+                string responseContent = response.Content;
+                return responseContent;
+            } else {
+                throw response.ErrorException;
+                //return ExecGet(Endpoint, Params);
             }
         }
 
