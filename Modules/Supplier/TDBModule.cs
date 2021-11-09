@@ -2,56 +2,84 @@
 using System.ComponentModel;
 using System.Xml;
 using System.Linq;
+using Ikrito_Fulfillment_Platform.Utils;
+using System;
+using Ikrito_Fulfillment_Platform.Models;
 
 namespace Ikrito_Fulfillment_Platform.Modules {
     class TDBModule {
 
-        private Dictionary<string, string> APIParams = new Dictionary<string, string> {
+        private static Dictionary<string, string> _APIParams = new Dictionary<string, string> {
             ["orgnum"] = "268230",
             ["username"] = "PREKES",
             ["pwd"] = "Welcome.123",
             ["ean"] = "y"
         };
 
-        private static string BaseUrl = "http://tdonline.tdbaltic.net/pls/PROD/";
-        private static string CataloguePath = "ixml.ProdCatExt";
-        private static string DataSheetsPath = "ixml.DSheets";
-        private static string DBTablePrefix = "TDB_";
-        
-
         //private readonly string TDBDesc_location = @"C:\Users\Luke\Desktop\Ikrito_Fulfillment_Platform\Files\TDB\TDB_cat.xml";
         //private readonly string TDBCat_location = @"C:\Users\Luke\Desktop\Ikrito_Fulfillment_Platform\Files\TDB\TDB_cat2.xml";
         //private readonly string TDBCategoriesJson = @"C:\Users\Luke\Desktop\Ikrito_Fulfillment_Platform\Files\TDB\TDBCategories.json";
 
+        private static string _BaseUrl = "http://tdonline.tdbaltic.net/pls/PROD/";
+        private static string _CataloguePath = "ixml.ProdCatExt";
+        private static string _DataSheetsPath = "ixml.DSheets";
+        private static string _DBTablePrefix = "TDB_";
+        private static string _SKUPrefix = "TDB-";
+
+        private Lazy<XmlDocument> _LazyDataSheetXML = new Lazy<XmlDocument>(() => GetTDBDataSheets());
+        [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
+        private XmlDocument _DataSheetsXML => _LazyDataSheetXML.Value;
+
+        private Lazy<XmlDocument> _LazyCategoryXML = new Lazy<XmlDocument>(() => GetTDBCatalogue());
+        [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
+        private XmlDocument _CategoryXML => _LazyCategoryXML.Value;
+
         //downloads Catalogue from TDB API
-        private string GetAPICatalogue() {
-            Dictionary<string, string> catalogueParams = APIParams;
-            RESTClient restClient = new(BaseUrl);
-            return restClient.ExecGetParams(CataloguePath, catalogueParams);
+        private static XmlDocument GetTDBCatalogue() {
+            RESTClient restClient = new(_BaseUrl);
+            string xmlCatalogueStr = restClient.ExecGetParams(_CataloguePath, _APIParams);
+
+            XmlDocument categoryXML = new();
+            categoryXML.LoadXml(xmlCatalogueStr);
+
+            return categoryXML;
+        }
+
+        //downloads Catalogue from TDB API
+        private static XmlDocument GetTDBDataSheets() {
+            Dictionary<string, string> dataSheetParams = _APIParams;
+            dataSheetParams.Remove("ean"); 
+
+            RESTClient restClient = new(_BaseUrl);
+            string xmlDataSheetStr = restClient.ExecGetParams(_DataSheetsPath, dataSheetParams);
+
+            XmlDocument dataSheetXML = new();
+            dataSheetXML.LoadXml(xmlDataSheetStr);
+
+            return dataSheetXML;
         }
 
         public void updateTDBProducts(object sender = null, DoWorkEventArgs e = null) {
-            string strCatalogue = GetAPICatalogue();
-            XmlDocument categoryXML = new();
-            categoryXML.LoadXml(strCatalogue);
+            List<Dictionary<string, string>> pendingChanges = new();
+            Dictionary<string, Dictionary<string, string>> appliedChanges = new();
 
-            List<Dictionary<string, string>> changeList = new();
-
-            var catalogueProducts = categoryXML.FirstChild.ChildNodes;
+            var catalogueProducts = _CategoryXML.FirstChild.ChildNodes;
             foreach (XmlNode prodXML in catalogueProducts) {
                 Dictionary<string, string> productInfo = new();
 
                 XmlNode skuNode = prodXML.SelectSingleNode("TDPartNbr");
-                XmlNode priceNode = prodXML.SelectSingleNode("Price");
+                XmlNode priceVendorNode = prodXML.SelectSingleNode("Price");
                 XmlNode stockNode = prodXML.SelectSingleNode("Stock");
                 XmlNode barcodeNode = prodXML.SelectSingleNode("Ean");
+                XmlNode vendorNode = prodXML.SelectSingleNode("Manuf");
 
                 productInfo.Add("SKU", "TDB-" + skuNode.InnerText);
-                productInfo.Add("Price", priceNode.InnerText);
+                productInfo.Add("PriceVendor", priceVendorNode.InnerText);
                 productInfo.Add("Stock", stockNode.InnerText);
                 productInfo.Add("Barcode", barcodeNode.InnerText);
+                productInfo.Add("Vendor", vendorNode.InnerText);
 
-                changeList.Add(productInfo);
+                pendingChanges.Add(productInfo);
             }
 
             //getting sku product from sku table Product table
@@ -62,102 +90,155 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
             foreach (var product in products) {
                 string sku = product["SKU"];
-                var productChanges = changeList.Find(x => x["SKU"] == sku);
+                var productChanges = pendingChanges.Find(x => x["SKU"] == sku);
 
-                db = new();
-                var whereQuery = new Dictionary<string, Dictionary<string, string>> {
-                    ["SKU"] = new Dictionary<string, string> {
-                        ["="] = sku
+                //handles archiving of products if tdb doesnt sell it anymore
+                if (productChanges == null) {
+                    
+                    //mark this product for archiving
+                    var updateData = new Dictionary<string, string> {
+                        ["Status"] = ProductStatus.NeedsArchiving,
+                        ["LastUpdateTime"] = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString()
+                    };
+                    var whereUpdate = new Dictionary<string, Dictionary<string, string>> {
+                        ["SKU"] = new Dictionary<string, string> {
+                            ["="] = sku
+                        }
+                    };
+                    db.Table("Products").Where(whereUpdate).Update(updateData);
+                    continue;
+                } else {
+                    
+                    //get product from db 
+                    var whereQuery = new Dictionary<string, Dictionary<string, string>> {
+                        ["SKU"] = new Dictionary<string, string> {
+                            ["="] = sku
+                        }
+                    };
+                    var oldProductDB = db.Table("TDB_Products").Where(whereQuery).Get()[0];
+
+                    //if data is the same dont change shit 
+                    if (oldProductDB["Stock"] == productChanges["Stock"] && oldProductDB["PriceVendor"] == productChanges["PriceVendor"]) {
+                        pendingChanges.RemoveAll(x => x["SKU"] == sku);
+                        continue;
+                    } else {
+                        appliedChanges.Add(sku, new Dictionary<string, string>());
+                        //updating stock value
+                        if (oldProductDB["Stock"] != productChanges["Stock"]) {
+                            var stockUpdateData = new Dictionary<string, string> {
+                                ["Stock"] = productChanges["Stock"]
+                            };
+                            var stockWhereUpdate = new Dictionary<string, Dictionary<string, string>> {
+                                ["SKU"] = new Dictionary<string, string> {
+                                    ["="] = sku
+                                }
+                            };
+                            db.Table("TDB_Products").Where(stockWhereUpdate).Update(stockUpdateData);
+
+                            //adding change to applied change list
+                            appliedChanges[sku].Add("Stock", $"{oldProductDB["Stock"]} -> {productChanges["Stock"]}");
+                        }
+
+                        if (oldProductDB["PriceVendor"] != productChanges["PriceVendor"]) {
+                            double priceChangeAmmount = double.Parse(productChanges["PriceVendor"]) - double.Parse(oldProductDB["PriceVendor"]);
+                            int priceChangeRounded = Convert.ToInt32(priceChangeAmmount);
+                            double newSalePrice = double.Parse(oldProductDB["Price"]) + priceChangeRounded;
+
+                            //updating price value
+                            var priceUpdateData = new Dictionary<string, string> {
+                                ["PriceVendor"] = productChanges["PriceVendor"],
+                                ["Price"] = newSalePrice.ToString()
+                            };
+                            var priceWhereUpdate = new Dictionary<string, Dictionary<string, string>> {
+                                ["SKU"] = new Dictionary<string, string> {
+                                    ["="] = sku
+                                }
+                            };
+                            db.Table("TDB_Products").Where(priceWhereUpdate).Update(priceUpdateData);
+
+                            //adding change to applied change list
+                            appliedChanges[sku].Add("PriceVendor", $"{oldProductDB["PriceVendor"]} -> {productChanges["PriceVendor"]}");
+                            appliedChanges[sku].Add("Price", $"{oldProductDB["Price"]} -> {newSalePrice}");
+                        }
+
+                        //marking product for shop sync
+                        var statusUpdateData = new Dictionary<string, string> {
+                            ["Status"] = ProductStatus.WaitingShopSync,
+                            ["LastUpdateTime"] = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString()
+                        };
+                        var statusWhereUpdate = new Dictionary<string, Dictionary<string, string>> {
+                            ["SKU"] = new Dictionary<string, string> {
+                                ["="] = sku
+                            }
+                        };
+                        db.Table("Products").Where(statusWhereUpdate).Update(statusUpdateData);
                     }
-                };
-                var oldProductDB = db.Table("TDB_Products").Where(whereQuery).Get()[0];
 
-                //todo: figure out this logic
-                if (oldProductDB["PriceVendor"] != productChanges["Price"]) { 
-                
+                    //remove entry from change list
+                    pendingChanges.RemoveAll(x => x["SKU"] == sku);
                 }
-                if (oldProductDB["PriceVendor"] != productChanges["Price"]) {
-
-                }
-
             }
 
+            //adding new products to database
+            List<Dictionary<string, string>> newProducts = new();
+            foreach (var nTDBProduct in pendingChanges) {
+                bool newProductWasAdded = addNewTDBProduct(nTDBProduct);
 
+                if (newProductWasAdded) {
+                    //adding product to this list to mark it as newly added
+                    newProducts.Add(nTDBProduct);
+                    //removing product from pendingChanges list
+                    pendingChanges.Remove(nTDBProduct);
+                }
+            }
+
+            //pass applied changes and pending changes to update on complete method
+            Dictionary<string, object> changes = new();
+            changes.Add("appliedChanges", appliedChanges);
+            changes.Add("pendingChanges", pendingChanges);
+            changes.Add("newProducts", newProducts);
+            if (e != null) {
+                e.Result = changes;
+            }
         }
 
         public void updateTDBProductsComplete(object sender, RunWorkerCompletedEventArgs e) {
 
         }
 
-        //private List<Product> CreateProductList() {
+        //todo:change to private
+        public bool addNewTDBProduct(Dictionary<string, string> newProductKVP) { 
+            bool productAdded = false;
+            string newProdSKU = newProductKVP["SKU"];
+            string newProdTDBSKU = newProdSKU.Substring(newProdSKU.IndexOf('-') + 1);
 
-        //    XmlDocument TDB_desc = new();
-        //    XmlDocument TDB_cat = new();
-        //    TDB_desc.Load(TDBDesc_location);
-        //    TDB_cat.Load(TDBCat_location);
+            var newProdData = _DataSheetsXML.SelectSingleNode(@$"/Datasheets/Datasheet[@TDPartNbr='{newProdTDBSKU}']");
+            Product newProduct = new();
 
-        //    var TDB_desc_products = TDB_desc.ChildNodes.Item(0).ChildNodes;
-        //    var TDB_cat_products = TDB_cat.ChildNodes.Item(0).ChildNodes;
+            newProduct.title = newProdData.SelectSingleNode("/ShortDesc").InnerText;
+            newProduct.vendor = newProductKVP["Vendor"];
+            newProduct.product_type = "Not-Assigned";
+            //newProduct.price
+            //newProduct.body_html
+            newProduct.sku = newProdSKU;
+            newProduct.stock = int.Parse(newProductKVP["Stock"]);
+            newProduct.barcode = newProductKVP["Barcode"];
+            newProduct.vendor_price = double.Parse(newProductKVP["PriceVendor"]);
 
-        //    List<Product> products = new();
 
-        //    for (int i = 0; i < TDB_cat_products.Count; i++) {
-        //        XmlNode CProd = TDB_cat_products.Item(i);
-        //        string CProdID = CProd.SelectSingleNode("productID").InnerText;
+            //getting weight
+            double grossWeight = double.Parse();
 
-        //        XmlNode DProd = TDB_desc_products.Item(i);
-        //        string DProdID = DProd.SelectSingleNode("productID").InnerText;
+            newProduct.weight = double.Parse()
 
-        //        if (CProdID != DProdID) {
-        //            foreach (XmlNode prod in TDB_desc_products) {
-        //                string id = prod.SelectSingleNode("productID").InnerText;
-        //                if (id == CProdID) {
-        //                    DProd = prod;
-        //                    DProdID = id;
-        //                    break;
-        //                }
-        //            }
-        //        }
 
-        //        Product newProduct = new();
-        //        newProduct.title = CProd.SelectSingleNode("product_title").InnerText;
-        //        newProduct.body_html = DProd.SelectSingleNode("new_desc").InnerText;
-        //        newProduct.vendor = CProd.SelectSingleNode("vendor").InnerText;
-        //        newProduct.product_type = CProd.SelectSingleNode("product_type").InnerText;
-        //        newProduct.price = double.Parse(DProd.SelectSingleNode("kaina").InnerText, System.Globalization.CultureInfo.InvariantCulture);
-        //        newProduct.sku = CProdID;
-        //        newProduct.barcode = CProd.SelectSingleNode("barcode").InnerText;
-        //        newProduct.vendor_price = double.Parse(DProd.SelectSingleNode("TDB_price").InnerText, System.Globalization.CultureInfo.InvariantCulture);
 
-        //        //handling stock
-        //        string stockStr = DProd.SelectSingleNode("stock").InnerText;
-        //        if (stockStr != "" && stockStr != null) {
-        //            newProduct.stock = int.Parse(DProd.SelectSingleNode("stock").InnerText, System.Globalization.CultureInfo.InvariantCulture);
-        //        } else {
-        //            newProduct.stock = 0;
-        //        }
+            return productAdded;
+        }
 
-        //        //getting weight
-        //        string weightStr = CProd.SelectSingleNode("weight").InnerText;
-        //        if (weightStr.EndsWith(" Kg")) {
-        //            weightStr = weightStr.Substring(0, weightStr.Length - 3);
-        //            newProduct.weight = double.Parse(weightStr, System.Globalization.CultureInfo.InvariantCulture);
-        //        } else {
-        //            newProduct.weight = 0;
-        //        }
+        //todo: add needs archiving clause to sync products module
 
-        //        //adding images 
-        //        string img1 = CProd.SelectSingleNode("product_images").InnerText;
-        //        if (img1 != "") newProduct.images.Add(img1);
-        //        string img2 = CProd.SelectSingleNode("product_images2").InnerText;
-        //        if (img2 != "") newProduct.images.Add(img2);
-        //        string img3 = CProd.SelectSingleNode("product_images3").InnerText;
-        //        if (img3 != "") newProduct.images.Add(img3);
-        //        string img4 = CProd.SelectSingleNode("product_images4").InnerText;
-        //        if (img4 != "") newProduct.images.Add(img4);
 
-        //        products.Add(newProduct);
-        //    }
 
     }
 }
