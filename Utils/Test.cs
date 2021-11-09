@@ -16,7 +16,14 @@ namespace Ikrito_Fulfillment_Platform.Utils {
 
         private void foo() {
             TDBModule TDBUpdater = new();
-            TDBUpdater.updateTDBProducts();
+            //TDBUpdater.updateTDBProducts();
+
+            Dictionary<string, string> testKVP = new() {
+                { "SKU", "TDB-RBC6" },
+                { "Vendor", "TDB-RBC6" }
+            };
+
+            TDBUpdater.addNewTDBProduct(testKVP);
         }
     }
 }

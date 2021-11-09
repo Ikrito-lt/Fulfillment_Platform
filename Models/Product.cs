@@ -19,7 +19,8 @@ namespace Ikrito_Fulfillment_Platform.Models {
         public int height { set; get; }       //in mm
         public int lenght { set; get; }       //in mm
         public int width { set; get; }        //in mm
-        public bool needsUpdate { set; get; }
+
+        public string productTypeVendor { set; get; } //for saving vendor product type to database.
 
         public List<string> tags = new();
         public List<string> images = new();
