@@ -108,7 +108,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             newProduct.images = editableProduct.images;
             newProduct.tags = editableProduct.tags;
 
-            ProductModule.SaveProductToDB(newProduct);
+            ProductModule.UpdateProductToDB(newProduct, ProductStatus.WaitingShopSync);
 
             return newProduct;
         }
