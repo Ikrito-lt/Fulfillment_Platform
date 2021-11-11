@@ -97,18 +97,9 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
                 //handles archiving of products if tdb doesnt sell it anymore
                 if (productChanges == null) {
-
+                    
                     //mark this product for archiving
-                    var updateData = new Dictionary<string, string> {
-                        ["Status"] = ProductStatus.NeedsArchiving,
-                        ["LastUpdateTime"] = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString()
-                    };
-                    var whereUpdate = new Dictionary<string, Dictionary<string, string>> {
-                        ["SKU"] = new Dictionary<string, string> {
-                            ["="] = sku
-                        }
-                    };
-                    db.Table("Products").Where(whereUpdate).Update(updateData);
+                    ProductModule.ChangeProductStatus(sku, ProductStatus.NeedsArchiving);
                     continue;
                 } else {
 
@@ -165,16 +156,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                         }
 
                         //marking product for shop sync
-                        var statusUpdateData = new Dictionary<string, string> {
-                            ["Status"] = ProductStatus.WaitingShopSync,
-                            ["LastUpdateTime"] = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString()
-                        };
-                        var statusWhereUpdate = new Dictionary<string, Dictionary<string, string>> {
-                            ["SKU"] = new Dictionary<string, string> {
-                                ["="] = sku
-                            }
-                        };
-                        db.Table("Products").Where(statusWhereUpdate).Update(statusUpdateData);
+                        ProductModule.ChangeProductStatus(sku, ProductStatus.WaitingShopSync);
                     }
 
                     //remove entry from change list
@@ -184,7 +166,8 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
             //adding new products to database
             List<Dictionary<string, string>> newProducts = new();
-            foreach (var nTDBProduct in pendingChanges) {
+            List<Dictionary<string, string>> ProductsToAdd = new(pendingChanges);
+            foreach (var nTDBProduct in ProductsToAdd) {
                 bool newProductWasAdded = addNewTDBProduct(nTDBProduct);
 
                 if (newProductWasAdded) {
@@ -205,18 +188,19 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             }
         }
 
-        public void updateTDBProductsComplete(object sender, RunWorkerCompletedEventArgs e) {
-            Dictionary<string, object> changes = e.Result as Dictionary<string, object>;
+        //public void updateTDBProductsComplete(object sender, RunWorkerCompletedEventArgs e) {
+        //    Dictionary<string, object> changes = e.Result as Dictionary<string, object>;
 
-            List<Dictionary<string, string>> newProducts = changes["newProducts"] as List<Dictionary<string, string>>;
-            List<Dictionary<string, string>> pendingChanges = changes["pendingChanges"] as List<Dictionary<string, string>>;
-            Dictionary<string, Dictionary<string, string>> appliedChanges = changes["appliedChanges"] as Dictionary<string, Dictionary<string, string>>;
+        //    List<Dictionary<string, string>> newProducts = changes["newProducts"] as List<Dictionary<string, string>>;
+        //    List<Dictionary<string, string>> pendingChanges = changes["pendingChanges"] as List<Dictionary<string, string>>;
+        //    Dictionary<string, Dictionary<string, string>> appliedChanges = changes["appliedChanges"] as Dictionary<string, Dictionary<string, string>>;
 
-            //todo show window with changes applied
-        }
+        //    //todo show window with changes applied
+        //    //finish this shit
 
-        //todo:change to private
-        public bool addNewTDBProduct(Dictionary<string, string> newProductKVP) {
+        //}
+
+        private bool addNewTDBProduct(Dictionary<string, string> newProductKVP) {
             bool productAdded = false;
             string newProdSKU = newProductKVP["SKU"];
             string newProdTDBSKU = newProdSKU.Substring(newProdSKU.IndexOf('-') + 1);
@@ -229,7 +213,11 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
                 //init new product object
                 Product newProduct = new();
-                newProduct.title = newProdDataKVP["ShortDesc"];
+
+                string title = newProdDataKVP["ShortDesc"];
+                title = title.Replace("'", "''");
+
+                newProduct.title = title;
                 newProduct.vendor = newProductKVP["Vendor"];
                 newProduct.product_type = "Not-Assigned";
                 newProduct.sku = newProdSKU;
@@ -238,16 +226,31 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 newProduct.vendor_price = double.Parse(newProductKVP["PriceVendor"]);
 
                 //getting weight
-                string grossWeightStr = newProdDataKVP["Gross Weight"];
-                string netWeightStr = newProdDataKVP["Net Weight"];
+                string grossWeightStr = "0";
+                bool grossExists = newProdDataKVP.TryGetValue("Gross Weight", out grossWeightStr);
+                string netWeightStr = "0";
+                bool netExists = newProdDataKVP.TryGetValue("Net Weight", out grossWeightStr);
+
+                if (!grossExists) { grossWeightStr = "0"; }
+                if (!netExists) { netWeightStr = "0"; }
+
                 grossWeightStr = grossWeightStr.Split(" ")[0];
                 netWeightStr = netWeightStr.Split(" ")[0];
-                double grossWeight = double.Parse(grossWeightStr);
-                double netWeight = double.Parse(netWeightStr);
+
+                double grossWeight = .0;
+                double netWeight = .0;
+
+                bool grossWeightConvSucceded = double.TryParse(grossWeightStr, out grossWeight);
+                if (!grossWeightConvSucceded) {grossWeight = .0;}
+                bool netWeightConvSucceded = double.TryParse(netWeightStr, out netWeight);
+                if (!netWeightConvSucceded) { netWeight = .0; }
                 newProduct.weight = Math.Max(grossWeight, netWeight);
 
                 //getting height
-                string heightStr = newProdDataKVP["Height"];
+                string heightStr = "0";
+                bool heightExists = newProdDataKVP.TryGetValue("Height", out heightStr);
+                if (!heightExists) { heightStr = "0"; }
+
                 heightStr = heightStr.Split(" ")[0];
                 int heightInt = 0;
                 bool heightConvSucceded = int.TryParse(heightStr, out heightInt);
@@ -258,7 +261,10 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 }
 
                 //getting lenght
-                string lenghtStr = newProdDataKVP["Depth"];
+                string lenghtStr = "0";
+                bool lenghtExists = newProdDataKVP.TryGetValue("Lenght", out lenghtStr);
+                if (!lenghtExists) { lenghtStr = "0"; }
+
                 lenghtStr = lenghtStr.Split(" ")[0];
                 int lenghtInt = 0;
                 bool lenghtConvSucceded = int.TryParse(lenghtStr, out lenghtInt);
@@ -269,7 +275,10 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 }
 
                 //getting width
-                string widthStr = newProdDataKVP["Width"];
+                string widthStr = "0";
+                bool widthExists = newProdDataKVP.TryGetValue("Width", out widthStr);
+                if (!widthExists) { widthStr = "0"; }
+
                 widthStr = widthStr.Split(" ")[0];
                 int widthInt = 0;
                 bool widthConvSucceded = int.TryParse(widthStr, out widthInt);
@@ -301,9 +310,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 //building Product description
                 newProduct.body_html = BuildDescription(newProdDataKVP);
 
-                //todo: send newProduct to DB
-                //todo: this doesnt  work write new method that will add new products to DB
-                ProductModule.SaveProductToDB(newProduct, ProductStatus.New);
+                ProductModule.AddProductToDB(newProduct);
                 productAdded = true;
                 return productAdded;
             }
@@ -323,10 +330,12 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                     var nodeAttributeVal = node.Attributes["descr"].Value;
 
                     if (nodeAttributeVal.Contains("Product Picture")) {
-                        nodeAttributeVal = "Picture" + (pictureCount++.ToString());
+                        nodeAttributeVal = "Picture" + pictureCount++.ToString();
                     }
 
-                    prodDataKVP.Add(nodeAttributeVal, node.InnerText);
+                    if (!prodDataKVP.ContainsKey(nodeAttributeVal)) {
+                        prodDataKVP.Add(nodeAttributeVal, node.InnerText);
+                    }
                 }
             }
             return prodDataKVP;
@@ -347,11 +356,18 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         private string BuildDescription(Dictionary<string, string> prodDataKVP) {
             string description = "";
 
-            if (!string.IsNullOrEmpty(prodDataKVP["LongDesc"]) || !string.IsNullOrWhiteSpace(prodDataKVP["LongDesc"])) {
-                description += prodDataKVP["LongDesc"] + "<br><br>";
+            string longDesc;
+            bool longDescExists = prodDataKVP.TryGetValue("LongDesc", out longDesc);
+            if (!longDescExists) { longDesc = ""; }
+            if (!string.IsNullOrEmpty(longDesc) || !string.IsNullOrWhiteSpace(longDesc)) {
+                description += longDesc + "<br><br>";
             }
-            if (!string.IsNullOrEmpty(prodDataKVP["Marketing Text"]) || !string.IsNullOrWhiteSpace(prodDataKVP["Marketing Text"])) {
-                description += prodDataKVP["Marketing Text"] + "<br><br>";
+
+            string marketingText;
+            bool marketingTextExists = prodDataKVP.TryGetValue("Marketing Text", out marketingText);
+            if (!marketingTextExists) { marketingText = ""; }
+            if (!string.IsNullOrEmpty(marketingText) || !string.IsNullOrWhiteSpace(marketingText)) {
+                description += marketingText + "<br><br>";
             }
 
             foreach (var skipableKey in descSkipableKeys) {
@@ -374,6 +390,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             string finishedTable = sb.ToString();
             description += finishedTable;
 
+            description = description.Replace("'", "''");
             return description;
         }
 

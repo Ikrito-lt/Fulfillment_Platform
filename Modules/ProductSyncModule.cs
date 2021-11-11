@@ -24,11 +24,18 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             ProductClient = new(BaseUrl);
         }
 
+
+        //
+        // General method section
+        //
+
+        //method to refresh the list of sync products from database
         public List<SyncProduct> RefreshSyncProducts() {
             syncProducts = GetSyncProducts();
             return syncProducts;
         }
 
+        //method to get list of sync product from database
         public static List<SyncProduct> GetSyncProducts(string status = null) {
             List<SyncProduct> p = new();
             DataBaseInterface db = new();
@@ -58,7 +65,11 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
                 product.sku = row["SKU"];
                 product.status = row["Status"];
-                product.lastSyncTime = row["LastSyncTime"].UnixTimeToSrt();
+                if (row["LastSyncTime"] == null || row["LastSyncTime"] == "") {
+                    product.lastSyncTime = "Not In Shop";
+                } else {
+                    product.lastSyncTime = row["LastSyncTime"].UnixTimeToSrt();
+                }
                 product.lastUpdateTime = row["LastUpdateTime"].UnixTimeToSrt();
                 product.shopifyID = row["ShopifyID"];
                 product.inventoryItemID = row["ShopifyInventoryItemID"];
@@ -68,6 +79,12 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             return p;
         }
 
+
+        //
+        // Export sync product section
+        //
+
+        //method that is used by the Export sync product worker to send each product to ExportSyncProduct and track exporting progress
         public void ExportShopifyProducts(object sender, DoWorkEventArgs e) {
             List<SyncProduct> syncProducts = GetSyncProducts();
             int count = syncProducts.Count;
@@ -83,8 +100,12 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         private void ExportShopifyProduct(SyncProduct sync) {
             Product p = ProductModule.GetProduct(sync.sku);
 
+            //todod: add needs archiving
+
             if (sync.status == ProductStatus.New) {
                 NewShopifyProduct(p, sync);
+            } else if (sync.status == ProductStatus.NeedsArchiving) {
+                ArchiveShopifyProduct(sync);
             } else if (sync.status == ProductStatus.WaitingShopSync) {
                 UpdateShopifyProduct(p, sync);
             } else {
@@ -92,6 +113,33 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             }
         }
 
+
+        //
+        // section with diffrent export options
+        //
+
+        //method that Archives product in shopify web-store
+        private void ArchiveShopifyProduct(SyncProduct sync) {
+            //archiving product in shopify
+            string archiveRequestBody = $@"{{""product"": {{""id"": {sync.shopifyID},""status"": ""archived""}}}}";
+
+            IRestResponse archiveRes = ProductClient.ExecPutProd($"products/{sync.shopifyID}.json", mainHeaders, archiveRequestBody);
+            if (!archiveRes.IsSuccessful) {
+                if (archiveRes.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable) {
+                    Thread.Sleep(5000);
+
+                    ArchiveShopifyProduct(sync);
+                    return;
+                } else {
+                    throw archiveRes.ErrorException;
+                }
+            }
+
+            //updating product status
+            ProductModule.ChangeProductStatus(sync.sku, ProductStatus.Archived);
+        }
+
+        //method that updates product in shopify web-store
         private void UpdateShopifyProduct(Product p, SyncProduct sync) {
             //updating product in shopify
             IRestResponse updateRes = ProductClient.ExecPutProd($"products/{sync.shopifyID}.json", mainHeaders, p.GetImportJsonString());
@@ -106,6 +154,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 }
             }
 
+            //getting various shopify ids required for the update
             dynamic data = JsonConvert.DeserializeObject<dynamic>(updateRes.Content);
             string shopifyVariantID = data["product"]["variants"].First["id"].Value.ToString();
             string inventoryItemID = data["product"]["variants"].First["inventory_item_id"].Value.ToString();
@@ -188,20 +237,10 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             }
 
             //updating product status
-            DataBaseInterface db = new();
-            var updateData = new Dictionary<string, string> {
-                ["Status"] = ProductStatus.Ok,
-                ["LastSyncTime"] = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString()
-            };
-            var whereUpdate = new Dictionary<string, Dictionary<string, string>> {
-                ["SKU"] = new Dictionary<string, string> {
-                    ["="] = sync.sku
-                }
-            };
-            db.Table("Products").Where(whereUpdate).Update(updateData);
-
+            ProductModule.ChangeProductStatus(sync.sku, ProductStatus.Ok);
         }
 
+        ////method that adds new product to shopify web-store
         private void NewShopifyProduct(Product p, SyncProduct sync) {
 
             //adding product to shopify
@@ -321,6 +360,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
         }
 
+        //method that extrack metafield IDs from json response (needed to update metafield values in update method)
         public Dictionary<string, string> ExtractMetafieldIDs(string json) {
             Dictionary<string, string> ids = new();
 

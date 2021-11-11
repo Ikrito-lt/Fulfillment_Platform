@@ -39,53 +39,27 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             Sync = new();
         }
 
-        //method that creates BGW to load Sync products
-        private void LoadSyncProducts() {
-            BackgroundWorker worker = new BackgroundWorker();
-            worker.WorkerReportsProgress = false;
-            worker.DoWork += BGW_PreloadSyncProducts;
-            worker.RunWorkerCompleted += BGW_PreloadSyncProductsCompleted;
 
-            //blocking refresh button and animating loading bar
-            progressBar.IsIndeterminate = true;
-            RefreshButton.IsEnabled = false;
+        //
+        // General method section
+        //
 
-            worker.RunWorkerAsync();
-        }
-        //BGW load sync products
-        private void BGW_PreloadSyncProducts(object sender, DoWorkEventArgs e) {
-            List<SyncProduct> products = ProductSyncModule.GetSyncProducts();
-            e.Result = products;
-        }
-        //BGW load sync products onComplete
-        private void BGW_PreloadSyncProductsCompleted(object sender, RunWorkerCompletedEventArgs e) {
-            SyncProducts = (List<SyncProduct>)e.Result;
-            Sync.syncProducts = (List<SyncProduct>)e.Result;
-            FilteredSyncProducts = SyncProducts;
-
-            //init DataGrid
-            productSyncDG.ItemsSource = FilteredSyncProducts;
-            //init label
-            ChangeCountLabel(FilteredSyncProducts.Count);
-            //unblocking refresh button and unanimating loading bar
-            progressBar.IsIndeterminate = false;
-            RefreshButton.IsEnabled = true;
-            Debug.WriteLine("BGW_PreloadAllProducts Finished");
-        }
-        
+        //method that changes datagrid count label text value
         private void ChangeCountLabel(int count) {
             SyncProductCountL.Content = "Sync Product Count: " + count.ToString();
         }
+        
         //method removes SKU filter from the data grid
         private void deleteFilters() {
             SKUFilterSBox.Clear();
             queryLenght = 0;
             FilteredSyncProducts = SyncProducts;
         }
+        
         //method for fitering by sku
         private void SKUFilterSBox_TextChanged(object sender, TextChangedEventArgs e) {
             TextBox textBox = sender as TextBox;
-            
+
             int currentQueryLenght = textBox.Text.Length;
             if (currentQueryLenght < queryLenght) {
                 clearFilters = true;
@@ -115,12 +89,68 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         private void BackButton_Click(object sender, RoutedEventArgs e) {
             MainWindow.Instance.mainFrame.Content = MainPage.Instance;
         }
+        
         //button that refreshes the data grid
         private void RefreshButton_Click(object sender, RoutedEventArgs e) {
             deleteFilters();
             LoadSyncProducts();
         }
-        //button that starts exporting products to Shopify
+
+
+        //
+        // section for loading Sync Products to datagrid
+        //
+
+        //method that creates BGW to load Sync products
+        private void LoadSyncProducts() {
+            BackgroundWorker worker = new BackgroundWorker();
+            worker.WorkerReportsProgress = false;
+            worker.DoWork += BGW_PreloadSyncProducts;
+            worker.RunWorkerCompleted += BGW_PreloadSyncProductsCompleted;
+
+            //blocking refresh button and animating loading bar
+            progressBar.IsIndeterminate = true;
+            RefreshButton.IsEnabled = false;
+
+            progressBar.IsIndeterminate = true;
+            progressBarLabel.Text = "Loading Sync Products from DataBase";
+
+            worker.RunWorkerAsync();
+        }
+        
+        //BGW load sync products
+        private void BGW_PreloadSyncProducts(object sender, DoWorkEventArgs e) {
+            List<SyncProduct> products = ProductSyncModule.GetSyncProducts();
+            e.Result = products;
+        }
+        
+        //BGW load sync products onComplete
+        private void BGW_PreloadSyncProductsCompleted(object sender, RunWorkerCompletedEventArgs e) {
+            //changing loading bar state
+            progressBar.IsIndeterminate = false;
+            progressBarLabel.Text = "";
+
+
+            SyncProducts = (List<SyncProduct>)e.Result;
+            Sync.syncProducts = (List<SyncProduct>)e.Result;
+            FilteredSyncProducts = SyncProducts;
+
+            //init DataGrid
+            productSyncDG.ItemsSource = FilteredSyncProducts;
+            //init label
+            ChangeCountLabel(FilteredSyncProducts.Count);
+            //unblocking refresh button and unanimating loading bar
+            progressBar.IsIndeterminate = false;
+            RefreshButton.IsEnabled = true;
+            Debug.WriteLine("BGW_PreloadAllProducts Finished");
+        }
+
+
+        //
+        // shopify sync section 
+        //
+
+        //button that starts shopify sync
         private void UpdateProducts_Click(object sender, RoutedEventArgs e) {
             //running export products in background
             BackgroundWorker worker = new BackgroundWorker();
@@ -133,8 +163,16 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
         //method that updates progress bar during product export
         void worker_ProgressChanged(object sender, ProgressChangedEventArgs e) {
-            progressBar.Value = e.ProgressPercentage;
+            int progress = e.ProgressPercentage;
+            progressBar.Value = progress;
+            progressBarLabel.Text = $"Syncing Products To Shopify: {progress}‰";
+
         }
+
+
+        //
+        // update TDB Products section
+        //
 
         //button that updates product from TDB
         private void UpdateTDBButton_Click(object sender, RoutedEventArgs e) {
@@ -143,9 +181,27 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             //running export products in background
             BackgroundWorker TDBUpdateWorker = new BackgroundWorker();
             TDBUpdateWorker.DoWork += TDBUpdater.updateTDBProducts;
-            TDBUpdateWorker.RunWorkerCompleted += TDBUpdater.updateTDBProductsComplete;
+            TDBUpdateWorker.RunWorkerCompleted += UpdateTDBWorkerOnComplete;
 
+            progressBar.IsIndeterminate = true;
+            progressBarLabel.Text = "Updating TDB products";
             TDBUpdateWorker.RunWorkerAsync();
         }
+
+        //method that opens new dialogue window that shows all changes made in database
+        private void UpdateTDBWorkerOnComplete(object sender, RunWorkerCompletedEventArgs e) {
+            progressBar.IsIndeterminate = false;
+            progressBarLabel.Text = "";
+
+            Dictionary<string, object> changes = e.Result as Dictionary<string, object>;
+
+            List<Dictionary<string, string>> newProducts = changes["newProducts"] as List<Dictionary<string, string>>;
+            List<Dictionary<string, string>> pendingChanges = changes["pendingChanges"] as List<Dictionary<string, string>>;
+            Dictionary<string, Dictionary<string, string>> appliedChanges = changes["appliedChanges"] as Dictionary<string, Dictionary<string, string>>;
+
+            //todo show window with changes applied
+            //finish this shit
+        }
+
     }
 }

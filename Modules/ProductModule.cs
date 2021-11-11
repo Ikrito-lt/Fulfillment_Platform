@@ -37,7 +37,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                     ["="] = sku
                 }
             };
-            var result = db.Table(tablePrefix+"_Products").Where(whereCond).Get();
+            var result = db.Table(tablePrefix + "_Products").Where(whereCond).Get();
             foreach (var row in result.Values) {
 
                 prod.DBID = int.Parse(row["ID"]);
@@ -85,6 +85,65 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             return prod;
         }
 
+        public static void AddProductToDB(Product p) {
+            DataBaseInterface db = new();
+            string tablePrefix = p.sku.GetUntilOrEmpty();
+
+            //getting category dictionary
+            Dictionary<string, string> categoriesKVP = GetCategoriesDictionary();
+            string categoryKey = categoriesKVP.FindFirstKeyByValue(p.product_type);
+
+            //adding product to Products table
+            MarkProductAsNew(p.sku);
+
+            //inserting to *_Products table
+            var InsertData = new Dictionary<string, string> {
+                ["Title"] = p.title,
+                ["Body"] = p.body_html,
+                ["Vendor"] = p.vendor,
+                ["ProductType"] = categoryKey,
+                ["Price"] = p.price.ToString(),
+                ["SKU"] = p.sku,
+                ["Stock"] = p.stock.ToString(),
+                ["Barcode"] = p.barcode,
+                ["PriceVendor"] = p.vendor_price.ToString(),
+                ["Weight"] = p.weight.ToString(),
+                ["Height"] = p.height.ToString(),
+                ["Lenght"] = p.lenght.ToString(),
+                ["Width"] = p.width.ToString(),
+                ["AddedTimeStamp"] = p.addedTimeStamp,
+                ["ProductTypeVendor"] = p.productTypeVendor
+            };
+            db.Table($"{tablePrefix}_Products").Insert(InsertData);
+
+            //getting ID of the product I just inserted
+            var whereQ = new Dictionary<string, Dictionary<string, string>> {
+                ["SKU"] = new Dictionary<string, string> {
+                    ["="] = p.sku
+                }
+            };
+            var newProductFromDB = db.Table($"{tablePrefix}_Products").Where(whereQ).Get();
+            var newProductDBID = newProductFromDB[0]["ID"];
+
+            //add new Product images to DB
+            foreach (var img in p.images) {
+                var insertData = new Dictionary<string, string> {
+                    ["ProductID"] = newProductDBID,
+                    ["ImgUrl"] = img
+                };
+                db.Table($"{tablePrefix}_Images").Insert(insertData);
+            }
+
+            //add new tags
+            foreach (var tag in p.tags) {
+                var insertData = new Dictionary<string, string> {
+                    ["ProductID"] = newProductDBID,
+                    ["Tag"] = tag
+                };
+                db.Table($"{tablePrefix}_Tags").Insert(insertData);
+            }
+        }
+
         public static void UpdateProductToDB(Product p, string status) {
             DataBaseInterface db = new();
             string tablePrefix = p.sku.GetUntilOrEmpty();
@@ -122,7 +181,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 }
             };
             var oldImages = db.Table($"{tablePrefix}_Images").Where(whereQ).Get();
-            
+
             //delete all images
             foreach (var img in oldImages.Values) {
                 var whereDelete = new Dictionary<string, Dictionary<string, string>> {
@@ -171,11 +230,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 db.Table($"{tablePrefix}_Tags").Insert(insertData);
             }
 
-            if (status == "New") {
-                MarkProductAsNew(p.sku);
-            } else {
-                ChangeProductStatus(p.sku, status);
-            }
+            ChangeProductStatus(p.sku, status);
         }
 
         public static void MarkProductAsNew(string sku) {
@@ -189,24 +244,19 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             db.Table("Products").Insert(InsertData);
         }
 
-        //public static void MarkProductForShopSync(string sku) {
-
-        //    DataBaseInterface db = new();
-        //    var updateData = new Dictionary<string, string> {
-        //        ["LastUpdateTime"] = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString(),
-        //        ["Status"] = ProductStatus.WaitingShopSync
-        //    };
-        //    var whereUpdate = new Dictionary<string, Dictionary<string, string>> {
-        //        ["SKU"] = new Dictionary<string, string> {
-        //            ["="] = sku
-        //        }
-        //    };
-        //    db.Table("Products").Where(whereUpdate).Update(updateData);
-        //}
-
         public static void ChangeProductStatus(string sku, string status) {
 
+            //first we need to get product status and check if its "New"
+            //if its "New" we cant change that
             DataBaseInterface db = new();
+            var whereQ = new Dictionary<string, Dictionary<string, string>> {
+                ["SKU"] = new Dictionary<string, string> {
+                    ["="] = sku
+                }
+            };
+            var productStatusResult = db.Table("Products").Where(whereQ).Get();
+            string productStatus = productStatusResult[0]["Status"];
+
             var updateData = new Dictionary<string, string> {
                 ["LastUpdateTime"] = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString(),
                 ["Status"] = status
@@ -216,7 +266,69 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                     ["="] = sku
                 }
             };
-            db.Table("Products").Where(whereUpdate).Update(updateData);
+
+            if (productStatus == ProductStatus.New) {
+                if (status == ProductStatus.Ok) {
+                    updateData["Status"] = ProductStatus.Ok;
+                    db.Table("Products").Where(whereUpdate).Update(updateData);
+                } else if (status == ProductStatus.WaitingShopSync) {
+                    updateData["Status"] = ProductStatus.New;
+                    db.Table("Products").Where(whereUpdate).Update(updateData);
+                } else {
+                    throw new Exception($"cant change product status {productStatus} -> {status}");
+                }
+
+            } else if (productStatus == ProductStatus.Ok) {
+
+                if (status == ProductStatus.NeedsArchiving) {
+                    updateData["Status"] = ProductStatus.NeedsArchiving;
+                    db.Table("Products").Where(whereUpdate).Update(updateData);
+                } else if (status == ProductStatus.WaitingShopSync) {
+                    updateData["Status"] = ProductStatus.WaitingShopSync;
+                    db.Table("Products").Where(whereUpdate).Update(updateData);
+                } else {
+                    throw new Exception($"cant change product status {productStatus} -> {status}");
+                }
+
+            } else if (productStatus == ProductStatus.NeedsArchiving) {
+
+                if (status == ProductStatus.Archived) {
+                    updateData["Status"] = ProductStatus.Archived;
+                    db.Table("Products").Where(whereUpdate).Update(updateData);
+                } else if (status == ProductStatus.NeedsArchiving) {
+                    updateData["Status"] = ProductStatus.NeedsArchiving;
+                    db.Table("Products").Where(whereUpdate).Update(updateData);
+                } else {
+                    throw new Exception($"cant change product status {productStatus} -> {status}");
+                }
+
+            } else if (productStatus == ProductStatus.Archived) {
+
+                if (status == ProductStatus.Ok) {
+                    updateData["Status"] = ProductStatus.Ok;
+                    db.Table("Products").Where(whereUpdate).Update(updateData);
+                } else {
+                    throw new Exception($"cant change product status {productStatus} -> {status}");
+                }
+
+            } else if (productStatus == ProductStatus.WaitingShopSync) {
+
+                if (status == ProductStatus.Ok) {
+                    updateData["Status"] = ProductStatus.Ok;
+                    db.Table("Products").Where(whereUpdate).Update(updateData);
+                } else if (status == ProductStatus.NeedsArchiving) {
+                    updateData["Status"] = ProductStatus.NeedsArchiving;
+                    db.Table("Products").Where(whereUpdate).Update(updateData);
+                } else if (status == ProductStatus.WaitingShopSync) {
+                    updateData["Status"] = ProductStatus.WaitingShopSync;
+                    db.Table("Products").Where(whereUpdate).Update(updateData);
+                } else {
+                    throw new Exception($"cant change product status {productStatus} -> {status}");
+                }
+
+            } else {
+                throw new Exception($"cant change product status {productStatus} -> {status}");
+            }
         }
 
         private static List<Product> GetTDBProducts() {
@@ -279,7 +391,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
             List<Product> TDBproducts = GetTDBProducts();
             p.AddRange(TDBproducts);
-            
+
             return p;
         }
     }
