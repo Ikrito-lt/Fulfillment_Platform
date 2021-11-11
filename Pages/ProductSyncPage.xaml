@@ -52,7 +52,7 @@
 
             <Grid Margin="0">
                 <ProgressBar x:Name="progressBar"  Minimum="0" Maximum="1000" Height="30" VerticalAlignment="Center" Visibility="Visible" IsEnabled="true" Margin="5"/>
-                <TextBlock Text="{Binding ElementName =progressBar, Path=Value, StringFormat={}{0:0}‰}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" Padding="5"/>
+                <TextBlock x:Name="progressBarLabel" Text="" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" Padding="5"/>
             </Grid>
 
             <Button x:Name="UpdateProductsBtn" Click="UpdateProducts_Click" Content="Update Products" Padding="5" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5"/>

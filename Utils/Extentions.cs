@@ -36,13 +36,15 @@ namespace Ikrito_Fulfillment_Platform.Utils {
             }
         }
 
+        //for getting dateTime in str form form unix timestamp
         public static string UnixTimeToSrt(this string unixTime) {
 
             DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             dateTime = dateTime.AddSeconds(int.Parse(unixTime)).ToLocalTime();
             return dateTime.ToString("MM/dd/yyyy HH:mm");
         }
-
+        
+        //for getting beggining of string until certain char (-)
         public static string GetUntilOrEmpty(this string text, string stopAt = "-") {
             if (!String.IsNullOrWhiteSpace(text)) {
                 int charLocation = text.IndexOf(stopAt, StringComparison.Ordinal);
@@ -51,8 +53,14 @@ namespace Ikrito_Fulfillment_Platform.Utils {
                     return text.Substring(0, charLocation);
                 }
             }
-
             return String.Empty;
         }
+
+        //for getting first key by value from dictionary
+        public static K FindFirstKeyByValue<K, V>(this Dictionary<K, V> dict, V val) {
+            return dict.FirstOrDefault(entry =>
+                EqualityComparer<V>.Default.Equals(entry.Value, val)).Key;
+        }
+
     }
 }
