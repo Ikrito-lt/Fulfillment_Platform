@@ -1,6 +1,7 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
 using Ikrito_Fulfillment_Platform.Models;
+using Ikrito_Fulfillment_Platform.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,6 +14,8 @@ using System.Threading.Tasks;
 
 namespace Ikrito_Fulfillment_Platform.Modules {
     class CSVModule {
+
+        //this was used to add tags to database
 
         private readonly List<dynamic> csvArchive;
         public CSVModule() {
@@ -87,7 +90,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
                 db.Table("TDB_Tags").Insert(insertData);
 
-                ProductModule.MarkProductForShopSync(p.sku);
+                ProductModule.ChangeProductStatus(p.sku, ProductStatus.WaitingShopSync);
             }
 
         }

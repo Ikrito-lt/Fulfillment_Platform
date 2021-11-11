@@ -85,7 +85,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             return prod;
         }
 
-        public static void SaveProductToDB(Product p) {
+        public static void UpdateProductToDB(Product p, string status) {
             DataBaseInterface db = new();
             string tablePrefix = p.sku.GetUntilOrEmpty();
 
@@ -103,7 +103,10 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 ["Weight"] = p.weight.ToString(),
                 ["Height"] = p.height.ToString(),
                 ["Lenght"] = p.lenght.ToString(),
-                ["Width"] = p.width.ToString()
+                ["Width"] = p.width.ToString(),
+                ["AddedTimeStamp"] = p.addedTimeStamp,
+                ["ProductTypeVendor"] = p.productTypeVendor
+
             };
             var whereUpdate = new Dictionary<string, Dictionary<string, string>> {
                 ["SKU"] = new Dictionary<string, string> {
@@ -168,23 +171,38 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 db.Table($"{tablePrefix}_Tags").Insert(insertData);
             }
 
-            MarkProductForShopSync(p.sku);
+            if (status == "New") {
+                MarkProductAsNew(p.sku);
+            } else {
+                ChangeProductStatus(p.sku, status);
+            }
         }
 
-        public static void MarkProductForShopSync(string sku) {
+        public static void MarkProductAsNew(string sku) {
 
             DataBaseInterface db = new();
-            var updateData = new Dictionary<string, string> {
+            var InsertData = new Dictionary<string, string> {
                 ["LastUpdateTime"] = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString(),
-                ["Status"] = ProductStatus.WaitingShopSync
+                ["Status"] = ProductStatus.New,
+                ["SKU"] = sku
             };
-            var whereUpdate = new Dictionary<string, Dictionary<string, string>> {
-                ["SKU"] = new Dictionary<string, string> {
-                    ["="] = sku
-                }
-            };
-            db.Table("Products").Where(whereUpdate).Update(updateData);
+            db.Table("Products").Insert(InsertData);
         }
+
+        //public static void MarkProductForShopSync(string sku) {
+
+        //    DataBaseInterface db = new();
+        //    var updateData = new Dictionary<string, string> {
+        //        ["LastUpdateTime"] = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString(),
+        //        ["Status"] = ProductStatus.WaitingShopSync
+        //    };
+        //    var whereUpdate = new Dictionary<string, Dictionary<string, string>> {
+        //        ["SKU"] = new Dictionary<string, string> {
+        //            ["="] = sku
+        //        }
+        //    };
+        //    db.Table("Products").Where(whereUpdate).Update(updateData);
+        //}
 
         public static void ChangeProductStatus(string sku, string status) {
 
@@ -225,6 +243,8 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 NewProduct.height = int.Parse(prod["Height"]);
                 NewProduct.lenght = int.Parse(prod["Lenght"]);
                 NewProduct.width = int.Parse(prod["Width"]);
+                NewProduct.addedTimeStamp = prod["AddedTimeStamp"];
+                NewProduct.productTypeVendor = prod["ProductTypeVendor"];
 
                 products.Add(NewProduct);
             }
