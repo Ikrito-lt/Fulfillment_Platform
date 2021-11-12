@@ -100,12 +100,12 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         private void ExportShopifyProduct(SyncProduct sync) {
             Product p = ProductModule.GetProduct(sync.sku);
 
-            //todod: add needs archiving
-
             if (sync.status == ProductStatus.New) {
                 NewShopifyProduct(p, sync);
             } else if (sync.status == ProductStatus.NeedsArchiving) {
                 ArchiveShopifyProduct(sync);
+            } else if (sync.status == ProductStatus.NeedsUnArchiving) {
+                UnArchiveShopifyProduct(sync);
             } else if (sync.status == ProductStatus.WaitingShopSync) {
                 UpdateShopifyProduct(p, sync);
             } else {
@@ -117,6 +117,27 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         //
         // section with diffrent export options
         //
+
+        //method that Archives product in shopify web-store
+        private void UnArchiveShopifyProduct(SyncProduct sync) {
+            //archiving product in shopify
+            string unArchiveRequestBody = $@"{{""product"": {{""id"": {sync.shopifyID},""status"": ""active""}}}}";
+
+            IRestResponse unArchiveRes = ProductClient.ExecPutProd($"products/{sync.shopifyID}.json", mainHeaders, unArchiveRequestBody);
+            if (!unArchiveRes.IsSuccessful) {
+                if (unArchiveRes.StatusCode == System.Net.HttpStatusCode.ServiceUnavailable) {
+                    Thread.Sleep(5000);
+
+                    UnArchiveShopifyProduct(sync);
+                    return;
+                } else {
+                    throw unArchiveRes.ErrorException;
+                }
+            }
+
+            //updating product status
+            ProductModule.ChangeProductStatus(sync.sku, ProductStatus.WaitingShopSync);
+        }
 
         //method that Archives product in shopify web-store
         private void ArchiveShopifyProduct(SyncProduct sync) {
@@ -240,7 +261,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             ProductModule.ChangeProductStatus(sync.sku, ProductStatus.Ok);
         }
 
-        ////method that adds new product to shopify web-store
+        //method that adds new product to shopify web-store
         private void NewShopifyProduct(Product p, SyncProduct sync) {
 
             //adding product to shopify

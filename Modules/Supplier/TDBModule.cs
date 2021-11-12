@@ -17,15 +17,20 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             ["ean"] = "y"
         };
 
-        //private readonly string TDBDesc_location = @"C:\Users\Luke\Desktop\Ikrito_Fulfillment_Platform\Files\TDB\TDB_cat.xml";
-        //private readonly string TDBCat_location = @"C:\Users\Luke\Desktop\Ikrito_Fulfillment_Platform\Files\TDB\TDB_cat2.xml";
-        //private readonly string TDBCategoriesJson = @"C:\Users\Luke\Desktop\Ikrito_Fulfillment_Platform\Files\TDB\TDBCategories.json";
+        private List<string> descSkipableKeys = new List<string>(){
+                "Manufacturer Logo",
+                "Picture1",
+                "Picture2",
+                "Picture3",
+                "Picture4",
+                "LongDesc",
+                "ShortDesc",
+                "Marketing Text"
+        };
 
         private static string _BaseUrl = "http://tdonline.tdbaltic.net/pls/PROD/";
         private static string _CataloguePath = "ixml.ProdCatExt";
         private static string _DataSheetsPath = "ixml.DSheets";
-        private static string _DBTablePrefix = "TDB_";
-        private static string _SKUPrefix = "TDB-";
 
         private Lazy<XmlDocument> _LazyDataSheetXML = new Lazy<XmlDocument>(() => GetTDBDataSheets());
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
@@ -35,7 +40,12 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
         private XmlDocument _CategoryXML => _LazyCategoryXML.Value;
 
-        //downloads Catalogue from TDB API
+
+        //
+        // section of methods for getting data from TDB API
+        //
+
+        //downloads product catalogue from TDB API
         private static XmlDocument GetTDBCatalogue() {
             RESTClient restClient = new(_BaseUrl);
             string xmlCatalogueStr = restClient.ExecGetParams(_CataloguePath, _APIParams);
@@ -46,7 +56,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             return categoryXML;
         }
 
-        //downloads Catalogue from TDB API
+        //downloads product datasheets from TDB API
         private static XmlDocument GetTDBDataSheets() {
             Dictionary<string, string> dataSheetParams = _APIParams;
             dataSheetParams.Remove("ean");
@@ -60,6 +70,12 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             return dataSheetXML;
         }
 
+
+        //
+        // Section for automatically updating and adding product to database
+        //
+        
+        // Updates product and then sends products that dont exist to addNewProduct method
         public void updateTDBProducts(object sender = null, DoWorkEventArgs e = null) {
             List<Dictionary<string, string>> pendingChanges = new();
             Dictionary<string, Dictionary<string, string>> appliedChanges = new();
@@ -137,6 +153,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                             double priceChangeAmmount = double.Parse(productChanges["PriceVendor"]) - double.Parse(oldProductDB["PriceVendor"]);
                             int priceChangeRounded = Convert.ToInt32(priceChangeAmmount);
                             double newSalePrice = double.Parse(oldProductDB["Price"]) + priceChangeRounded;
+                            //todo: impelelent price variator to product prices
 
                             //updating price value
                             var priceUpdateData = new Dictionary<string, string> {
@@ -155,7 +172,6 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                             appliedChanges[sku].Add("Price", $"{oldProductDB["Price"]} -> {newSalePrice}");
                         }
 
-                        //marking product for shop sync
                         ProductModule.ChangeProductStatus(sku, ProductStatus.WaitingShopSync);
                     }
 
@@ -188,18 +204,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             }
         }
 
-        //public void updateTDBProductsComplete(object sender, RunWorkerCompletedEventArgs e) {
-        //    Dictionary<string, object> changes = e.Result as Dictionary<string, object>;
-
-        //    List<Dictionary<string, string>> newProducts = changes["newProducts"] as List<Dictionary<string, string>>;
-        //    List<Dictionary<string, string>> pendingChanges = changes["pendingChanges"] as List<Dictionary<string, string>>;
-        //    Dictionary<string, Dictionary<string, string>> appliedChanges = changes["appliedChanges"] as Dictionary<string, Dictionary<string, string>>;
-
-        //    //todo show window with changes applied
-        //    //finish this shit
-
-        //}
-
+        // adds new TDB product to database
         private bool addNewTDBProduct(Dictionary<string, string> newProductKVP) {
             bool productAdded = false;
             string newProdSKU = newProductKVP["SKU"];
@@ -316,8 +321,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             }
         }
 
-        //todo: add needs archiving clause to sync products module
-
+        //method that gets product data KVP from XML node(from datasheet) 
         private Dictionary<string, string> GetProductDataKVP(XmlNode prodData) {
             Dictionary<string, string> prodDataKVP = new();
 
@@ -341,18 +345,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             return prodDataKVP;
         }
 
-
-        private List<string> descSkipableKeys = new List<string>(){
-                "Manufacturer Logo",
-                "Picture1",
-                "Picture2",
-                "Picture3",
-                "Picture4",
-                "LongDesc",
-                "ShortDesc",
-                "Marketing Text"
-            };
-
+        //method that builds description for the product uisng datasheet KVP
         private string BuildDescription(Dictionary<string, string> prodDataKVP) {
             string description = "";
 
