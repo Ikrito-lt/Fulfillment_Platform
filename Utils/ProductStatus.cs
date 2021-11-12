@@ -11,9 +11,10 @@ namespace Ikrito_Fulfillment_Platform.Utils {
         public static string WaitingShopSync = "Waiting Shop Sync";
         public static string New = "New";
         public static string Ok = "Ok";
+        public static string NeedsArchiving = "Needs Archiving";
 
         //todo: add those cases to sync module
-        public static string NeedsArchiving = "Needs Archiving";
+        public static string NeedsUnArchiving = "Needs Un-Archiving";
         public static string Archived = "Archived";
     }
 }
