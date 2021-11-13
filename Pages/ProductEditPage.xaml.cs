@@ -51,6 +51,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             HeightBox.Text = editableProduct.height.ToString();
             WidthBox.Text = editableProduct.width.ToString();
             LenghtBox.Text = editableProduct.lenght.ToString();
+            VendorProductTypeLabel.Content = editableProduct.productTypeVendor;
 
             //Image listBox init
             imgListBoxDataSource = new ObservableCollection<string>(editableProduct.images);
@@ -89,6 +90,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             newProduct.vendor = VendorBox.Text;
             newProduct.barcode = BarcodeBox.Text;
             newProduct.sku = SKUBox.Text;
+
 
             //todo:repair this
             //newProduct.product_type = ProductTypeBox.Text;
