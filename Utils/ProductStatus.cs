@@ -16,5 +16,16 @@ namespace Ikrito_Fulfillment_Platform.Utils {
         //todo: add those cases to sync module
         public static string NeedsUnArchiving = "Needs Un-Archiving";
         public static string Archived = "Archived";
+
+
+        //method for getting list of values for all declared fields
+        public static List<string> GetFields() {
+            List<string> fieldValues = new();
+            foreach (var fieldInfo in typeof(ProductStatus).GetFields()) {
+                string fieldVal = fieldInfo.GetValue(null).ToString();
+                fieldValues.Add(fieldVal);
+            }
+            return fieldValues;
+        }
     }
 }
