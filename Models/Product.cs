@@ -20,8 +20,9 @@ namespace Ikrito_Fulfillment_Platform.Models {
         public int lenght { set; get; }                 //in mm
         public int width { set; get; }                  //in mm
 
-        public string addedTimeStamp { set; get; }    //timestamp of when product was created
+        public string addedTimeStamp { set; get; }      //timestamp of when product was created
         public string productTypeVendor { set; get; }   //for saving vendor product type to database.
+        public string status { set; get; }              //for product status as in sync Status
 
         public List<string> tags = new();
         public List<string> images = new();

@@ -429,7 +429,6 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             }
 
             //getting images faster
-            db = new();
             result = db.Table("TDB_Images").Get();
             foreach (var imgRow in result.Values) {
 
@@ -440,7 +439,6 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             }
 
             //getting tags faster
-            db = new();
             result = db.Table("TDB_Tags").Get();
             foreach (var tagRow in result.Values) {
 
@@ -453,13 +451,25 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             return products;
         }
 
-        //metdod gets list of all Products in database
+        //method gets list of all Products in database
         public static List<Product> GetAllProducts() {
             List<Product> p = new();
 
             List<Product> TDBproducts = GetTDBProducts();
             p.AddRange(TDBproducts);
 
+            //getting product statuses faster
+            DataBaseInterface db = new();
+            var result = db.Table("Products").Get();
+            foreach (var statusRow in result.Values) {
+
+                string sku = statusRow["SKU"];
+                string status = statusRow["Status"];
+
+                if (p.Exists(x => x.sku == sku)) {
+                    p.Find(x => x.sku == sku).status = status;
+                }
+            }
             return p;
         }
     }

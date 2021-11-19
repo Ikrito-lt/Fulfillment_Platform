@@ -319,7 +319,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 productAdded = true;
                 return productAdded;
             }
-        }
+        } 
 
         //method that gets product data KVP from XML node(from datasheet) 
         private Dictionary<string, string> GetProductDataKVP(XmlNode prodData) {
