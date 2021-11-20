@@ -33,7 +33,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             set {
                 _clearFilters = value;
                 if (value == true) {
-                    DeleteTextFilters();
+                    ResetTextFilters();
                 }
             }
         }
@@ -101,13 +101,8 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
         //refreshes Product datagrid
         private void RefreshButton_Click(object sender, RoutedEventArgs e) {
-            DeleteTextFilters();
+            ResetTextFilters();
             LoadAllProducts();
-        }
-
-        //removing and reseting all filters
-        private void ResetAllFilters() { 
-            
         }
 
 
@@ -154,6 +149,8 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         //on status change filtering 
         private void FilterByStatus() {
             StatusFilteredProducts.Clear();
+            ResetDateFilters();
+            ResetTextFilters();
 
             foreach (CheckBoxListItem status in StatusList) {
                 if (status.IsSelected) {
@@ -161,9 +158,11 @@ namespace Ikrito_Fulfillment_Platform.Pages {
                 }
             }
 
-            DateFilteredFilteredProducts = StatusFilteredProducts;
-            TextFilteredProducts = DateFilteredFilteredProducts;
-            productDG.ItemsSource = TextFilteredProducts;
+            DateFilteredFilteredProducts = StatusFilteredProducts.ToList();
+            TextFilteredProducts = DateFilteredFilteredProducts.ToList();
+            productDG.ItemsSource = TextFilteredProducts.ToList();
+            productDG.Items.Refresh();
+            ChangeCountLabel(TextFilteredProducts.Count);
         }
 
         // this method fires when checkbox was clicked ie selection changed
@@ -181,14 +180,35 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             //setting begin and end date pickers
             BeginDatePicker.DisplayDateStart = new DateTime(2021, 09, 01);
             EndDatePicker.DisplayDateStart = new DateTime(2021, 09, 01);
-
         }
 
         //on selected date change
         private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e) {
 
+            //todo reset text filters;
+
+            if (BeginDatePicker.SelectedDate.HasValue && EndDatePicker.SelectedDate.HasValue) {
+                long beginTimeStamp = ((DateTimeOffset)BeginDatePicker.SelectedDate.Value).ToUnixTimeSeconds();
+                long endTimeStamp = ((DateTimeOffset)EndDatePicker.SelectedDate.Value).ToUnixTimeSeconds();
+                if (beginTimeStamp <= endTimeStamp) {
+                    //todo: do filtering 
+
+                    DateFilteredFilteredProducts.Clear();
+                    DateFilteredFilteredProducts.AddRange(StatusFilteredProducts.FindAll(x => beginTimeStamp <= long.Parse(x.addedTimeStamp)  && long.Parse(x.addedTimeStamp) <= endTimeStamp));
+
+                    TextFilteredProducts = DateFilteredFilteredProducts.ToList();
+                    productDG.ItemsSource = TextFilteredProducts.ToList();
+                    productDG.Items.Refresh();
+                    ChangeCountLabel(TextFilteredProducts.Count);
+                }
+            }
         }
 
+        //remove / reset date filters
+        private void ResetDateFilters() {
+            BeginDatePicker.SelectedDate = null;
+            EndDatePicker.SelectedDate = null;
+        }
 
         //
         // Text Filtering section
@@ -213,13 +233,13 @@ namespace Ikrito_Fulfillment_Platform.Pages {
                     ChangeCountLabel(TextFilteredProducts.Count);
                     productDG.ItemsSource = TextFilteredProducts;
                 } else {
-                    TextFilteredProducts = AllProducts.Where(p => p.vendor.ToLower().Contains(query)).ToList();
+                    TextFilteredProducts = DateFilteredFilteredProducts.Where(p => p.vendor.ToLower().Contains(query)).ToList();
                     ChangeCountLabel(TextFilteredProducts.Count);
                     productDG.ItemsSource = TextFilteredProducts;
                 }
             } else if (textBox.Text.Length == 0) {
-                ChangeCountLabel(AllProducts.Count);
-                productDG.ItemsSource = AllProducts;
+                ChangeCountLabel(DateFilteredFilteredProducts.Count);
+                productDG.ItemsSource = DateFilteredFilteredProducts.ToList();
             }
         }
        
@@ -242,13 +262,13 @@ namespace Ikrito_Fulfillment_Platform.Pages {
                     ChangeCountLabel(TextFilteredProducts.Count);
                     productDG.ItemsSource = TextFilteredProducts;
                 } else {
-                    TextFilteredProducts = AllProducts.Where(p => p.sku.ToLower().Contains(query)).ToList();
+                    TextFilteredProducts = DateFilteredFilteredProducts.Where(p => p.sku.ToLower().Contains(query)).ToList();
                     ChangeCountLabel(TextFilteredProducts.Count);
                     productDG.ItemsSource = TextFilteredProducts;
                 }
             } else if (textBox.Text.Length == 0) {
-                ChangeCountLabel(AllProducts.Count);
-                productDG.ItemsSource = AllProducts;
+                ChangeCountLabel(DateFilteredFilteredProducts.Count);
+                productDG.ItemsSource = DateFilteredFilteredProducts.ToList();
             }
         }
         
@@ -271,13 +291,13 @@ namespace Ikrito_Fulfillment_Platform.Pages {
                     ChangeCountLabel(TextFilteredProducts.Count);
                     productDG.ItemsSource = TextFilteredProducts;
                 } else {
-                    TextFilteredProducts = AllProducts.Where(p => p.title.ToLower().Contains(query)).ToList();
+                    TextFilteredProducts = DateFilteredFilteredProducts.Where(p => p.title.ToLower().Contains(query)).ToList();
                     ChangeCountLabel(TextFilteredProducts.Count);
                     productDG.ItemsSource = TextFilteredProducts;
                 }
             } else if (textBox.Text.Length == 0) {
-                ChangeCountLabel(AllProducts.Count);
-                productDG.ItemsSource = AllProducts;
+                ChangeCountLabel(DateFilteredFilteredProducts.Count);
+                productDG.ItemsSource = DateFilteredFilteredProducts.ToList();
             }
         }
         
@@ -300,30 +320,30 @@ namespace Ikrito_Fulfillment_Platform.Pages {
                     ChangeCountLabel(TextFilteredProducts.Count);
                     productDG.ItemsSource = TextFilteredProducts;
                 } else {
-                    TextFilteredProducts = AllProducts.Where(p => p.product_type.ToLower().Contains(query)).ToList();
+                    TextFilteredProducts = DateFilteredFilteredProducts.Where(p => p.product_type.ToLower().Contains(query)).ToList();
                     ChangeCountLabel(TextFilteredProducts.Count);
                     productDG.ItemsSource = TextFilteredProducts;
                 }
             } else if (textBox.Text.Length == 0) {
-                ChangeCountLabel(AllProducts.Count);
-                productDG.ItemsSource = AllProducts;
+                ChangeCountLabel(DateFilteredFilteredProducts.Count);
+                productDG.ItemsSource = DateFilteredFilteredProducts.ToList();
             }
         }
 
         //method for deleting deleting filters
-        private void DeleteTextFilters() {
+        private void ResetTextFilters() {
             TypeFilterSBox.Clear();
             TitleFilterSBox.Clear();
             SKUFilterSBox.Clear();
             VendorFilterSBox.Clear();
 
             queryLenght = 0;
-            TextFilteredProducts = AllProducts.ToList();
+            TextFilteredProducts = DateFilteredFilteredProducts.ToList();
         }
 
         //method that is triggered when clicking remove filters button
         private void RemoveFilters_Click(object sender, RoutedEventArgs e) {
-            DeleteTextFilters();
+            ResetTextFilters();
         }
     }
 }

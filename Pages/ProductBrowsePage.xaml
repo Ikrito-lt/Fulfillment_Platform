@@ -83,7 +83,7 @@
                 <!--date stuff-->
                 <ColumnDefinition Width="350"/>
                 <!--remove FIlter Button-->
-                <ColumnDefinition Width="130"/>
+                <ColumnDefinition Width="155"/>
             </Grid.ColumnDefinitions>
 
             <Border Grid.Column="0" Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="2" Margin="10,0,0,0">
@@ -110,7 +110,7 @@
 
             <Border Grid.Column="2" Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="2" Margin="10,0,10,0">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button x:Name="RemoveFilters" Click="RemoveFilters_Click" Content="Remove Filters" Padding="5" HorizontalAlignment="Right" Width="85"
+                    <Button x:Name="RemoveFilters" Click="RemoveFilters_Click" Content="Remove Text Filters" Padding="5" HorizontalAlignment="Right" 
                         VerticalAlignment="Center" Margin="0,0,10,0"/>
                 </StackPanel>
             </Border>

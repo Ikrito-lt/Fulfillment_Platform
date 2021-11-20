@@ -211,6 +211,8 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 prod.height = int.Parse(row["Height"]);
                 prod.lenght = int.Parse(row["Lenght"]);
                 prod.width = int.Parse(row["Width"]);
+                prod.addedTimeStamp = row["AddedTimeStamp"];
+                prod.productTypeVendor = row["ProductTypeVendor"];
             }
 
             //getting images faster
@@ -422,6 +424,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 NewProduct.height = int.Parse(prod["Height"]);
                 NewProduct.lenght = int.Parse(prod["Lenght"]);
                 NewProduct.width = int.Parse(prod["Width"]);
+
                 NewProduct.addedTimeStamp = prod["AddedTimeStamp"];
                 NewProduct.productTypeVendor = prod["ProductTypeVendor"];
 
