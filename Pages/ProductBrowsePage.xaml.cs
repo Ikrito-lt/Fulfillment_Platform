@@ -5,7 +5,6 @@ using Ikrito_Fulfillment_Platform.Utils;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -102,6 +101,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         //refreshes Product datagrid
         private void RefreshButton_Click(object sender, RoutedEventArgs e) {
             ResetTextFilters();
+            ResetDateFilters();
             LoadAllProducts();
         }
 

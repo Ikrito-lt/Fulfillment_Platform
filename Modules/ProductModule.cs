@@ -2,9 +2,6 @@
 using Ikrito_Fulfillment_Platform.Utils;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ikrito_Fulfillment_Platform.Modules {
     static class ProductModule {
@@ -25,6 +22,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             return categoriesKVP;
         }
 
+        //
         //
         // Section with methods that are needed for product statuses
         //
