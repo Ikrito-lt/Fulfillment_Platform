@@ -52,7 +52,8 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Text="Product Type: " Margin="5" Padding="3"/>
-                        <TextBox Grid.Column="1" x:Name="ProductTypeBox" Visibility="Visible" VerticalAlignment="Center" Padding="3"/>
+                        <ComboBox Grid.Column="1" x:Name="ProductTypeComboBox" Margin="0,4,0,4" ItemsSource="{Binding}" SelectedValuePath="Key" DisplayMemberPath="Value"/>
+                        <!--<TextBox Grid.Column="1" x:Name="ProductTypeBox" Visibility="Visible" VerticalAlignment="Center" Padding="3"/>-->
 
                         <TextBlock Grid.Column="2" Text="Vendor Type: " Margin="5" Padding="3"/>
                         <Label Grid.Column="3" x:Name="VendorProductTypeLabel" Content="" VerticalAlignment="Center" Padding="3"/>
@@ -65,11 +66,11 @@
                             <ColumnDefinition Width="100"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="2" Text="SKU: " Margin="5" Padding="3"/>
-                        <TextBox Grid.Column="3" x:Name="SKUBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" IsEnabled="False" IsReadOnly="True"/>
-
                         <TextBlock Grid.Column="0" Text="Vendor: " Margin="5" Padding="3"/>
                         <TextBox Grid.Column="1" x:Name="VendorBox" Visibility="Visible" VerticalAlignment="Center" Padding="3"/>
+
+                        <TextBlock Grid.Column="2" Text="SKU: " Margin="5" Padding="3"/>
+                        <Label Grid.Column="3" x:Name="SKULabel" Content="" VerticalAlignment="Center" Padding="3"/>
                     </Grid>
 
                     <Grid Margin="0">

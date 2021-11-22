@@ -116,7 +116,7 @@
             </Border>
         </Grid>
 
-        <DataGrid x:Name="productDG" Grid.Row="4" Margin="10,0,10,0" SelectionMode="Single" CanUserAddRows="False" HeadersVisibility="Column" HorizontalAlignment="Stretch" VerticalAlignment="Top" AutoGenerateColumns="False" Style="{DynamicResource DataGridStyle1}" ItemsSource="{Binding}" >
+        <DataGrid x:Name="productDG" Grid.Row="4" Margin="10,0,10,0" SelectionMode="Single" CanUserAddRows="False" HeadersVisibility="Column" HorizontalAlignment="Stretch" VerticalAlignment="Top" AutoGenerateColumns="False" Style="{DynamicResource DataGridStyle1}" ItemsSource="{Binding}" IsReadOnly="True">
             <DataGrid.Resources>
                 <Style TargetType="DataGridRow">
                     <EventSetter Event="MouseDoubleClick" Handler="Row_MouseDoubleClick"/>
@@ -124,7 +124,7 @@
             </DataGrid.Resources>
             <DataGrid.Columns>
 
-                <DataGridTextColumn Binding="{Binding sku}" Width="200">
+                <DataGridTextColumn Binding="{Binding sku}" Width="200" >
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="HorizontalAlignment" Value="Left" />
