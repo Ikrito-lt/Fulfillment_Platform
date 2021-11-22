@@ -31,13 +31,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Utils\DialogueOK.xaml.cs">
+    <Compile Update="UI\DialogueOK.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <Page Update="Utils\DialogueOK.xaml">
+    <Page Update="UI\DialogueOK.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
     </Page>

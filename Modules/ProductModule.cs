@@ -6,6 +6,7 @@ using System.Collections.Generic;
 namespace Ikrito_Fulfillment_Platform.Modules {
     static class ProductModule {
 
+        //gets Categories KVP from database
         public static Dictionary<string, string> GetCategoriesDictionary() {
             //getting category KVP from database
             Dictionary<string, string> categoriesKVP = new();
@@ -22,7 +23,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             return categoriesKVP;
         }
 
-        //
+
         //
         // Section with methods that are needed for product statuses
         //
@@ -182,7 +183,6 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         // method that gets product from database using its SKU
         public static Product GetProduct(string sku) {
             Product prod = new();
-            var categoriesKVP = GetCategoriesDictionary();
             string tablePrefix = sku.GetUntilOrEmpty();
 
             DataBaseInterface db = new();
@@ -199,7 +199,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 prod.title = row["Title"];
                 prod.body_html = row["Body"];
                 prod.vendor = row["Vendor"];
-                prod.product_type = categoriesKVP[row["ProductType"]];
+                prod.product_type = row["ProductType"];
                 prod.price = double.Parse(row["Price"]);
                 prod.sku = row["SKU"];
                 prod.stock = int.Parse(row["Stock"]);
@@ -247,10 +247,6 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             DataBaseInterface db = new();
             string tablePrefix = p.sku.GetUntilOrEmpty();
 
-            //getting category dictionary
-            Dictionary<string, string> categoriesKVP = GetCategoriesDictionary();
-            string categoryKey = categoriesKVP.FindFirstKeyByValue(p.product_type);
-
             //adding product to Products table
             MarkProductAsNew(p.sku);
 
@@ -259,7 +255,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 ["Title"] = p.title,
                 ["Body"] = p.body_html,
                 ["Vendor"] = p.vendor,
-                ["ProductType"] = categoryKey,
+                ["ProductType"] = p.product_type,
                 ["Price"] = p.price.ToString(),
                 ["SKU"] = p.sku,
                 ["Stock"] = p.stock.ToString(),
@@ -312,8 +308,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 ["Title"] = p.title,
                 ["Body"] = p.body_html,
                 ["Vendor"] = p.vendor,
-                //todo: i need to pass int to DB here p has string in it
-                //["ProductType"] = p.product_type, 
+                ["ProductType"] = p.product_type, 
                 ["Price"] = p.price.ToString(),
                 ["Stock"] = p.stock.ToString(),
                 ["Barcode"] = p.barcode,
@@ -400,7 +395,6 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         //method gets list of TDB products
         private static List<Product> GetTDBProducts() {
             List<Product> products = new();
-            Dictionary<string, string> categoriesKVP = GetCategoriesDictionary();
 
             //getting main product info
             DataBaseInterface db = new();
@@ -412,7 +406,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 NewProduct.title = prod["Title"];
                 NewProduct.body_html = prod["Body"];
                 NewProduct.vendor = prod["Vendor"];
-                NewProduct.product_type = categoriesKVP[prod["ProductType"]];
+                NewProduct.product_type = prod["ProductType"];
                 NewProduct.price = double.Parse(prod["Price"]);
                 NewProduct.sku = prod["SKU"];
                 NewProduct.stock = int.Parse(prod["Stock"]);
