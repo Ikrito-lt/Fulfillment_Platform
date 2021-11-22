@@ -16,13 +16,16 @@
             <RowDefinition Height="70"/>
         </Grid.RowDefinitions>
 
-
-
         <!--Box for all other information-->
         <Border Grid.Row="0" Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="2" Margin="10,10,10,0" Padding="10">
-            <StackPanel Orientation="Vertical">
-
-                <Grid Margin="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="380"/>
+                </Grid.RowDefinitions>
+                
+                <Grid Margin="0" Grid.Row="0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="100"/>
                         <ColumnDefinition Width="*"/>
@@ -31,156 +34,158 @@
                     <TextBox Grid.Column="1" x:Name="TitleBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" MaxLength="255"/>
                 </Grid>
 
-                <Grid Margin="0">
+                <Grid Margin="0" Grid.Row="1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="100"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Text="Description: " Margin="5" Padding="3"/>
-                    <TextBox Grid.Column="1" x:Name="DescBox" Visibility="Visible" Margin="0,5,0,5" VerticalAlignment="Center"  Padding="3" AcceptsReturn="True" TextWrapping="Wrap" MaxHeight=""/>
+                    <TextBox Grid.Column="1" x:Name="DescBox" Visibility="Visible" Margin="0,5,0,5" VerticalAlignment="Stretch"  Padding="3" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
                 </Grid>
 
-                <Grid Margin="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="Product Type: " Margin="5" Padding="3"/>
-                    <TextBox Grid.Column="1" x:Name="ProductTypeBox" Visibility="Visible" VerticalAlignment="Center" Padding="3"/>
+                <StackPanel Orientation="Vertical" Grid.Row="2">
+                    <Grid Margin="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Product Type: " Margin="5" Padding="3"/>
+                        <TextBox Grid.Column="1" x:Name="ProductTypeBox" Visibility="Visible" VerticalAlignment="Center" Padding="3"/>
 
-                    <TextBlock Grid.Column="2" Text="Vendor Type: " Margin="5" Padding="3"/>
-                    <Label Grid.Column="3" x:Name="VendorProductTypeLabel" Content="" VerticalAlignment="Center" Padding="3"/>
-                </Grid>
+                        <TextBlock Grid.Column="2" Text="Vendor Type: " Margin="5" Padding="3"/>
+                        <Label Grid.Column="3" x:Name="VendorProductTypeLabel" Content="" VerticalAlignment="Center" Padding="3"/>
+                    </Grid>
 
-                <Grid Margin="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="2" Text="SKU: " Margin="5" Padding="3"/>
-                    <TextBox Grid.Column="3" x:Name="SKUBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" IsEnabled="False" IsReadOnly="True"/>
+                    <Grid Margin="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="2" Text="SKU: " Margin="5" Padding="3"/>
+                        <TextBox Grid.Column="3" x:Name="SKUBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" IsEnabled="False" IsReadOnly="True"/>
 
-                    <TextBlock Grid.Column="0" Text="Vendor: " Margin="5" Padding="3"/>
-                    <TextBox Grid.Column="1" x:Name="VendorBox" Visibility="Visible" VerticalAlignment="Center" Padding="3"/>
-                </Grid>
+                        <TextBlock Grid.Column="0" Text="Vendor: " Margin="5" Padding="3"/>
+                        <TextBox Grid.Column="1" x:Name="VendorBox" Visibility="Visible" VerticalAlignment="Center" Padding="3"/>
+                    </Grid>
 
-                <Grid Margin="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="Stock: " Margin="5" Padding="3"/>
-                    <TextBox Grid.Column="1" x:Name="StockBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" PreviewTextInput="IntPreviewTextInput"/>
+                    <Grid Margin="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Stock: " Margin="5" Padding="3"/>
+                        <TextBox Grid.Column="1" x:Name="StockBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" PreviewTextInput="IntPreviewTextInput"/>
 
-                    <TextBlock Grid.Column="2" Text="Barcode: " Margin="3" Padding="3"/>
-                    <TextBox Grid.Column="3" x:Name="BarcodeBox" Visibility="Visible" VerticalAlignment="Center" Padding="3"/>
-                </Grid>
+                        <TextBlock Grid.Column="2" Text="Barcode: " Margin="3" Padding="3"/>
+                        <TextBox Grid.Column="3" x:Name="BarcodeBox" Visibility="Visible" VerticalAlignment="Center" Padding="3"/>
+                    </Grid>
 
-                <Grid Margin="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="Price (€): " Margin="5" Padding="3"/>
-                    <TextBox Grid.Column="1" x:Name="PriceBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" PreviewTextInput="DoublePreviewTextInput"/>
+                    <Grid Margin="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Price (€): " Margin="5" Padding="3"/>
+                        <TextBox Grid.Column="1" x:Name="PriceBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" PreviewTextInput="DoublePreviewTextInput"/>
 
-                    <TextBlock Grid.Column="2" Text="Vendor Price (€): " Margin="5" Padding="3"/>
-                    <TextBox Grid.Column="3" x:Name="VendorPriceBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" PreviewTextInput="DoublePreviewTextInput"/>
-                </Grid>
+                        <TextBlock Grid.Column="2" Text="Vendor Price (€): " Margin="5" Padding="3"/>
+                        <TextBox Grid.Column="3" x:Name="VendorPriceBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" PreviewTextInput="DoublePreviewTextInput"/>
+                    </Grid>
 
-                <Grid Margin="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="Weight (kg): " Margin="5" Padding="3"/>
-                    <TextBox Grid.Column="1" x:Name="WeightBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" PreviewTextInput="DoublePreviewTextInput"/>
-                    <TextBlock Grid.Column="2" Text="Height (mm): " Margin="5" Padding="3"/>
-                    <TextBox Grid.Column="3" x:Name="HeightBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" PreviewTextInput="IntPreviewTextInput"/>
-                </Grid>
+                    <Grid Margin="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Weight (kg): " Margin="5" Padding="3"/>
+                        <TextBox Grid.Column="1" x:Name="WeightBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" PreviewTextInput="DoublePreviewTextInput"/>
+                        <TextBlock Grid.Column="2" Text="Height (mm): " Margin="5" Padding="3"/>
+                        <TextBox Grid.Column="3" x:Name="HeightBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" PreviewTextInput="IntPreviewTextInput"/>
+                    </Grid>
 
-                <Grid Margin="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="Lenght (mm): " Margin="5" Padding="3"/>
-                    <TextBox Grid.Column="1" x:Name="LenghtBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" PreviewTextInput="IntPreviewTextInput"/>
-                    
-                    <TextBlock Grid.Column="2" Text="Width (mm): " Margin="5" Padding="3"/>
-                    <TextBox Grid.Column="3" x:Name="WidthBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" PreviewTextInput="IntPreviewTextInput"/>
-                </Grid>
+                    <Grid Margin="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Lenght (mm): " Margin="5" Padding="3"/>
+                        <TextBox Grid.Column="1" x:Name="LenghtBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" PreviewTextInput="IntPreviewTextInput"/>
 
-                <Grid Margin="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="30"/>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="30"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="2" Text="Width (mm): " Margin="5" Padding="3"/>
+                        <TextBox Grid.Column="3" x:Name="WidthBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" PreviewTextInput="IntPreviewTextInput"/>
+                    </Grid>
 
-                    <TextBlock Grid.Column="0" Text="Images: " Margin="5" Padding="3"/>
-                    <TextBox Grid.Column="1" x:Name="ImageBox" Visibility="Visible" VerticalAlignment="Center" Padding="3"/>
-                    <Button x:Name="AddImageButton" Grid.Column="2" Click="AddImageButton_Click" Content="+" Padding="3" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,5,0,5" VerticalContentAlignment="Center"/>
-                    <ListBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" Name="ImageListBox" MaxHeight="150" SelectionMode="Single" HorizontalContentAlignment="Stretch">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"></ColumnDefinition>
-                                        <ColumnDefinition Width="40"></ColumnDefinition>
-                                        <ColumnDefinition Width="40"></ColumnDefinition>
-                                    </Grid.ColumnDefinitions>
+                    <Grid Margin="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="30"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
 
-                                    <TextBlock Text="{Binding}" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                    <Button Content="[x]" Command="{Binding ElementName=ImageListBox, Path=DataContext.DeleteImageCommand}"
+                        <TextBlock Grid.Column="0" Text="Images: " Margin="5" Padding="3"/>
+                        <TextBox Grid.Column="1" x:Name="ImageBox" Visibility="Visible" VerticalAlignment="Center" Padding="3"/>
+                        <Button x:Name="AddImageButton" Grid.Column="2" Click="AddImageButton_Click" Content="+" Padding="3" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,5,0,5" VerticalContentAlignment="Center"/>
+                        <ListBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" Name="ImageListBox" MaxHeight="150" SelectionMode="Single" HorizontalContentAlignment="Stretch">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                            <ColumnDefinition Width="40"></ColumnDefinition>
+                                            <ColumnDefinition Width="40"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBlock Text="{Binding}" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <Button Content="[x]" Command="{Binding ElementName=ImageListBox, Path=DataContext.DeleteImageCommand}"
                                         CommandParameter="{Binding}" Grid.Column="2" Margin="5" Padding="3" VerticalContentAlignment="Center"/>
-                                    <Button Content="🔎︎" Command="{Binding ElementName=ImageListBox, Path=DataContext.ShowImageCommand}"
+                                        <Button Content="🔎︎" Command="{Binding ElementName=ImageListBox, Path=DataContext.ShowImageCommand}"
                                         CommandParameter="{Binding}" Grid.Column="1" Margin="5" Padding="3" VerticalContentAlignment="Center"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
 
-                    <TextBlock Grid.Column="3" Text="Tags: " Margin="5" Padding="3"/>
-                    <TextBox Grid.Column="4" x:Name="TagBox" Visibility="Visible" VerticalAlignment="Center" Padding="3"/>
-                    <Button x:Name="AddTagButton" Grid.Column="5" Click="AddTagButton_Click" Content="+" Padding="3" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,5,0,5" VerticalContentAlignment="Center"/>
-                    <ListBox Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="1" Name="TagListBox"  MaxHeight="150" SelectionMode="Single" HorizontalContentAlignment="Stretch">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"></ColumnDefinition>
-                                        <ColumnDefinition Width="40"></ColumnDefinition>
-                                    </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="3" Text="Tags: " Margin="5" Padding="3"/>
+                        <TextBox Grid.Column="4" x:Name="TagBox" Visibility="Visible" VerticalAlignment="Center" Padding="3"/>
+                        <Button x:Name="AddTagButton" Grid.Column="5" Click="AddTagButton_Click" Content="+" Padding="3" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,5,0,5" VerticalContentAlignment="Center"/>
+                        <ListBox Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="1" Name="TagListBox"  MaxHeight="150" SelectionMode="Single" HorizontalContentAlignment="Stretch">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                            <ColumnDefinition Width="40"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
 
-                                    <TextBlock Text="{Binding}" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                    <Button Content="[x]" Command="{Binding ElementName=TagListBox, Path=DataContext.DeleteTagCommand}" CommandParameter="{Binding}" Grid.Column="1" Margin="5" Padding="3" VerticalContentAlignment="Center"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                </Grid>
-            
-            </StackPanel>
+                                        <TextBlock Text="{Binding}" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                        <Button Content="[x]" Command="{Binding ElementName=TagListBox, Path=DataContext.DeleteTagCommand}" CommandParameter="{Binding}" Grid.Column="1" Margin="5" Padding="3" VerticalContentAlignment="Center"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </StackPanel>
+                
+            </Grid>
         </Border>
         
         <!--buttons Border-->
