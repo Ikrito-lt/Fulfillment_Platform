@@ -87,7 +87,12 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                     //edge case
                     updateData["Status"] = ProductStatus.New;
                     db.Table("Products").Where(whereUpdate).Update(updateData);
-                
+
+                } else if (status == ProductStatus.NeedsArchiving) {
+                    //edge case
+                    //todo: delete product with that sku from database
+                    DeleteProduct(sku);
+
                 } else {
                     //todo: add critical error window
                     throw new Exception($"cant change product status {productStatus} -> {status}");
@@ -180,6 +185,55 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         // Section of methods that are responsible for managign individual products in database
         //
 
+        // method for deleting product form database 
+        public static void DeleteProduct(string sku) {
+            string tablePrefix = sku.GetUntilOrEmpty();
+
+            //getting product ID in *_Product Table
+            DataBaseInterface db = new();
+            Dictionary<string, Dictionary<string, string>> whereCond;
+            whereCond = new Dictionary<string, Dictionary<string, string>> {
+                ["SKU"] = new Dictionary<string, string> {
+                    ["="] = sku
+                }
+            };
+            var result = db.Table(tablePrefix + "_Products").Where(whereCond).Get();
+            string ProductDBID = result[0]["ID"];
+
+            //deleting tags
+            var whereDelete = new Dictionary<string, Dictionary<string, string>> {
+                ["ProductID"] = new Dictionary<string, string> {
+                    ["="] = ProductDBID
+                }
+            };
+            db.Table($"{tablePrefix}_Tags").Where(whereDelete).Delete();
+
+            //deleting images
+            whereDelete = new Dictionary<string, Dictionary<string, string>> {
+                ["ProductID"] = new Dictionary<string, string> {
+                    ["="] = ProductDBID
+                }
+            };
+            db.Table($"{tablePrefix}_Images").Where(whereDelete).Delete();
+
+            //deleting from *_Products table
+            whereDelete = new Dictionary<string, Dictionary<string, string>> {
+                ["ID"] = new Dictionary<string, string> {
+                    ["="] = ProductDBID
+                }
+            };
+            db.Table($"{tablePrefix}_Products").Where(whereDelete).Delete();
+
+            //deleting from Products table
+            whereDelete = new Dictionary<string, Dictionary<string, string>> {
+                ["SKU"] = new Dictionary<string, string> {
+                    ["="] = sku
+                }
+            };
+            db.Table("Products").Where(whereDelete).Delete();
+
+        }
+
         // method that gets product from database using its SKU
         public static Product GetProduct(string sku) {
             Product prod = new();
@@ -245,6 +299,9 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         // method that adds new product to database (decides what table to add to using SKU prefix)
         public static void AddProductToDB(Product p) {
             DataBaseInterface db = new();
+            //getting categories KVP
+            var CategoriesKVP = GetCategoriesDictionary();
+
             string tablePrefix = p.sku.GetUntilOrEmpty();
 
             //adding product to Products table
@@ -255,7 +312,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 ["Title"] = p.title,
                 ["Body"] = p.body_html,
                 ["Vendor"] = p.vendor,
-                ["ProductType"] = p.product_type,
+                ["ProductType"] = CategoriesKVP.GetFirstKeyByValue(p.product_type),
                 ["Price"] = p.price.ToString(),
                 ["SKU"] = p.sku,
                 ["Stock"] = p.stock.ToString(),
