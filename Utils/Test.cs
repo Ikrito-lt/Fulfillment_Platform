@@ -15,6 +15,7 @@ namespace Ikrito_Fulfillment_Platform.Utils {
         }
 
         private void foo() {
+            PriceGenModule.GenNewPrice(150.20);
         }
     }
 }

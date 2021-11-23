@@ -150,10 +150,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                         }
 
                         if (oldProductDB["PriceVendor"] != productChanges["PriceVendor"]) {
-                            double priceChangeAmmount = double.Parse(productChanges["PriceVendor"]) - double.Parse(oldProductDB["PriceVendor"]);
-                            int priceChangeRounded = Convert.ToInt32(priceChangeAmmount);
-                            double newSalePrice = double.Parse(oldProductDB["Price"]) + priceChangeRounded;
-                            //todo: impelelent price variator to product prices
+                            double newSalePrice = PriceGenModule.GenNewPrice(double.Parse(productChanges["PriceVendor"]));
 
                             //updating price value
                             var priceUpdateData = new Dictionary<string, string> {
@@ -294,10 +291,8 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 }
 
                 //calvulating newProduct price with 15-30% margin choosen on random
-                int marginPercent = new Random().Next(15, 30);
-                double newPrice = (newProduct.vendor_price * (100 + marginPercent)) / 100;
-                newPrice = Math.Floor(newPrice) + 0.99;
-                newProduct.price = newPrice;
+                double NewSalePrice = PriceGenModule.GenNewPrice(newProduct.vendor_price);
+                newProduct.price = NewSalePrice;
 
                 //adding pictures
                 foreach (var pic in newProdDataKVP.Where(x => x.Key.Contains("Picture"))) {

@@ -36,12 +36,13 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
         //generates new price with random profit adding PVM into consideration and adding random price suffix
         public static double GenNewPrice(double VendorPrice) {
-            double NewPrice;
+            double NewPrice = 0.0;
 
             double PriceProfit = VendorPrice * (1 + PriceProfitList[rnd.Next(PriceProfitList.Count)]);
             double PriceProfitPVM = PriceProfit * AddedPVM;
 
-
+            double Price = Math.Ceiling(PriceProfitPVM);
+            NewPrice = Price + PriceSufixesList[rnd.Next(PriceSufixesList.Count)];
 
             return NewPrice;
         }
