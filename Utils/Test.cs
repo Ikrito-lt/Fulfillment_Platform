@@ -15,7 +15,14 @@ namespace Ikrito_Fulfillment_Platform.Utils {
         }
 
         private void foo() {
-            PriceGenModule.GenNewPrice(150.20);
+            DataBaseInterface db = new();
+            var result = db.Table("Products").Get();
+
+            foreach (var row in result.Values) {
+                if (row["Status"] == ProductStatus.NeedsArchiving) {
+                    ProductModule.DeleteProduct(row["SKU"]);
+                }
+            }
         }
     }
 }

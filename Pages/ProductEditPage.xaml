@@ -9,7 +9,7 @@
 
     <!--todo: maybe make sku a window title-->
     
-    <Grid Margin="0"   Background="WhiteSmoke">
+    <Grid Margin="0" Background="WhiteSmoke">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -200,7 +200,7 @@
                 <Button x:Name="BackButton" Grid.Column="0" Click="BackButton_Click" Content="Back" Padding="15,5,15,5" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                 <Button x:Name="SaveButton" Grid.Column="1" Click="SaveButton_Click" Content="Save" Padding="15,5,15,5" HorizontalAlignment="Left" VerticalAlignment="Center"/>
             </Grid>
-            
+
         </Border>
 
     </Grid>

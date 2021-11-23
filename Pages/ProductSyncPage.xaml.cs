@@ -151,7 +151,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         //
 
         //button that starts shopify sync
-        private void UpdateProducts_Click(object sender, RoutedEventArgs e) {
+        private void SyncProducts_Click(object sender, RoutedEventArgs e) {
             //running export products in background
             BackgroundWorker worker = new BackgroundWorker();
             worker.WorkerReportsProgress = true;
@@ -195,9 +195,9 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
             Dictionary<string, object> changes = e.Result as Dictionary<string, object>;
 
-            List<Dictionary<string, string>> newProducts = changes["newProducts"] as List<Dictionary<string, string>>;
-            List<Dictionary<string, string>> pendingChanges = changes["pendingChanges"] as List<Dictionary<string, string>>;
-            Dictionary<string, Dictionary<string, string>> appliedChanges = changes["appliedChanges"] as Dictionary<string, Dictionary<string, string>>;
+            List<Dictionary<string, string>> newProducts = changes["newProducts"] as List<Dictionary<string, string>>;                                      //what new product were added
+            List<Dictionary<string, string>> pendingChanges = changes["pendingChanges"] as List<Dictionary<string, string>>;                                //what products werent added because they were missing datasheet
+            Dictionary<string, Dictionary<string, string>> appliedChanges = changes["appliedChanges"] as Dictionary<string, Dictionary<string, string>>;    //what products were changed
 
             //todo show window with changes applied
             //finish this shit

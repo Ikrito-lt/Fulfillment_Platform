@@ -57,7 +57,7 @@ namespace Ikrito_Fulfillment_Platform.Utils {
         }
 
         //for getting first key by value from dictionary
-        public static K FindFirstKeyByValue<K, V>(this Dictionary<K, V> dict, V val) {
+        public static K GetFirstKeyByValue<K, V>(this Dictionary<K, V> dict, V val) {
             return dict.FirstOrDefault(entry =>
                 EqualityComparer<V>.Default.Equals(entry.Value, val)).Key;
         }

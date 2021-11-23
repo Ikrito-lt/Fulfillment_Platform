@@ -125,7 +125,8 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                             ["="] = sku
                         }
                     };
-                    var oldProductDB = db.Table("TDB_Products").Where(whereQuery).Get()[0];
+                    var result = db.Table("TDB_Products").Where(whereQuery).Get();
+                    var oldProductDB = result[0];
 
                     //if data is the same dont change shit 
                     if (oldProductDB["Stock"] == productChanges["Stock"] && oldProductDB["PriceVendor"] == productChanges["PriceVendor"]) {
