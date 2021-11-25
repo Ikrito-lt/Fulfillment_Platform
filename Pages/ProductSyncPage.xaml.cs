@@ -1,4 +1,5 @@
 ﻿using Ikrito_Fulfillment_Platform.Models;
+using Ikrito_Fulfillment_Platform.Models.SyncModels;
 using Ikrito_Fulfillment_Platform.Modules;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6,6 +7,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+
+//todo: when double ckicking any of these list boxes you edit product and then delete if from list box
 
 namespace Ikrito_Fulfillment_Platform.Pages {
     public partial class ProductSyncPage : Page {
@@ -48,14 +51,14 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         private void ChangeCountLabel(int count) {
             SyncProductCountL.Content = "Sync Product Count: " + count.ToString();
         }
-        
+
         //method removes SKU filter from the data grid
         private void deleteFilters() {
             SKUFilterSBox.Clear();
             queryLenght = 0;
             FilteredSyncProducts = SyncProducts;
         }
-        
+
         //method for fitering by sku
         private void SKUFilterSBox_TextChanged(object sender, TextChangedEventArgs e) {
             TextBox textBox = sender as TextBox;
@@ -89,7 +92,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         private void BackButton_Click(object sender, RoutedEventArgs e) {
             MainWindow.Instance.mainFrame.Content = MainPage.Instance;
         }
-        
+
         //button that refreshes the data grid
         private void RefreshButton_Click(object sender, RoutedEventArgs e) {
             deleteFilters();
@@ -117,13 +120,13 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
             worker.RunWorkerAsync();
         }
-        
+
         //BGW load sync products
         private void BGW_PreloadSyncProducts(object sender, DoWorkEventArgs e) {
             List<SyncProduct> products = ProductSyncModule.GetSyncProducts();
             e.Result = products;
         }
-        
+
         //BGW load sync products onComplete
         private void BGW_PreloadSyncProductsCompleted(object sender, RunWorkerCompletedEventArgs e) {
             //changing loading bar state
@@ -193,14 +196,55 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             progressBar.IsIndeterminate = false;
             progressBarLabel.Text = "";
 
-            Dictionary<string, object> changes = e.Result as Dictionary<string, object>;
+            PopulateChangeListBoxes(e.Result);
+        }
 
-            List<Dictionary<string, string>> newProducts = changes["newProducts"] as List<Dictionary<string, string>>;                                      //what new product were added
-            List<Dictionary<string, string>> pendingChanges = changes["pendingChanges"] as List<Dictionary<string, string>>;                                //what products werent added because they were missing datasheet
-            Dictionary<string, Dictionary<string, string>> appliedChanges = changes["appliedChanges"] as Dictionary<string, Dictionary<string, string>>;    //what products were changed
+        //method that populates chnaged products listboxes
+        private void PopulateChangeListBoxes(object Changes) {
+            Dictionary<string, object> ChangesKVP = Changes as Dictionary<string, object>;
 
-            //todo show window with changes applied
-            //finish this shit
+            //converting chnages to list to lists of productchanges
+            List<Dictionary<string, string>> newProducts = ChangesKVP["NewProducts"] as List<Dictionary<string, string>>;                                      //what new product were added
+            List<Dictionary<string, string>> invalidProducts = ChangesKVP["InvalidProducts"] as List<Dictionary<string, string>>;                               //what products werent added because they were missing datasheet
+            Dictionary<string, Dictionary<string, string>> updatedProducts = ChangesKVP["UpdatedProducts"] as Dictionary<string, Dictionary<string, string>>;    //what products were changed
+
+            List<ProductChange> NewProducts = new();
+            List<ProductChange> InvalidProducts = new();
+            List<ProductChange> UpdatedProducts = new();
+
+            foreach (var NP in newProducts) {
+                ProductChange NewProduct = new();
+                NewProduct.SKU = NP["SKU"];
+                NewProduct.PriceVendor = NP["PriceVendor"];
+                NewProduct.Stock = NP["Stock"];
+                NewProduct.Barcode = NP["Barcode"];
+                NewProduct.Vendor = NP["Vendor"];
+                NewProduct.VendorType = NP["VendorType"];
+
+                NewProducts.Add(NewProduct);
+            }
+            foreach (var IP in invalidProducts) {
+                ProductChange InvalidProduct = new();
+                InvalidProduct.SKU = IP["SKU"];
+                InvalidProduct.PriceVendor = IP["PriceVendor"];
+                InvalidProduct.Stock = IP["Stock"];
+                InvalidProduct.Barcode = IP["Barcode"];
+                InvalidProduct.Vendor = IP["Vendor"];
+                InvalidProduct.VendorType = IP["VendorType"];
+
+                InvalidProducts.Add(InvalidProduct);
+            }
+            foreach (var UP in updatedProducts) {
+                ProductChange ChangedProduct = new();
+                ChangedProduct.SKU = UP.Key;
+                ChangedProduct.Changes = UP.Value;
+
+                UpdatedProducts.Add(ChangedProduct);
+            }
+
+            NewProductListBox.ItemsSource = NewProducts;
+            UpdatedProductListBox.ItemsSource = UpdatedProducts;
+            InvalidProductListBox.ItemsSource = InvalidProducts;
         }
 
     }
