@@ -24,6 +24,8 @@ namespace Ikrito_Fulfillment_Platform.Models {
         public string productTypeVendor { set; get; }   //for saving vendor product type to database.
         public string status { set; get; }              //for product status as in sync Status
 
+        public string ProductTypeDisplayVal { set; get; }
+
         public List<string> tags = new();
         public List<string> images = new();
 

@@ -56,6 +56,8 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
         //method that changes product status to one passed to it (with conflict control)
         public static void ChangeProductStatus(string sku, string status) {
+            //todo: add critical error window
+            //https://wpf-tutorial.com/wpf-application/handling-exceptions/
 
             //first we need to get product status and check if its "New"
             //if its "New" we cant change that
@@ -90,11 +92,8 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
                 } else if (status == ProductStatus.NeedsArchiving) {
                     //edge case
-                    //todo: delete product with that sku from database
                     DeleteProduct(sku);
-
                 } else {
-                    //todo: add critical error window
                     throw new Exception($"cant change product status {productStatus} -> {status}");
                 }
 

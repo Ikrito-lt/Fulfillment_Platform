@@ -133,7 +133,13 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                         pendingChanges.RemoveAll(x => x["SKU"] == sku);
                         continue;
                     } else {
-                        appliedChanges.Add(sku, new Dictionary<string, string>());
+                        
+                        appliedChanges.Add(sku, new Dictionary<string, string>() { 
+                            ["Stock"] = "",
+                            ["PriceVendor"] = "",
+                            ["Price"] = "",
+                        });
+
                         //updating stock value
                         if (oldProductDB["Stock"] != productChanges["Stock"]) {
                             var stockUpdateData = new Dictionary<string, string> {
@@ -147,9 +153,10 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                             db.Table("TDB_Products").Where(stockWhereUpdate).Update(stockUpdateData);
 
                             //adding change to applied change list
-                            appliedChanges[sku].Add("Stock", $"{oldProductDB["Stock"]} -> {productChanges["Stock"]}");
+                            appliedChanges[sku]["Stock"] = $"{oldProductDB["Stock"]} -> {productChanges["Stock"]}";
                         }
 
+                        //updating price
                         if (oldProductDB["PriceVendor"] != productChanges["PriceVendor"]) {
                             double newSalePrice = PriceGenModule.GenNewPrice(double.Parse(productChanges["PriceVendor"]));
 
@@ -166,8 +173,8 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                             db.Table("TDB_Products").Where(priceWhereUpdate).Update(priceUpdateData);
 
                             //adding change to applied change list
-                            appliedChanges[sku].Add("PriceVendor", $"{oldProductDB["PriceVendor"]} -> {productChanges["PriceVendor"]}");
-                            appliedChanges[sku].Add("Price", $"{oldProductDB["Price"]} -> {newSalePrice}");
+                            appliedChanges[sku]["PriceVendor"] = $"{oldProductDB["PriceVendor"]} -> {productChanges["PriceVendor"]}";
+                            appliedChanges[sku]["Price"] = $"{oldProductDB["Price"]} -> {newSalePrice}";
                         }
 
                         ProductModule.ChangeProductStatus(sku, ProductStatus.WaitingShopSync);
@@ -194,9 +201,9 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
             //pass applied changes and pending changes to update on complete method
             Dictionary<string, object> changes = new();
-            changes.Add("appliedChanges", appliedChanges);
-            changes.Add("pendingChanges", pendingChanges);
-            changes.Add("newProducts", newProducts);
+            changes.Add("UpdatedProducts", appliedChanges);
+            changes.Add("InvalidProducts", pendingChanges);
+            changes.Add("NewProducts", newProducts);
             if (e != null) {
                 e.Result = changes;
             }

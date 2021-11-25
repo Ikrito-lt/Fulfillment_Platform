@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 
 
@@ -23,7 +24,8 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
         public List<CheckBoxListItem> StatusList;
 
-
+        private Lazy<Dictionary<string, string>> _LazyCategoryKVP = new Lazy<Dictionary<string, string>>(() => ProductModule.GetCategoriesDictionary());
+        private Dictionary<string, string> CategoryKVP => _LazyCategoryKVP.Value;
 
         private int queryLenght = 0;
         private bool _clearFilters;
@@ -46,6 +48,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         //private constructor
         private ProductBrowsePage() {
             InitializeComponent();
+
             InitStatusListBox();
             InitDatePickers();
             LoadAllProducts();
@@ -78,15 +81,24 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
         // background Worker for loading all product on complete
         private void BGW_PreloadAllProductsCompleted(object sender, RunWorkerCompletedEventArgs e) {
-            AllProducts = (e.Result as List<Product>).AsReadOnly();
+            //getting category display names
+            var TempProductList = e.Result as List<Product>;
+            foreach (var TempProduct in TempProductList) {
+                TempProduct.ProductTypeDisplayVal = CategoryKVP[TempProduct.product_type];
+            }
+
+            //putting products in their grids
+            AllProducts = TempProductList.AsReadOnly();
             StatusFilteredProducts = AllProducts.ToList();
             DateFilteredFilteredProducts = AllProducts.ToList();
             TextFilteredProducts = AllProducts.ToList();
 
             //init DataGrid
             productDG.ItemsSource = TextFilteredProducts;
+
             //init label
             ChangeCountLabel(TextFilteredProducts.Count);
+
             //unblocking refresh button and unanimating loading bar
             loadingBar.IsIndeterminate = false;
             RefreshButton.IsEnabled = true;
@@ -185,13 +197,10 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         //on selected date change
         private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e) {
 
-            //todo reset text filters;
-
             if (BeginDatePicker.SelectedDate.HasValue && EndDatePicker.SelectedDate.HasValue) {
                 long beginTimeStamp = ((DateTimeOffset)BeginDatePicker.SelectedDate.Value).ToUnixTimeSeconds();
                 long endTimeStamp = ((DateTimeOffset)EndDatePicker.SelectedDate.Value).ToUnixTimeSeconds();
                 if (beginTimeStamp <= endTimeStamp) {
-                    //todo: do filtering 
 
                     DateFilteredFilteredProducts.Clear();
                     DateFilteredFilteredProducts.AddRange(StatusFilteredProducts.FindAll(x => beginTimeStamp <= long.Parse(x.addedTimeStamp)  && long.Parse(x.addedTimeStamp) <= endTimeStamp));

@@ -210,7 +210,7 @@
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Binding="{Binding product_type}" Width="250">
+                <DataGridTextColumn x:Name="ProductTypeColumn" Binding="{Binding ProductTypeDisplayVal}" Width="250">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="HorizontalAlignment" Value="Left" />
