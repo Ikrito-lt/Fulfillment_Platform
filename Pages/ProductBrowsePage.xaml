@@ -11,7 +11,6 @@
     <Page.Resources>
         <!-- DataGrid style -->
         <Style x:Key="DataGridStyle1" TargetType="{x:Type DataGrid}">
-            <!--<Setter Property="ColumnHeaderStyle" Value="{DynamicResource ColumnHeaderStyle1}"/>-->
             <Setter Property="CanUserResizeColumns" Value="False"/>
             <Setter Property="CanUserSortColumns" Value="False" />
             <Setter Property="CanUserResizeColumns" Value="True" />
@@ -30,11 +29,6 @@
             <Setter Property="Height" Value="25" />
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <!--<Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="ToolTip" Value="Click to sort."/>
-                </Trigger>
-            </Style.Triggers>-->
         </Style>
     </Page.Resources>
 
@@ -112,11 +106,22 @@
         </Grid>
 
         <DataGrid x:Name="productDG" Grid.Row="2" Margin="10,10,10,0" SelectionMode="Single" CanUserAddRows="False" HeadersVisibility="Column" HorizontalAlignment="Stretch" VerticalAlignment="Top" AutoGenerateColumns="False" Style="{DynamicResource DataGridStyle1}" ItemsSource="{Binding}" IsReadOnly="True">
+            
             <DataGrid.Resources>
                 <Style TargetType="DataGridRow">
                     <EventSetter Event="MouseDoubleClick" Handler="Row_MouseDoubleClick"/>
                 </Style>
             </DataGrid.Resources>
+
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="ToolTip" Value="Double Click To Edit"/>
+                    <Setter Property="ToolTipService.InitialShowDelay" Value="5000"/>
+                    <Setter Property="ToolTipService.ShowDuration" Value="5000"/>
+                    <Setter Property="ToolTipService.BetweenShowDelay" Value="5000"/>
+                </Style>
+            </DataGrid.RowStyle>
+            
             <DataGrid.Columns>
 
                 <DataGridTextColumn Binding="{Binding sku}" Width="200" >
