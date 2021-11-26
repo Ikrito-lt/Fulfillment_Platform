@@ -2,6 +2,7 @@
 using Ikrito_Fulfillment_Platform.Utils;
 using System;
 using System.Collections.Generic;
+using System.Windows;
 
 namespace Ikrito_Fulfillment_Platform.Modules {
     static class ProductModule {
@@ -56,8 +57,6 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
         //method that changes product status to one passed to it (with conflict control)
         public static void ChangeProductStatus(string sku, string status) {
-            //todo: add critical error window
-            //https://wpf-tutorial.com/wpf-application/handling-exceptions/
 
             //first we need to get product status and check if its "New"
             //if its "New" we cant change that
@@ -440,7 +439,12 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 db.Table($"{tablePrefix}_Tags").Insert(insertData);
             }
 
-            ChangeProductStatus(p.sku, status);
+            try {
+                ChangeProductStatus(p.sku, status);
+            }
+            catch (Exception ex) {
+                MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.", "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         
