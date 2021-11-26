@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ikrito_Fulfillment_Platform.Modules {
     static class PriceGenModule {
 
-        private static Random rnd = new();
-        private static double AddedPVM = 1.21;
+        private static readonly Random rnd = new();
+        private static readonly double AddedPVM = 1.21;
 
-        private static List<double> PriceSufixesList = new List<double>() {
+        private static readonly List<double> PriceSufixesList = new() {
             .35,
             .39,
             .45,
@@ -27,7 +24,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             .99
         };
 
-        private static List<double> PriceProfitList = new List<double>() {
+        private static readonly List<double> PriceProfitList = new() {
             .07,
             .08,
             .09,
@@ -44,7 +41,5 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
             return NewPrice;
         }
-
-
     }
 }

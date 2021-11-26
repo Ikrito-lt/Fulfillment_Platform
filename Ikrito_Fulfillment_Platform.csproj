@@ -27,7 +27,6 @@
 
   <ItemGroup>
     <Folder Include="Files\CSVarchive\" />
-    <Folder Include="ViewModels\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -16,8 +16,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
         public List<SyncProduct> syncProducts;
         private readonly RESTClient ProductClient;
-
-        Dictionary<string, string> mainHeaders = new Dictionary<string, string>(){
+        readonly Dictionary<string, string> mainHeaders = new(){
                 {"Authorization", Globals.getBase64ShopifyCreds()}
             };
 
@@ -398,7 +397,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         }
 
         //method that extrack metafield IDs from json response (needed to update metafield values in update method)
-        public Dictionary<string, string> ExtractMetafieldIDs(string json) {
+        public static Dictionary<string, string> ExtractMetafieldIDs(string json) {
             Dictionary<string, string> ids = new();
 
             dynamic dJson = JsonConvert.DeserializeObject(json);

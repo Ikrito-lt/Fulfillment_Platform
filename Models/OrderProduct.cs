@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Ikrito_Fulfillment_Platform.Models {
+﻿namespace Ikrito_Fulfillment_Platform.Models {
     public class OrderProduct {
         public string id { set; get; }
         public int grams { set; get; }
@@ -18,6 +12,5 @@ namespace Ikrito_Fulfillment_Platform.Models {
         public double total_discount { set; get; }
         public string variant_id { set; get; }
         public string vendor { set; get; }
-
     }
 }

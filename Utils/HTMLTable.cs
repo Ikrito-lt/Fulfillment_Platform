@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Ikrito_Fulfillment_Platform.Utils {
     public class HTMLTable : IDisposable {
-        private StringBuilder _sb;
+        private readonly StringBuilder _sb;
 
         public HTMLTable(StringBuilder sb, string id = "default", string classValue = "") {
             _sb = sb;
@@ -37,8 +34,8 @@ namespace Ikrito_Fulfillment_Platform.Utils {
     }
 
     public class HTMLRow : IDisposable {
-        private StringBuilder _sb;
-        private bool _isHeader;
+        private readonly StringBuilder _sb;
+        private readonly bool _isHeader;
         public HTMLRow(StringBuilder sb, bool isHeader = false) {
             _sb = sb;
             _isHeader = isHeader;

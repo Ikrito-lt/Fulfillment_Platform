@@ -10,7 +10,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 
 
@@ -24,7 +23,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
         public List<CheckBoxListItem> StatusList;
 
-        private Lazy<Dictionary<string, string>> _LazyCategoryKVP = new Lazy<Dictionary<string, string>>(() => ProductModule.GetCategoriesDictionary());
+        private readonly Lazy<Dictionary<string, string>> _LazyCategoryKVP = new(() => ProductModule.GetCategoriesDictionary());
         private Dictionary<string, string> CategoryKVP => _LazyCategoryKVP.Value;
 
         private int queryLenght = 0;
@@ -61,7 +60,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
         //method for  loading products to datagrid
         private void LoadAllProducts() {
-            BackgroundWorker worker = new BackgroundWorker();
+            BackgroundWorker worker = new();
             worker.WorkerReportsProgress = false;
             worker.DoWork += BGW_PreloadAllProducts;
             worker.RunWorkerCompleted += BGW_PreloadAllProductsCompleted;

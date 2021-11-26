@@ -20,7 +20,7 @@ namespace Ikrito_Fulfillment_Platform {
             //test();
         }
 
-        public void test() {
+        public static void test() {
             Test t = new();
         }
 

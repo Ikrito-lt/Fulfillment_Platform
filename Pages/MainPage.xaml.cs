@@ -14,8 +14,8 @@ namespace Ikrito_Fulfillment_Platform {
             Instance = new MainPage();
         }
 
-        private List<Order> newOrders = new();
-        private NewOrderModule newOrderGetter = new();
+        private readonly List<Order> newOrders = new();
+        private readonly NewOrderModule newOrderGetter = new();
 
         private MainPage() {
             InitializeComponent();
