@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace Ikrito_Fulfillment_Platform.Modules {
     class CSVModule {
@@ -90,10 +91,13 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
                 db.Table("TDB_Tags").Insert(insertData);
 
-                ProductModule.ChangeProductStatus(p.sku, ProductStatus.WaitingShopSync);
+                try {
+                    ProductModule.ChangeProductStatus(p.sku, ProductStatus.WaitingShopSync);
+                }
+                catch (Exception ex) {
+                    MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.", "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
-
         }
-
     }
 }

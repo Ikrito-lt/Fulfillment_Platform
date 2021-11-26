@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
+using System.Windows;
 
 namespace Ikrito_Fulfillment_Platform.Modules {
     class ProductSyncModule {
@@ -136,7 +137,12 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             }
 
             //updating product status
-            ProductModule.ChangeProductStatus(sync.sku, ProductStatus.WaitingShopSync);
+            try {
+                ProductModule.ChangeProductStatus(sync.sku, ProductStatus.WaitingShopSync);
+            }
+            catch (Exception ex) {
+                MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.", "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         //method that Archives product in shopify web-store
@@ -157,7 +163,12 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             }
 
             //updating product status
-            ProductModule.ChangeProductStatus(sync.sku, ProductStatus.Archived);
+            try {
+                ProductModule.ChangeProductStatus(sync.sku, ProductStatus.Archived);
+            }
+            catch (Exception ex) {
+                MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.", "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         //method that updates product in shopify web-store
@@ -258,7 +269,12 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             }
 
             //updating product status
-            ProductModule.ChangeProductStatus(sync.sku, ProductStatus.Ok);
+            try {
+                ProductModule.ChangeProductStatus(sync.sku, ProductStatus.Ok);
+            }
+            catch (Exception ex) {
+                MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.", "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         //method that adds new product to shopify web-store

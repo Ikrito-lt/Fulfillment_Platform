@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Xml;
 
 namespace Ikrito_Fulfillment_Platform.Modules {
@@ -115,7 +116,12 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 if (productChanges == null) {
                     
                     //mark this product for archiving
-                    ProductModule.ChangeProductStatus(sku, ProductStatus.NeedsArchiving);
+                    try {
+                        ProductModule.ChangeProductStatus(sku, ProductStatus.NeedsArchiving);
+                    }
+                    catch (Exception ex) {
+                        MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.", "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                     continue;
                 } else {
 
@@ -177,7 +183,12 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                             appliedChanges[sku]["Price"] = $"{oldProductDB["Price"]} -> {newSalePrice}";
                         }
 
-                        ProductModule.ChangeProductStatus(sku, ProductStatus.WaitingShopSync);
+                        try {
+                            ProductModule.ChangeProductStatus(sku, ProductStatus.WaitingShopSync);
+                        }
+                        catch (Exception ex) {
+                            MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.", "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
                     }
 
                     //remove entry from change list
