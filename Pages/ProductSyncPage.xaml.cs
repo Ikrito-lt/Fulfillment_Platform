@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 //todo: when double ckicking any of these list boxes you edit product and then delete if from list box
 
@@ -40,6 +41,9 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             //getting SyncProducts
             LoadSyncProducts();
             Sync = new();
+
+            //NewProductListBox.MouseDoubleClick += ChangeListBox_MouseDoubleClick;
+            //UpdatedProductListBox.MouseDoubleClick += ChangeListBox_MouseDoubleClick;
         }
 
 
@@ -199,14 +203,19 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             PopulateChangeListBoxes(e.Result);
         }
 
+
+        //
+        // Changes ListBoxes section
+        //
+
         //method that populates chnaged products listboxes
         private void PopulateChangeListBoxes(object Changes) {
             Dictionary<string, object> ChangesKVP = Changes as Dictionary<string, object>;
 
             //converting chnages to list to lists of productchanges
-            List<Dictionary<string, string>> newProducts = ChangesKVP["NewProducts"] as List<Dictionary<string, string>>;                                      //what new product were added
-            List<Dictionary<string, string>> invalidProducts = ChangesKVP["InvalidProducts"] as List<Dictionary<string, string>>;                               //what products werent added because they were missing datasheet
-            Dictionary<string, Dictionary<string, string>> updatedProducts = ChangesKVP["UpdatedProducts"] as Dictionary<string, Dictionary<string, string>>;    //what products were changed
+            List<Dictionary<string, string>> newProducts = ChangesKVP["NewProducts"] as List<Dictionary<string, string>>;                                           //what new product were added
+            List<Dictionary<string, string>> invalidProducts = ChangesKVP["InvalidProducts"] as List<Dictionary<string, string>>;                                   //what products werent added because they were missing datasheet
+            Dictionary<string, Dictionary<string, string>> updatedProducts = ChangesKVP["UpdatedProducts"] as Dictionary<string, Dictionary<string, string>>;       //what products were changed
 
             List<ProductChange> NewProducts = new();
             List<ProductChange> InvalidProducts = new();
@@ -247,5 +256,15 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             InvalidProductListBox.ItemsSource = InvalidProducts;
         }
 
+        //method that allows user to edit list box product by opening it in ProductEditPage
+        private void ChangeListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
+            ListBoxItem listboxItem = sender as ListBoxItem;
+            
+            if (listboxItem != null) {
+                ProductChange productChange = listboxItem.Content as ProductChange;
+                Product editProduct = ProductModule.GetProduct(productChange.SKU);
+                MainWindow.Instance.mainFrame.Content = new ProductEditPage(editProduct, this);
+            }
+        }
     }
 }

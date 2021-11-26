@@ -16,7 +16,7 @@ using System.Windows.Input;
 
 namespace Ikrito_Fulfillment_Platform.Pages {
     public partial class ProductBrowsePage : Page {
-        
+
         private ReadOnlyCollection<Product> AllProducts;
         private List<Product> StatusFilteredProducts;
         private List<Product> DateFilteredFilteredProducts;
@@ -131,7 +131,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         private void Row_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
             DataGridRow row = sender as DataGridRow;
             Product product = row.Item as Product;
-            MainWindow.Instance.mainFrame.Content = new ProductEditPage(product);
+            MainWindow.Instance.mainFrame.Content = new ProductEditPage(product, this);
         }
 
 

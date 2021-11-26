@@ -206,16 +206,27 @@
                             <Label Grid.Row="0" Content="New Producs" HorizontalAlignment="Center" VerticalAlignment="Top"/>
 
                             <ListBox Grid.Row="1" Name="NewProductListBox" SelectionMode="Single" ItemsSource="{Binding}">
-                                
-                                <ListBox.ItemContainerStyle>
+
+                                <ListBox.Resources>
                                     <Style TargetType="ListBoxItem">
-                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                                        <EventSetter Event="MouseDoubleClick" Handler="ChangeListBox_MouseDoubleClick"/>
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                                         <Setter Property="ToolTip" Value="Double Click To Edit"/>
                                         <Setter Property="ToolTipService.InitialShowDelay" Value="5000"/>
                                         <Setter Property="ToolTipService.ShowDuration" Value="5000"/>
                                         <Setter Property="ToolTipService.BetweenShowDelay" Value="5000"/>
                                     </Style>
-                                </ListBox.ItemContainerStyle>
+                                </ListBox.Resources>
+
+                                <!--<ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem">
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                        <Setter Property="ToolTip" Value="Double Click To Edit"/>
+                                        <Setter Property="ToolTipService.InitialShowDelay" Value="5000"/>
+                                        <Setter Property="ToolTipService.ShowDuration" Value="5000"/>
+                                        <Setter Property="ToolTipService.BetweenShowDelay" Value="5000"/>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>-->
 
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
@@ -270,7 +281,18 @@
 
                             <ListBox Grid.Row="1" Name="UpdatedProductListBox" SelectionMode="Single" ItemsSource="{Binding}">
 
-                                <ListBox.ItemContainerStyle>
+                                <ListBox.Resources>
+                                    <Style TargetType="ListBoxItem">
+                                        <EventSetter Event="MouseDoubleClick" Handler="ChangeListBox_MouseDoubleClick"/>
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                        <Setter Property="ToolTip" Value="Double Click To Edit"/>
+                                        <Setter Property="ToolTipService.InitialShowDelay" Value="5000"/>
+                                        <Setter Property="ToolTipService.ShowDuration" Value="5000"/>
+                                        <Setter Property="ToolTipService.BetweenShowDelay" Value="5000"/>
+                                    </Style>
+                                </ListBox.Resources>
+
+                                <!--<ListBox.ItemContainerStyle>
                                     <Style TargetType="ListBoxItem">
                                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                                         <Setter Property="ToolTip" Value="Double Click To Edit"/>
@@ -278,7 +300,7 @@
                                         <Setter Property="ToolTipService.ShowDuration" Value="5000"/>
                                         <Setter Property="ToolTipService.BetweenShowDelay" Value="5000"/>
                                     </Style>
-                                </ListBox.ItemContainerStyle>
+                                </ListBox.ItemContainerStyle>-->
 
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>

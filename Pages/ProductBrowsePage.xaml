@@ -106,24 +106,18 @@
         </Grid>
 
         <DataGrid x:Name="productDG" Grid.Row="2" Margin="10,10,10,0" SelectionMode="Single" CanUserAddRows="False" HeadersVisibility="Column" HorizontalAlignment="Stretch" VerticalAlignment="Top" AutoGenerateColumns="False" Style="{DynamicResource DataGridStyle1}" ItemsSource="{Binding}" IsReadOnly="True">
-            
+
             <DataGrid.Resources>
                 <Style TargetType="DataGridRow">
                     <EventSetter Event="MouseDoubleClick" Handler="Row_MouseDoubleClick"/>
-                </Style>
-            </DataGrid.Resources>
-
-            <DataGrid.RowStyle>
-                <Style TargetType="DataGridRow">
                     <Setter Property="ToolTip" Value="Double Click To Edit"/>
                     <Setter Property="ToolTipService.InitialShowDelay" Value="5000"/>
                     <Setter Property="ToolTipService.ShowDuration" Value="5000"/>
                     <Setter Property="ToolTipService.BetweenShowDelay" Value="5000"/>
                 </Style>
-            </DataGrid.RowStyle>
-            
-            <DataGrid.Columns>
+            </DataGrid.Resources>
 
+            <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding sku}" Width="200" >
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
