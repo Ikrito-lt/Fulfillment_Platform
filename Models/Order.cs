@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ikrito_Fulfillment_Platform.Models {
     public class Order {
@@ -37,7 +34,6 @@ namespace Ikrito_Fulfillment_Platform.Models {
             }
         }
     }
-
 
     public class Address {
         public string first_name { set; get; }

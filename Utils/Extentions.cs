@@ -1,9 +1,6 @@
-﻿using RestSharp;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ikrito_Fulfillment_Platform.Utils {
 
@@ -39,7 +36,7 @@ namespace Ikrito_Fulfillment_Platform.Utils {
         //for getting dateTime in str form form unix timestamp
         public static string UnixTimeToSrt(this string unixTime) {
 
-            DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            DateTime dateTime = new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             dateTime = dateTime.AddSeconds(int.Parse(unixTime)).ToLocalTime();
             return dateTime.ToString("MM/dd/yyyy HH:mm");
         }
@@ -61,6 +58,5 @@ namespace Ikrito_Fulfillment_Platform.Utils {
             return dict.FirstOrDefault(entry =>
                 EqualityComparer<V>.Default.Equals(entry.Value, val)).Key;
         }
-
     }
 }

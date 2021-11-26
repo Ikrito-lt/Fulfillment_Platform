@@ -5,12 +5,9 @@ using Ikrito_Fulfillment_Platform.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Dynamic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace Ikrito_Fulfillment_Platform.Modules {
@@ -23,7 +20,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             csvArchive = GetCSV();
         }
 
-        private List<dynamic> GetCSV() {
+        private static List<dynamic> GetCSV() {
 
             List<dynamic> records = new();
 
@@ -81,7 +78,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             }
         }
 
-        void saveProdToDB(Product p) {
+        static void saveProdToDB(Product p) {
             DataBaseInterface db = new();
             foreach (string tag in p.tags) {
                 var insertData = new Dictionary<string, string> {

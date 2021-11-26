@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using RestSharp;
+﻿using Ikrito_Fulfillment_Platform.Models;
 using Ikrito_Fulfillment_Platform.Utils;
 using Newtonsoft.Json;
-using Ikrito_Fulfillment_Platform.Models;
+using RestSharp;
+using System.Collections.Generic;
 
 namespace Ikrito_Fulfillment_Platform.Modules {
     class NewOrderModule {

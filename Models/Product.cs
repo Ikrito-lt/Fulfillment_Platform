@@ -46,8 +46,8 @@ namespace Ikrito_Fulfillment_Platform.Models {
             width = -1;
         }
 
-        private string repairHTLMBody(string body) {
-            StringBuilder builder = new StringBuilder(body);
+        private static string repairHTLMBody(string body) {
+            StringBuilder builder = new(body);
             builder.Replace("&#xA;", "\\n");
             builder.Replace("\"", "\\\"");
             string s = builder.ToString();
@@ -56,9 +56,9 @@ namespace Ikrito_Fulfillment_Platform.Models {
             return s;
         }
 
-        private string repairTitle(string title) {
+        private static string repairTitle(string title) {
 
-            StringBuilder builder = new StringBuilder(title);
+            StringBuilder builder = new(title);
             builder.Replace("\"", "\\\"");
 
             return builder.ToString();
@@ -163,8 +163,6 @@ namespace Ikrito_Fulfillment_Platform.Models {
 
             return vendorPriceBody;
         }
-
     }
-
     //TODO: think about adding SEO shit
 }

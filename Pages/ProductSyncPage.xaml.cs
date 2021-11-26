@@ -110,7 +110,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
         //method that creates BGW to load Sync products
         private void LoadSyncProducts() {
-            BackgroundWorker worker = new BackgroundWorker();
+            BackgroundWorker worker = new();
             worker.WorkerReportsProgress = false;
             worker.DoWork += BGW_PreloadSyncProducts;
             worker.RunWorkerCompleted += BGW_PreloadSyncProductsCompleted;
@@ -160,7 +160,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         //button that starts shopify sync
         private void SyncProducts_Click(object sender, RoutedEventArgs e) {
             //running export products in background
-            BackgroundWorker worker = new BackgroundWorker();
+            BackgroundWorker worker = new();
             worker.WorkerReportsProgress = true;
             worker.DoWork += Sync.ExportShopifyProducts;
             worker.ProgressChanged += worker_ProgressChanged;
@@ -186,7 +186,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             TDBModule TDBUpdater = new();
 
             //running export products in background
-            BackgroundWorker TDBUpdateWorker = new BackgroundWorker();
+            BackgroundWorker TDBUpdateWorker = new();
             TDBUpdateWorker.DoWork += TDBUpdater.updateTDBProducts;
             TDBUpdateWorker.RunWorkerCompleted += UpdateTDBWorkerOnComplete;
 
@@ -258,9 +258,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
         //method that allows user to edit list box product by opening it in ProductEditPage
         private void ChangeListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
-            ListBoxItem listboxItem = sender as ListBoxItem;
-            
-            if (listboxItem != null) {
+            if (sender is ListBoxItem listboxItem) {
                 ProductChange productChange = listboxItem.Content as ProductChange;
                 Product editProduct = ProductModule.GetProduct(productChange.SKU);
                 MainWindow.Instance.mainFrame.Content = new ProductEditPage(editProduct, this);

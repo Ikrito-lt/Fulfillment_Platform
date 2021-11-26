@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Ikrito_Fulfillment_Platform.Modules {
     class DataBaseInterface {
-        private MySqlConnection connection;
+        private readonly MySqlConnection connection;
 
         private string query;
         private string tableName;
@@ -115,6 +115,3 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
     }
 }
-
-
-

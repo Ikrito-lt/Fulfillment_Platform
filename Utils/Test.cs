@@ -14,7 +14,7 @@ namespace Ikrito_Fulfillment_Platform.Utils {
             foo();
         }
 
-        private void foo() {
+        private static void foo() {
             DataBaseInterface db = new();
             var result = db.Table("Products").Get();
 

@@ -205,13 +205,13 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
         //only double can be entered (numbers and .)
         private void DoublePreviewTextInput(object sender, TextCompositionEventArgs e) {
-            Regex DoubleRegex = new Regex("[^0-9.]+");
+            Regex DoubleRegex = new("[^0-9.]+");
             e.Handled = DoubleRegex.IsMatch(e.Text);
         }
         
         //only int can be entered (numbers)
         private void IntPreviewTextInput(object sender, TextCompositionEventArgs e) {
-            Regex IntRegex = new Regex("[^0-9]+");
+            Regex IntRegex = new("[^0-9]+");
             e.Handled = IntRegex.IsMatch(e.Text);
         }
 

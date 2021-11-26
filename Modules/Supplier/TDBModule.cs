@@ -11,14 +11,14 @@ using System.Xml;
 namespace Ikrito_Fulfillment_Platform.Modules {
     class TDBModule {
 
-        private static Dictionary<string, string> _APIParams = new Dictionary<string, string> {
+        private static readonly Dictionary<string, string> _APIParams = new() {
             ["orgnum"] = "268230",
             ["username"] = "PREKES",
             ["pwd"] = "Welcome.123",
             ["ean"] = "y"
         };
 
-        private List<string> descSkipableKeys = new List<string>(){
+        private readonly List<string> descSkipableKeys = new(){
                 "Manufacturer Logo",
                 "Picture1",
                 "Picture2",
@@ -29,15 +29,15 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 "Marketing Text"
         };
 
-        private static string _BaseUrl = "http://tdonline.tdbaltic.net/pls/PROD/";
-        private static string _CataloguePath = "ixml.ProdCatExt";
-        private static string _DataSheetsPath = "ixml.DSheets";
+        private static readonly string _BaseUrl = "http://tdonline.tdbaltic.net/pls/PROD/";
+        private static readonly string _CataloguePath = "ixml.ProdCatExt";
+        private static readonly string _DataSheetsPath = "ixml.DSheets";
 
-        private Lazy<XmlDocument> _LazyDataSheetXML = new Lazy<XmlDocument>(() => GetTDBDataSheets());
+        private readonly Lazy<XmlDocument> _LazyDataSheetXML = new(() => GetTDBDataSheets());
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
         private XmlDocument _DataSheetsXML => _LazyDataSheetXML.Value;
 
-        private Lazy<XmlDocument> _LazyCategoryXML = new Lazy<XmlDocument>(() => GetTDBCatalogue());
+        private readonly Lazy<XmlDocument> _LazyCategoryXML = new(() => GetTDBCatalogue());
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
         private XmlDocument _CategoryXML => _LazyCategoryXML.Value;
 
@@ -224,7 +224,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         private bool addNewTDBProduct(Dictionary<string, string> newProductKVP) {
             bool productAdded = false;
             string newProdSKU = newProductKVP["SKU"];
-            string newProdTDBSKU = newProdSKU.Substring(newProdSKU.IndexOf('-') + 1);
+            string newProdTDBSKU = newProdSKU[(newProdSKU.IndexOf('-') + 1)..];
 
             var newProdDataXML = _DataSheetsXML.SelectSingleNode(@$"/Datasheets/Datasheet[@TDPartNbr='{newProdTDBSKU}']");
             if (newProdDataXML == null) {
@@ -247,8 +247,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 newProduct.vendor_price = double.Parse(newProductKVP["PriceVendor"]);
 
                 //getting weight
-                string grossWeightStr = "0";
-                bool grossExists = newProdDataKVP.TryGetValue("Gross Weight", out grossWeightStr);
+                bool grossExists = newProdDataKVP.TryGetValue("Gross Weight", out string grossWeightStr);
                 string netWeightStr = "0";
                 bool netExists = newProdDataKVP.TryGetValue("Net Weight", out grossWeightStr);
 
@@ -258,23 +257,19 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 grossWeightStr = grossWeightStr.Split(" ")[0];
                 netWeightStr = netWeightStr.Split(" ")[0];
 
-                double grossWeight = .0;
-                double netWeight = .0;
 
-                bool grossWeightConvSucceded = double.TryParse(grossWeightStr, out grossWeight);
+                bool grossWeightConvSucceded = double.TryParse(grossWeightStr, out double grossWeight);
                 if (!grossWeightConvSucceded) {grossWeight = .0;}
-                bool netWeightConvSucceded = double.TryParse(netWeightStr, out netWeight);
+                bool netWeightConvSucceded = double.TryParse(netWeightStr, out double netWeight);
                 if (!netWeightConvSucceded) { netWeight = .0; }
                 newProduct.weight = Math.Max(grossWeight, netWeight);
 
                 //getting height
-                string heightStr = "0";
-                bool heightExists = newProdDataKVP.TryGetValue("Height", out heightStr);
+                bool heightExists = newProdDataKVP.TryGetValue("Height", out string heightStr);
                 if (!heightExists) { heightStr = "0"; }
 
                 heightStr = heightStr.Split(" ")[0];
-                int heightInt = 0;
-                bool heightConvSucceded = int.TryParse(heightStr, out heightInt);
+                bool heightConvSucceded = int.TryParse(heightStr, out int heightInt);
                 if (heightConvSucceded) {
                     newProduct.height = heightInt;
                 } else {
@@ -282,13 +277,11 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 }
 
                 //getting lenght
-                string lenghtStr = "0";
-                bool lenghtExists = newProdDataKVP.TryGetValue("Lenght", out lenghtStr);
+                bool lenghtExists = newProdDataKVP.TryGetValue("Lenght", out string lenghtStr);
                 if (!lenghtExists) { lenghtStr = "0"; }
 
                 lenghtStr = lenghtStr.Split(" ")[0];
-                int lenghtInt = 0;
-                bool lenghtConvSucceded = int.TryParse(lenghtStr, out lenghtInt);
+                bool lenghtConvSucceded = int.TryParse(lenghtStr, out int lenghtInt);
                 if (lenghtConvSucceded) {
                     newProduct.lenght = lenghtInt;
                 } else {
@@ -296,13 +289,11 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 }
 
                 //getting width
-                string widthStr = "0";
-                bool widthExists = newProdDataKVP.TryGetValue("Width", out widthStr);
+                bool widthExists = newProdDataKVP.TryGetValue("Width", out string widthStr);
                 if (!widthExists) { widthStr = "0"; }
 
                 widthStr = widthStr.Split(" ")[0];
-                int widthInt = 0;
-                bool widthConvSucceded = int.TryParse(widthStr, out widthInt);
+                bool widthConvSucceded = int.TryParse(widthStr, out int widthInt);
                 if (widthConvSucceded) {
                     newProduct.width = widthInt;
                 } else {
@@ -336,7 +327,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         } 
 
         //method that gets product data KVP from XML node(from datasheet) 
-        private Dictionary<string, string> GetProductDataKVP(XmlNode prodData) {
+        private static Dictionary<string, string> GetProductDataKVP(XmlNode prodData) {
             Dictionary<string, string> prodDataKVP = new();
 
             int pictureCount = 1;
@@ -363,15 +354,13 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         private string BuildDescription(Dictionary<string, string> prodDataKVP) {
             string description = "";
 
-            string longDesc;
-            bool longDescExists = prodDataKVP.TryGetValue("LongDesc", out longDesc);
+            bool longDescExists = prodDataKVP.TryGetValue("LongDesc", out string longDesc);
             if (!longDescExists) { longDesc = ""; }
             if (!string.IsNullOrEmpty(longDesc) || !string.IsNullOrWhiteSpace(longDesc)) {
                 description += longDesc + "<br><br>";
             }
 
-            string marketingText;
-            bool marketingTextExists = prodDataKVP.TryGetValue("Marketing Text", out marketingText);
+            bool marketingTextExists = prodDataKVP.TryGetValue("Marketing Text", out string marketingText);
             if (!marketingTextExists) { marketingText = ""; }
             if (!string.IsNullOrEmpty(marketingText) || !string.IsNullOrWhiteSpace(marketingText)) {
                 description += marketingText + "<br><br>";
@@ -383,9 +372,9 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 }
             }
 
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
 
-            using (HTMLTable table = new HTMLTable(sb)) {
+            using (HTMLTable table = new(sb)) {
                 foreach (var kvp in prodDataKVP) {
                     using (HTMLRow row = table.AddRow()) {
                         row.AddCell(kvp.Key);
