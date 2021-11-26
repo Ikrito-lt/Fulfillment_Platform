@@ -14,6 +14,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
         private readonly Product EditableProduct;
         private readonly Dictionary<string, string> CategoryKVP;
+        private readonly Page PreviousPage;
 
         private bool ProductSaved = true;
 
@@ -24,7 +25,9 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         private ObservableCollection<string> TagListBoxDataSource;
         public ICommand DeleteTagCommand { get; set; }
 
-        public ProductEditPage(Product product) {
+        public ProductEditPage(Product product, Page prevPage) {
+            PreviousPage = prevPage;
+
             InitializeComponent();
             DataContext = this;
             EditableProduct = product;
@@ -135,7 +138,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
         //method that chnages page to product browse page
         private void exitPage() {
-            MainWindow.Instance.mainFrame.Content = ProductBrowsePage.Instance;
+            MainWindow.Instance.mainFrame.Content = PreviousPage;
         }
 
         //save button on click method
