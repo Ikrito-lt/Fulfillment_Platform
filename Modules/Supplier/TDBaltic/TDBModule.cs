@@ -11,12 +11,7 @@ using System.Xml;
 namespace Ikrito_Fulfillment_Platform.Modules {
     class TDBModule {
 
-        private static readonly Dictionary<string, string> _APIParams = new() {
-            ["orgnum"] = "268230",
-            ["username"] = "PREKES",
-            ["pwd"] = "Welcome.123",
-            ["ean"] = "y"
-        };
+        private static readonly Dictionary<string, string> _APIParams = Globals._TDBAPIParams;
 
         private readonly List<string> descSkipableKeys = new(){
                 "Manufacturer Logo",
@@ -29,9 +24,9 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 "Marketing Text"
         };
 
-        private static readonly string _BaseUrl = "http://tdonline.tdbaltic.net/pls/PROD/";
-        private static readonly string _CataloguePath = "ixml.ProdCatExt";
-        private static readonly string _DataSheetsPath = "ixml.DSheets";
+        private const string _BaseUrl = "http://tdonline.tdbaltic.net/pls/PROD/";
+        private const string _CataloguePath = "ixml.ProdCatExt";
+        private const string _DataSheetsPath = "ixml.DSheets";
 
         private readonly Lazy<XmlDocument> _LazyDataSheetXML = new(() => GetTDBDataSheets());
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
@@ -389,6 +384,5 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             description = description.Replace("'", "''");
             return description;
         }
-
     }
 }

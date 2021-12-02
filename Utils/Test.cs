@@ -1,4 +1,5 @@
 ﻿using Ikrito_Fulfillment_Platform.Modules;
+using Ikrito_Fulfillment_Platform.Modules.Supplier;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -15,13 +16,9 @@ namespace Ikrito_Fulfillment_Platform.Utils {
         }
 
         private static void foo() {
-            DataBaseInterface db = new();
-            var result = db.Table("Products").Get();
-
-            foreach (var row in result.Values) {
-                if (row["Status"] == ProductStatus.NeedsArchiving) {
-                    ProductModule.DeleteProduct(row["SKU"]);
-                }
+            KGModule KG = new();
+            foreach (var i in KGModule._ProductPackagingList) {
+                Debug.WriteLine(i.ToString());
             }
         }
     }
