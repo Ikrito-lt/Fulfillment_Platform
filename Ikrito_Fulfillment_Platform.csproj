@@ -12,6 +12,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Modules\Supplier\KotrynaGroup\dinamic.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="ikritoDB.db-journal" />
   </ItemGroup>
 

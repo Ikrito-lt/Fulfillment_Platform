@@ -194,7 +194,8 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             sync.inventoryItemID = inventoryItemID;
 
             //to update metafields i need to get metafield IDs
-            string getMetaRes = ProductClient.ExecGet($"products/{sync.shopifyID}/metafields.json", mainHeaders);
+            //its was ExecGet();
+            string getMetaRes = ProductClient.ExecGetParams($"products/{sync.shopifyID}/metafields.json", mainHeaders);
             var ids = ExtractMetafieldIDs(getMetaRes);
 
             //updating height metafield

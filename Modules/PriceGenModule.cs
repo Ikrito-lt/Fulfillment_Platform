@@ -8,6 +8,12 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         private static readonly double AddedPVM = 1.21;
 
         private static readonly List<double> PriceSufixesList = new() {
+            .05,
+            .09,
+            .15,
+            .19,
+            .25,
+            .29,
             .35,
             .39,
             .45,
