@@ -12,14 +12,18 @@ using System.Threading.Tasks;
 namespace Ikrito_Fulfillment_Platform.Utils {
     class Test {
         public Test() {
-            foo();
+            //foo();
+            //too();
         }
 
         private static void foo() {
             KGModule KG = new();
-            foreach (var i in KGModule._ProductPackagingList) {
-                Debug.WriteLine(i.ToString());
-            }
+            KG.UpdateKGProducts();
+        }
+
+        private static void too() {
+            TDBModule TDB = new();
+            TDB.UpdateTDBProducts();
         }
     }
 }

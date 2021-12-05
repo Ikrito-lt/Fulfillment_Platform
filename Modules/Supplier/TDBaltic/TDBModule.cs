@@ -15,6 +15,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
         private readonly List<string> descSkipableKeys = new(){
                 "Manufacturer Logo",
+                "Manufacturer Logo URL",
                 "Picture1",
                 "Picture2",
                 "Picture3",
@@ -68,17 +69,134 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
 
         //
-        // Section for automatically updating and adding product to database
+        // Section for automatically updating and adding products to database
         //
-        
+
         // Updates product and then sends products that dont exist to addNewProduct method
-        public void updateTDBProducts(object sender = null, DoWorkEventArgs e = null) {
-            List<Dictionary<string, string>> pendingChanges = new();
-            Dictionary<string, Dictionary<string, string>> appliedChanges = new();
+        public void UpdateTDBProducts(object sender = null, DoWorkEventArgs e = null) {
+            List<Product> DBProducts = ProductModule.GetTDBProducts();
+            List<Product> APIProducts = BuildProductList();
+
+            List<Product> ArchiveProducts = DBProducts.Where(p1 => APIProducts.All(p2 => p2.sku != p1.sku)).ToList();
+            List<Product> NewProducts = APIProducts.Where(p1 => DBProducts.All(p2 => p2.sku != p1.sku)).ToList();
+            List<Product> UpdateProducts = APIProducts.Where(p1 => NewProducts.All(p2 => p2.sku != p1.sku)).ToList();
+
+
+            Dictionary<string, Dictionary<string, string>> appliedChanges = new();          //for updates
+            List<Dictionary<string, string>> newChanges = new();                            //for new products
+            List<Dictionary<string, string>> archivedChanges = new();                       //for archived Products                     
+
+            //archiving products
+            foreach (Product archiveProduct in ArchiveProducts) {
+                try {
+                    ProductModule.ChangeProductStatus(archiveProduct.sku, ProductStatus.NeedsArchiving);
+
+                    Dictionary<string, string> archiveChange = new();
+                    archiveChange.Add("SKU", archiveProduct.sku);
+                    archiveChange.Add("PriceVendor", archiveProduct.vendor_price.ToString());
+                    archiveChange.Add("Stock", archiveProduct.stock.ToString());
+                    archiveChange.Add("Barcode", archiveProduct.barcode);
+                    archiveChange.Add("Vendor", archiveProduct.vendor);
+                    archiveChange.Add("VendorType", archiveProduct.productTypeVendor);
+                    archivedChanges.Add(archiveChange);
+                }
+                catch (Exception ex) {
+                    MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.", "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+
+            // adding new Products
+            foreach (Product newProduct in NewProducts) {
+                ProductModule.AddProductToDB(newProduct);
+
+                Dictionary<string, string> newChange = new();
+                newChange.Add("SKU", newProduct.sku);
+                newChange.Add("PriceVendor", newProduct.vendor_price.ToString());
+                newChange.Add("Stock", newProduct.stock.ToString());
+                newChange.Add("Barcode", newProduct.barcode);
+                newChange.Add("Vendor", newProduct.vendor);
+                newChange.Add("VendorType", newProduct.productTypeVendor);
+                newChanges.Add(newChange);
+            }
+
+            DataBaseInterface db = new();
+
+            //updating products
+            foreach (Product updateProduct in UpdateProducts) {
+                Product oldProduct = DBProducts.Find(x => x.sku == updateProduct.sku);
+
+                //if no changes skip
+                if (updateProduct.stock == oldProduct.stock && updateProduct.vendor_price == oldProduct.vendor_price) {
+                    continue;
+                } else {
+
+                    appliedChanges.Add(oldProduct.sku, new Dictionary<string, string>() {
+                        ["Stock"] = "",
+                        ["PriceVendor"] = "",
+                        ["Price"] = "",
+                    });
+
+                    //update stock
+                    if (updateProduct.stock != oldProduct.stock) {
+                        var stockUpdateData = new Dictionary<string, string> {
+                            ["Stock"] = updateProduct.stock.ToString()
+                        };
+                        var stockWhereUpdate = new Dictionary<string, Dictionary<string, string>> {
+                            ["SKU"] = new Dictionary<string, string> {
+                                ["="] = oldProduct.sku
+                            }
+                        };
+                        db.Table("TDB_Products").Where(stockWhereUpdate).Update(stockUpdateData);
+
+                        //adding change to applied change list
+                        appliedChanges[oldProduct.sku]["Stock"] = $"{oldProduct.stock} -> {updateProduct.stock}";
+                    }
+
+                    //update price
+                    if (updateProduct.vendor_price != oldProduct.vendor_price) {
+                        //updating price value
+                        var priceUpdateData = new Dictionary<string, string> {
+                            ["PriceVendor"] = updateProduct.vendor_price.ToString(),
+                            ["Price"] = updateProduct.price.ToString()
+                        };
+                        var priceWhereUpdate = new Dictionary<string, Dictionary<string, string>> {
+                            ["SKU"] = new Dictionary<string, string> {
+                                ["="] = oldProduct.sku
+                            }
+                        };
+                        db.Table("TDB_Products").Where(priceWhereUpdate).Update(priceUpdateData);
+
+                        //adding change to applied change list
+                        appliedChanges[oldProduct.sku]["PriceVendor"] = $"{oldProduct.vendor_price} -> {updateProduct.vendor_price}";
+                        appliedChanges[oldProduct.sku]["Price"] = $"{oldProduct.price} -> {updateProduct.price}";
+                    }
+
+                    //updating product status
+                    try {
+                        ProductModule.ChangeProductStatus(oldProduct.sku, ProductStatus.WaitingShopSync);
+                    }
+                    catch (Exception ex) {
+                        MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.", "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                }
+            }
+
+            //pass applied changes and pending changes to update on complete method
+            Dictionary<string, object> changes = new();
+            changes.Add("UpdatedProducts", appliedChanges);
+            changes.Add("ArchivedProducts", archivedChanges);
+            changes.Add("NewProducts", newChanges);
+            if (e != null) {
+                e.Result = changes;
+            }
+        }
+
+        //method that builds product list from TDB API data
+        public List<Product> BuildProductList() {
+            List<Product> NewProducts = new();
 
             var catalogueProducts = _CategoryXML.FirstChild.ChildNodes;
             foreach (XmlNode prodXML in catalogueProducts) {
-                Dictionary<string, string> productInfo = new();
 
                 XmlNode skuNode = prodXML.SelectSingleNode("TDPartNbr");
                 XmlNode priceVendorNode = prodXML.SelectSingleNode("Price");
@@ -87,239 +205,107 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 XmlNode vendorNode = prodXML.SelectSingleNode("Manuf");
                 XmlNode vendorTypeNode = prodXML.SelectSingleNode("SubClassCode");
 
-                productInfo.Add("SKU", "TDB-" + skuNode.InnerText);
-                productInfo.Add("PriceVendor", priceVendorNode.InnerText);
-                productInfo.Add("Stock", stockNode.InnerText);
-                productInfo.Add("Barcode", barcodeNode.InnerText);
-                productInfo.Add("Vendor", vendorNode.InnerText);
-                productInfo.Add("VendorType", vendorTypeNode.InnerText);
+                string TDBSKU = skuNode.InnerText;
+                string NewSKU = "TDB-" + TDBSKU;
 
-                pendingChanges.Add(productInfo);
-            }
-
-            //getting sku product from sku table Product table
-            DataBaseInterface db = new();
-            var productTable = db.Table("Products").Get();
-            var products = productTable.Values.ToList();
-            products.RemoveAll(x => !x["SKU"].StartsWith("TDB-"));
-
-            foreach (var product in products) {
-                string sku = product["SKU"];
-                var productChanges = pendingChanges.Find(x => x["SKU"] == sku);
-
-                //handles archiving of products if tdb doesnt sell it anymore
-                if (productChanges == null) {
-                    
-                    //mark this product for archiving
-                    try {
-                        ProductModule.ChangeProductStatus(sku, ProductStatus.NeedsArchiving);
-                    }
-                    catch (Exception ex) {
-                        MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.", "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
+                var newProdDataXML = _DataSheetsXML.SelectSingleNode(@$"/Datasheets/Datasheet[@TDPartNbr='{TDBSKU}']");
+                if (newProdDataXML == null) {
                     continue;
                 } else {
+                    Dictionary<string, string> newProdDataKVP = GetProductDataKVP(newProdDataXML);
 
-                    //get product from db 
-                    var whereQuery = new Dictionary<string, Dictionary<string, string>> {
-                        ["SKU"] = new Dictionary<string, string> {
-                            ["="] = sku
-                        }
-                    };
-                    var result = db.Table("TDB_Products").Where(whereQuery).Get();
-                    var oldProductDB = result[0];
+                    //init new product object
+                    Product newProduct = new();
 
-                    //if data is the same dont change shit 
-                    if (oldProductDB["Stock"] == productChanges["Stock"] && oldProductDB["PriceVendor"] == productChanges["PriceVendor"]) {
-                        pendingChanges.RemoveAll(x => x["SKU"] == sku);
-                        continue;
+                    string title = newProdDataKVP["ShortDesc"];
+                    title = SQLUtil.SQLSafeString(title);
+
+                    newProduct.title = title;
+                    newProduct.vendor = vendorNode.InnerText;
+                    newProduct.product_type = "Not-Assigned";
+                    newProduct.sku = NewSKU;
+                    newProduct.stock = int.Parse(stockNode.InnerText);
+                    newProduct.barcode = barcodeNode.InnerText;
+                    newProduct.vendor_price = double.Parse(priceVendorNode.InnerText);
+
+                    //getting weight
+                    bool grossExists = newProdDataKVP.TryGetValue("Gross Weight", out string grossWeightStr);
+                    string netWeightStr = "0";
+                    bool netExists = newProdDataKVP.TryGetValue("Net Weight", out grossWeightStr);
+
+                    if (!grossExists) { grossWeightStr = "0"; }
+                    if (!netExists) { netWeightStr = "0"; }
+
+                    grossWeightStr = grossWeightStr.Split(" ")[0];
+                    netWeightStr = netWeightStr.Split(" ")[0];
+
+                    bool grossWeightConvSucceded = double.TryParse(grossWeightStr, out double grossWeight);
+                    if (!grossWeightConvSucceded) { grossWeight = .0; }
+                    bool netWeightConvSucceded = double.TryParse(netWeightStr, out double netWeight);
+                    if (!netWeightConvSucceded) { netWeight = .0; }
+                    newProduct.weight = Math.Max(grossWeight, netWeight);
+
+                    //getting height
+                    bool heightExists = newProdDataKVP.TryGetValue("Height", out string heightStr);
+                    if (!heightExists) { heightStr = "0"; }
+
+                    heightStr = heightStr.Split(" ")[0];
+                    bool heightConvSucceded = int.TryParse(heightStr, out int heightInt);
+                    if (heightConvSucceded) {
+                        newProduct.height = heightInt;
                     } else {
-                        
-                        appliedChanges.Add(sku, new Dictionary<string, string>() { 
-                            ["Stock"] = "",
-                            ["PriceVendor"] = "",
-                            ["Price"] = "",
-                        });
+                        newProduct.height = 0;
+                    }
 
-                        //updating stock value
-                        if (oldProductDB["Stock"] != productChanges["Stock"]) {
-                            var stockUpdateData = new Dictionary<string, string> {
-                                ["Stock"] = productChanges["Stock"]
-                            };
-                            var stockWhereUpdate = new Dictionary<string, Dictionary<string, string>> {
-                                ["SKU"] = new Dictionary<string, string> {
-                                    ["="] = sku
-                                }
-                            };
-                            db.Table("TDB_Products").Where(stockWhereUpdate).Update(stockUpdateData);
+                    //getting lenght
+                    bool lenghtExists = newProdDataKVP.TryGetValue("Lenght", out string lenghtStr);
+                    if (!lenghtExists) { lenghtStr = "0"; }
 
-                            //adding change to applied change list
-                            appliedChanges[sku]["Stock"] = $"{oldProductDB["Stock"]} -> {productChanges["Stock"]}";
-                        }
+                    lenghtStr = lenghtStr.Split(" ")[0];
+                    bool lenghtConvSucceded = int.TryParse(lenghtStr, out int lenghtInt);
+                    if (lenghtConvSucceded) {
+                        newProduct.lenght = lenghtInt;
+                    } else {
+                        newProduct.lenght = 0;
+                    }
 
-                        //updating price
-                        if (oldProductDB["PriceVendor"] != productChanges["PriceVendor"]) {
-                            double newSalePrice = PriceGenModule.GenNewPrice(double.Parse(productChanges["PriceVendor"]));
+                    //getting width
+                    bool widthExists = newProdDataKVP.TryGetValue("Width", out string widthStr);
+                    if (!widthExists) { widthStr = "0"; }
 
-                            //updating price value
-                            var priceUpdateData = new Dictionary<string, string> {
-                                ["PriceVendor"] = productChanges["PriceVendor"],
-                                ["Price"] = newSalePrice.ToString()
-                            };
-                            var priceWhereUpdate = new Dictionary<string, Dictionary<string, string>> {
-                                ["SKU"] = new Dictionary<string, string> {
-                                    ["="] = sku
-                                }
-                            };
-                            db.Table("TDB_Products").Where(priceWhereUpdate).Update(priceUpdateData);
+                    widthStr = widthStr.Split(" ")[0];
+                    bool widthConvSucceded = int.TryParse(widthStr, out int widthInt);
+                    if (widthConvSucceded) {
+                        newProduct.width = widthInt;
+                    } else {
+                        newProduct.width = 0;
+                    }
 
-                            //adding change to applied change list
-                            appliedChanges[sku]["PriceVendor"] = $"{oldProductDB["PriceVendor"]} -> {productChanges["PriceVendor"]}";
-                            appliedChanges[sku]["Price"] = $"{oldProductDB["Price"]} -> {newSalePrice}";
-                        }
+                    //calvulating newProduct price
+                    double NewSalePrice = PriceGenModule.GenNewPrice(newProduct.vendor_price);
+                    newProduct.price = NewSalePrice;
 
-                        try {
-                            ProductModule.ChangeProductStatus(sku, ProductStatus.WaitingShopSync);
-                        }
-                        catch (Exception ex) {
-                            MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.", "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                    //adding pictures
+                    foreach (var pic in newProdDataKVP.Where(x => x.Key.Contains("Picture"))) {
+                        if (!string.IsNullOrEmpty(pic.Value) || !string.IsNullOrWhiteSpace(pic.Value)) {
+                            newProduct.images.Add(pic.Value);
                         }
                     }
 
-                    //remove entry from change list
-                    pendingChanges.RemoveAll(x => x["SKU"] == sku);
+                    //adding vendor product type
+                    newProduct.productTypeVendor = vendorTypeNode.InnerText;
+
+                    //adding product added timestamp
+                    newProduct.addedTimeStamp = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString();
+
+                    //building Product description
+                    newProduct.body_html = BuildDescription(newProdDataKVP);
+
+                    NewProducts.Add(newProduct);
                 }
             }
-
-            //adding new products to database
-            List<Dictionary<string, string>> newProducts = new();
-            List<Dictionary<string, string>> ProductsToAdd = new(pendingChanges);
-            foreach (var nTDBProduct in ProductsToAdd) {
-                bool newProductWasAdded = addNewTDBProduct(nTDBProduct);
-
-                if (newProductWasAdded) {
-                    //adding product to this list to mark it as newly added
-                    newProducts.Add(nTDBProduct);
-                    //removing product from pendingChanges list
-                    pendingChanges.Remove(nTDBProduct);
-                }
-            }
-
-            //pass applied changes and pending changes to update on complete method
-            Dictionary<string, object> changes = new();
-            changes.Add("UpdatedProducts", appliedChanges);
-            changes.Add("InvalidProducts", pendingChanges);
-            changes.Add("NewProducts", newProducts);
-            if (e != null) {
-                e.Result = changes;
-            }
+            return NewProducts;
         }
-
-        // adds new TDB product to database
-        private bool addNewTDBProduct(Dictionary<string, string> newProductKVP) {
-            bool productAdded = false;
-            string newProdSKU = newProductKVP["SKU"];
-            string newProdTDBSKU = newProdSKU[(newProdSKU.IndexOf('-') + 1)..];
-
-            var newProdDataXML = _DataSheetsXML.SelectSingleNode(@$"/Datasheets/Datasheet[@TDPartNbr='{newProdTDBSKU}']");
-            if (newProdDataXML == null) {
-                return productAdded;
-            } else {
-                Dictionary<string, string> newProdDataKVP = GetProductDataKVP(newProdDataXML);
-
-                //init new product object
-                Product newProduct = new();
-
-                string title = newProdDataKVP["ShortDesc"];
-                title = title.Replace("'", "''");
-
-                newProduct.title = title;
-                newProduct.vendor = newProductKVP["Vendor"];
-                newProduct.product_type = "Not-Assigned";
-                newProduct.sku = newProdSKU;
-                newProduct.stock = int.Parse(newProductKVP["Stock"]);
-                newProduct.barcode = newProductKVP["Barcode"];
-                newProduct.vendor_price = double.Parse(newProductKVP["PriceVendor"]);
-
-                //getting weight
-                bool grossExists = newProdDataKVP.TryGetValue("Gross Weight", out string grossWeightStr);
-                string netWeightStr = "0";
-                bool netExists = newProdDataKVP.TryGetValue("Net Weight", out grossWeightStr);
-
-                if (!grossExists) { grossWeightStr = "0"; }
-                if (!netExists) { netWeightStr = "0"; }
-
-                grossWeightStr = grossWeightStr.Split(" ")[0];
-                netWeightStr = netWeightStr.Split(" ")[0];
-
-
-                bool grossWeightConvSucceded = double.TryParse(grossWeightStr, out double grossWeight);
-                if (!grossWeightConvSucceded) {grossWeight = .0;}
-                bool netWeightConvSucceded = double.TryParse(netWeightStr, out double netWeight);
-                if (!netWeightConvSucceded) { netWeight = .0; }
-                newProduct.weight = Math.Max(grossWeight, netWeight);
-
-                //getting height
-                bool heightExists = newProdDataKVP.TryGetValue("Height", out string heightStr);
-                if (!heightExists) { heightStr = "0"; }
-
-                heightStr = heightStr.Split(" ")[0];
-                bool heightConvSucceded = int.TryParse(heightStr, out int heightInt);
-                if (heightConvSucceded) {
-                    newProduct.height = heightInt;
-                } else {
-                    newProduct.height = 0;
-                }
-
-                //getting lenght
-                bool lenghtExists = newProdDataKVP.TryGetValue("Lenght", out string lenghtStr);
-                if (!lenghtExists) { lenghtStr = "0"; }
-
-                lenghtStr = lenghtStr.Split(" ")[0];
-                bool lenghtConvSucceded = int.TryParse(lenghtStr, out int lenghtInt);
-                if (lenghtConvSucceded) {
-                    newProduct.lenght = lenghtInt;
-                } else {
-                    newProduct.lenght = 0;
-                }
-
-                //getting width
-                bool widthExists = newProdDataKVP.TryGetValue("Width", out string widthStr);
-                if (!widthExists) { widthStr = "0"; }
-
-                widthStr = widthStr.Split(" ")[0];
-                bool widthConvSucceded = int.TryParse(widthStr, out int widthInt);
-                if (widthConvSucceded) {
-                    newProduct.width = widthInt;
-                } else {
-                    newProduct.width = 0;
-                }
-
-                //calvulating newProduct price with 15-30% margin choosen on random
-                double NewSalePrice = PriceGenModule.GenNewPrice(newProduct.vendor_price);
-                newProduct.price = NewSalePrice;
-
-                //adding pictures
-                foreach (var pic in newProdDataKVP.Where(x => x.Key.Contains("Picture"))) {
-                    if (!string.IsNullOrEmpty(pic.Value) || !string.IsNullOrWhiteSpace(pic.Value)) {
-                        newProduct.images.Add(pic.Value);
-                    }
-                }
-
-                //adding vendor product type
-                newProduct.productTypeVendor = newProductKVP["VendorType"];
-
-                //adding product added timestamp
-                newProduct.addedTimeStamp = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString();
-
-                //building Product description
-                newProduct.body_html = BuildDescription(newProdDataKVP);
-
-                ProductModule.AddProductToDB(newProduct);
-                productAdded = true;
-                return productAdded;
-            }
-        } 
 
         //method that gets product data KVP from XML node(from datasheet) 
         private static Dictionary<string, string> GetProductDataKVP(XmlNode prodData) {
@@ -381,8 +367,154 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             string finishedTable = sb.ToString();
             description += finishedTable;
 
-            description = description.Replace("'", "''");
+            description = SQLUtil.SQLSafeString(description);
             return description;
         }
+
+
+        //// Updates product and then sends products that dont exist to addNewProduct method
+        //public void updateTDBProducts(object sender = null, DoWorkEventArgs e = null) {
+        //    List<Dictionary<string, string>> pendingChanges = new();
+        //    Dictionary<string, Dictionary<string, string>> appliedChanges = new();
+
+        //    var catalogueProducts = _CategoryXML.FirstChild.ChildNodes;
+        //    foreach (XmlNode prodXML in catalogueProducts) {
+        //        Dictionary<string, string> productInfo = new();
+
+        //        XmlNode skuNode = prodXML.SelectSingleNode("TDPartNbr");
+        //        XmlNode priceVendorNode = prodXML.SelectSingleNode("Price");
+        //        XmlNode stockNode = prodXML.SelectSingleNode("Stock");
+        //        XmlNode barcodeNode = prodXML.SelectSingleNode("Ean");
+        //        XmlNode vendorNode = prodXML.SelectSingleNode("Manuf");
+        //        XmlNode vendorTypeNode = prodXML.SelectSingleNode("SubClassCode");
+
+        //        productInfo.Add("SKU", "TDB-" + skuNode.InnerText);
+        //        productInfo.Add("PriceVendor", priceVendorNode.InnerText);
+        //        productInfo.Add("Stock", stockNode.InnerText);
+        //        productInfo.Add("Barcode", barcodeNode.InnerText);
+        //        productInfo.Add("Vendor", vendorNode.InnerText);
+        //        productInfo.Add("VendorType", vendorTypeNode.InnerText);
+
+        //        pendingChanges.Add(productInfo);
+        //    }
+
+        //    //getting sku product from sku table Product table
+        //    DataBaseInterface db = new();
+        //    var productTable = db.Table("Products").Get();
+        //    var products = productTable.Values.ToList();
+        //    products.RemoveAll(x => !x["SKU"].StartsWith("TDB-"));
+
+        //    foreach (var product in products) {
+        //        string sku = product["SKU"];
+        //        var productChanges = pendingChanges.Find(x => x["SKU"] == sku);
+
+        //        //handles archiving of products if tdb doesnt sell it anymore
+        //        if (productChanges == null) {
+
+        //            //mark this product for archiving
+        //            try {
+        //                ProductModule.ChangeProductStatus(sku, ProductStatus.NeedsArchiving);
+        //            }
+        //            catch (Exception ex) {
+        //                MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.", "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+        //            }
+        //            continue;
+        //        } else {
+
+        //            //get product from db 
+        //            var whereQuery = new Dictionary<string, Dictionary<string, string>> {
+        //                ["SKU"] = new Dictionary<string, string> {
+        //                    ["="] = sku
+        //                }
+        //            };
+        //            var result = db.Table("TDB_Products").Where(whereQuery).Get();
+        //            var oldProductDB = result[0];
+
+        //            //if data is the same dont change shit 
+        //            if (oldProductDB["Stock"] == productChanges["Stock"] && oldProductDB["PriceVendor"] == productChanges["PriceVendor"]) {
+        //                pendingChanges.RemoveAll(x => x["SKU"] == sku);
+        //                continue;
+        //            } else {
+
+        //                appliedChanges.Add(sku, new Dictionary<string, string>() { 
+        //                    ["Stock"] = "",
+        //                    ["PriceVendor"] = "",
+        //                    ["Price"] = "",
+        //                });
+
+        //                //updating stock value
+        //                if (oldProductDB["Stock"] != productChanges["Stock"]) {
+        //                    var stockUpdateData = new Dictionary<string, string> {
+        //                        ["Stock"] = productChanges["Stock"]
+        //                    };
+        //                    var stockWhereUpdate = new Dictionary<string, Dictionary<string, string>> {
+        //                        ["SKU"] = new Dictionary<string, string> {
+        //                            ["="] = sku
+        //                        }
+        //                    };
+        //                    db.Table("TDB_Products").Where(stockWhereUpdate).Update(stockUpdateData);
+
+        //                    //adding change to applied change list
+        //                    appliedChanges[sku]["Stock"] = $"{oldProductDB["Stock"]} -> {productChanges["Stock"]}";
+        //                }
+
+        //                //updating price
+        //                if (oldProductDB["PriceVendor"] != productChanges["PriceVendor"]) {
+        //                    double newSalePrice = PriceGenModule.GenNewPrice(double.Parse(productChanges["PriceVendor"]));
+
+        //                    //updating price value
+        //                    var priceUpdateData = new Dictionary<string, string> {
+        //                        ["PriceVendor"] = productChanges["PriceVendor"],
+        //                        ["Price"] = newSalePrice.ToString()
+        //                    };
+        //                    var priceWhereUpdate = new Dictionary<string, Dictionary<string, string>> {
+        //                        ["SKU"] = new Dictionary<string, string> {
+        //                            ["="] = sku
+        //                        }
+        //                    };
+        //                    db.Table("TDB_Products").Where(priceWhereUpdate).Update(priceUpdateData);
+
+        //                    //adding change to applied change list
+        //                    appliedChanges[sku]["PriceVendor"] = $"{oldProductDB["PriceVendor"]} -> {productChanges["PriceVendor"]}";
+        //                    appliedChanges[sku]["Price"] = $"{oldProductDB["Price"]} -> {newSalePrice}";
+        //                }
+
+        //                try {
+        //                    ProductModule.ChangeProductStatus(sku, ProductStatus.WaitingShopSync);
+        //                }
+        //                catch (Exception ex) {
+        //                    MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.", "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+        //                }
+        //            }
+
+        //            //remove entry from change list
+        //            pendingChanges.RemoveAll(x => x["SKU"] == sku);
+        //        }
+        //    }
+
+        //    //adding new products to database
+        //    List<Dictionary<string, string>> newProducts = new();
+        //    List<Dictionary<string, string>> ProductsToAdd = new(pendingChanges);
+        //    foreach (var nTDBProduct in ProductsToAdd) {
+        //        bool newProductWasAdded = addNewTDBProduct(nTDBProduct);
+
+        //        if (newProductWasAdded) {
+        //            //adding product to this list to mark it as newly added
+        //            newProducts.Add(nTDBProduct);
+        //            //removing product from pendingChanges list
+        //            pendingChanges.Remove(nTDBProduct);
+        //        }
+        //    }
+
+        //    //pass applied changes and pending changes to update on complete method
+        //    Dictionary<string, object> changes = new();
+        //    changes.Add("UpdatedProducts", appliedChanges);
+        //    changes.Add("InvalidProducts", pendingChanges);
+        //    changes.Add("NewProducts", newProducts);
+        //    if (e != null) {
+        //        e.Result = changes;
+        //    }
+        //}
+
     }
 }
