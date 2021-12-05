@@ -453,7 +453,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         //
 
         //method gets list of TDB products
-        private static List<Product> GetTDBProducts() {
+        public static List<Product> GetTDBProducts() {
             List<Product> products = new();
 
             //getting main product info
@@ -506,12 +506,69 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             return products;
         }
 
+        //method gets list of TDB products
+        public static List<Product> GetKGProducts() {
+            List<Product> products = new();
+
+            //getting main product info
+            DataBaseInterface db = new();
+            var result = db.Table("KG_Products").Get();
+            foreach (var prod in result.Values) {
+
+                Product NewProduct = new();
+                NewProduct.DBID = int.Parse(prod["ID"]);
+                NewProduct.title = prod["Title"];
+                NewProduct.body_html = prod["Body"];
+                NewProduct.vendor = prod["Vendor"];
+                NewProduct.product_type = prod["ProductType"];
+                NewProduct.price = double.Parse(prod["Price"]);
+                NewProduct.sku = prod["SKU"];
+                NewProduct.stock = int.Parse(prod["Stock"]);
+                NewProduct.barcode = prod["Barcode"];
+                NewProduct.vendor_price = double.Parse(prod["PriceVendor"]);
+                NewProduct.weight = double.Parse(prod["Weight"]);
+                NewProduct.height = int.Parse(prod["Height"]);
+                NewProduct.lenght = int.Parse(prod["Lenght"]);
+                NewProduct.width = int.Parse(prod["Width"]);
+
+                NewProduct.addedTimeStamp = prod["AddedTimeStamp"];
+                NewProduct.productTypeVendor = prod["ProductTypeVendor"];
+
+                products.Add(NewProduct);
+            }
+
+            //getting images faster
+            result = db.Table("KG_Images").Get();
+            foreach (var imgRow in result.Values) {
+
+                int productID = int.Parse(imgRow["ProductID"]);
+                string imageUrl = imgRow["ImgUrl"];
+
+                products.Find(x => x.DBID == productID).images.Add(imageUrl);
+            }
+
+            //getting tags faster
+            result = db.Table("KG_Tags").Get();
+            foreach (var tagRow in result.Values) {
+
+                int productID = int.Parse(tagRow["ProductID"]);
+                string tag = tagRow["Tag"];
+
+                products.Find(x => x.DBID == productID).tags.Add(tag);
+            }
+
+            return products;
+        }
+
         //method gets list of all Products in database
         public static List<Product> GetAllProducts() {
             List<Product> p = new();
 
             List<Product> TDBproducts = GetTDBProducts();
             p.AddRange(TDBproducts);
+
+            List<Product> KGproducts = GetKGProducts();
+            p.AddRange(KGproducts);
 
             //getting product statuses faster
             DataBaseInterface db = new();

@@ -1,6 +1,7 @@
 ﻿using Ikrito_Fulfillment_Platform.Models;
 using Ikrito_Fulfillment_Platform.Models.SyncModels;
 using Ikrito_Fulfillment_Platform.Modules;
+using Ikrito_Fulfillment_Platform.Modules.Supplier;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -178,35 +179,15 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
 
         //
-        // update TDB Products section
-        //
-
-        //button that updates product from TDB
-        private void UpdateTDBButton_Click(object sender, RoutedEventArgs e) {
-            TDBModule TDBUpdater = new();
-
-            //running export products in background
-            BackgroundWorker TDBUpdateWorker = new();
-            TDBUpdateWorker.DoWork += TDBUpdater.updateTDBProducts;
-            TDBUpdateWorker.RunWorkerCompleted += UpdateTDBWorkerOnComplete;
-
-            progressBar.IsIndeterminate = true;
-            progressBarLabel.Text = "Updating TDB products";
-            TDBUpdateWorker.RunWorkerAsync();
-        }
-
-        //method that opens new dialogue window that shows all changes made in database
-        private void UpdateTDBWorkerOnComplete(object sender, RunWorkerCompletedEventArgs e) {
-            progressBar.IsIndeterminate = false;
-            progressBarLabel.Text = "";
-
-            PopulateChangeListBoxes(e.Result);
-        }
-
-
-        //
         // Changes ListBoxes section
         //
+
+        //method taht clears changes window
+        private void ClearChangesListBoxes() {
+            NewProductListBox.ItemsSource = null;
+            UpdatedProductListBox.ItemsSource = null;
+            ArchivedProductListBox.ItemsSource = null;
+        }
 
         //method that populates chnaged products listboxes
         private void PopulateChangeListBoxes(object Changes) {
@@ -214,11 +195,11 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
             //converting chnages to list to lists of productchanges
             List<Dictionary<string, string>> newProducts = ChangesKVP["NewProducts"] as List<Dictionary<string, string>>;                                           //what new product were added
-            List<Dictionary<string, string>> invalidProducts = ChangesKVP["InvalidProducts"] as List<Dictionary<string, string>>;                                   //what products werent added because they were missing datasheet
+            List<Dictionary<string, string>> archivedProducts = ChangesKVP["ArchivedProducts"] as List<Dictionary<string, string>>;                                  //what products werent added because they were missing datasheet
             Dictionary<string, Dictionary<string, string>> updatedProducts = ChangesKVP["UpdatedProducts"] as Dictionary<string, Dictionary<string, string>>;       //what products were changed
 
             List<ProductChange> NewProducts = new();
-            List<ProductChange> InvalidProducts = new();
+            List<ProductChange> ArchivedProducts = new();
             List<ProductChange> UpdatedProducts = new();
 
             foreach (var NP in newProducts) {
@@ -232,16 +213,16 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
                 NewProducts.Add(NewProduct);
             }
-            foreach (var IP in invalidProducts) {
+            foreach (var AP in archivedProducts) {
                 ProductChange InvalidProduct = new();
-                InvalidProduct.SKU = IP["SKU"];
-                InvalidProduct.PriceVendor = IP["PriceVendor"];
-                InvalidProduct.Stock = IP["Stock"];
-                InvalidProduct.Barcode = IP["Barcode"];
-                InvalidProduct.Vendor = IP["Vendor"];
-                InvalidProduct.VendorType = IP["VendorType"];
+                InvalidProduct.SKU = AP["SKU"];
+                InvalidProduct.PriceVendor = AP["PriceVendor"];
+                InvalidProduct.Stock = AP["Stock"];
+                InvalidProduct.Barcode = AP["Barcode"];
+                InvalidProduct.Vendor = AP["Vendor"];
+                InvalidProduct.VendorType = AP["VendorType"];
 
-                InvalidProducts.Add(InvalidProduct);
+                ArchivedProducts.Add(InvalidProduct);
             }
             foreach (var UP in updatedProducts) {
                 ProductChange ChangedProduct = new();
@@ -253,7 +234,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
             NewProductListBox.ItemsSource = NewProducts;
             UpdatedProductListBox.ItemsSource = UpdatedProducts;
-            InvalidProductListBox.ItemsSource = InvalidProducts;
+            ArchivedProductListBox.ItemsSource = ArchivedProducts;
         }
 
         //method that allows user to edit list box product by opening it in ProductEditPage
@@ -264,5 +245,66 @@ namespace Ikrito_Fulfillment_Platform.Pages {
                 MainWindow.Instance.mainFrame.Content = new ProductEditPage(editProduct, this);
             }
         }
+
+
+        //
+        // update TDB Products section
+        //
+
+        //button that updates product from TDB
+        private void UpdateTDBButton_Click(object sender, RoutedEventArgs e) {
+            TDBModule TDBUpdater = new();
+
+            //running export products in background
+            BackgroundWorker TDBUpdateWorker = new();
+            TDBUpdateWorker.DoWork += TDBUpdater.UpdateTDBProducts;
+            TDBUpdateWorker.RunWorkerCompleted += UpdateTDBWorkerOnComplete;
+
+            progressBar.IsIndeterminate = true;
+            progressBarLabel.Text = "Updating TDB products";
+
+            ClearChangesListBoxes();
+
+            TDBUpdateWorker.RunWorkerAsync();
+        }
+
+        //method that opens new dialogue window that shows all changes made in database
+        private void UpdateTDBWorkerOnComplete(object sender, RunWorkerCompletedEventArgs e) {
+            progressBar.IsIndeterminate = false;
+            progressBarLabel.Text = "";
+
+            PopulateChangeListBoxes(e.Result);
+        }
+
+
+        //
+        // update KG Products section
+        //
+
+        //button that updates product from KG
+        private void UpdateKGButton_Click(object sender, RoutedEventArgs e) {
+            KGModule KGUpdater = new();
+
+            //running export products in background
+            BackgroundWorker KGUpdateWorker = new();
+            KGUpdateWorker.DoWork += KGUpdater.UpdateKGProducts;
+            KGUpdateWorker.RunWorkerCompleted += UpdateKGWorkerOnComplete;
+
+            progressBar.IsIndeterminate = true;
+            progressBarLabel.Text = "Updating KG products";
+
+            ClearChangesListBoxes();
+
+            KGUpdateWorker.RunWorkerAsync();
+        }
+
+        //method that opens new dialogue window that shows all changes made in database
+        private void UpdateKGWorkerOnComplete(object sender, RunWorkerCompletedEventArgs e) {
+            progressBar.IsIndeterminate = false;
+            progressBarLabel.Text = "";
+
+            PopulateChangeListBoxes(e.Result);
+        }
+
     }
 }
