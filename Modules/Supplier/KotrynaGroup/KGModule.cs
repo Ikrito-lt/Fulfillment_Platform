@@ -358,6 +358,9 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier {
             List<Product> NewProducts = APIProducts.Where(p1 => DBProducts.All(p2 => p2.sku != p1.sku)).ToList();
             List<Product> UpdateProducts = APIProducts.Where(p1 => NewProducts.All(p2 => p2.sku != p1.sku)).ToList();
 
+            //remove dublicate skus from newProd list
+            var a = NewProducts.GroupBy(x => x.sku.ToLower()).Where(x => x.LongCount() > 1).ToList();
+            a.ForEach(x => NewProducts.RemoveAll(y => y.sku.ToLower() == x.Key));
 
             Dictionary<string, Dictionary<string, string>> appliedChanges = new();          //for updates
             List<Dictionary<string, string>> newChanges = new();                            //for new products

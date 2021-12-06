@@ -29,7 +29,7 @@ namespace Ikrito_Fulfillment_Platform.Utils {
         public const string KGApiKey = "ef364d8416ccbaf9f1ad1db3835e40c7064dd2b9";
 
         // AWS mySQL DB creds
-        public const string DBServer = "ikrito-db.c175yaycfw7i.eu-central-1.rds.amazonaws.com";
+        public const string DBServer = "ikrito-db-v2.c175yaycfw7i.eu-central-1.rds.amazonaws.com";
         public const string DBServerPort = "3306";
         public const string DBServerUsername = "admin";
         public const string DBServerPassword = "p3gD2Z5fbztX8Uh";
