@@ -31,21 +31,21 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier {
 
         private const string _SKUPrefix = "KG-";
 
-        private static readonly Lazy<List<AssortmentProduct>> _LazyAssortmentList = new(() => GetAssortmentList());
+        private static readonly Lazy<List<KGAssortmentProduct>> _LazyAssortmentList = new(() => GetAssortmentList());
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
-        public static List<AssortmentProduct> _AssortmentList => _LazyAssortmentList.Value;
+        public static List<KGAssortmentProduct> _AssortmentList => _LazyAssortmentList.Value;
 
-        private static readonly Lazy<List<ProductInfo>> _LazyProductInfoList = new(() => GetProductInfoList());
+        private static readonly Lazy<List<KGProductInfo>> _LazyProductInfoList = new(() => GetProductInfoList());
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
-        public static List<ProductInfo> _ProductInfoList => _LazyProductInfoList.Value;
+        public static List<KGProductInfo> _ProductInfoList => _LazyProductInfoList.Value;
 
-        private static readonly Lazy<List<ProductMeasurements>> _LazyProductMeasurementsList = new(() => GetProductMeasurementsList());
+        private static readonly Lazy<List<KGProductMeasurements>> _LazyProductMeasurementsList = new(() => GetProductMeasurementsList());
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
-        public static List<ProductMeasurements> _ProductMeasurementsList => _LazyProductMeasurementsList.Value;
+        public static List<KGProductMeasurements> _ProductMeasurementsList => _LazyProductMeasurementsList.Value;
 
-        private static readonly Lazy<List<ProductPackaging>> _LazyProductPackagingList = new(() => GetProductPackagingList());
+        private static readonly Lazy<List<KGProductPackaging>> _LazyProductPackagingList = new(() => GetProductPackagingList());
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
-        public static List<ProductPackaging> _ProductPackagingList => _LazyProductPackagingList.Value;
+        public static List<KGProductPackaging> _ProductPackagingList => _LazyProductPackagingList.Value;
 
 
         //
@@ -53,12 +53,12 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier {
         //
 
         //downloads product catalogue from KG API
-        private static List<AssortmentProduct> GetAssortmentList() {
+        private static List<KGAssortmentProduct> GetAssortmentList() {
             RESTClient restClient = new(_BaseUrl);
             string assortmentJson = restClient.ExecGetParams(_CataloguePath, _APIHeader);
             dynamic assortmentResponse = JsonConvert.DeserializeObject<dynamic>(assortmentJson);
 
-            List<AssortmentProduct> assortmentProducts = new();
+            List<KGAssortmentProduct> assortmentProducts = new();
 
             if (assortmentResponse["status"] == true) {
                 dynamic dynamicCat = assortmentResponse["result"];
@@ -66,7 +66,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier {
                     if (string.IsNullOrEmpty(prod["base_price"].ToString()) || string.IsNullOrEmpty(prod["price"].ToString())) {
                         continue;
                     } else {
-                        AssortmentProduct product = new();
+                        KGAssortmentProduct product = new();
                         product.id = prod["id"];
                         product.axapta_id = prod["axapta_id"];
                         product.ean = prod["ean"];
@@ -84,14 +84,14 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier {
         }
 
         //downloads product info from KG API
-        private static List<ProductInfo> GetProductInfoList() {
-            List<ProductInfo> infoList = new();
+        private static List<KGProductInfo> GetProductInfoList() {
+            List<KGProductInfo> infoList = new();
 
             for (int i = 0; i < _AssortmentList.Count; i = i + 200) {
                 var items = _AssortmentList.Skip(i).Take(200);
                 List<KeyValuePair<string, string>> postData = new List<KeyValuePair<string, string>>();
 
-                foreach (AssortmentProduct item in items) {
+                foreach (KGAssortmentProduct item in items) {
                     postData.Add(new KeyValuePair<string, string>("ids[]", item.axapta_id));
                 }
 
@@ -109,7 +109,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier {
                 if (infoResponse["status"] == true) {
                     dynamic dynamicInfo = infoResponse["result"];
                     foreach (var info in dynamicInfo) {
-                        ProductInfo pInfo = new();
+                        KGProductInfo pInfo = new();
 
                         pInfo.axapta_id = info.Name;
                         pInfo.kpn = info.First["additional"]["kpn"];
@@ -165,14 +165,14 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier {
         }
 
         //downloads product measurements from KG API
-        private static List<ProductMeasurements> GetProductMeasurementsList() {
-            List<ProductMeasurements> MeasurementsList = new();
+        private static List<KGProductMeasurements> GetProductMeasurementsList() {
+            List<KGProductMeasurements> MeasurementsList = new();
 
             for (int i = 0; i < _AssortmentList.Count; i = i + 200) {
                 var items = _AssortmentList.Skip(i).Take(200);
                 List<KeyValuePair<string, string>> postData = new List<KeyValuePair<string, string>>();
 
-                foreach (AssortmentProduct item in items) {
+                foreach (KGAssortmentProduct item in items) {
                     postData.Add(new KeyValuePair<string, string>("ids[]", item.axapta_id));
                 }
 
@@ -191,7 +191,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier {
                     dynamic dynamicMeasurements = MeasurementsResponse["result"];
                     foreach (var m in dynamicMeasurements) {
                         var json = JsonConvert.SerializeObject(m.First);
-                        ProductMeasurements PM = JsonConvert.DeserializeObject<ProductMeasurements>(json);
+                        KGProductMeasurements PM = JsonConvert.DeserializeObject<KGProductMeasurements>(json);
                         PM.axapta_id = m.Name;
 
                         MeasurementsList.Add(PM);
@@ -208,14 +208,14 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier {
         }
 
         //downloads product measurements from KG API
-        private static List<ProductPackaging> GetProductPackagingList() {
-            List<ProductPackaging> PackagingList = new();
+        private static List<KGProductPackaging> GetProductPackagingList() {
+            List<KGProductPackaging> PackagingList = new();
 
             for (int i = 0; i < _AssortmentList.Count; i = i + 200) {
                 var items = _AssortmentList.Skip(i).Take(200);
                 List<KeyValuePair<string, string>> postData = new List<KeyValuePair<string, string>>();
 
-                foreach (AssortmentProduct item in items) {
+                foreach (KGAssortmentProduct item in items) {
                     postData.Add(new KeyValuePair<string, string>("ids[]", item.axapta_id));
                 }
 
@@ -234,7 +234,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier {
                     dynamic dynamicPackaging = PackagingResponse["result"];
                     foreach (var p in dynamicPackaging) {
 
-                        ProductPackaging PP = new();
+                        KGProductPackaging PP = new();
                         PP.axapta_id = p.Name;
 
                         foreach (var pack in p.First) {
@@ -264,11 +264,11 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier {
         public static List<Product> BuildProductList() {
             List<Product> pList = new();
 
-            foreach (AssortmentProduct AP in _AssortmentList) {
+            foreach (KGAssortmentProduct AP in _AssortmentList) {
                 string ProductID = AP.axapta_id;
-                ProductInfo PI = _ProductInfoList.Find(x => x.axapta_id == ProductID);
-                ProductMeasurements PM = _ProductMeasurementsList.Find(x => x.axapta_id == ProductID);
-                ProductPackaging PP = _ProductPackagingList.Find(x => x.axapta_id == ProductID);
+                KGProductInfo PI = _ProductInfoList.Find(x => x.axapta_id == ProductID);
+                KGProductMeasurements PM = _ProductMeasurementsList.Find(x => x.axapta_id == ProductID);
+                KGProductPackaging PP = _ProductPackagingList.Find(x => x.axapta_id == ProductID);
 
                 pList.Add(BuildProduct(AP, PI, PM, PP));
             }
@@ -277,7 +277,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier {
         }
 
         // method that builds Product form API data
-        public static Product BuildProduct(AssortmentProduct AP, ProductInfo PI, ProductMeasurements PM, ProductPackaging PP) {
+        public static Product BuildProduct(KGAssortmentProduct AP, KGProductInfo PI, KGProductMeasurements PM, KGProductPackaging PP) {
             Product newProduct = new();
 
             newProduct.title = SQLUtil.SQLSafeString(PI.title);

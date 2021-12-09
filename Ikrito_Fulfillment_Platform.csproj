@@ -9,6 +9,7 @@
     <Configurations>Debug;Release;Build+</Configurations>
     <Platforms>AnyCPU;x64</Platforms>
     <UserSecretsId>19b393f6-a8d9-4b31-bdf3-bf89fa480c60</UserSecretsId>
+	  <!--<Nullable>enable</Nullable>-->
   </PropertyGroup>
 
   <ItemGroup>

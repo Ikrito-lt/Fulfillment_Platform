@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Ikrito_Fulfillment_Platform.Modules.Supplier.KotrynaGroup.Modules {
-    class ProductInfo {
+    class KGProductInfo {
         public string axapta_id { set; get; }
         public string kpn { set; get; }
         public string coo { set; get; }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Ikrito_Fulfillment_Platform.Modules.Supplier.KotrynaGroup.Modules {
-    class ProductPackaging {
+    class KGProductPackaging {
 
         public string axapta_id { set; get; }
         public List<Packaging> packagings = new();
