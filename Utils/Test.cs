@@ -1,5 +1,7 @@
-﻿using Ikrito_Fulfillment_Platform.Modules;
+﻿using Ikrito_Fulfillment_Platform.Models;
+using Ikrito_Fulfillment_Platform.Modules;
 using Ikrito_Fulfillment_Platform.Modules.Supplier;
+using Ikrito_Fulfillment_Platform.Modules.Supplier.Pretendentas;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,6 +16,8 @@ namespace Ikrito_Fulfillment_Platform.Utils {
         public Test() {
             //foo();
             //too();
+            //testTitles();
+            PDCat();
         }
 
         private static void foo() {
@@ -24,6 +28,24 @@ namespace Ikrito_Fulfillment_Platform.Utils {
         private static void too() {
             TDBModule TDB = new();
             TDB.UpdateTDBProducts();
+        }
+
+        private static void testTitles() {
+            List<Product> pList = ProductModule.GetAllProducts();
+            List<Product> titleList = new();
+
+            foreach (Product p in pList) {
+                if (p.title.Length > 200) {
+                    titleList.Add(p);
+                }
+            }
+
+            var a = titleList;
+        }
+
+        private static void PDCat() {
+            PDModule PDM = new();
+            var a = PDModule._ProductList;
         }
     }
 }

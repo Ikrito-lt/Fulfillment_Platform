@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Ikrito_Fulfillment_Platform.Modules.Supplier.KotrynaGroup.Modules {
-    class AssortmentProduct {
+    class KGAssortmentProduct {
 
         public int id { set; get; }
         public string axapta_id { set; get; }

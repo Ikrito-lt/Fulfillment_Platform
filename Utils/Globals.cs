@@ -24,9 +24,12 @@ namespace Ikrito_Fulfillment_Platform.Utils {
             ["ean"] = "y"
         };
 
-        //Kotryn Group Creds
+        //Kotryna Group Creds
         public const string KGApi = "http://ws.kotrynagroup.com/api/";
         public const string KGApiKey = "ef364d8416ccbaf9f1ad1db3835e40c7064dd2b9";
+
+        //Pretendentas API Creds
+        public const string PDApiKey = "390ad56b495968e4679e2be66ed507ad";
 
         // AWS mySQL DB creds
         public const string DBServer = "ikrito-db-v2.c175yaycfw7i.eu-central-1.rds.amazonaws.com";

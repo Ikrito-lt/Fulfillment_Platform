@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Ikrito_Fulfillment_Platform.Modules.Supplier.KotrynaGroup.Modules {
-    class ProductMeasurements {
+    class KGProductMeasurements {
 
         public string axapta_id { set; get; }
         public string height { set; get; }
