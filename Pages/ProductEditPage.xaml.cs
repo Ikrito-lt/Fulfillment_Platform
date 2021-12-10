@@ -15,6 +15,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         private readonly Product EditableProduct;
         private readonly Dictionary<string, string> CategoryKVP;
         private readonly Page PreviousPage;
+        private readonly bool isReadOnly;
 
         private bool ProductSaved = true;
 
@@ -25,17 +26,55 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         private ObservableCollection<string> TagListBoxDataSource;
         public ICommand DeleteTagCommand { get; set; }
 
-        public ProductEditPage(Product product, Page prevPage) {
+        public ProductEditPage(Product product, Page prevPage, bool readOnly = false) {
             PreviousPage = prevPage;
+            isReadOnly = readOnly;
 
             InitializeComponent();
+
             DataContext = this;
             EditableProduct = product;
-
             CategoryKVP = ProductModule.GetCategoriesDictionary();
             ProductFieldInit();
+
+            if (isReadOnly) {
+                MakePageReadonly();
+            }
         }
 
+
+        //
+        // making page readonly section
+        //
+
+        //method that makes page readonly
+        private void MakePageReadonly() {
+            DescBox.IsReadOnly = true;
+            TitleBox.IsReadOnly = true;
+            VendorBox.IsReadOnly = true;
+            StockBox.IsReadOnly = true;
+            BarcodeBox.IsReadOnly = true;
+            PriceBox.IsReadOnly = true;
+            VendorPriceBox.IsReadOnly = true;
+            WeightBox.IsReadOnly = true;
+            LenghtBox.IsReadOnly = true;
+            HeightBox.IsReadOnly = true;
+            WidthBox.IsReadOnly = true;
+            ImageBox.IsReadOnly = true;
+            TagBox.IsReadOnly = true;
+
+            AddImageButton.IsEnabled = false;
+            AddTagButton.IsEnabled = false;
+
+            ProductTypeComboBox.IsEnabled = false;
+
+            TagListBox.IsEnabled = false;
+            ImageListBox.IsEnabled = false;
+
+            //changing buttons
+            SaveButton.Visibility = Visibility.Hidden;
+            EditButton.Visibility = Visibility.Visible;
+        }
         
         //
         // Field init and data save section
@@ -147,6 +186,13 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             ProductSaved = true;
         }
 
+        //method for editng page if it is readonly
+        private void EditButton_Click(object sender, RoutedEventArgs e) {
+            if (isReadOnly) {
+                MainWindow.Instance.mainFrame.Content = new ProductEditPage(EditableProduct, PreviousPage);
+            }
+        }
+
         //back button on click method (checks if product needs saving, opens confirmation dialog box and exits)
         private void BackButton_Click(object sender, RoutedEventArgs e) {
             if (ProductSaved) {
@@ -222,5 +268,6 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         private void ProductTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             ProductSaved = false;
         }
+
     }
 }
