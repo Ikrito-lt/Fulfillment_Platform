@@ -5,7 +5,7 @@ using RestSharp;
 using System.Collections.Generic;
 
 namespace Ikrito_Fulfillment_Platform.Modules {
-    class NewOrderModule {
+    class OrderModule {
         private readonly string getOrdersEndPoint = "https://real-europe-corp.myshopify.com/admin/api/2021-07/orders.json";
         
         public List<Order> getOrders() {

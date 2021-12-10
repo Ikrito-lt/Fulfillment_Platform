@@ -6,6 +6,7 @@ namespace Ikrito_Fulfillment_Platform.Models {
     public class Product {
 
         public int DBID { set; get; }
+        public string VendorID { set; get; }
         public string title { set; get; }
         public string body_html { set; get; }           //desc
         public string vendor { set; get; }

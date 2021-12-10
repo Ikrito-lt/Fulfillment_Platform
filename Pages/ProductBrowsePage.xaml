@@ -12,7 +12,7 @@
         <!-- DataGrid style -->
         <Style x:Key="DataGridStyle1" TargetType="{x:Type DataGrid}">
             <Setter Property="CanUserResizeColumns" Value="False"/>
-            <Setter Property="CanUserSortColumns" Value="False" />
+            <Setter Property="CanUserSortColumns" Value="True" />
             <Setter Property="CanUserResizeColumns" Value="True" />
             <Setter Property="CanUserResizeRows" Value="False" />
             <Setter Property="CanUserAddRows" Value="False"/>
@@ -32,8 +32,8 @@
         </Style>
     </Page.Resources>
 
-
-
+    
+    
     <Grid Margin="0" Background="WhiteSmoke">
 
         <Grid.RowDefinitions>
