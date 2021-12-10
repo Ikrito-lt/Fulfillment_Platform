@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Ikrito_Fulfillment_Platform {
     public partial class MainPage : Page {
@@ -15,7 +16,7 @@ namespace Ikrito_Fulfillment_Platform {
         }
 
         private readonly List<Order> newOrders = new();
-        private readonly NewOrderModule newOrderGetter = new();
+        private readonly OrderModule newOrderGetter = new();
 
         private MainPage() {
             InitializeComponent();
@@ -28,8 +29,13 @@ namespace Ikrito_Fulfillment_Platform {
 
         //changes text to say howm much orders there is
         private void UpdateNewOrderLabel(int count) { 
-            newOrderCountL.Content = "Current New Orders: " + count.ToString();
-        } 
+            newOrderCountL.Content = $"Current Orders ({count})";
+        }
+
+        //changes text to say howm much orders there is
+        private void UpdateProcessingOrderLabel(int count) {
+            processingOrderCountL.Content = $"Processing Orders ({count})";
+        }
 
         //loads orders to order grid
         private void RefreshNewOrderDG() {
@@ -39,11 +45,6 @@ namespace Ikrito_Fulfillment_Platform {
 
             UpdateNewOrderLabel(newOrders.Count);
             newOrderDG.ItemsSource = newOrders.ToList();
-        }
-
-        //Todo: redo button to make it double click
-        private void ShowOrderInfo(object sender, RoutedEventArgs e) {
-            
         }
 
 
@@ -59,6 +60,13 @@ namespace Ikrito_Fulfillment_Platform {
         //opens sync page
         private void openSyncPage(object sender, RoutedEventArgs e) {
             MainWindow.Instance.mainFrame.Content = ProductSyncPage.Instance;
+        }
+
+        //opens order Info page
+        private void Row_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
+            DataGridRow row = sender as DataGridRow;
+            Order order = row.Item as Order;
+            MainWindow.Instance.mainFrame.Content = new OrderInfoPage(order, this);
         }
     }
 }

@@ -2,6 +2,7 @@
 using Ikrito_Fulfillment_Platform.Models.SyncModels;
 using Ikrito_Fulfillment_Platform.Modules;
 using Ikrito_Fulfillment_Platform.Modules.Supplier;
+using Ikrito_Fulfillment_Platform.Modules.Supplier.Pretendentas;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -42,9 +43,6 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             //getting SyncProducts
             LoadSyncProducts();
             Sync = new();
-
-            //NewProductListBox.MouseDoubleClick += ChangeListBox_MouseDoubleClick;
-            //UpdatedProductListBox.MouseDoubleClick += ChangeListBox_MouseDoubleClick;
         }
 
 
@@ -187,6 +185,10 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             NewProductListBox.ItemsSource = null;
             UpdatedProductListBox.ItemsSource = null;
             ArchivedProductListBox.ItemsSource = null;
+
+            NewProductsLabel.Content = $"New Products";
+            UpdatedProductsLabel.Content = $"Updated Products";
+            ArchivedProductsLabel.Content = $"Archived Products";
         }
 
         //method that populates chnaged products listboxes
@@ -235,6 +237,12 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             NewProductListBox.ItemsSource = NewProducts;
             UpdatedProductListBox.ItemsSource = UpdatedProducts;
             ArchivedProductListBox.ItemsSource = ArchivedProducts;
+
+            NewProductsLabel.Content = $"New Products ({NewProducts.Count})";
+            UpdatedProductsLabel.Content = $"Updated Products ({UpdatedProducts.Count})";
+            ArchivedProductsLabel.Content = $"Archived Products ({ArchivedProducts.Count})";
+
+
         }
 
         //method that allows user to edit list box product by opening it in ProductEditPage
@@ -306,5 +314,34 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             PopulateChangeListBoxes(e.Result);
         }
 
+
+        //
+        // update PD Products section
+        //
+
+        //button that updates product from PD
+        private void UpdatePDButton_Click(object sender, RoutedEventArgs e) {
+            PDModule PDUpdater = new();
+
+            //running export products in background
+            BackgroundWorker PDUpdateWorker = new();
+            PDUpdateWorker.DoWork += PDUpdater.UpdatePDProducts;
+            PDUpdateWorker.RunWorkerCompleted += UpdatePDWorkerOnComplete;
+
+            progressBar.IsIndeterminate = true;
+            progressBarLabel.Text = "Updating PD products";
+
+            ClearChangesListBoxes();
+
+            PDUpdateWorker.RunWorkerAsync();
+        }
+
+        //method that opens new dialogue window that shows all changes made in database
+        private void UpdatePDWorkerOnComplete(object sender, RunWorkerCompletedEventArgs e) {
+            progressBar.IsIndeterminate = false;
+            progressBarLabel.Text = "";
+
+            PopulateChangeListBoxes(e.Result);
+        }
     }
 }

@@ -47,6 +47,10 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier {
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
         public static List<KGProductPackaging> _ProductPackagingList => _LazyProductPackagingList.Value;
 
+        private static readonly Lazy<List<Product>> _LazyProductList = new(() => BuildProductList());
+        [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
+        public static List<Product> _ProductList => _LazyProductList.Value;
+
 
         //
         // section of methods for getting data from KG API
@@ -307,6 +311,9 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier {
             newProduct.lenght = (int)Math.Round(double.Parse(PM.gross_depth) * 1000);
             newProduct.width = (int)Math.Round(double.Parse(PM.gross_width) * 1000);
 
+            //adding product added timestamp
+            newProduct.addedTimeStamp = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString();
+
             return newProduct;
         }
 
@@ -352,7 +359,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier {
         // method for updates KG Products
         public void UpdateKGProducts(object sender = null, DoWorkEventArgs e = null) {
             List<Product> DBProducts = ProductModule.GetKGProducts();
-            List<Product> APIProducts = BuildProductList();
+            List<Product> APIProducts = _ProductList;
 
             List<Product> ArchiveProducts = DBProducts.Where(p1 => APIProducts.All(p2 => p2.sku != p1.sku)).ToList();
             List<Product> NewProducts = APIProducts.Where(p1 => DBProducts.All(p2 => p2.sku != p1.sku)).ToList();
