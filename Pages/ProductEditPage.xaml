@@ -195,9 +195,11 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="100"/>
                     <ColumnDefinition Width="100"/>
+                    
                 </Grid.ColumnDefinitions>
                 <Button x:Name="BackButton" Grid.Column="0" Click="BackButton_Click" Content="Back" Padding="15,5,15,5" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                <Button x:Name="SaveButton" Grid.Column="1" Click="SaveButton_Click" Content="Save" Padding="15,5,15,5" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <Button x:Name="SaveButton" Grid.Column="1" Click="SaveButton_Click" Content="Save" Padding="15,5,15,5" HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Visible"/>
+                <Button x:Name="EditButton" Grid.Column="1" Click="EditButton_Click" Content="Edit" Padding="15,5,15,5" HorizontalAlignment="Left" VerticalAlignment="Center" Visibility="Hidden"/>
             </Grid>
 
         </Border>
