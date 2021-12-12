@@ -13,6 +13,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Files\**" />
+    <EmbeddedResource Remove="Files\**" />
+    <None Remove="Files\**" />
+    <Page Remove="Files\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Modules\Supplier\KotrynaGroup\dinamic.cs" />
   </ItemGroup>
 
@@ -28,10 +35,6 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Prism.Core" Version="8.1.97" />
     <PackageReference Include="RestSharp" Version="106.12.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Files\CSVarchive\" />
   </ItemGroup>
 
   <ItemGroup>

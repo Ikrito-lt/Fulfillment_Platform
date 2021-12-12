@@ -454,10 +454,11 @@
 
             <Grid Margin="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Button x:Name="BackButton" Click="BackButton_Click" Content="Back" Padding="15,5,15,5" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+                <Button x:Name="FulfillOrderButton" Click="FulfillOrderButton_Click" Content="Fulfill Order" Padding="15,5,15,5" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Column="1"/>
             </Grid>
 
         </Border>

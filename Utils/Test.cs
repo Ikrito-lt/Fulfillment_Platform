@@ -18,6 +18,7 @@ namespace Ikrito_Fulfillment_Platform.Utils {
             //too();
             //testTitles();
             //PDCat();
+            //testOrders();
         }
 
         private static void foo() {
@@ -46,6 +47,11 @@ namespace Ikrito_Fulfillment_Platform.Utils {
         private static void PDCat() {
             PDModule PDM = new();
             var a = PDModule._ProductList;
+        }
+
+        private static void testOrders() {
+            OrderModule orderM = new();
+            orderM.FulFillOrder(orderM.getNewOrders()[2]);
         }
     }
 }

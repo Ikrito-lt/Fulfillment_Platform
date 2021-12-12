@@ -161,7 +161,6 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier {
                 } else {
                     string error = infoResponse["error"];
                     string method = _InfoPath;
-                    //todo: make handlig for that
                     throw new Exception($"{method}: {error}");
                 }
             }
@@ -204,7 +203,6 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier {
                 } else {
                     string error = MeasurementsResponse["error"];
                     string method = _MeasurementsPath;
-                    //todo: make handlig for that
                     throw new Exception($"{method}: {error}");
                 }
             }
@@ -252,7 +250,6 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier {
                 } else {
                     string error = PackagingResponse["error"];
                     string method = _PackagingPath;
-                    //todo: make handlig for that
                     throw new Exception($"{method}: {error}");
                 }
             }

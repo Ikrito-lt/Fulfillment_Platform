@@ -2,6 +2,8 @@
 using Ikrito_Fulfillment_Platform.Modules;
 using Ikrito_Fulfillment_Platform.Pages;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,11 +18,12 @@ namespace Ikrito_Fulfillment_Platform {
         }
 
         private readonly List<Order> newOrders = new();
+        private readonly List<Order> fulfilledOrders = new();
         private readonly OrderModule newOrderGetter = new();
 
         private MainPage() {
             InitializeComponent();
-            RefreshNewOrderDG();
+            LoadAllOrders();
         }
 
         //
@@ -33,15 +36,68 @@ namespace Ikrito_Fulfillment_Platform {
         }
 
         //changes text to say howm much orders there is
-        private void UpdateProcessingOrderLabel(int count) {
-            processingOrderCountL.Content = $"Processing Orders ({count})";
+        private void UpdateFulfilledOrderLabel(int count) {
+            fulfilledCountL.Content = $"Processing Orders ({count})";
+        }
+
+        //on click method of refresh button
+        private void RefreshButton_Click(object sender, RoutedEventArgs e) {
+            LoadAllOrders();
+        }
+
+        //method for  loading products to datagrid
+        public void LoadAllOrders() {
+            BackgroundWorker OrderWorker = new();
+            OrderWorker.WorkerReportsProgress = false;
+            OrderWorker.DoWork += BGW_LoadAllOrders;
+            OrderWorker.RunWorkerCompleted += BGW_LoadAllOrdersCompleted;
+
+            //blocking refresh button and animating loading bar
+            loadingBar.IsIndeterminate = true;
+            RefreshButton.IsEnabled = false;
+            loadingbarLabel.Text = "Loading Orders";
+
+            OrderWorker.RunWorkerAsync();
+        }
+
+        // backgroud worker for loading all products
+        private void BGW_LoadAllOrders(object sender, DoWorkEventArgs e) {
+            Dictionary<string, List<Order>> result = new();
+            result.Add("newOrders", newOrderGetter.getNewOrders());
+            result.Add("fulfilledOrders", newOrderGetter.getFulfilledOrders());
+
+            e.Result = result;
+        }
+
+        // background Worker for loading all product on complete
+        private void BGW_LoadAllOrdersCompleted(object sender, RunWorkerCompletedEventArgs e) {
+            //refreshing datagrids
+            var result = e.Result as Dictionary<string, List<Order>>;
+            RefreshFulfilledOrderDG(result["fulfilledOrders"]);
+            RefreshNewOrderDG(result["newOrders"]);
+
+            //unblocking refresh button and unanimating loading bar
+            loadingBar.IsIndeterminate = false;
+            RefreshButton.IsEnabled = true;
+            loadingbarLabel.Text = "";
+            Debug.WriteLine("BGW_LoadAllOrders Finished");
         }
 
         //loads orders to order grid
-        private void RefreshNewOrderDG() {
+        private void RefreshFulfilledOrderDG(List<Order> orders) {
+            fulfilledOrderDG.ItemsSource = null;
+            fulfilledOrders.Clear();
+            fulfilledOrders.AddRange(orders);
+
+            UpdateFulfilledOrderLabel(fulfilledOrders.Count);
+            fulfilledOrderDG.ItemsSource = fulfilledOrders.ToList();
+        }
+
+        //loads orders to order grid
+        private void RefreshNewOrderDG(List<Order> orders) {
             newOrderDG.ItemsSource = null;
             newOrders.Clear();
-            newOrders.AddRange(newOrderGetter.getOrders());
+            newOrders.AddRange(orders);
 
             UpdateNewOrderLabel(newOrders.Count);
             newOrderDG.ItemsSource = newOrders.ToList();
@@ -63,10 +119,18 @@ namespace Ikrito_Fulfillment_Platform {
         }
 
         //opens order Info page
-        private void Row_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
+        private void Row_MouseDoubleClickCurrentOrder(object sender, MouseButtonEventArgs e) {
             DataGridRow row = sender as DataGridRow;
             Order order = row.Item as Order;
             MainWindow.Instance.mainFrame.Content = new OrderInfoPage(order, this);
         }
+
+        //opens order Info page
+        private void Row_MouseDoubleClickFulfilledOrder(object sender, MouseButtonEventArgs e) {
+            DataGridRow row = sender as DataGridRow;
+            Order order = row.Item as Order;
+            MainWindow.Instance.mainFrame.Content = new OrderInfoPage(order, this, false);
+        }
+
     }
 }

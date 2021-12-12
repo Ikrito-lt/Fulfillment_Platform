@@ -44,13 +44,14 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             return this;
         }
 
-        public void Insert(Dictionary<string, string> data) {
+        public string Insert(Dictionary<string, string> data) {
             string columns = string.Join(", ", data.Select(x => x.Key).ToArray());
             string values = string.Join(", ", data.Select(x => "'" + x.Value + "'").ToArray());
 
-            query = "INSERT INTO `" + tableName + "`(" + columns + ") VALUES (" + values + ")";
+            query = "INSERT INTO `" + tableName + "`(" + columns + ") VALUES (" + values + "); SELECT LAST_INSERT_ID();";
 
-            ExecuteQuery();
+            var a = ExecuteQuery();
+            return a[0]["LAST_INSERT_ID()"];
         }
 
         public Dictionary<int, Dictionary<string, string>> Get(string fields = "*", int rowLimit = 0) {

@@ -68,6 +68,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             //blocking refresh button and animating loading bar
             loadingBar.IsIndeterminate = true;
             RefreshButton.IsEnabled = false;
+            loadingbarLabel.Text = "Loading Products";
 
             worker.RunWorkerAsync();
         }
@@ -99,6 +100,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             ChangeCountLabel(TextFilteredProducts.Count);
 
             //unblocking refresh button and unanimating loading bar
+            loadingbarLabel.Text = "";
             loadingBar.IsIndeterminate = false;
             RefreshButton.IsEnabled = true;
             Debug.WriteLine("BGW_PreloadAllProducts Finished");

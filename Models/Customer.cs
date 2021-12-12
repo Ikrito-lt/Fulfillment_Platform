@@ -2,7 +2,11 @@
 
 namespace Ikrito_Fulfillment_Platform.Models {
     public class Customer {
+        //shopify_ID
         public string id { set; get; }
+        //DB_ID
+        public string DBID { set; get; }
+
         public string email { set; get; }
         public string phone { set; get; }
 
