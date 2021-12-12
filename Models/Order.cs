@@ -3,11 +3,12 @@ using System.Collections.Generic;
 
 namespace Ikrito_Fulfillment_Platform.Models {
     public class Order {
-
+        //shopify_ID
         public string id { set; get; }
+        //DB_ID
+        public string DBID { set; get; }
+
         public string contact_email { set; get; }
-
-
         public bool confirmed { set; get; }
         public string confirmedString {
             get {
@@ -19,12 +20,11 @@ namespace Ikrito_Fulfillment_Platform.Models {
             }
         }
 
-
         //date stuff
         public string created_at { set; get; }
         public string Created_date {
             get {
-                if (created_at != null) {
+                if (!string.IsNullOrEmpty(created_at)) {
                     DateTime createdDate = DateTime.Parse(created_at);
                     return createdDate.ToString("MM/dd/yyyy HH:mm");
                 } else {
@@ -36,7 +36,7 @@ namespace Ikrito_Fulfillment_Platform.Models {
         public string cancelled_at { set; get; }
         public string Canceled_date {
             get {
-                if (cancelled_at != null) {
+                if (!string.IsNullOrEmpty(cancelled_at)) {
                     DateTime CanceledDate = DateTime.Parse(cancelled_at);
                     return CanceledDate.ToString("MM/dd/yyyy HH:mm");
                 } else {
@@ -48,7 +48,7 @@ namespace Ikrito_Fulfillment_Platform.Models {
         public string closed_at { set; get; }
         public string Closed_date {
             get {
-                if (closed_at != null) {
+                if (!string.IsNullOrEmpty(closed_at)) {
                     DateTime ClosedDate = DateTime.Parse(closed_at);
                     return ClosedDate.ToString("MM/dd/yyyy HH:mm");
                 } else {
@@ -84,10 +84,11 @@ namespace Ikrito_Fulfillment_Platform.Models {
 
         public string Item_count => line_items.Count == 1 ? line_items.Count.ToString() + " Item" : line_items.Count.ToString() + " Items";
         
-
     }
 
     public class Address {
+        //DB_ID
+        public string DBID { set; get; }
 
         public string first_name { set; get; }
         public string last_name { set; get; }

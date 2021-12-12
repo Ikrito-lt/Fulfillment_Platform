@@ -2,6 +2,11 @@
 
 namespace Ikrito_Fulfillment_Platform.Models {
     public class OrderProduct {
+        //shopify_ID
+        public string id { set; get; }
+        //DB_ID
+        public string DBID { set; get; }
+        public string OrderDBID { set; get; }
 
         public string sku { set; get; }
         public string name { set; get; }
@@ -21,7 +26,6 @@ namespace Ikrito_Fulfillment_Platform.Models {
         public bool product_exists { set; get; }
         public bool taxable { set; get; }
 
-        public string id { set; get; }
         public string product_id { set; get; }
         public string variant_id { set; get; }
     }

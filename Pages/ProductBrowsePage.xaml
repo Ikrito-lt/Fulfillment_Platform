@@ -59,7 +59,10 @@
                 <Label x:Name="productCountL" Content="Product Count: " HorizontalAlignment="Left" VerticalAlignment="Center"
                        Grid.Column="0"/>
 
-                <ProgressBar x:Name="loadingBar"  Minimum="0" Maximum="1000" Height="30" VerticalAlignment="Center" Visibility="Visible" IsEnabled="True" Grid.Column="1"/>
+                <Grid Margin="0" Grid.Column="1">
+                    <ProgressBar x:Name="loadingBar"  Minimum="0" Maximum="1000" Height="30" VerticalAlignment="Center" Visibility="Visible" IsEnabled="true"/>
+                    <TextBlock x:Name="loadingbarLabel" Text="" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="5"/>
+                </Grid>
 
                 <Button x:Name="RefreshButton" Click="RefreshButton_Click" Content="Refresh" Padding="5" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="2"/>
             </Grid>
