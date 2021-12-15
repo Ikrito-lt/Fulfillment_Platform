@@ -19,6 +19,11 @@ namespace Ikrito_Fulfillment_Platform.Utils {
             //testTitles();
             //PDCat();
             //testOrders();
+            //a();
+        }
+
+        private static void a() {
+            ProductModule.MarkProductAsNew("KG-2040302-2377");
         }
 
         private static void foo() {

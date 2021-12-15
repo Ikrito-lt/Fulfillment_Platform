@@ -308,6 +308,10 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier {
             newProduct.lenght = (int)Math.Round(double.Parse(PM.gross_depth) * 1000);
             newProduct.width = (int)Math.Round(double.Parse(PM.gross_width) * 1000);
 
+            if (newProduct.height == 0) newProduct.height = 1;
+            if (newProduct.width == 0) newProduct.width = 1;
+            if (newProduct.lenght == 0) newProduct.lenght = 1;
+
             //adding product added timestamp
             newProduct.addedTimeStamp = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString();
 

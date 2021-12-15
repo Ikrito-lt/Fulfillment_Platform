@@ -9,6 +9,23 @@ namespace Ikrito_Fulfillment_Platform.Utils {
             if (string.IsNullOrEmpty(value)) return value;
             return value.Length <= maxLength ? value : value.Substring(0, maxLength);
         }
+
+        /// <summary>
+        /// for getting beggining of string until certain char (-)
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="stopAt"></param>
+        /// <returns></returns>
+        public static string GetUntilOrEmpty(this string text, string stopAt = "-") {
+            if (!String.IsNullOrWhiteSpace(text)) {
+                int charLocation = text.IndexOf(stopAt, StringComparison.Ordinal);
+
+                if (charLocation > 0) {
+                    return text.Substring(0, charLocation);
+                }
+            }
+            return String.Empty;
+        }
     }
 
     public static class ExtensionMethods {
@@ -46,18 +63,6 @@ namespace Ikrito_Fulfillment_Platform.Utils {
             DateTime dateTime = new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             dateTime = dateTime.AddSeconds(int.Parse(unixTime)).ToLocalTime();
             return dateTime.ToString("MM/dd/yyyy HH:mm");
-        }
-        
-        //for getting beggining of string until certain char (-)
-        public static string GetUntilOrEmpty(this string text, string stopAt = "-") {
-            if (!String.IsNullOrWhiteSpace(text)) {
-                int charLocation = text.IndexOf(stopAt, StringComparison.Ordinal);
-
-                if (charLocation > 0) {
-                    return text.Substring(0, charLocation);
-                }
-            }
-            return String.Empty;
         }
 
         //for getting first key by value from dictionary

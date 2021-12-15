@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 
 namespace Ikrito_Fulfillment_Platform.Models {
     public class Product {
@@ -41,27 +43,33 @@ namespace Ikrito_Fulfillment_Platform.Models {
             stock = -1;
             barcode = "NULL";
             vendor_price = -1;
-            weight = -1;
-            height = -1;
-            lenght = -1;
-            width = -1;
+            weight = 1;
+            height = 1;
+            lenght = 1;
+            width = 1;
         }
 
         private static string repairHTLMBody(string body) {
-            StringBuilder builder = new(body);
-            builder.Replace("&#xA;", "\\n");
-            builder.Replace("\"", "\\\"");
-            string s = builder.ToString();
+            //StringBuilder builder = new(body);
+            //builder.Replace("&#xA;", "\\n");
+            //builder.Replace("\"", "\\\"");
+            //string s = builder.ToString();
 
-            s = Regex.Replace(s, @"\r\n?|\n", "");
-            return s;
+            //s = Regex.Replace(s, @"\r\n?|\n", "");
+
+            StringWriter wr = new StringWriter();
+            var jsonWriter = new JsonTextWriter(wr);
+            jsonWriter.StringEscapeHandling = StringEscapeHandling.EscapeHtml;
+            new JsonSerializer().Serialize(jsonWriter, body);
+            var d = wr.ToString();
+            return d;
         }
 
         private static string repairTitle(string title) {
 
             StringBuilder builder = new(title);
             builder.Replace("\"", "\\\"");
-
+            builder.Replace("\n", "");
             return builder.ToString();
         }
 
@@ -87,9 +95,9 @@ namespace Ikrito_Fulfillment_Platform.Models {
             @$"{{
                 ""product"": {{
                     ""title"": ""{repairTitle(title)}"",
-                    ""body_html"": ""{repairHTLMBody(body_html)}"",
+                    ""body_html"": {repairHTLMBody(body_html)},
                     ""vendor"": ""{vendor}"",
-                    ""product_type"": ""{product_type}"",
+                    ""product_type"": ""{ProductTypeDisplayVal}"",
                     ""variants"": [
                         {{
                             ""price"": ""{price}"",

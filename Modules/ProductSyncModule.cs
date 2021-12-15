@@ -76,6 +76,8 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 product.shopifyVariantID = row["ShopifyVariantID"];
                 p.Add(product);
             }
+
+            p.RemoveAll(x => x.status == ProductStatus.Archived);
             return p;
         }
 
@@ -195,7 +197,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
             //to update metafields i need to get metafield IDs
             //its was ExecGet();
-            string getMetaRes = ProductClient.ExecGetParams($"products/{sync.shopifyID}/metafields.json", mainHeaders);
+            string getMetaRes = ProductClient.ExecGetHeader($"products/{sync.shopifyID}/metafields.json", mainHeaders);
             var ids = ExtractMetafieldIDs(getMetaRes);
 
             //updating height metafield

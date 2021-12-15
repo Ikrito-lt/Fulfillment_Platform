@@ -208,11 +208,11 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.Pretendentas {
             //adding product added timestamp
             newProduct.addedTimeStamp = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString();
 
-            //getting the dimensions
+            //getting the dimensions //they dont give dims
             newProduct.weight = PDproduct.weight;
-            newProduct.height = 0;
-            newProduct.lenght = 0;
-            newProduct.width = 0;
+            newProduct.height = 1;
+            newProduct.lenght = 1;
+            newProduct.width = 1;
 
             return newProduct;
         }

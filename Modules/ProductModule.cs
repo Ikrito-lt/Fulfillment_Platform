@@ -28,7 +28,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         //
         // Section with methods that are needed for product statuses
         //
-        
+
         // method taht gets product tatus for DB using product SKU
         public static string GetProductStatus(string sku) {
             DataBaseInterface db = new();
@@ -43,9 +43,32 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             return productStatus;
         }
 
-        //method that chages product status to new 
-        public static void MarkProductAsNew(string sku) {
+        /// <summary>
+        /// method that check if product is in database
+        /// </summary>
+        /// <param name="sku"></param>
+        public static bool CheckIfExistsInDB(string sku) {
+            DataBaseInterface db = new();
 
+            string tablePrefix = sku.GetUntilOrEmpty();
+            var whereGet = new Dictionary<string, Dictionary<string, string>> {
+                ["SKU"] = new Dictionary<string, string> {
+                    ["="] = sku
+                }
+            };
+            Dictionary<int, Dictionary<string, string>> result = db.Table($"{tablePrefix}_Products").Where(whereGet).Get();
+            if (result[0].ContainsValue(sku)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// method that chages product status to new 
+        /// </summary>
+        /// <param name="sku"></param>
+        public static void MarkProductAsNew(string sku) {
             DataBaseInterface db = new();
             var InsertData = new Dictionary<string, string> {
                 ["LastUpdateTime"] = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString(),
@@ -53,6 +76,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 ["SKU"] = sku
             };
             db.Table("Products").Insert(InsertData);
+
         }
 
         //method that changes product status to one passed to it (with conflict control)
@@ -83,7 +107,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 if (status == ProductStatus.Ok) {
                     updateData["Status"] = ProductStatus.Ok;
                     db.Table("Products").Where(whereUpdate).Update(updateData);
-                
+
                 } else if (status == ProductStatus.WaitingShopSync) {
                     //edge case
                     updateData["Status"] = ProductStatus.New;
@@ -101,11 +125,11 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 if (status == ProductStatus.NeedsArchiving) {
                     updateData["Status"] = ProductStatus.NeedsArchiving;
                     db.Table("Products").Where(whereUpdate).Update(updateData);
-                
+
                 } else if (status == ProductStatus.WaitingShopSync) {
                     updateData["Status"] = ProductStatus.WaitingShopSync;
                     db.Table("Products").Where(whereUpdate).Update(updateData);
-                
+
                 } else {
                     throw new Exception($"cant change product status {productStatus} -> {status}");
                 }
@@ -115,12 +139,12 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 if (status == ProductStatus.Archived) {
                     updateData["Status"] = ProductStatus.Archived;
                     db.Table("Products").Where(whereUpdate).Update(updateData);
-                
+
                 } else if (status == ProductStatus.NeedsUnArchiving) {
                     //edge case
                     updateData["Status"] = ProductStatus.WaitingShopSync;
                     db.Table("Products").Where(whereUpdate).Update(updateData);
-                
+
                 } else if (status == ProductStatus.NeedsArchiving) {
                     updateData["Status"] = ProductStatus.NeedsArchiving;
                     db.Table("Products").Where(whereUpdate).Update(updateData);
@@ -138,12 +162,17 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 if (status == ProductStatus.NeedsUnArchiving) {
                     updateData["Status"] = ProductStatus.NeedsUnArchiving;
                     db.Table("Products").Where(whereUpdate).Update(updateData);
-                
-                }else if (status == ProductStatus.WaitingShopSync) {
+
+                } else if (status == ProductStatus.WaitingShopSync) {
                     //edge case
                     updateData["Status"] = ProductStatus.NeedsUnArchiving;
                     db.Table("Products").Where(whereUpdate).Update(updateData);
-                
+
+                } else if (status == ProductStatus.NeedsArchiving) {
+                    //edge case
+                    updateData["Status"] = ProductStatus.Archived;
+                    db.Table("Products").Where(whereUpdate).Update(updateData);
+
                 } else {
                     throw new Exception($"cant change product status {productStatus} -> {status}");
                 }
@@ -168,7 +197,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 if (status == ProductStatus.WaitingShopSync) {
                     updateData["Status"] = ProductStatus.WaitingShopSync;
                     db.Table("Products").Where(whereUpdate).Update(updateData);
-                
+
                 } else {
                     throw new Exception($"cant change product status {productStatus} -> {status}");
                 }
@@ -291,12 +320,25 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
                 prod.tags.Add(tag);
             }
+
+            //getting category dicplay value
+            var catKVP = GetCategoriesDictionary();
+            prod.ProductTypeDisplayVal = catKVP[prod.product_type];
+
             return prod;
         }
 
         // method that adds new product to database (decides what table to add to using SKU prefix)
         public static void AddProductToDB(Product p) {
             DataBaseInterface db = new();
+            //checing if product exists in database if yeas unarchaving it
+            if (CheckIfExistsInDB(p.sku)) {
+                //unarchaiving
+                UpdateProductToDB(p ,ProductStatus.NeedsUnArchiving);
+                return;
+            }
+
+
             //getting categories KVP
             var CategoriesKVP = GetCategoriesDictionary();
 
@@ -363,7 +405,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 ["Title"] = p.title,
                 ["Body"] = p.body_html,
                 ["Vendor"] = p.vendor,
-                ["ProductType"] = p.product_type, 
+                ["ProductType"] = p.product_type,
                 ["Price"] = p.price.ToString(),
                 ["Stock"] = p.stock.ToString(),
                 ["Barcode"] = p.barcode,
@@ -447,7 +489,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             }
         }
 
-        
+
         //
         // Section for getting product lists from database
         //
