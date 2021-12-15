@@ -304,6 +304,10 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                     //building Product description
                     newProduct.body_html = BuildDescription(newProdDataKVP);
 
+                    if (newProduct.height == 0) newProduct.height = 1;
+                    if (newProduct.width == 0) newProduct.width = 1;
+                    if (newProduct.lenght == 0) newProduct.lenght = 1;
+
                     NewProducts.Add(newProduct);
                 }
             }

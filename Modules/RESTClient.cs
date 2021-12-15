@@ -1,5 +1,7 @@
 ﻿using RestSharp;
+using System;
 using System.Collections.Generic;
+using System.Windows;
 
 namespace Ikrito_Fulfillment_Platform.Modules {
     class RESTClient {
@@ -10,28 +12,28 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             BaseUrl = url;
         }
 
-        //todo: maybe delete it
-        //public string ExecGet(string Endpoint, Dictionary<string, string> Params) {
-        //    //setup
-        //    string RequestUrl = BaseUrl + Endpoint;
-        //    RestClient client = new(RequestUrl);
-        //    RestRequest request = new();
+        public string ExecGetHeader(string Endpoint, Dictionary<string, string> Params) {
+            //setup
+            string RequestUrl = BaseUrl + Endpoint;
+            RestClient client = new(RequestUrl);
+            RestRequest request = new();
 
-        //    //adding params to request
-        //    foreach (KeyValuePair<string, string> pair in Params) {
-        //        request.AddHeader(pair.Key, pair.Value);
-        //    }
+            //adding params to request
+            foreach (KeyValuePair<string, string> pair in Params) {
+                request.AddHeader(pair.Key, pair.Value);
+            }
 
-        //    //executing request and checking for response
-        //    var response = client.Execute(request);
-        //    if (response.IsSuccessful) {
+            //executing request and checking for response
+            var response = client.Execute(request);
+            if (response.IsSuccessful) {
 
-        //        string responseContent = response.Content;
-        //        return responseContent;
-        //    } else {
-        //        return ExecGet(Endpoint, Params);
-        //    }
-        //}
+                string responseContent = response.Content;
+                return responseContent;
+            } else {
+                MessageBox.Show("An exception just occurred Executing GET:\n" + response.StatusDescription + "\n\nResponse content:\n" + response.Content + "\n\nRequest URL:\n" + RequestUrl + "\n\nSend screenshot you know where.", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw new Exception(response.StatusDescription);
+            }
+        }
 
         public string ExecGetParams(string Endpoint, Dictionary<string, string> Params) {
             //setup
@@ -51,7 +53,9 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 string responseContent = response.Content;
                 return responseContent;
             } else {
-                throw response.ErrorException;
+
+                MessageBox.Show("An exception just occurred Executing GET:\n" + response.StatusDescription + "\n\nResponse content:\n" + response.Content + "\n\nRequest URL:\n" + RequestUrl + "\n\nSend screenshot you know where.", "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw new Exception(response.StatusDescription);
                 //return ExecGet(Endpoint, Params);
             }
         }

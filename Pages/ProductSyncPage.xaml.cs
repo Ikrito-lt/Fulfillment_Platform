@@ -118,7 +118,6 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             progressBar.IsIndeterminate = true;
             RefreshButton.IsEnabled = false;
 
-            progressBar.IsIndeterminate = true;
             progressBarLabel.Text = "Loading Sync Products from DataBase";
 
             worker.RunWorkerAsync();
@@ -162,19 +161,36 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             BackgroundWorker worker = new();
             worker.WorkerReportsProgress = true;
             worker.DoWork += Sync.ExportShopifyProducts;
-            worker.ProgressChanged += worker_ProgressChanged;
+            worker.ProgressChanged += workerSync_ProgressChanged;
+            worker.RunWorkerCompleted += BGW_SyncProductsCompleted;
 
             worker.RunWorkerAsync();
         }
 
         //method that updates progress bar during product export
-        void worker_ProgressChanged(object sender, ProgressChangedEventArgs e) {
+        void workerSync_ProgressChanged(object sender, ProgressChangedEventArgs e) {
             int progress = e.ProgressPercentage;
             progressBar.Value = progress;
             progressBarLabel.Text = $"Syncing Products To Shopify: {progress}‰";
 
         }
 
+        //BGW load sync products onComplete
+        private void BGW_SyncProductsCompleted(object sender, RunWorkerCompletedEventArgs e) {
+            //changing loading bar state
+            progressBar.Value = 0;
+            progressBar.IsIndeterminate = false;
+            progressBarLabel.Text = "";
+
+            //init DataGrid
+            productSyncDG.ItemsSource = FilteredSyncProducts;
+            //init label
+            ChangeCountLabel(FilteredSyncProducts.Count);
+            //unblocking refresh button and unanimating loading bar
+            progressBar.IsIndeterminate = false;
+            RefreshButton.IsEnabled = true;
+            Debug.WriteLine("BGW_SyncProducts Finished");
+        }
 
         //
         // Changes ListBoxes section
