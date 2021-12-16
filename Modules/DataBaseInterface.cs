@@ -27,7 +27,15 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                + ";port=" + Globals.DBServerPort + ";User Id=" + Globals.DBServerUsername + ";password=" + Globals.DBServerPassword + ";SslMode=none";
 
             connection = new MySqlConnection(connectionQuery);
-            connection.Open();
+
+            try
+            {
+                connection.Open();
+            }
+            catch (Exception ex)
+            {
+                throw ex.InnerException;
+            }
         }
 
         public DataBaseInterface Table(string name) {
