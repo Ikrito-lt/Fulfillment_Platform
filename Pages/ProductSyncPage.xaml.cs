@@ -168,7 +168,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         }
 
         //method that updates progress bar during product export
-        void workerSync_ProgressChanged(object sender, ProgressChangedEventArgs e) {
+        private void workerSync_ProgressChanged(object sender, ProgressChangedEventArgs e) {
             int progress = e.ProgressPercentage;
             progressBar.Value = progress;
             progressBarLabel.Text = $"Syncing Products To Shopify: {progress}‰";
@@ -277,11 +277,9 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
         //button that updates product from TDB
         private void UpdateTDBButton_Click(object sender, RoutedEventArgs e) {
-            TDBModule TDBUpdater = new();
-
             //running export products in background
             BackgroundWorker TDBUpdateWorker = new();
-            TDBUpdateWorker.DoWork += TDBUpdater.UpdateTDBProducts;
+            TDBUpdateWorker.DoWork += TDBModule.UpdateTDBProducts;
             TDBUpdateWorker.RunWorkerCompleted += UpdateTDBWorkerOnComplete;
 
             progressBar.IsIndeterminate = true;
@@ -307,11 +305,9 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
         //button that updates product from KG
         private void UpdateKGButton_Click(object sender, RoutedEventArgs e) {
-            KGModule KGUpdater = new();
-
             //running export products in background
             BackgroundWorker KGUpdateWorker = new();
-            KGUpdateWorker.DoWork += KGUpdater.UpdateKGProducts;
+            KGUpdateWorker.DoWork += KGModule.UpdateKGProducts;
             KGUpdateWorker.RunWorkerCompleted += UpdateKGWorkerOnComplete;
 
             progressBar.IsIndeterminate = true;
@@ -337,11 +333,9 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
         //button that updates product from PD
         private void UpdatePDButton_Click(object sender, RoutedEventArgs e) {
-            PDModule PDUpdater = new();
-
             //running export products in background
             BackgroundWorker PDUpdateWorker = new();
-            PDUpdateWorker.DoWork += PDUpdater.UpdatePDProducts;
+            PDUpdateWorker.DoWork += PDModule.UpdatePDProducts;
             PDUpdateWorker.RunWorkerCompleted += UpdatePDWorkerOnComplete;
 
             progressBar.IsIndeterminate = true;

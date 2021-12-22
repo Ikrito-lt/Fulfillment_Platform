@@ -17,14 +17,14 @@ namespace Ikrito_Fulfillment_Platform {
             Instance = new MainPage();
         }
 
-        private readonly List<Order> newOrders = new();
-        private readonly List<Order> fulfilledOrders = new();
-        private readonly OrderModule newOrderGetter = new();
-
-        private MainPage() {
+        private MainPage()
+        {
             InitializeComponent();
             LoadAllOrders();
         }
+
+        private readonly List<Order> newOrders = new();
+        private readonly List<Order> fulfilledOrders = new();
 
         //
         // Data grid manipulation section
@@ -63,8 +63,8 @@ namespace Ikrito_Fulfillment_Platform {
         // backgroud worker for loading all products
         private void BGW_LoadAllOrders(object sender, DoWorkEventArgs e) {
             Dictionary<string, List<Order>> result = new();
-            result.Add("newOrders", newOrderGetter.getNewOrders());
-            result.Add("fulfilledOrders", newOrderGetter.getFulfilledOrders());
+            result.Add("newOrders", OrderModule.getNewOrders());
+            result.Add("fulfilledOrders", OrderModule.getFulfilledOrders());
 
             e.Result = result;
         }

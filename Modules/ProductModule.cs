@@ -57,7 +57,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 }
             };
             Dictionary<int, Dictionary<string, string>> result = db.Table($"{tablePrefix}_Products").Where(whereGet).Get();
-            if (result[0].ContainsValue(sku)) {
+            if (result.Count != 0 && result[0].ContainsValue(sku)) {
                 return true;
             } else {
                 return false;

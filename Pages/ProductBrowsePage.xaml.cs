@@ -314,7 +314,9 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         //method for filtering by type
         private void TypeFilterSBox_TextChanged(object sender, TextChangedEventArgs e) {
             TextBox textBox = sender as TextBox;
-            
+
+            Dictionary<string, string> categoryKVP = ProductModule.GetCategoriesDictionary();
+
             int currentQueryLenght = textBox.Text.Length;
             if (currentQueryLenght < queryLenght) {
                 clearFilters = true;
@@ -326,11 +328,11 @@ namespace Ikrito_Fulfillment_Platform.Pages {
                 string query = textBox.Text.ToLower();
 
                 if (productDG.ItemsSource == TextFilteredProducts) {
-                    TextFilteredProducts = TextFilteredProducts.Where(p => p.product_type.ToLower().Contains(query)).ToList();
+                    TextFilteredProducts = TextFilteredProducts.Where(p => p.ProductTypeDisplayVal.ToLower().Contains(query)).ToList();
                     ChangeCountLabel(TextFilteredProducts.Count);
                     productDG.ItemsSource = TextFilteredProducts;
                 } else {
-                    TextFilteredProducts = DateFilteredFilteredProducts.Where(p => p.product_type.ToLower().Contains(query)).ToList();
+                    TextFilteredProducts = DateFilteredFilteredProducts.Where(p => p.ProductTypeDisplayVal.ToLower().Contains(query)).ToList();
                     ChangeCountLabel(TextFilteredProducts.Count);
                     productDG.ItemsSource = TextFilteredProducts;
                 }

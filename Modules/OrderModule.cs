@@ -6,14 +6,14 @@ using System;
 using System.Collections.Generic;
 
 namespace Ikrito_Fulfillment_Platform.Modules {
-    class OrderModule {
-        private readonly string getOrdersEndPoint = "https://real-europe-corp.myshopify.com/admin/api/2021-07/orders.json";
+    static class OrderModule {
+        private const string getOrdersEndPoint = Globals.getOrdersEndPoint;
         //
         // getting orders from Shopyfi API
         //
 
         //method for getting orders from Shopyfi API
-        public List<Order> getNewOrders() {
+        public static List<Order> getNewOrders() {
 
             var client = new RestClient(getOrdersEndPoint);
             var request = new RestRequest();
@@ -37,7 +37,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             }
         }
 
-        public List<Order> foo(List<Order> orders) {
+        public static List<Order> foo(List<Order> orders) {
             List<Order> bar = orders;
 
             DataBaseInterface db = new();
@@ -57,7 +57,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         //
         //
         //method for getting orders form DB
-        public List<Order> getFulfilledOrders() {
+        public static List<Order> getFulfilledOrders() {
             List<Order> FulfilledOrders = new();
             DataBaseInterface db = new();
 
@@ -108,7 +108,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         }
 
         //method for getting address from database
-        private List<OrderProduct> GetOrderProducts(string OrderID) {
+        private static List<OrderProduct> GetOrderProducts(string OrderID) {
             List<OrderProduct> orderProducts = new();
 
             DataBaseInterface db = new();
@@ -145,7 +145,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         }
 
         //method for getting address from database
-        private Address GetAddress(string addressID) {
+        private static Address GetAddress(string addressID) {
             Address address = new();
 
             DataBaseInterface db = new();
@@ -179,7 +179,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         }
 
         //method for getting customer from database
-        private Customer GetCustomer(string customerID) {
+        private static Customer GetCustomer(string customerID) {
             Customer customer = new();
 
             DataBaseInterface db = new();
@@ -216,25 +216,29 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         //
 
         //method that fulfills order i.e. saves it to DB
-        public void FulFillOrder(Order order) {
+        public static void FulFillOrder(Order order) {
+            //fetching customers from database
             DataBaseInterface db = new();
             var customers = db.Table("Customers").Get();
             List<Dictionary<string, string>> CustomerList = new();
 
+            //adding customer data into a list
             foreach (var c in customers) {
                 CustomerList.Add(c.Value);
             }
-
+            //checking if fulfil orders customer exists in database
             if (CustomerList.Exists(x => x["Shopify_ID"] == order.customer.id)) {
+                //inserting order normally
                 string customerDBID = CustomerList.Find(x => x["Shopify_ID"] == order.customer.id)["ID"];
                 InsertOrder(order, customerDBID);
             } else {
+                //inserting order and adding new customer
                 InsertOrderNewCustomer(order);
             }
         }
 
         //inserting order data to DB but customer is already in DB
-        public void InsertOrder(Order order, string customerDBID) {
+        public static void InsertOrder(Order order, string customerDBID) {
             DataBaseInterface db = new();
 
             //inserting shipping address
@@ -338,7 +342,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         }
 
         //inserting order data to DB but customer is not in DB
-        public void InsertOrderNewCustomer(Order order) {
+        public static void InsertOrderNewCustomer(Order order) {
             DataBaseInterface db = new();
 
             //inserting shipping address

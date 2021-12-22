@@ -14,26 +14,12 @@ using System.Threading.Tasks;
 namespace Ikrito_Fulfillment_Platform.Utils {
     class Test {
         public Test() {
-            //foo();
-            //too();
             //testTitles();
-            //PDCat();
-            //testOrders();
             //a();
         }
 
         private static void a() {
             ProductModule.MarkProductAsNew("KG-2040302-2377");
-        }
-
-        private static void foo() {
-            KGModule KG = new();
-            KG.UpdateKGProducts();
-        }
-
-        private static void too() {
-            TDBModule TDB = new();
-            TDB.UpdateTDBProducts();
         }
 
         private static void testTitles() {
@@ -47,16 +33,6 @@ namespace Ikrito_Fulfillment_Platform.Utils {
             }
 
             var a = titleList;
-        }
-
-        private static void PDCat() {
-            PDModule PDM = new();
-            var a = PDModule._ProductList;
-        }
-
-        private static void testOrders() {
-            OrderModule orderM = new();
-            orderM.FulFillOrder(orderM.getNewOrders()[2]);
         }
     }
 }
