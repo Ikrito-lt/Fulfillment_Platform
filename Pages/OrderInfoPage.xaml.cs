@@ -53,8 +53,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         }
 
         private void FulfillOrderButton_Click(object sender, RoutedEventArgs e) {
-            OrderModule orderM = new();
-            orderM.FulFillOrder(OrderInfo);
+            OrderModule.FulFillOrder(OrderInfo);
 
             if (PreviousPage is MainPage) {
                 (PreviousPage as MainPage).LoadAllOrders();

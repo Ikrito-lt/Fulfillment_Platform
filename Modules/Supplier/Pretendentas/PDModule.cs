@@ -13,9 +13,9 @@ using System.Windows;
 using System.Xml;
 
 namespace Ikrito_Fulfillment_Platform.Modules.Supplier.Pretendentas {
-    class PDModule {
+    static class PDModule {
 
-        public const string PDApiKey = Globals.PDApiKey;
+        private const string PDApiKey = Globals.PDApiKey;
 
         private static readonly Dictionary<string, string> _APIParams = new Dictionary<string, string>()
         {
@@ -30,11 +30,11 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.Pretendentas {
 
         private static readonly Lazy<List<PDCategory>> _LazyCategoriesXML = new(() => GetPDCategories());
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
-        public static List<PDCategory> _CategoriesXML => _LazyCategoriesXML.Value;
+        private static List<PDCategory> _CategoriesXML => _LazyCategoriesXML.Value;
 
         private static readonly Lazy<List<PDManufacturer>> _LazyManufacturerList = new(() => GetPDManufacturerList());
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
-        public static List<PDManufacturer> _ManufList => _LazyManufacturerList.Value;
+        private static List<PDManufacturer> _ManufList => _LazyManufacturerList.Value;
 
         private static readonly Lazy<List<Product>> _LazyProductList = new(() => BuildProductList());
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
@@ -222,7 +222,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.Pretendentas {
         //
 
         // method for updates KG Products
-        public void UpdatePDProducts(object sender = null, DoWorkEventArgs e = null) {
+        public static void UpdatePDProducts(object sender = null, DoWorkEventArgs e = null) {
             List<Product> DBProducts = ProductModule.GetPDProducts();
             List<Product> APIProducts = _ProductList;
 
@@ -342,13 +342,6 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.Pretendentas {
                 e.Result = changes;
             }
         }
-
-
-
-
-
-
-
 
     }
 }

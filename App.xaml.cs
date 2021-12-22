@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Threading;
 
 namespace Ikrito_Fulfillment_Platform {
     /// <summary>
@@ -14,8 +15,10 @@ namespace Ikrito_Fulfillment_Platform {
             Ikrito_Fulfillment_Platform.MainWindow.Instance.Show();
         }
 
-        private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e) {
-            MessageBox.Show("An exception just occurred:\n" + e.Exception.Message + "\n\nSend screenshot you know where.", "Unhandled Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+        private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e) {
+            MessageBox.Show("An exception just occurred:\n" + e.Exception.Message + 
+                            "\n\nSend screenshot you know where.",
+                            "Unhandled Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             e.Handled = true;
         }
     }

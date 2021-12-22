@@ -87,7 +87,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             DescBox.Text = EditableProduct.body_html;
             VendorBox.Text = EditableProduct.vendor;
             BarcodeBox.Text = EditableProduct.barcode;
-            SKULabel.Content = EditableProduct.sku;
+            SKUBox.Text = EditableProduct.sku;
 
             PriceBox.Text = EditableProduct.price.ToString();
             VendorPriceBox.Text = EditableProduct.vendor_price.ToString();
@@ -184,6 +184,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         private void SaveButton_Click(object sender, RoutedEventArgs e) {
             saveProduct();
             ProductSaved = true;
+            exitPage();
         }
 
         //method for editng page if it is readonly

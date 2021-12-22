@@ -11,19 +11,18 @@ using System.Windows;
 namespace Ikrito_Fulfillment_Platform.Modules {
     class ProductSyncModule {
 
-        public static string BaseUrl = "https://real-europe-corp.myshopify.com/admin/api/2021-10/";
-        public static string ProductPath = "products.json";
+        private static string BaseUrl = "https://real-europe-corp.myshopify.com/admin/api/2021-10/";
+        private static string ProductPath = "products.json";
 
         public List<SyncProduct> syncProducts;
         private readonly RESTClient ProductClient;
-        readonly Dictionary<string, string> mainHeaders = new(){
+        private readonly Dictionary<string, string> mainHeaders = new(){
                 {"Authorization", Globals.getBase64ShopifyCreds()}
             };
 
         public ProductSyncModule() {
             ProductClient = new(BaseUrl);
         }
-
 
         //
         // General method section
@@ -168,7 +167,8 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 ProductModule.ChangeProductStatus(sync.sku, ProductStatus.Archived);
             }
             catch (Exception ex) {
-                MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.", "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.", 
+                    "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -275,7 +275,8 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 ProductModule.ChangeProductStatus(sync.sku, ProductStatus.Ok);
             }
             catch (Exception ex) {
-                MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.", "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.",
+                                "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

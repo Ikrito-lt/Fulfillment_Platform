@@ -38,5 +38,8 @@ namespace Ikrito_Fulfillment_Platform.Utils {
         public const string DBServerPassword = "p3gD2Z5fbztX8Uh";
         public const string DefaultDB = "main";
 
+
+        //shopify orders endpoint
+        public const string getOrdersEndPoint = "https://real-europe-corp.myshopify.com/admin/api/2021-07/orders.json";
     }
 }

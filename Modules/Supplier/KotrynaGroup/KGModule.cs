@@ -13,9 +13,9 @@ using System.Threading.Tasks;
 using System.Windows;
 
 namespace Ikrito_Fulfillment_Platform.Modules.Supplier {
-    class KGModule {
-        public const string KGApi = Globals.KGApi;
-        public const string KGApiKey = Globals.KGApiKey;
+    static class KGModule {
+        private const string KGApi = Globals.KGApi;
+        private const string KGApiKey = Globals.KGApiKey;
 
         private const string _BaseUrl = KGApi + "data/";
         private static readonly Dictionary<string, string> _APIHeader = new Dictionary<string, string>()
@@ -33,23 +33,23 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier {
 
         private static readonly Lazy<List<KGAssortmentProduct>> _LazyAssortmentList = new(() => GetAssortmentList());
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
-        public static List<KGAssortmentProduct> _AssortmentList => _LazyAssortmentList.Value;
+        private static List<KGAssortmentProduct> _AssortmentList => _LazyAssortmentList.Value;
 
         private static readonly Lazy<List<KGProductInfo>> _LazyProductInfoList = new(() => GetProductInfoList());
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
-        public static List<KGProductInfo> _ProductInfoList => _LazyProductInfoList.Value;
+        private static List<KGProductInfo> _ProductInfoList => _LazyProductInfoList.Value;
 
         private static readonly Lazy<List<KGProductMeasurements>> _LazyProductMeasurementsList = new(() => GetProductMeasurementsList());
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
-        public static List<KGProductMeasurements> _ProductMeasurementsList => _LazyProductMeasurementsList.Value;
+        private static List<KGProductMeasurements> _ProductMeasurementsList => _LazyProductMeasurementsList.Value;
 
         private static readonly Lazy<List<KGProductPackaging>> _LazyProductPackagingList = new(() => GetProductPackagingList());
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
-        public static List<KGProductPackaging> _ProductPackagingList => _LazyProductPackagingList.Value;
+        private static List<KGProductPackaging> _ProductPackagingList => _LazyProductPackagingList.Value;
 
         private static readonly Lazy<List<Product>> _LazyProductList = new(() => BuildProductList());
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
-        public static List<Product> _ProductList => _LazyProductList.Value;
+        private static List<Product> _ProductList => _LazyProductList.Value;
 
 
         //
@@ -261,7 +261,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier {
         // Section for getting Product form KG API
         //
 
-        // buulding List<Product> from KG api data
+        // bulding List<Product> from KG api data
         public static List<Product> BuildProductList() {
             List<Product> pList = new();
 
@@ -358,7 +358,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier {
         //
 
         // method for updates KG Products
-        public void UpdateKGProducts(object sender = null, DoWorkEventArgs e = null) {
+        public static void UpdateKGProducts(object sender = null, DoWorkEventArgs e = null) {
             List<Product> DBProducts = ProductModule.GetKGProducts();
             List<Product> APIProducts = _ProductList;
 
