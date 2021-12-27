@@ -295,7 +295,6 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             }
 
             //getting images faster
-            db = new();
             whereCond = new Dictionary<string, Dictionary<string, string>> {
                 ["ProductID"] = new Dictionary<string, string> {
                     ["="] = prod.DBID.ToString()
@@ -308,7 +307,6 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             }
 
             //getting tags faster
-            db = new();
             whereCond = new Dictionary<string, Dictionary<string, string>> {
                 ["ProductID"] = new Dictionary<string, string> {
                     ["="] = prod.DBID.ToString()
@@ -325,6 +323,16 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             var catKVP = GetCategoriesDictionary();
             prod.ProductTypeDisplayVal = catKVP[prod.product_type];
 
+            //getting product status
+            whereCond = new Dictionary<string, Dictionary<string, string>>
+            {
+                ["SKU"] = new Dictionary<string, string>
+                {
+                    ["="] = sku
+                }
+            };
+            result = db.Table("Products").Where(whereCond).Get();
+            prod.status = result[0]["Status"];
             return prod;
         }
 
