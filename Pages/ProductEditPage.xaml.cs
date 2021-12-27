@@ -177,7 +177,19 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
         //method that chnages page to product browse page
         private void exitPage() {
-            MainWindow.Instance.mainFrame.Content = PreviousPage;
+            if (PreviousPage is ProductBrowsePage) {
+                var page = PreviousPage as ProductBrowsePage;
+                int index = page.AllProducts.FindIndex(x => x.sku == EditableProduct.sku);
+                
+                Product editedProduct = ProductModule.GetProduct(EditableProduct.sku);
+
+                page.AllProducts[index] = editedProduct;
+                page.RefreshDataGrid();
+                MainWindow.Instance.mainFrame.Content = page;
+            }
+            else {
+                MainWindow.Instance.mainFrame.Content = PreviousPage;
+            }
         }
 
         //save button on click method

@@ -16,7 +16,7 @@ using System.Windows.Input;
 namespace Ikrito_Fulfillment_Platform.Pages {
     public partial class ProductBrowsePage : Page {
 
-        private ReadOnlyCollection<Product> AllProducts;
+        public List<Product> AllProducts;
         private List<Product> StatusFilteredProducts;
         private List<Product> DateFilteredFilteredProducts;
         private List<Product> TextFilteredProducts;
@@ -88,7 +88,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             }
 
             //putting products in their grids
-            AllProducts = TempProductList.AsReadOnly();
+            AllProducts = TempProductList;
             StatusFilteredProducts = AllProducts.ToList();
             DateFilteredFilteredProducts = AllProducts.ToList();
             TextFilteredProducts = AllProducts.ToList();
@@ -104,6 +104,20 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             loadingBar.IsIndeterminate = false;
             RefreshButton.IsEnabled = true;
             Debug.WriteLine("BGW_PreloadAllProducts Finished");
+        }
+
+        //refresh datagrid
+        public void RefreshDataGrid() {
+            //putting products in their grids
+            StatusFilteredProducts = AllProducts.ToList();
+            DateFilteredFilteredProducts = AllProducts.ToList();
+            TextFilteredProducts = AllProducts.ToList();
+
+            //init DataGrid
+            productDG.ItemsSource = TextFilteredProducts;
+
+            //init label
+            ChangeCountLabel(TextFilteredProducts.Count);
         }
 
         //changes label to reflect product count in datagrid
