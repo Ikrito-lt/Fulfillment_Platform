@@ -13,8 +13,10 @@ using System.Windows.Input;
 
 //todo: when double ckicking any of these list boxes you edit product and then delete if from list box
 
-namespace Ikrito_Fulfillment_Platform.Pages {
-    public partial class ProductSyncPage : Page {
+namespace Ikrito_Fulfillment_Platform.Pages
+{
+    public partial class ProductSyncPage : Page
+    {
 
         private readonly ProductSyncModule Sync;
         private List<SyncProduct> SyncProducts;
@@ -22,11 +24,14 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
         private int queryLenght = 0;
         private bool _clearFilters;
-        public bool clearFilters {
+        public bool clearFilters
+        {
             get { return _clearFilters; }
-            set {
+            set
+            {
                 _clearFilters = value;
-                if (value == true) {
+                if (value == true)
+                {
                     deleteFilters();
                 }
             }
@@ -34,11 +39,13 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
         //shit makes it a singleton
         public static ProductSyncPage Instance { get; private set; }
-        static ProductSyncPage() {
+        static ProductSyncPage()
+        {
             Instance = new ProductSyncPage();
         }
 
-        private ProductSyncPage() {
+        private ProductSyncPage()
+        {
             InitializeComponent();
             //getting SyncProducts
             LoadSyncProducts();
@@ -51,53 +58,67 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         //
 
         //method that changes datagrid count label text value
-        private void ChangeCountLabel(int count) {
+        private void ChangeCountLabel(int count)
+        {
             SyncProductCountL.Content = "Sync Product Count: " + count.ToString();
         }
 
         //method removes SKU filter from the data grid
-        private void deleteFilters() {
+        private void deleteFilters()
+        {
             SKUFilterSBox.Clear();
             queryLenght = 0;
             FilteredSyncProducts = SyncProducts;
         }
 
         //method for fitering by sku
-        private void SKUFilterSBox_TextChanged(object sender, TextChangedEventArgs e) {
+        private void SKUFilterSBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
             TextBox textBox = sender as TextBox;
 
             int currentQueryLenght = textBox.Text.Length;
-            if (currentQueryLenght < queryLenght) {
+            if (currentQueryLenght < queryLenght)
+            {
                 clearFilters = true;
-            } else {
+            }
+            else
+            {
                 queryLenght = currentQueryLenght;
             }
 
-            if (textBox.Text.Length >= 2) {
+            if (textBox.Text.Length >= 2)
+            {
                 string query = textBox.Text.ToLower();
 
-                if (productSyncDG.ItemsSource == FilteredSyncProducts) {
+                if (productSyncDG.ItemsSource == FilteredSyncProducts)
+                {
                     FilteredSyncProducts = FilteredSyncProducts.Where(p => p.sku.ToLower().Contains(query)).ToList();
                     ChangeCountLabel(FilteredSyncProducts.Count);
                     productSyncDG.ItemsSource = FilteredSyncProducts;
-                } else {
+                }
+                else
+                {
                     FilteredSyncProducts = SyncProducts.Where(p => p.sku.ToLower().Contains(query)).ToList();
                     ChangeCountLabel(FilteredSyncProducts.Count);
                     productSyncDG.ItemsSource = FilteredSyncProducts;
                 }
-            } else if (textBox.Text.Length == 0) {
+            }
+            else if (textBox.Text.Length == 0)
+            {
                 ChangeCountLabel(SyncProducts.Count);
                 productSyncDG.ItemsSource = SyncProducts;
             }
         }
 
         //button that goes back to main screen
-        private void BackButton_Click(object sender, RoutedEventArgs e) {
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
             MainWindow.Instance.mainFrame.Content = MainPage.Instance;
         }
 
         //button that refreshes the data grid
-        private void RefreshButton_Click(object sender, RoutedEventArgs e) {
+        private void RefreshButton_Click(object sender, RoutedEventArgs e)
+        {
             deleteFilters();
             LoadSyncProducts();
         }
@@ -108,7 +129,8 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         //
 
         //method that creates BGW to load Sync products
-        private void LoadSyncProducts() {
+        private void LoadSyncProducts()
+        {
             BackgroundWorker worker = new();
             worker.WorkerReportsProgress = false;
             worker.DoWork += BGW_PreloadSyncProducts;
@@ -124,13 +146,15 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         }
 
         //BGW load sync products
-        private void BGW_PreloadSyncProducts(object sender, DoWorkEventArgs e) {
+        private void BGW_PreloadSyncProducts(object sender, DoWorkEventArgs e)
+        {
             List<SyncProduct> products = ProductSyncModule.GetSyncProducts();
             e.Result = products;
         }
 
         //BGW load sync products onComplete
-        private void BGW_PreloadSyncProductsCompleted(object sender, RunWorkerCompletedEventArgs e) {
+        private void BGW_PreloadSyncProductsCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
             //changing loading bar state
             progressBar.IsIndeterminate = false;
             progressBarLabel.Text = "";
@@ -150,13 +174,56 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             Debug.WriteLine("BGW_PreloadAllProducts Finished");
         }
 
+        //
+        // set stock 0 to archival
+        //
+
+        private void Stock0ArchiveBtn_Click(object sender, RoutedEventArgs e)
+        {
+            SetStock0Archival();
+        }
+
+        //method that creates BGW to load Sync products
+        private void SetStock0Archival()
+        {
+            BackgroundWorker worker = new();
+            worker.WorkerReportsProgress = true;
+            worker.DoWork += Sync.MarkOutOfStockNeedsArchival;
+            worker.ProgressChanged += BGW_SetStock_ProgressChanged;
+            worker.RunWorkerCompleted += BGW_SyncProductsCompleted;
+
+            RefreshButton.IsEnabled = false;
+
+            progressBarLabel.Text = "Setting Stock 0 Products to Archival";
+
+            worker.RunWorkerAsync();
+        }
+
+        //method that updates progress bar during product export
+        private void BGW_SetStock_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            int progress = e.ProgressPercentage;
+            progressBar.Value = progress;
+            progressBarLabel.Text = $"Setting Stock 0 Products to Archival: {progress}‰";
+        }
+
+        //BGW load sync products onComplete
+        private void BGW__SetStock_Completed(object sender, RunWorkerCompletedEventArgs e)
+        {
+            //changing loading bar state
+            progressBar.Value = 0;
+            progressBarLabel.Text = "";
+
+            LoadSyncProducts();
+        }
 
         //
         // shopify sync section 
         //
 
         //button that starts shopify sync
-        private void SyncProducts_Click(object sender, RoutedEventArgs e) {
+        private void SyncProducts_Click(object sender, RoutedEventArgs e)
+        {
             //running export products in background
             BackgroundWorker worker = new();
             worker.WorkerReportsProgress = true;
@@ -164,11 +231,16 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             worker.ProgressChanged += workerSync_ProgressChanged;
             worker.RunWorkerCompleted += BGW_SyncProductsCompleted;
 
+            RefreshButton.IsEnabled = false;
+
+            progressBarLabel.Text = "Syncing Products To Shopify: 0‰";
+
             worker.RunWorkerAsync();
         }
 
         //method that updates progress bar during product export
-        private void workerSync_ProgressChanged(object sender, ProgressChangedEventArgs e) {
+        private void workerSync_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
             int progress = e.ProgressPercentage;
             progressBar.Value = progress;
             progressBarLabel.Text = $"Syncing Products To Shopify: {progress}‰";
@@ -176,7 +248,8 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         }
 
         //BGW load sync products onComplete
-        private void BGW_SyncProductsCompleted(object sender, RunWorkerCompletedEventArgs e) {
+        private void BGW_SyncProductsCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
             //changing loading bar state
             progressBar.Value = 0;
             progressBar.IsIndeterminate = false;
@@ -190,6 +263,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             progressBar.IsIndeterminate = false;
             RefreshButton.IsEnabled = true;
             Debug.WriteLine("BGW_SyncProducts Finished");
+            LoadSyncProducts();
         }
 
         //
@@ -197,7 +271,8 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         //
 
         //method taht clears changes window
-        private void ClearChangesListBoxes() {
+        private void ClearChangesListBoxes()
+        {
             NewProductListBox.ItemsSource = null;
             UpdatedProductListBox.ItemsSource = null;
             ArchivedProductListBox.ItemsSource = null;
@@ -208,7 +283,8 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         }
 
         //method that populates chnaged products listboxes
-        private void PopulateChangeListBoxes(object Changes) {
+        private void PopulateChangeListBoxes(object Changes)
+        {
             Dictionary<string, object> ChangesKVP = Changes as Dictionary<string, object>;
 
             //converting chnages to list to lists of productchanges
@@ -220,7 +296,8 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             List<ProductChange> ArchivedProducts = new();
             List<ProductChange> UpdatedProducts = new();
 
-            foreach (var NP in newProducts) {
+            foreach (var NP in newProducts)
+            {
                 ProductChange NewProduct = new();
                 NewProduct.SKU = NP["SKU"];
                 NewProduct.PriceVendor = NP["PriceVendor"];
@@ -231,7 +308,8 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
                 NewProducts.Add(NewProduct);
             }
-            foreach (var AP in archivedProducts) {
+            foreach (var AP in archivedProducts)
+            {
                 ProductChange InvalidProduct = new();
                 InvalidProduct.SKU = AP["SKU"];
                 InvalidProduct.PriceVendor = AP["PriceVendor"];
@@ -242,7 +320,8 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
                 ArchivedProducts.Add(InvalidProduct);
             }
-            foreach (var UP in updatedProducts) {
+            foreach (var UP in updatedProducts)
+            {
                 ProductChange ChangedProduct = new();
                 ChangedProduct.SKU = UP.Key;
                 ChangedProduct.Changes = UP.Value;
@@ -262,8 +341,10 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         }
 
         //method that allows user to edit list box product by opening it in ProductEditPage
-        private void ChangeListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
-            if (sender is ListBoxItem listboxItem) {
+        private void ChangeListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is ListBoxItem listboxItem)
+            {
                 ProductChange productChange = listboxItem.Content as ProductChange;
                 Product editProduct = ProductModule.GetProduct(productChange.SKU);
                 MainWindow.Instance.mainFrame.Content = new ProductEditPage(editProduct, this);
@@ -276,7 +357,8 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         //
 
         //button that updates product from TDB
-        private void UpdateTDBButton_Click(object sender, RoutedEventArgs e) {
+        private void UpdateTDBButton_Click(object sender, RoutedEventArgs e)
+        {
             //running export products in background
             BackgroundWorker TDBUpdateWorker = new();
             TDBUpdateWorker.DoWork += TDBModule.UpdateTDBProducts;
@@ -291,7 +373,8 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         }
 
         //method that opens new dialogue window that shows all changes made in database
-        private void UpdateTDBWorkerOnComplete(object sender, RunWorkerCompletedEventArgs e) {
+        private void UpdateTDBWorkerOnComplete(object sender, RunWorkerCompletedEventArgs e)
+        {
             progressBar.IsIndeterminate = false;
             progressBarLabel.Text = "";
 
@@ -304,7 +387,8 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         //
 
         //button that updates product from KG
-        private void UpdateKGButton_Click(object sender, RoutedEventArgs e) {
+        private void UpdateKGButton_Click(object sender, RoutedEventArgs e)
+        {
             //running export products in background
             BackgroundWorker KGUpdateWorker = new();
             KGUpdateWorker.DoWork += KGModule.UpdateKGProducts;
@@ -319,7 +403,8 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         }
 
         //method that opens new dialogue window that shows all changes made in database
-        private void UpdateKGWorkerOnComplete(object sender, RunWorkerCompletedEventArgs e) {
+        private void UpdateKGWorkerOnComplete(object sender, RunWorkerCompletedEventArgs e)
+        {
             progressBar.IsIndeterminate = false;
             progressBarLabel.Text = "";
 
@@ -332,7 +417,8 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         //
 
         //button that updates product from PD
-        private void UpdatePDButton_Click(object sender, RoutedEventArgs e) {
+        private void UpdatePDButton_Click(object sender, RoutedEventArgs e)
+        {
             //running export products in background
             BackgroundWorker PDUpdateWorker = new();
             PDUpdateWorker.DoWork += PDModule.UpdatePDProducts;
@@ -347,11 +433,14 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         }
 
         //method that opens new dialogue window that shows all changes made in database
-        private void UpdatePDWorkerOnComplete(object sender, RunWorkerCompletedEventArgs e) {
+        private void UpdatePDWorkerOnComplete(object sender, RunWorkerCompletedEventArgs e)
+        {
             progressBar.IsIndeterminate = false;
             progressBarLabel.Text = "";
 
             PopulateChangeListBoxes(e.Result);
         }
+
+
     }
 }

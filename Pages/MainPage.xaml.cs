@@ -37,7 +37,7 @@ namespace Ikrito_Fulfillment_Platform {
 
         //changes text to say howm much orders there is
         private void UpdateFulfilledOrderLabel(int count) {
-            fulfilledCountL.Content = $"Processing Orders ({count})";
+            fulfilledCountL.Content = $"Fulfiled Orders ({count})";
         }
 
         //on click method of refresh button

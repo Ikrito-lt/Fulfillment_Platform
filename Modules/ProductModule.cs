@@ -130,7 +130,15 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                     updateData["Status"] = ProductStatus.WaitingShopSync;
                     db.Table("Products").Where(whereUpdate).Update(updateData);
 
-                } else {
+                }
+                else if (status == ProductStatus.NeedsArchiving)
+                {
+                    updateData["Status"] = ProductStatus.NeedsArchiving;
+                    db.Table("Products").Where(whereUpdate).Update(updateData);
+
+                }
+                else
+                {
                     throw new Exception($"cant change product status {productStatus} -> {status}");
                 }
 
@@ -198,7 +206,26 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                     updateData["Status"] = ProductStatus.WaitingShopSync;
                     db.Table("Products").Where(whereUpdate).Update(updateData);
 
-                } else {
+                } else if (status == ProductStatus.NeedsArchiving)
+                {
+                    updateData["Status"] = ProductStatus.NeedsArchiving;
+                    db.Table("Products").Where(whereUpdate).Update(updateData);
+
+                }
+                else if (status == ProductStatus.WaitingShopSync)
+                {
+                    updateData["Status"] = ProductStatus.NeedsUnArchiving;
+                    db.Table("Products").Where(whereUpdate).Update(updateData);
+
+                }
+                else if (status == ProductStatus.Ok)
+                {
+                    updateData["Status"] = ProductStatus.NeedsUnArchiving;
+                    db.Table("Products").Where(whereUpdate).Update(updateData);
+
+                }
+                else
+                {
                     throw new Exception($"cant change product status {productStatus} -> {status}");
                 }
 
