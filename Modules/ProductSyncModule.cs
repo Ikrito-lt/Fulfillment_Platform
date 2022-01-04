@@ -85,15 +85,41 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         // Export sync product section
         //
 
-        //method that is used by the Export sync product worker to send each product to ExportSyncProduct and track exporting progress
-        public void ExportShopifyProducts(object sender, DoWorkEventArgs e) {
+        //method sets out of stock products as NeedsArchiving
+        public void MarkOutOfStockNeedsArchival(object sender, DoWorkEventArgs e)
+        {
             List<SyncProduct> syncProducts = GetSyncProducts();
+            syncProducts.AddRange(GetSyncProducts(ProductStatus.Ok));
             int count = syncProducts.Count;
-            for (int i = 0; i < count; i++) {
+            for (int i = 0; i < count; i++)
+            {
+                Product p = ProductModule.GetProduct(syncProducts[i].sku);
+                if (p.stock <= 0)
+                {
+                    ProductModule.ChangeProductStatus(syncProducts[i].sku, ProductStatus.NeedsArchiving);
+                }
 
                 int progress = i * 1000 / count;
                 (sender as BackgroundWorker).ReportProgress(progress);
+            }
+        }
+
+
+        //
+        // Export sync product section
+        //
+
+        //method that is used by the Export sync product worker to send each product to ExportSyncProduct and track exporting progress
+        public void ExportShopifyProducts(object sender, DoWorkEventArgs e)
+        {
+            List<SyncProduct> syncProducts = GetSyncProducts();
+            int count = syncProducts.Count;
+            for (int i = 0; i < count; i++)
+            {
                 ExportShopifyProduct(syncProducts[i]);
+
+                int progress = i * 1000 / count;
+                (sender as BackgroundWorker).ReportProgress(progress);
             }
         }
 
@@ -106,7 +132,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             } else if (sync.status == ProductStatus.NeedsArchiving) {
                 ArchiveShopifyProduct(sync);
             } else if (sync.status == ProductStatus.NeedsUnArchiving) {
-                UnArchiveShopifyProduct(sync);
+                UpdateShopifyProduct(p, sync);
             } else if (sync.status == ProductStatus.WaitingShopSync) {
                 UpdateShopifyProduct(p, sync);
             } else {

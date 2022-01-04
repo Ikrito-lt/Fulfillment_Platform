@@ -97,6 +97,7 @@ namespace Ikrito_Fulfillment_Platform.Models {
                     ""title"": ""{repairTitle(title)}"",
                     ""body_html"": {repairHTLMBody(body_html)},
                     ""vendor"": ""{vendor}"",
+                    ""status"": ""active"",
                     ""product_type"": ""{ProductTypeDisplayVal}"",
                     ""variants"": [
                         {{
