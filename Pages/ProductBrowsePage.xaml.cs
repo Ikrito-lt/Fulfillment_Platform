@@ -411,5 +411,9 @@ namespace Ikrito_Fulfillment_Platform.Pages
             ResetTextFilters();
         }
 
+        private void BulkCategoryEditButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
