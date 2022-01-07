@@ -143,7 +143,7 @@
                                 <ColumnDefinition Width="5*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="SKU" Margin="3" Padding="1"/>
-                            <TextBox Grid.Column="1" x:Name="SKUFilterSBox" Visibility="Visible" VerticalAlignment="Center" TextChanged="SKUFilterSBox_TextChanged"/>
+                            <TextBox Grid.Column="1" x:Name="SKUFilterSBox" Visibility="Visible" VerticalAlignment="Center" KeyUp="SKUFilterSBox_KeyUp"/>
                         </Grid>
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
@@ -170,7 +170,7 @@
                                 <ColumnDefinition Width="5*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="Title" Margin="3" Padding="1"/>
-                            <TextBox Grid.Column="1" x:Name="TitleFilterSBox" Visibility="Visible" VerticalAlignment="Center" TextChanged="TitleFilterSBox_TextChanged"/>
+                            <TextBox Grid.Column="1" x:Name="TitleFilterSBox" Visibility="Visible" VerticalAlignment="Center" KeyUp="TitleFilterSBox_KeyUp"/>
                         </Grid>
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
@@ -207,7 +207,7 @@
                                 <ColumnDefinition Width="2*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="Vendor" Margin="3" Padding="1"/>
-                            <TextBox Grid.Column="1" x:Name="VendorFilterSBox" Visibility="Visible" VerticalAlignment="Center" HorizontalAlignment="Stretch" TextChanged="VendorFilterSBox_TextChanged"/>
+                            <TextBox Grid.Column="1" x:Name="VendorFilterSBox" Visibility="Visible" VerticalAlignment="Center" HorizontalAlignment="Stretch" KeyUp="VendorFilterSBox_KeyUp"/>
                         </Grid>
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
@@ -234,7 +234,8 @@
                                 <ColumnDefinition Width="5*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="Type" Margin="3" Padding="1"/>
-                            <TextBox Grid.Column="1" x:Name="TypeFilterSBox" Visibility="Visible" VerticalAlignment="Center" TextChanged="TypeFilterSBox_TextChanged"/>
+                            <ComboBox Grid.Column="1" x:Name="TypeFilterCBox" Visibility="Visible" VerticalAlignment="Center" KeyUp="TypeFilterCBox_KeyUp" StaysOpenOnEdit="True"
+                                     IsTextSearchEnabled="True" IsEditable="True" />
                         </Grid>
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
