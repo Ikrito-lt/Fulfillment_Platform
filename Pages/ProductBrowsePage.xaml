@@ -283,7 +283,7 @@
                     <ColumnDefinition Width="200"/>
                 </Grid.ColumnDefinitions>
                 <Button x:Name="BackButton" Click="BackButton_Click" Content="Back" Padding="15,5,15,5" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0"/>
-                <Button x:Name="BulkCategoryEditButton" Click="BulkCategoryEditButton_Click" Content="Bulk Category Edit" Padding="15,5,15,5" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="2"/>
+                <Button x:Name="BulkCategoryEditButton" Click="BulkCategoryEditButton_Click" Content="Bulk Category Edit" Padding="15,5,15,5" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="2" IsEnabled="False"/>
             </Grid>
 
         </Border>
