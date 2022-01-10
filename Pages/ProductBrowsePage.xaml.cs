@@ -30,7 +30,6 @@ namespace Ikrito_Fulfillment_Platform.Pages
         private Dictionary<string, string> CategoryKVP => _LazyCategoryKVP.Value;
 
 
-        private int queryLenght = 0;
         private bool _clearFilters;
         public bool clearFilters
         {
@@ -80,6 +79,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
             loadingBar.IsIndeterminate = true;
             RefreshButton.IsEnabled = false;
             loadingbarLabel.Text = "Loading Products";
+            BulkCategoryEditButton.IsEnabled = false;
 
             worker.RunWorkerAsync();
         }
@@ -119,6 +119,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
             loadingBar.IsIndeterminate = false;
             RefreshButton.IsEnabled = true;
             Debug.WriteLine("BGW_PreloadAllProducts Finished");
+            BulkCategoryEditButton.IsEnabled = true;
         }
 
         //refresh datagrid
@@ -167,6 +168,16 @@ namespace Ikrito_Fulfillment_Platform.Pages
             DataGridRow row = sender as DataGridRow;
             Product product = row.Item as Product;
             MainWindow.Instance.mainFrame.Content = new ProductEditPage(product, this, false);
+        }
+
+        /// <summary>
+        /// This method changes page displayed to BulkProduct edit Page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BulkCategoryEditButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow.Instance.mainFrame.Content = new ProductBulkEditPage(AllProducts, CategoryKVP, this);
         }
 
 
@@ -397,7 +408,6 @@ namespace Ikrito_Fulfillment_Platform.Pages
             SKUFilterSBox.Clear();
             VendorFilterSBox.Clear();
 
-            queryLenght = 0;
             TextFilteredProducts = DateFilteredFilteredProducts.ToList();
             DataGridSource = TextFilteredProducts;
             productDG.ItemsSource = DataGridSource;
@@ -409,11 +419,6 @@ namespace Ikrito_Fulfillment_Platform.Pages
         private void RemoveFilters_Click(object sender, RoutedEventArgs e)
         {
             ResetTextFilters();
-        }
-
-        private void BulkCategoryEditButton_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }
