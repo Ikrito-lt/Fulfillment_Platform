@@ -20,6 +20,7 @@ namespace Ikrito_Fulfillment_Platform {
         private MainPage()
         {
             InitializeComponent();
+            //openBrowserPage(new object(), new RoutedEventArgs());
             LoadAllOrders();
         }
 
