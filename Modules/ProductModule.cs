@@ -7,6 +7,34 @@ using System.Windows;
 namespace Ikrito_Fulfillment_Platform.Modules {
     static class ProductModule {
 
+        //
+        // section for product category manipulation
+        //
+
+        /// <summary>
+        /// changes product category in the database
+        /// </summary> 
+        /// <param name="sku"></param>
+        /// <param name="newCategoryID"></param>
+        public static void ChangeProductCategory(string sku, string newCategoryID) {
+            DataBaseInterface db = new();
+            string tablePrefix = sku.GetUntilOrEmpty();
+
+            //updating *_Products table
+            var updateData = new Dictionary<string, string>
+            {
+                ["ProductType"] = newCategoryID
+            };
+            var whereUpdate = new Dictionary<string, Dictionary<string, string>>
+            {
+                ["SKU"] = new Dictionary<string, string>
+                {
+                    ["="] = sku
+                }
+            };
+            db.Table($"{tablePrefix}_Products").Where(whereUpdate).Update(updateData);
+        }
+
         //gets Categories KVP from database
         public static Dictionary<string, string> GetCategoriesDictionary() {
             //getting category KVP from database
