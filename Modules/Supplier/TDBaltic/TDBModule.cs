@@ -111,6 +111,10 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
             // adding new Products
             foreach (Product newProduct in NewProducts) {
+
+                string skipSKU = "TDB-Network-M2".ToLower();
+                if (newProduct.sku.ToLower() == skipSKU) continue;
+
                 ProductModule.AddProductToDB(newProduct);
 
                 Dictionary<string, string> newChange = new();
