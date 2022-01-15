@@ -11,7 +11,7 @@ using System.Windows;
 namespace Ikrito_Fulfillment_Platform.Modules {
     class ProductSyncModule {
 
-        private static string BaseUrl = "https://real-europe-corp.myshopify.com/admin/api/2021-10/";
+        private static string BaseUrl = "https://ikrito.myshopify.com/admin/api/2021-10/";
         private static string ProductPath = "products.json";
 
         public List<SyncProduct> syncProducts;
