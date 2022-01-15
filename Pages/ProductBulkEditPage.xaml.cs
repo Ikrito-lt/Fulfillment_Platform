@@ -34,8 +34,11 @@ namespace Ikrito_Fulfillment_Platform.Pages
             PreviousPage = prevPage;
             Products = products;
             CategoryKVP = categoryKVP;
+
+            //sorting lists
             PossibleTypes = CategoryKVP.Values.ToList();
-            PossibleVendorTypes = GetVendorTypes();
+            PossibleTypes = PossibleTypes.OrderBy(x => x).ToList();
+            PossibleVendorTypes = GetVendorTypes().OrderBy(x => x).ToList();
             ListBoxSource = new();
 
             InitTypes();
