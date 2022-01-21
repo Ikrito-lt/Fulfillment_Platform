@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Ikrito_Fulfillment_Platform.Modules.Supplier {
+namespace Ikrito_Fulfillment_Platform.Modules.Supplier.KotrynaGroup {
     static class KGModule {
         private const string KGApi = Globals.KGApi;
         private const string KGApiKey = Globals.KGApiKey;

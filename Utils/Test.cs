@@ -1,21 +1,19 @@
 ﻿using Ikrito_Fulfillment_Platform.Models;
 using Ikrito_Fulfillment_Platform.Modules;
-using Ikrito_Fulfillment_Platform.Modules.Supplier;
-using Ikrito_Fulfillment_Platform.Modules.Supplier.Pretendentas;
-using Newtonsoft.Json;
-using System;
+using Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Ikrito_Fulfillment_Platform.Utils {
+namespace Ikrito_Fulfillment_Platform.Utils
+{
     class Test {
         public Test() {
+            testBeFancyImport();
             //testTitles();
             //a();
+        }
+
+        public static void testBeFancyImport() {
+            var s = BFModule._VendorProductWithVariantsList;
         }
 
         private static void a() {

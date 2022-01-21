@@ -228,7 +228,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
             //updating height metafield
             if (ids.ContainsKey("dimensions")) {
-                string heightVal = $"\"{{\\\"unit\\\": \\\"cm\\\",\\\"value\\\": {p.height}}}\"";
+                string heightVal = $"\"{{\\\"unit\\\": \\\"mm\\\",\\\"value\\\": {p.height}}}\"";
                 string heightBody = $@"{{""metafield"": {{""value"": {heightVal} }}}}";
                 IRestResponse heightRes = ProductClient.ExecPutProd($"products/{sync.shopifyID}/metafields/{ids["dimensions"]}.json", mainHeaders, heightBody);
                 if (!heightRes.IsSuccessful) {
@@ -247,7 +247,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
             //updating lenght metafield
             if (ids.ContainsKey("lenght")) {
-                string lenghtVal = $"\"{{\\\"unit\\\": \\\"cm\\\",\\\"value\\\": {p.lenght}}}\"";
+                string lenghtVal = $"\"{{\\\"unit\\\": \\\"mm\\\",\\\"value\\\": {p.lenght}}}\"";
                 string lenghtBody = $@"{{""metafield"": {{""value"": {lenghtVal} }}}}";
                 IRestResponse lenghtRes = ProductClient.ExecPutProd($"products/{sync.shopifyID}/metafields/{ids["lenght"]}.json", mainHeaders, lenghtBody);
                 if (!lenghtRes.IsSuccessful) {
@@ -266,7 +266,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
             //updating width metafield
             if (ids.ContainsKey("width")) {
-                string widthVal = $"\"{{\\\"unit\\\": \\\"cm\\\",\\\"value\\\": {p.width}}}\"";
+                string widthVal = $"\"{{\\\"unit\\\": \\\"mm\\\",\\\"value\\\": {p.width}}}\"";
                 string widthBody = $@"{{""metafield"": {{""value"": {widthVal} }}}}";
                 IRestResponse widthRes = ProductClient.ExecPutProd($"products/{sync.shopifyID}/metafields/{ids["width"]}.json", mainHeaders, widthBody);
                 if (!widthRes.IsSuccessful) {

@@ -31,12 +31,18 @@ namespace Ikrito_Fulfillment_Platform.Utils {
         //Pretendentas API Creds
         public const string PDApiKey = "390ad56b495968e4679e2be66ed507ad";
 
-        // AWS mySQL DB creds
+        // AWS mySQL DB creds (main)
         public const string DBServer = "ikrito-db-v2.c175yaycfw7i.eu-central-1.rds.amazonaws.com";
         public const string DBServerPort = "3306";
         public const string DBServerUsername = "admin";
         public const string DBServerPassword = "p3gD2Z5fbztX8Uh";
         public const string DefaultDB = "main";
+
+        // AWS mySQL DB creds (webShop)
+        public const string DBServerWS = "ikrito-db-v2.c175yaycfw7i.eu-central-1.rds.amazonaws.com";
+        public const string DBServerPortWS = "3306";
+        public const string DBServerUsernameWS = "webShop";
+        public const string DBServerPasswordWS = "HUVVU6UgKaEdvZ";
 
 
         //shopify orders endpoint

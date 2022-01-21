@@ -1,8 +1,9 @@
 ﻿using Ikrito_Fulfillment_Platform.Models;
 using Ikrito_Fulfillment_Platform.Models.SyncModels;
 using Ikrito_Fulfillment_Platform.Modules;
-using Ikrito_Fulfillment_Platform.Modules.Supplier;
+using Ikrito_Fulfillment_Platform.Modules.Supplier.KotrynaGroup;
 using Ikrito_Fulfillment_Platform.Modules.Supplier.Pretendentas;
+using Ikrito_Fulfillment_Platform.Modules.Supplier.TDBaltic;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;

@@ -290,6 +290,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
         private void InitTypeComboBox()
         {
             List<string> typeDisplayValList = CategoryKVP.Values.ToList();
+            typeDisplayValList.Sort();
             TypeFilterCBox.ItemsSource = typeDisplayValList;
         }
 

@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows;
 using System.Xml;
 
-namespace Ikrito_Fulfillment_Platform.Modules {
+namespace Ikrito_Fulfillment_Platform.Modules.Supplier.TDBaltic {
     static class TDBModule {
 
         private static readonly Dictionary<string, string> _APIParams = Globals._TDBAPIParams;
@@ -23,6 +23,11 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 "LongDesc",
                 "ShortDesc",
                 "Marketing Text"
+        };
+
+        private static readonly List<string> SKUBlackList = new()
+        {
+            "TDB-Network-M2".ToLower()
         };
 
         private const string _BaseUrl = "http://tdonline.tdbaltic.net/pls/PROD/";
@@ -112,9 +117,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             // adding new Products
             foreach (Product newProduct in NewProducts) {
 
-                string skipSKU = "TDB-Network-M2".ToLower();
-                if (newProduct.sku.ToLower() == skipSKU) continue;
-
+                if (SKUBlackList.Contains(newProduct.sku.ToLower())) continue;
                 ProductModule.AddProductToDB(newProduct);
 
                 Dictionary<string, string> newChange = new();
