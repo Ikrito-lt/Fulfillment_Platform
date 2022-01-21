@@ -1,5 +1,6 @@
 ﻿using Ikrito_Fulfillment_Platform.Models;
 using Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy.Models;
+using Ikrito_Fulfillment_Platform.Utils;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -40,9 +41,13 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
         public static List<BFProductWithVariants> _VendorProductWithVariantsList => _LazyVendorProductWithVariantsList.Value;
 
-        //private static readonly Lazy<List<Product>> _LazyProductList = new(() => BuildProductList());
-        //[System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
-        //private static List<Product> _ProductList => _LazyProductList.Value;
+        private static readonly Lazy<List<Product>> _LazyProductList = new(() => BuildProductList());
+        [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
+        private static List<Product> _ProductList => _LazyProductList.Value;
+
+        private static readonly Lazy<List<Product>> _LazyProductWithVariantsList = new(() => BuildProductWithVariantsList());
+        [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
+        private static List<Product> _ProductWithVariantsList => _LazyProductList.Value;
 
 
         //
@@ -205,70 +210,72 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy
         }
 
 
-        //    //
-        //    // Section for getting Product form KG API
-        //    //
+        //
+        // Section for getting Product lists from BF product models
+        //
 
-        //    // bulding List<Product> from KG api data
-        //    public static List<Product> BuildProductList()
-        //    {
-        //        List<Product> pList = new();
+        // bulding List of basic products 
+        public static List<Product> BuildProductList()
+        {
+            List<Product> pList = new();
+            foreach (BFProduct product in _VendorProductList)
+            {
+                //IMPORTANT: if product doesnt have an id we arent selling it. (it  doesnt get added to our database)
+                string ProductID = product.model;
+                if (!string.IsNullOrEmpty(ProductID))
+                {
+                    //add to list
+                    pList.Add(BuildProduct(product));
+                }
+                else {
+                    continue;
+                }
+            }
+            return pList;
+        }
 
-        //        foreach (KGAssortmentProduct AP in _AssortmentList)
-        //        {
-        //            string ProductID = AP.axapta_id;
-        //            KGProductInfo PI = _ProductInfoList.Find(x => x.axapta_id == ProductID);
-        //            KGProductMeasurements PM = _ProductMeasurementsList.Find(x => x.axapta_id == ProductID);
-        //            KGProductPackaging PP = _ProductPackagingList.Find(x => x.axapta_id == ProductID);
+        // method that builds Product form API data
+        public static Product BuildProduct(BFProduct bfProduct)
+        {
+            Product newProduct = new();
 
-        //            pList.Add(BuildProduct(AP, PI, PM, PP));
-        //        }
+            newProduct.title = SQLUtil.SQLSafeString(PI.title);
+            newProduct.body_html = BuildDescription(PI.properties);
 
-        //        return pList;
-        //    }
+            string newVendor = PI.brand;
+            if (string.IsNullOrEmpty(newVendor))
+            {
+                newVendor = "NULL_ERROR";
+            }
 
-        //    // method that builds Product form API data
-        //    public static Product BuildProduct(KGAssortmentProduct AP, KGProductInfo PI, KGProductMeasurements PM, KGProductPackaging PP)
-        //    {
-        //        Product newProduct = new();
+            newProduct.vendor = SQLUtil.SQLSafeString(newVendor);
+            newProduct.product_type = "Not-Assigned";
+            newProduct.price = AP.base_price;
+            newProduct.sku = _SKUPrefix + AP.axapta_id;
+            newProduct.stock = AP.qty;
+            newProduct.barcode = AP.ean;
+            newProduct.vendor_price = AP.price;
 
-        //        newProduct.title = SQLUtil.SQLSafeString(PI.title);
-        //        newProduct.body_html = BuildDescription(PI.properties);
+            newProduct.productTypeVendor = PI.vendorType;
 
-        //        string newVendor = PI.brand;
-        //        if (string.IsNullOrEmpty(newVendor))
-        //        {
-        //            newVendor = "NULL_ERROR";
-        //        }
+            newProduct.images = PI.images;
+            //no tags in new products;
 
-        //        newProduct.vendor = SQLUtil.SQLSafeString(newVendor);
-        //        newProduct.product_type = "Not-Assigned";
-        //        newProduct.price = AP.base_price;
-        //        newProduct.sku = _SKUPrefix + AP.axapta_id;
-        //        newProduct.stock = AP.qty;
-        //        newProduct.barcode = AP.ean;
-        //        newProduct.vendor_price = AP.price;
+            //getting the dimensions
+            newProduct.weight = double.Parse(PM.net_weight);
+            newProduct.height = (int)Math.Round(double.Parse(PM.gross_height) * 1000);
+            newProduct.lenght = (int)Math.Round(double.Parse(PM.gross_depth) * 1000);
+            newProduct.width = (int)Math.Round(double.Parse(PM.gross_width) * 1000);
 
-        //        newProduct.productTypeVendor = PI.vendorType;
+            if (newProduct.height == 0) newProduct.height = 1;
+            if (newProduct.width == 0) newProduct.width = 1;
+            if (newProduct.lenght == 0) newProduct.lenght = 1;
 
-        //        newProduct.images = PI.images;
-        //        //no tags in new products;
+            //adding product added timestamp
+            newProduct.addedTimeStamp = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString();
 
-        //        //getting the dimensions
-        //        newProduct.weight = double.Parse(PM.net_weight);
-        //        newProduct.height = (int)Math.Round(double.Parse(PM.gross_height) * 1000);
-        //        newProduct.lenght = (int)Math.Round(double.Parse(PM.gross_depth) * 1000);
-        //        newProduct.width = (int)Math.Round(double.Parse(PM.gross_width) * 1000);
-
-        //        if (newProduct.height == 0) newProduct.height = 1;
-        //        if (newProduct.width == 0) newProduct.width = 1;
-        //        if (newProduct.lenght == 0) newProduct.lenght = 1;
-
-        //        //adding product added timestamp
-        //        newProduct.addedTimeStamp = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString();
-
-        //        return newProduct;
-        //    }
+            return newProduct;
+        }
 
         //    //method that builds description for the product uisng datasheet KVP
         //    private static string BuildDescription(Dictionary<string, string> prodDataKVP)
