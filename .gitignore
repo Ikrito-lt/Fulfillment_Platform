@@ -361,3 +361,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Modules/Supplier/BeFancy/Models/ikritolt_products_2021-12-30_09_42.xml

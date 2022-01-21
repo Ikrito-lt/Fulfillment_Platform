@@ -62,7 +62,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy
             return productXML;
         }
 
-        //downloads product catalogue from KG API
+        //downloads products without variants from BF
         private static List<BFProduct> GetVendorProductList()
         {
             var productList = _VendorXML.SelectNodes("/root/products/product");
@@ -124,7 +124,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy
             return vendorProducts;
         }
 
-        //downloads product catalogue from KG API
+        //downloads products with variants from BF
         private static List<BFProductWithVariants> GetVendorProductWithVariantsList()
         {
             var productList = _VendorXML.SelectNodes("/root/products/product");
