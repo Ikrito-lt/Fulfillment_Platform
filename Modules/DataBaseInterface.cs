@@ -12,7 +12,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         private string tableName;
         private string where;
 
-        private readonly bool debug = true;
+        private readonly bool debug = false;
 
         public DataBaseInterface(string hostname, string username, string password, string database, int port = 3306) {
             String connectionQuery = "Server=" + hostname + ";Database=" + database
