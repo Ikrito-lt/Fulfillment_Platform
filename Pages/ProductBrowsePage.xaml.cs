@@ -99,7 +99,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
             var TempProductList = e.Result as List<Product>;
             foreach (var TempProduct in TempProductList)
             {
-                TempProduct.ProductTypeDisplayVal = CategoryKVP[TempProduct.product_type];
+                TempProduct.ProductTypeDisplayVal = CategoryKVP[TempProduct.productTypeID];
             }
 
             //putting products in their grids

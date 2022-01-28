@@ -86,14 +86,15 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             TitleBox.Text = EditableProduct.title;
             DescBox.Text = EditableProduct.body_html;
             VendorBox.Text = EditableProduct.vendor;
-            BarcodeBox.Text = EditableProduct.barcode;
-            SKUBox.Text = EditableProduct.sku;
+            //todo: repair this
+            //BarcodeBox.Text = EditableProduct.barcode;
+            //SKUBox.Text = EditableProduct.sku;
 
-            PriceBox.Text = EditableProduct.price.ToString();
-            VendorPriceBox.Text = EditableProduct.vendor_price.ToString();
-            WeightBox.Text = EditableProduct.weight.ToString();
+            //PriceBox.Text = EditableProduct.price.ToString();
+            //VendorPriceBox.Text = EditableProduct.vendor_price.ToString();
+            //WeightBox.Text = EditableProduct.weight.ToString();
 
-            StockBox.Text = EditableProduct.stock.ToString();
+            //StockBox.Text = EditableProduct.stock.ToString();
             HeightBox.Text = EditableProduct.height.ToString();
             WidthBox.Text = EditableProduct.width.ToString();
             LenghtBox.Text = EditableProduct.lenght.ToString();
@@ -127,7 +128,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
             //adding category KVP to product type combobox
             ProductTypeComboBox.ItemsSource = CategoryKVP;
-            ProductTypeComboBox.SelectedValue = EditableProduct.product_type;
+            ProductTypeComboBox.SelectedValue = EditableProduct.productTypeID;
             ProductTypeComboBox.SelectionChanged += ProductTypeComboBox_SelectionChanged;
         }
 
@@ -135,24 +136,26 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         private Product saveProduct() {
             Product newProduct = new();
 
-            //adding string values
-            newProduct.DBID = EditableProduct.DBID;
-            newProduct.title = TitleBox.Text;
-            newProduct.body_html = DescBox.Text;
-            newProduct.vendor = VendorBox.Text;
-            newProduct.barcode = BarcodeBox.Text;
-            newProduct.sku = EditableProduct.sku;
+            //todo:repair this
 
-            //saving product type selection category
-            newProduct.product_type = ProductTypeComboBox.SelectedValue.ToString();
+            ////adding string values
+            //newProduct.DBID = EditableProduct.DBID;
+            //newProduct.title = TitleBox.Text;
+            //newProduct.body_html = DescBox.Text;
+            //newProduct.vendor = VendorBox.Text;
+            //newProduct.barcode = BarcodeBox.Text;
+            //newProduct.sku = EditableProduct.sku;
 
-            //adding doubles
-            newProduct.price = double.Parse(PriceBox.Text);
-            newProduct.vendor_price = double.Parse(VendorPriceBox.Text);
-            newProduct.weight = double.Parse(WeightBox.Text);
+            ////saving product type selection category
+            //newProduct.product_type = ProductTypeComboBox.SelectedValue.ToString();
 
-            //adding ints
-            newProduct.stock = int.Parse(StockBox.Text);
+            ////adding doubles
+            //newProduct.price = double.Parse(PriceBox.Text);
+            //newProduct.vendor_price = double.Parse(VendorPriceBox.Text);
+            //newProduct.weight = double.Parse(WeightBox.Text);
+
+            ////adding ints
+            //newProduct.stock = int.Parse(StockBox.Text);
             newProduct.height = int.Parse(HeightBox.Text);
             newProduct.width = int.Parse(WidthBox.Text);
             newProduct.lenght = int.Parse(LenghtBox.Text);

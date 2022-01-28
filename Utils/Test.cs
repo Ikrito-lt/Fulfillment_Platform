@@ -7,17 +7,13 @@ namespace Ikrito_Fulfillment_Platform.Utils
 {
     class Test {
         public Test() {
-            testBeFancyImport();
+            //testBeFancyImport();
             //testTitles();
             //a();
         }
 
         public static void testBeFancyImport() {
             var s = BFModule._VendorProductWithVariantsList;
-        }
-
-        private static void a() {
-            ProductModule.MarkProductAsNew("KG-2040302-2377");
         }
 
         private static void testTitles() {

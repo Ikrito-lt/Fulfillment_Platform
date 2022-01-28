@@ -79,22 +79,22 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         }
 
         static void saveProdToDB(Product p) {
-            DataBaseInterface db = new();
-            foreach (string tag in p.tags) {
-                var insertData = new Dictionary<string, string> {
-                    ["ProductID"] = p.DBID.ToString(),
-                    ["Tag"] = tag.Trim()
-                };
+            //DataBaseInterface db = new();
+            //foreach (string tag in p.tags) {
+            //    var insertData = new Dictionary<string, string> {
+            //        ["ProductID"] = p.DBID.ToString(),
+            //        ["Tag"] = tag.Trim()
+            //    };
 
-                db.Table("TDB_Tags").Insert(insertData);
+            //    db.Table("TDB_Tags").Insert(insertData);
 
-                try {
-                    ProductModule.ChangeProductStatus(p.sku, ProductStatus.WaitingShopSync);
-                }
-                catch (Exception ex) {
-                    MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.", "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
+            //    try {
+            //        ProductModule.ChangeProductStatus(p.sku, ProductStatus.WaitingShopSync);
+            //    }
+            //    catch (Exception ex) {
+            //        MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.", "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            //    }
+            //}
         }
     }
 }
