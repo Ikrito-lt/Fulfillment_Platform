@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Ikrito_Fulfillment_Platform.Utils {
+namespace Ikrito_Fulfillment_Platform.Models {
     static class ProductStatus {
         //when adding new statuses update productMOdule ChangeProductStatus method
 

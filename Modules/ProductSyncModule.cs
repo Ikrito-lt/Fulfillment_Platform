@@ -5,6 +5,7 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 
@@ -57,23 +58,23 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             var result = db.Table("Products").Where(whereCond).Get();
 
             foreach (var row in result.Values) {
-                SyncProduct product = new();
+                SyncProduct syncProduct = new();
 
-                product.id = int.Parse(row["ID"]);
+                syncProduct.sku = row["SKU"];
+                syncProduct.productType_ID = row["ProductType_ID"];
+                syncProduct.status = row["Status"];
+                syncProduct.lastUpdateTime = row["LastUpdateTime"].UnixTimeToSrt();
+                syncProduct.shopifyID = row["ShopifyID"];
+                syncProduct.inventoryItemID = row["ShopifyInventoryItemID"];
+                syncProduct.shopifyVariantID = row["ShopifyVariantID"];
 
-
-                product.sku = row["SKU"];
-                product.status = row["Status"];
                 if (row["LastSyncTime"] == null || row["LastSyncTime"] == "") {
-                    product.lastSyncTime = "Not In Shop";
+                    syncProduct.lastSyncTime = "Not In Shop";
                 } else {
-                    product.lastSyncTime = row["LastSyncTime"].UnixTimeToSrt();
+                    syncProduct.lastSyncTime = row["LastSyncTime"].UnixTimeToSrt();
                 }
-                product.lastUpdateTime = row["LastUpdateTime"].UnixTimeToSrt();
-                product.shopifyID = row["ShopifyID"];
-                product.inventoryItemID = row["ShopifyInventoryItemID"];
-                product.shopifyVariantID = row["ShopifyVariantID"];
-                p.Add(product);
+
+                p.Add(syncProduct);
             }
 
             p.RemoveAll(x => x.status == ProductStatus.Archived);
@@ -94,7 +95,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             for (int i = 0; i < count; i++)
             {
                 Product p = ProductModule.GetProduct(syncProducts[i].sku);
-                if (p.stock <= 0)
+                if (p.productVariants.All(x => x.stock < 0))
                 {
                     ProductModule.ChangeProductStatus(syncProducts[i].sku, ProductStatus.NeedsArchiving);
                 }

@@ -37,7 +37,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.Pretendentas
 
         private static readonly Lazy<List<Product>> _LazyProductList = new(() => BuildProductList());
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
-        public static List<Product> _ProductList => _LazyProductList.Value;
+        public static List<Product> ProductList => _LazyProductList.Value;
 
 
         //
@@ -160,58 +160,58 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.Pretendentas
         private static Product BuildProduct(PDProduct PDproduct) {
             Product newProduct = new();
 
-            newProduct.VendorID = PDproduct.id;
+            //newProduct.VendorID = PDproduct.id;
 
-            newProduct.title = SQLUtil.SQLSafeString(PDproduct.title);
-            newProduct.body_html = SQLUtil.SQLSafeString(PDproduct.descriptionHTML);
+            //newProduct.title = SQLUtil.SQLSafeString(PDproduct.title);
+            //newProduct.body_html = SQLUtil.SQLSafeString(PDproduct.descriptionHTML);
 
-            //getting vendor
-            List<PDManufacturer> ManufList = _ManufList;
-            PDManufacturer ProdManuf = ManufList.Find(x => x.id == PDproduct.manufacturer_id);
-            newProduct.vendor = SQLUtil.SQLSafeString(ProdManuf.title);
+            ////getting vendor
+            //List<PDManufacturer> ManufList = _ManufList;
+            //PDManufacturer ProdManuf = ManufList.Find(x => x.id == PDproduct.manufacturer_id);
+            //newProduct.vendor = SQLUtil.SQLSafeString(ProdManuf.title);
 
-            newProduct.product_type = "Not-Assigned";
-            newProduct.price = PriceGenModule.GenNewPrice(PDproduct.price);
-            newProduct.sku = _SKUPrefix + PDproduct.artnum;
-            newProduct.barcode = PDproduct.ean;
-            newProduct.vendor_price = PDproduct.price;
+            //newProduct.product_type = "Not-Assigned";
+            //newProduct.price = PriceGenModule.GenNewPrice(PDproduct.price);
+            //newProduct.sku = _SKUPrefix + PDproduct.artnum;
+            //newProduct.barcode = PDproduct.ean;
+            //newProduct.vendor_price = PDproduct.price;
 
-            newProduct.productTypeVendor = PDproduct.vandorType;
+            //newProduct.productTypeVendor = PDproduct.vandorType;
 
-            //setting product stock
-            //todo: stock has types ask Darka
-            if (PDproduct.stock.ContainsKey("type")) {
-                if (PDproduct.stock["type"] == "morethan" || PDproduct.stock["type"] == "total") {
-                    newProduct.stock = int.Parse(PDproduct.stock["amount"]);
-                } else {
-                    newProduct.stock = -1;
-                }
-            } else {
-                newProduct.stock = int.Parse(PDproduct.stock["amount"]);
-            }
+            ////setting product stock
+            ////todo: stock has types ask Darka
+            //if (PDproduct.stock.ContainsKey("type")) {
+            //    if (PDproduct.stock["type"] == "morethan" || PDproduct.stock["type"] == "total") {
+            //        newProduct.stock = int.Parse(PDproduct.stock["amount"]);
+            //    } else {
+            //        newProduct.stock = -1;
+            //    }
+            //} else {
+            //    newProduct.stock = int.Parse(PDproduct.stock["amount"]);
+            //}
 
-            //adding images
-            dynamic imagesDynamic = PDproduct.pictures;
-            imagesDynamic = imagesDynamic.big;
-            if (imagesDynamic.Type == JTokenType.Array) {
-                foreach (dynamic img in imagesDynamic) {
-                    string imageURL = img.ToString();
-                    newProduct.images.Add(imageURL);
-                }
-            } else if (imagesDynamic.Type == JTokenType.String) {
-                string imageURL = imagesDynamic.Value.ToString();
-                newProduct.images.Add(imageURL);
-            }
+            ////adding images
+            //dynamic imagesDynamic = PDproduct.pictures;
+            //imagesDynamic = imagesDynamic.big;
+            //if (imagesDynamic.Type == JTokenType.Array) {
+            //    foreach (dynamic img in imagesDynamic) {
+            //        string imageURL = img.ToString();
+            //        newProduct.images.Add(imageURL);
+            //    }
+            //} else if (imagesDynamic.Type == JTokenType.String) {
+            //    string imageURL = imagesDynamic.Value.ToString();
+            //    newProduct.images.Add(imageURL);
+            //}
 
 
-            //adding product added timestamp
-            newProduct.addedTimeStamp = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString();
+            ////adding product added timestamp
+            //newProduct.addedTimeStamp = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString();
 
-            //getting the dimensions //they dont give dims
-            newProduct.weight = PDproduct.weight;
-            newProduct.height = 1;
-            newProduct.lenght = 1;
-            newProduct.width = 1;
+            ////getting the dimensions //they dont give dims
+            //newProduct.weight = PDproduct.weight;
+            //newProduct.height = 1;
+            //newProduct.lenght = 1;
+            //newProduct.width = 1;
 
             return newProduct;
         }
@@ -222,124 +222,124 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.Pretendentas
 
         // method for updates KG Products
         public static void UpdatePDProducts(object sender = null, DoWorkEventArgs e = null) {
-            List<Product> DBProducts = ProductModule.GetPDProducts();
-            List<Product> APIProducts = _ProductList;
+            //List<Product> DBProducts = ProductModule.GetPDProducts();
+            //List<Product> APIProducts = _ProductList;
 
-            List<Product> ArchiveProducts = DBProducts.Where(p1 => APIProducts.All(p2 => p2.sku != p1.sku)).ToList();
-            List<Product> NewProducts = APIProducts.Where(p1 => DBProducts.All(p2 => p2.sku != p1.sku)).ToList();
-            List<Product> UpdateProducts = APIProducts.Where(p1 => NewProducts.All(p2 => p2.sku != p1.sku)).ToList();
+            //List<Product> ArchiveProducts = DBProducts.Where(p1 => APIProducts.All(p2 => p2.sku != p1.sku)).ToList();
+            //List<Product> NewProducts = APIProducts.Where(p1 => DBProducts.All(p2 => p2.sku != p1.sku)).ToList();
+            //List<Product> UpdateProducts = APIProducts.Where(p1 => NewProducts.All(p2 => p2.sku != p1.sku)).ToList();
 
-            //remove dublicate skus from newProd list
-            var a = NewProducts.GroupBy(x => x.sku.ToLower()).Where(x => x.LongCount() > 1).ToList();
-            a.ForEach(x => NewProducts.RemoveAll(y => y.sku.ToLower() == x.Key));
+            ////remove dublicate skus from newProd list
+            //var a = NewProducts.GroupBy(x => x.sku.ToLower()).Where(x => x.LongCount() > 1).ToList();
+            //a.ForEach(x => NewProducts.RemoveAll(y => y.sku.ToLower() == x.Key));
 
-            Dictionary<string, Dictionary<string, string>> appliedChanges = new();          //for updates
-            List<Dictionary<string, string>> newChanges = new();                            //for new products
-            List<Dictionary<string, string>> archivedChanges = new();                       //for archived Products                     
+            //Dictionary<string, Dictionary<string, string>> appliedChanges = new();          //for updates
+            //List<Dictionary<string, string>> newChanges = new();                            //for new products
+            //List<Dictionary<string, string>> archivedChanges = new();                       //for archived Products                     
 
-            //archiving products
-            foreach (Product archiveProduct in ArchiveProducts) {
-                try {
-                    ProductModule.ChangeProductStatus(archiveProduct.sku, ProductStatus.NeedsArchiving);
+            ////archiving products
+            //foreach (Product archiveProduct in ArchiveProducts) {
+            //    try {
+            //        ProductModule.ChangeProductStatus(archiveProduct.sku, ProductStatus.NeedsArchiving);
 
-                    Dictionary<string, string> archiveChange = new();
-                    archiveChange.Add("SKU", archiveProduct.sku);
-                    archiveChange.Add("PriceVendor", archiveProduct.vendor_price.ToString());
-                    archiveChange.Add("Stock", archiveProduct.stock.ToString());
-                    archiveChange.Add("Barcode", archiveProduct.barcode);
-                    archiveChange.Add("Vendor", archiveProduct.vendor);
-                    archiveChange.Add("VendorType", archiveProduct.productTypeVendor);
-                    archivedChanges.Add(archiveChange);
-                }
-                catch (Exception ex) {
-                    MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.", "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
-            }
+            //        Dictionary<string, string> archiveChange = new();
+            //        archiveChange.Add("SKU", archiveProduct.sku);
+            //        archiveChange.Add("PriceVendor", archiveProduct.vendor_price.ToString());
+            //        archiveChange.Add("Stock", archiveProduct.stock.ToString());
+            //        archiveChange.Add("Barcode", archiveProduct.barcode);
+            //        archiveChange.Add("Vendor", archiveProduct.vendor);
+            //        archiveChange.Add("VendorType", archiveProduct.productTypeVendor);
+            //        archivedChanges.Add(archiveChange);
+            //    }
+            //    catch (Exception ex) {
+            //        MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.", "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            //    }
+            //}
 
-            // adding new Products
-            foreach (Product newProduct in NewProducts) {
-                ProductModule.AddProductToDB(newProduct);
+            //// adding new Products
+            //foreach (Product newProduct in NewProducts) {
+            //    ProductModule.AddProductToDB(newProduct);
 
-                Dictionary<string, string> newChange = new();
-                newChange.Add("SKU", newProduct.sku);
-                newChange.Add("PriceVendor", newProduct.vendor_price.ToString());
-                newChange.Add("Stock", newProduct.stock.ToString());
-                newChange.Add("Barcode", newProduct.barcode);
-                newChange.Add("Vendor", newProduct.vendor);
-                newChange.Add("VendorType", newProduct.productTypeVendor);
-                newChanges.Add(newChange);
-            }
+            //    Dictionary<string, string> newChange = new();
+            //    newChange.Add("SKU", newProduct.sku);
+            //    newChange.Add("PriceVendor", newProduct.vendor_price.ToString());
+            //    newChange.Add("Stock", newProduct.stock.ToString());
+            //    newChange.Add("Barcode", newProduct.barcode);
+            //    newChange.Add("Vendor", newProduct.vendor);
+            //    newChange.Add("VendorType", newProduct.productTypeVendor);
+            //    newChanges.Add(newChange);
+            //}
 
-            DataBaseInterface db = new();
+            //DataBaseInterface db = new();
 
-            //updating products
-            foreach (Product updateProduct in UpdateProducts) {
-                Product oldProduct = DBProducts.Find(x => x.sku == updateProduct.sku);
+            ////updating products
+            //foreach (Product updateProduct in UpdateProducts) {
+            //    Product oldProduct = DBProducts.Find(x => x.sku == updateProduct.sku);
 
-                //if no changes skip
-                if (updateProduct.stock == oldProduct.stock && updateProduct.vendor_price == oldProduct.vendor_price) {
-                    continue;
-                } else {
+            //    //if no changes skip
+            //    if (updateProduct.stock == oldProduct.stock && updateProduct.vendor_price == oldProduct.vendor_price) {
+            //        continue;
+            //    } else {
 
-                    appliedChanges.Add(oldProduct.sku, new Dictionary<string, string>() {
-                        ["Stock"] = "",
-                        ["PriceVendor"] = "",
-                        ["Price"] = "",
-                    });
+            //        appliedChanges.Add(oldProduct.sku, new Dictionary<string, string>() {
+            //            ["Stock"] = "",
+            //            ["PriceVendor"] = "",
+            //            ["Price"] = "",
+            //        });
 
-                    //update stock
-                    if (updateProduct.stock != oldProduct.stock) {
-                        var stockUpdateData = new Dictionary<string, string> {
-                            ["Stock"] = updateProduct.stock.ToString()
-                        };
-                        var stockWhereUpdate = new Dictionary<string, Dictionary<string, string>> {
-                            ["SKU"] = new Dictionary<string, string> {
-                                ["="] = oldProduct.sku
-                            }
-                        };
-                        db.Table("KG_Products").Where(stockWhereUpdate).Update(stockUpdateData);
+            //        //update stock
+            //        if (updateProduct.stock != oldProduct.stock) {
+            //            var stockUpdateData = new Dictionary<string, string> {
+            //                ["Stock"] = updateProduct.stock.ToString()
+            //            };
+            //            var stockWhereUpdate = new Dictionary<string, Dictionary<string, string>> {
+            //                ["SKU"] = new Dictionary<string, string> {
+            //                    ["="] = oldProduct.sku
+            //                }
+            //            };
+            //            db.Table("KG_Products").Where(stockWhereUpdate).Update(stockUpdateData);
 
-                        //adding change to applied change list
-                        appliedChanges[oldProduct.sku]["Stock"] = $"{oldProduct.stock} -> {updateProduct.stock}";
-                    }
+            //            //adding change to applied change list
+            //            appliedChanges[oldProduct.sku]["Stock"] = $"{oldProduct.stock} -> {updateProduct.stock}";
+            //        }
 
-                    //update price
-                    if (updateProduct.vendor_price != oldProduct.vendor_price) {
-                        //updating price value
-                        var priceUpdateData = new Dictionary<string, string> {
-                            ["PriceVendor"] = updateProduct.vendor_price.ToString(),
-                            ["Price"] = updateProduct.price.ToString()
-                        };
-                        var priceWhereUpdate = new Dictionary<string, Dictionary<string, string>> {
-                            ["SKU"] = new Dictionary<string, string> {
-                                ["="] = oldProduct.sku
-                            }
-                        };
-                        db.Table("KG_Products").Where(priceWhereUpdate).Update(priceUpdateData);
+            //        //update price
+            //        if (updateProduct.vendor_price != oldProduct.vendor_price) {
+            //            //updating price value
+            //            var priceUpdateData = new Dictionary<string, string> {
+            //                ["PriceVendor"] = updateProduct.vendor_price.ToString(),
+            //                ["Price"] = updateProduct.price.ToString()
+            //            };
+            //            var priceWhereUpdate = new Dictionary<string, Dictionary<string, string>> {
+            //                ["SKU"] = new Dictionary<string, string> {
+            //                    ["="] = oldProduct.sku
+            //                }
+            //            };
+            //            db.Table("KG_Products").Where(priceWhereUpdate).Update(priceUpdateData);
 
-                        //adding change to applied change list
-                        appliedChanges[oldProduct.sku]["PriceVendor"] = $"{oldProduct.vendor_price} -> {updateProduct.vendor_price}";
-                        appliedChanges[oldProduct.sku]["Price"] = $"{oldProduct.price} -> {updateProduct.price}";
-                    }
+            //            //adding change to applied change list
+            //            appliedChanges[oldProduct.sku]["PriceVendor"] = $"{oldProduct.vendor_price} -> {updateProduct.vendor_price}";
+            //            appliedChanges[oldProduct.sku]["Price"] = $"{oldProduct.price} -> {updateProduct.price}";
+            //        }
 
-                    //updating product status
-                    try {
-                        ProductModule.ChangeProductStatus(oldProduct.sku, ProductStatus.WaitingShopSync);
-                    }
-                    catch (Exception ex) {
-                        MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.", "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
-                    }
-                }
-            }
+            //        //updating product status
+            //        try {
+            //            ProductModule.ChangeProductStatus(oldProduct.sku, ProductStatus.WaitingShopSync);
+            //        }
+            //        catch (Exception ex) {
+            //            MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.", "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            //        }
+            //    }
+            //}
 
-            //pass applied changes and pending changes to update on complete method
-            Dictionary<string, object> changes = new();
-            changes.Add("UpdatedProducts", appliedChanges);
-            changes.Add("ArchivedProducts", archivedChanges);
-            changes.Add("NewProducts", newChanges);
-            if (e != null) {
-                e.Result = changes;
-            }
+            ////pass applied changes and pending changes to update on complete method
+            //Dictionary<string, object> changes = new();
+            //changes.Add("UpdatedProducts", appliedChanges);
+            //changes.Add("ArchivedProducts", archivedChanges);
+            //changes.Add("NewProducts", newChanges);
+            //if (e != null) {
+            //    e.Result = changes;
+            //}
         }
 
     }

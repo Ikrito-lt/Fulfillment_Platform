@@ -8,6 +8,7 @@ namespace Ikrito_Fulfillment_Platform.Utils {
     static class SQLUtil {
 
         public static string SQLSafeString(string input) {
+            input = input.Replace("\\", $"");
             input = input.Replace("\'", $"\\'");
             input = input.Replace("\"", $"\\\"");
             return input;
