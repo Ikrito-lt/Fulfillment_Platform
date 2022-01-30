@@ -41,6 +41,14 @@ namespace Ikrito_Fulfillment_Platform.Models {
             public double vendor_price { set; get; }
             public string VariantType { set; get; }
             public string VariantData { set; get; }
+            public bool PermPrice { set; get; }
+
+            public bool isSame(ProductVariant other) {
+                if(barcode != other.barcode) return false;
+                if(vendor_price != other.vendor_price) return false;
+                if(stock != other.stock) return false;
+                return true;
+            }
         }
 
         public Product() {

@@ -247,6 +247,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.TDBaltic {
                     newVariant.stock = int.Parse(stockNode.InnerText);
                     newVariant.barcode = barcodeNode.InnerText;
                     newVariant.vendor_price = double.Parse(priceVendorNode.InnerText);
+                    newVariant.PermPrice = false;
 
                     //getting weight
                     bool grossExists = newProdDataKVP.TryGetValue("Gross Weight", out string grossWeightStr);
@@ -301,7 +302,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.TDBaltic {
                         newProduct.width = 0;
                     }
 
-                    //calvulating newProduct price
+                    //calculating newProduct price
                     double NewSalePrice = PriceGenModule.GenNewPrice(newVariant.vendor_price);
                     newVariant.price = NewSalePrice;
 

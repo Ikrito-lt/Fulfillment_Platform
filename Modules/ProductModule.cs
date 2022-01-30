@@ -546,7 +546,8 @@ namespace Ikrito_Fulfillment_Platform.Modules
                     ["Stock"] = productVariant.stock.ToString(),
                     ["Barcode"] = productVariant.barcode,
                     ["VariantType"] = productVariant.VariantType,
-                    ["VariantData"] = productVariant.VariantData
+                    ["VariantData"] = productVariant.VariantData,
+                    ["PermPrice"] = productVariant.PermPrice ? "1" : "0"
                 };
                 db.Table($"_{tablePrefix}_Variants").Insert(insertData);
             }
@@ -682,7 +683,8 @@ namespace Ikrito_Fulfillment_Platform.Modules
                     ["Stock"] = productVariant.stock.ToString(),
                     ["Barcode"] = productVariant.barcode,
                     ["VariantType"] = productVariant.VariantType,
-                    ["VariantData"] = productVariant.VariantData
+                    ["VariantData"] = productVariant.VariantData,
+                    ["PermPrice"] = productVariant.PermPrice ? "1" : "0"
                 };
                 db.Table($"_{tablePrefix}_Variants").Insert(insertData);
             }
@@ -793,6 +795,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
                 variant.barcode = row["Barcode"];
                 variant.VariantType = row["VariantType"];
                 variant.VariantData = row["VariantData"];
+                variant.PermPrice = row["PermPrice"] == "1" ? true : false;
 
                 products.Find(x => x.sku == sku).productVariants.Add(variant);
             }
