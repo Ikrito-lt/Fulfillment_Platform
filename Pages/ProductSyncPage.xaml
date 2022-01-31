@@ -226,30 +226,42 @@
                                                     <ColumnDefinition Width="*"/>
                                                 </Grid.ColumnDefinitions>
                                                 <Grid.RowDefinitions>
-                                                    <RowDefinition/>
-                                                    <RowDefinition/>
-                                                    <RowDefinition/>
-                                                    <RowDefinition/>
-                                                    <RowDefinition/>
-                                                    <RowDefinition/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="3*"/>
                                                 </Grid.RowDefinitions>
                                                 <TextBlock Text="SKU:" Grid.Row="0" Grid.Column="0"/>
-                                                <TextBlock Text="{Binding SKU}" Grid.Row="0" Grid.Column="2"/>
+                                                <TextBlock Text="{Binding getFormattedSKU}" Grid.Row="0" Grid.Column="2"/>
 
                                                 <TextBlock Text="Barcode:" Grid.Row="1" Grid.Column="0"/>
                                                 <TextBlock Text="{Binding Barcode}" Grid.Row="1" Grid.Column="2"/>
+                                                
+                                                <TextBlock Text="Product Type:" Grid.Row="2" Grid.Column="0"/>
+                                                <TextBlock Text="{Binding ProductType}" Grid.Row="2" Grid.Column="2"/>
 
-                                                <TextBlock Text="VendorType:" Grid.Row="2" Grid.Column="0"/>
-                                                <TextBlock Text="{Binding VendorType}" Grid.Row="2" Grid.Column="2"/>
+                                                <TextBlock Text="Vendor Type:" Grid.Row="3" Grid.Column="0"/>
+                                                <TextBlock Text="{Binding VendorProductType}" Grid.Row="3" Grid.Column="2"/>
 
-                                                <TextBlock Text="Vendor:" Grid.Row="3" Grid.Column="0"/>
-                                                <TextBlock Text="{Binding Vendor}" Grid.Row="3" Grid.Column="2"/>
+                                                <TextBlock Text="Vendor:" Grid.Row="4" Grid.Column="0"/>
+                                                <TextBlock Text="{Binding Vendor}" Grid.Row="4" Grid.Column="2"/>
 
-                                                <TextBlock Text="VendorPrice:" Grid.Row="4" Grid.Column="0"/>
-                                                <TextBlock Text="{Binding PriceVendor}" Grid.Row="4" Grid.Column="2"/>
+                                                <TextBlock Text="Price:" Grid.Row="5" Grid.Column="0"/>
+                                                <TextBlock Text="{Binding Price}" Grid.Row="5" Grid.Column="2"/>
+                                                
+                                                <TextBlock Text="VendorPrice:" Grid.Row="6" Grid.Column="0"/>
+                                                <TextBlock Text="{Binding PriceVendor}" Grid.Row="6" Grid.Column="2"/>
 
-                                                <TextBlock Text="Stock:" Grid.Row="5" Grid.Column="0"/>
-                                                <TextBlock Text="{Binding Stock}" Grid.Row="5" Grid.Column="2"/>
+                                                <TextBlock Text="Stock:" Grid.Row="7" Grid.Column="0"/>
+                                                <TextBlock Text="{Binding Stock}" Grid.Row="7" Grid.Column="2"/>
+
+                                                <TextBlock Grid.ColumnSpan="3" Text="{Binding getChangesMade}" Grid.Row="9" Grid.Column="0"/>
                                             </Grid>
                                         </Border>
                                     </DataTemplate>
@@ -290,24 +302,42 @@
                                                     <ColumnDefinition Width="*"/>
                                                 </Grid.ColumnDefinitions>
                                                 <Grid.RowDefinitions>
-                                                    <RowDefinition/>
-                                                    <RowDefinition/>
-                                                    <RowDefinition/>
-                                                    <RowDefinition/>
-                                                    <RowDefinition/>
-                                                    <RowDefinition/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="3*"/>
                                                 </Grid.RowDefinitions>
                                                 <TextBlock Text="SKU:" Grid.Row="0" Grid.Column="0"/>
-                                                <TextBlock Text="{Binding SKU}" Grid.Row="0" Grid.Column="2"/>
+                                                <TextBlock Text="{Binding getFormattedSKU}" Grid.Row="0" Grid.Column="2"/>
 
-                                                <TextBlock Text="VendorPrice:" Grid.Row="4" Grid.Column="0"/>
-                                                <TextBlock Text="{Binding Changes[PriceVendor]}" Grid.Row="4" Grid.Column="2"/>
+                                                <TextBlock Text="Barcode:" Grid.Row="1" Grid.Column="0"/>
+                                                <TextBlock Text="{Binding Barcode}" Grid.Row="1" Grid.Column="2"/>
 
-                                                <TextBlock Text="Price:" Grid.Row="3" Grid.Column="0"/>
-                                                <TextBlock Text="{Binding Changes[Price]}" Grid.Row="3" Grid.Column="2"/>
+                                                <TextBlock Text="Product Type:" Grid.Row="2" Grid.Column="0"/>
+                                                <TextBlock Text="{Binding ProductType}" Grid.Row="2" Grid.Column="2"/>
 
-                                                <TextBlock Text="Stock:" Grid.Row="5" Grid.Column="0"/>
-                                                <TextBlock Text="{Binding Changes[Stock]}" Grid.Row="5" Grid.Column="2"/>
+                                                <TextBlock Text="Vendor Type:" Grid.Row="3" Grid.Column="0"/>
+                                                <TextBlock Text="{Binding VendorProductType}" Grid.Row="3" Grid.Column="2"/>
+
+                                                <TextBlock Text="Vendor:" Grid.Row="4" Grid.Column="0"/>
+                                                <TextBlock Text="{Binding Vendor}" Grid.Row="4" Grid.Column="2"/>
+
+                                                <TextBlock Text="Price:" Grid.Row="5" Grid.Column="0"/>
+                                                <TextBlock Text="{Binding Price}" Grid.Row="5" Grid.Column="2"/>
+
+                                                <TextBlock Text="VendorPrice:" Grid.Row="6" Grid.Column="0"/>
+                                                <TextBlock Text="{Binding PriceVendor}" Grid.Row="6" Grid.Column="2"/>
+
+                                                <TextBlock Text="Stock:" Grid.Row="7" Grid.Column="0"/>
+                                                <TextBlock Text="{Binding Stock}" Grid.Row="7" Grid.Column="2"/>
+
+                                                <TextBlock Grid.ColumnSpan="3" Text="{Binding getChangesMade}" Grid.Row="9" Grid.Column="0"/>
                                             </Grid>
                                         </Border>
                                     </DataTemplate>
@@ -336,30 +366,42 @@
                                                     <ColumnDefinition Width="*"/>
                                                 </Grid.ColumnDefinitions>
                                                 <Grid.RowDefinitions>
-                                                    <RowDefinition/>
-                                                    <RowDefinition/>
-                                                    <RowDefinition/>
-                                                    <RowDefinition/>
-                                                    <RowDefinition/>
-                                                    <RowDefinition/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="*"/>
+                                                    <RowDefinition Height="3*"/>
                                                 </Grid.RowDefinitions>
                                                 <TextBlock Text="SKU:" Grid.Row="0" Grid.Column="0"/>
-                                                <TextBlock Text="{Binding SKU}" Grid.Row="0" Grid.Column="2"/>
+                                                <TextBlock Text="{Binding getFormattedSKU}" Grid.Row="0" Grid.Column="2"/>
 
                                                 <TextBlock Text="Barcode:" Grid.Row="1" Grid.Column="0"/>
                                                 <TextBlock Text="{Binding Barcode}" Grid.Row="1" Grid.Column="2"/>
 
-                                                <TextBlock Text="VendorType:" Grid.Row="2" Grid.Column="0"/>
-                                                <TextBlock Text="{Binding VendorType}" Grid.Row="2" Grid.Column="2"/>
+                                                <TextBlock Text="Product Type:" Grid.Row="2" Grid.Column="0"/>
+                                                <TextBlock Text="{Binding ProductType}" Grid.Row="2" Grid.Column="2"/>
 
-                                                <TextBlock Text="Vendor:" Grid.Row="3" Grid.Column="0"/>
-                                                <TextBlock Text="{Binding Vendor}" Grid.Row="3" Grid.Column="2"/>
+                                                <TextBlock Text="Vendor Type:" Grid.Row="3" Grid.Column="0"/>
+                                                <TextBlock Text="{Binding VendorProductType}" Grid.Row="3" Grid.Column="2"/>
 
-                                                <TextBlock Text="VendorPrice:" Grid.Row="4" Grid.Column="0"/>
-                                                <TextBlock Text="{Binding PriceVendor}" Grid.Row="4" Grid.Column="2"/>
+                                                <TextBlock Text="Vendor:" Grid.Row="4" Grid.Column="0"/>
+                                                <TextBlock Text="{Binding Vendor}" Grid.Row="4" Grid.Column="2"/>
 
-                                                <TextBlock Text="Stock:" Grid.Row="5" Grid.Column="0"/>
-                                                <TextBlock Text="{Binding Stock}" Grid.Row="5" Grid.Column="2"/>
+                                                <TextBlock Text="Price:" Grid.Row="5" Grid.Column="0"/>
+                                                <TextBlock Text="{Binding Price}" Grid.Row="5" Grid.Column="2"/>
+
+                                                <TextBlock Text="VendorPrice:" Grid.Row="6" Grid.Column="0"/>
+                                                <TextBlock Text="{Binding PriceVendor}" Grid.Row="6" Grid.Column="2"/>
+
+                                                <TextBlock Text="Stock:" Grid.Row="7" Grid.Column="0"/>
+                                                <TextBlock Text="{Binding Stock}" Grid.Row="7" Grid.Column="2"/>
+
+                                                <TextBlock Grid.ColumnSpan="3" Text="{Binding getChangesMade}" Grid.Row="9" Grid.Column="0"/>
                                             </Grid>
                                         </Border>
                                     </DataTemplate>

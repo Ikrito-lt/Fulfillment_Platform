@@ -90,7 +90,8 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
                         ProductType = archiveProduct.ProductTypeDisplayVal,
                         Status = archiveProduct.status,
                         VariantData = $"{firstVariant.VariantType} - {firstVariant.VariantData}",
-                        VariantCount = archiveProduct.productVariants.Count()
+                        VariantCount = archiveProduct.productVariants.Count(),
+                        ChangesMade = new()
                     };
                     archiveChange.ChangesMade.Add("Archived");
                     archivedChanges.Add(archiveChange);
@@ -120,7 +121,8 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
                     ProductType = newProduct.ProductTypeDisplayVal,
                     Status = newProduct.status,
                     VariantData = $"{firstVariant.VariantType} - {firstVariant.VariantData}",
-                    VariantCount = newProduct.productVariants.Count()
+                    VariantCount = newProduct.productVariants.Count(),
+                    ChangesMade = new()
                 };
                 newChange.ChangesMade.Add("Added to Database");
                 newChanges.Add(newChange);
@@ -132,7 +134,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
             {
                 Product oldProduct = DBProducts.Find(x => x.sku == updateProduct.sku);
 
-                foreach (ProductVariant pVariant in oldProduct.productVariants) {
+                foreach (ProductVariant pVariant in updateProduct.productVariants) {
                     ProductVariant dbVariant = oldProduct.productVariants.Where(x => x.barcode == pVariant.barcode).FirstOrDefault();
 
                     ProductChangeRecord updateChange = new ProductChangeRecord
@@ -143,8 +145,9 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
                         VendorProductType = updateProduct.productTypeVendor,
                         ProductType = updateProduct.ProductTypeDisplayVal,
                         Status = updateProduct.status,
-                        VariantCount = updateProduct.productVariants.Count()
-                    };
+                        VariantCount = updateProduct.productVariants.Count(),
+                        ChangesMade = new()
+                    }; 
 
                     if (dbVariant != null)
                     {
@@ -176,8 +179,9 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
                                 updateChange.PriceVendor = pVariant.vendor_price.ToString();
                                 updateChange.Stock = pVariant.stock.ToString();
                                 updateChange.VariantData = $"{pVariant.VariantType} - {pVariant.VariantData}";
-                                updateChange.ChangesMade.Add($"Changed stock: {dbVariant.stock} -> {pVariant.stock}");
-                                updateChange.ChangesMade.Add($"Changed vendor price: {dbVariant.vendor_price} -> {pVariant.vendor_price}");
+                                updateChange.ChangesMade.Add($"Changed stock:\t\t{dbVariant.stock} -> {pVariant.stock}");
+                                updateChange.ChangesMade.Add($"Price is permament check profit!");
+                                updateChange.ChangesMade.Add($"Changed vendor price:\t\t{dbVariant.vendor_price} -> {pVariant.vendor_price}");
                             }
                             else {
                                 //price isnt permament
@@ -202,13 +206,27 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
                                 updateChange.PriceVendor = pVariant.vendor_price.ToString();
                                 updateChange.Stock = pVariant.stock.ToString();
                                 updateChange.VariantData = $"{pVariant.VariantType} - {pVariant.VariantData}";
-                                updateChange.ChangesMade.Add($"Changed stock: {dbVariant.stock} -> {pVariant.stock}");
-                                updateChange.ChangesMade.Add($"Changed price: {dbVariant.price} -> {pVariant.price}");
-                                updateChange.ChangesMade.Add($"Changed vendor price: {dbVariant.vendor_price} -> {pVariant.vendor_price}");
+                                updateChange.ChangesMade.Add($"Changed stock:\t\t{dbVariant.stock} -> {pVariant.stock}");
+                                updateChange.ChangesMade.Add($"Changed price:\t\t{dbVariant.price} -> {pVariant.price}");
+                                updateChange.ChangesMade.Add($"Changed vendor price:\t\t{dbVariant.vendor_price} -> {pVariant.vendor_price}");
                             }
                         }
                     }
                     else {
+                        //check if there are any variants with out barcode in this product and delete them
+                        var barcodeLessVariants = oldProduct.productVariants.Where(x => string.IsNullOrEmpty(x.barcode));
+                        foreach (ProductVariant barcodeLessVariant in barcodeLessVariants) {
+                            var variantWhereDelete = new Dictionary<string, Dictionary<string, string>>
+                            {
+                                ["ID"] = new Dictionary<string, string>
+                                {
+                                    ["="] = barcodeLessVariant.variantDBID.ToString()
+                                }
+                            };
+                            db.Table($"_{TablePrefix}_Variants").Where(variantWhereDelete).Delete();
+                        }
+
+
                         // add new variant
                         var insertData = new Dictionary<string, string>
                         {
@@ -223,14 +241,17 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
                         };
                         db.Table($"_{TablePrefix}_Variants").Insert(insertData);
 
-                        updateChange.Price = dbVariant.price.ToString();
+                        updateChange.Price = pVariant.price.ToString();
                         updateChange.PriceVendor = pVariant.vendor_price.ToString();
                         updateChange.Stock = pVariant.stock.ToString();
                         updateChange.VariantData = $"{pVariant.VariantType} - {pVariant.VariantData}";
-                        updateChange.ChangesMade.Add($"Added Variant");
+                        updateChange.ChangesMade.Add($"Added Variant + Deleted Variants Without Barcode");
                     }
-                
-                    appliedChanges.Add(updateChange);
+
+                    if (updateChange.ChangesMade.Count > 0)
+                    {
+                        appliedChanges.Add(updateChange);
+                    }
                 }
 
                 //updating product status

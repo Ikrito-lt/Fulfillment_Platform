@@ -1,9 +1,10 @@
 ﻿using Ikrito_Fulfillment_Platform.Models;
-using Ikrito_Fulfillment_Platform.Models.SyncModels;
 using Ikrito_Fulfillment_Platform.Modules;
+using Ikrito_Fulfillment_Platform.Modules.Supplier;
 using Ikrito_Fulfillment_Platform.Modules.Supplier.KotrynaGroup;
 using Ikrito_Fulfillment_Platform.Modules.Supplier.Pretendentas;
 using Ikrito_Fulfillment_Platform.Modules.Supplier.TDBaltic;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -289,56 +290,17 @@ namespace Ikrito_Fulfillment_Platform.Pages
             Dictionary<string, object> ChangesKVP = Changes as Dictionary<string, object>;
 
             //converting chnages to list to lists of productchanges
-            List<Dictionary<string, string>> newProducts = ChangesKVP["NewProducts"] as List<Dictionary<string, string>>;                                           //what new product were added
-            List<Dictionary<string, string>> archivedProducts = ChangesKVP["ArchivedProducts"] as List<Dictionary<string, string>>;                                  //what products werent added because they were missing datasheet
-            Dictionary<string, Dictionary<string, string>> updatedProducts = ChangesKVP["UpdatedProducts"] as Dictionary<string, Dictionary<string, string>>;       //what products were changed
+            List<ProductChangeRecord> newProducts = ChangesKVP["NewProducts"] as List<ProductChangeRecord>;                     //what new product were added
+            List<ProductChangeRecord> archivedProducts = ChangesKVP["ArchivedProducts"] as List<ProductChangeRecord>;           //what products werent added because they were missing datasheet
+            List<ProductChangeRecord> updatedProducts = ChangesKVP["UpdatedProducts"] as List<ProductChangeRecord>;             //what products were changed
 
-            List<ProductChange> NewProducts = new();
-            List<ProductChange> ArchivedProducts = new();
-            List<ProductChange> UpdatedProducts = new();
+            NewProductListBox.ItemsSource = newProducts;
+            UpdatedProductListBox.ItemsSource = updatedProducts;
+            ArchivedProductListBox.ItemsSource = archivedProducts;
 
-            foreach (var NP in newProducts)
-            {
-                ProductChange NewProduct = new();
-                NewProduct.SKU = NP["SKU"];
-                NewProduct.PriceVendor = NP["PriceVendor"];
-                NewProduct.Stock = NP["Stock"];
-                NewProduct.Barcode = NP["Barcode"];
-                NewProduct.Vendor = NP["Vendor"];
-                NewProduct.VendorType = NP["VendorType"];
-
-                NewProducts.Add(NewProduct);
-            }
-            foreach (var AP in archivedProducts)
-            {
-                ProductChange InvalidProduct = new();
-                InvalidProduct.SKU = AP["SKU"];
-                InvalidProduct.PriceVendor = AP["PriceVendor"];
-                InvalidProduct.Stock = AP["Stock"];
-                InvalidProduct.Barcode = AP["Barcode"];
-                InvalidProduct.Vendor = AP["Vendor"];
-                InvalidProduct.VendorType = AP["VendorType"];
-
-                ArchivedProducts.Add(InvalidProduct);
-            }
-            foreach (var UP in updatedProducts)
-            {
-                ProductChange ChangedProduct = new();
-                ChangedProduct.SKU = UP.Key;
-                ChangedProduct.Changes = UP.Value;
-
-                UpdatedProducts.Add(ChangedProduct);
-            }
-
-            NewProductListBox.ItemsSource = NewProducts;
-            UpdatedProductListBox.ItemsSource = UpdatedProducts;
-            ArchivedProductListBox.ItemsSource = ArchivedProducts;
-
-            NewProductsLabel.Content = $"New Products ({NewProducts.Count})";
-            UpdatedProductsLabel.Content = $"Updated Products ({UpdatedProducts.Count})";
-            ArchivedProductsLabel.Content = $"Archived Products ({ArchivedProducts.Count})";
-
-
+            NewProductsLabel.Content = $"New Products ({newProducts.Count})";
+            UpdatedProductsLabel.Content = $"Updated Products ({updatedProducts.Count})";
+            ArchivedProductsLabel.Content = $"Archived Products ({archivedProducts.Count})";
         }
 
         //method that allows user to edit list box product by opening it in ProductEditPage
@@ -346,7 +308,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
         {
             if (sender is ListBoxItem listboxItem)
             {
-                ProductChange productChange = listboxItem.Content as ProductChange;
+                ProductChangeRecord productChange = listboxItem.Content as ProductChangeRecord;
                 Product editProduct = ProductModule.GetProduct(productChange.SKU);
                 MainWindow.Instance.mainFrame.Content = new ProductEditPage(editProduct, this);
             }
@@ -362,7 +324,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
         {
             //running export products in background
             BackgroundWorker TDBUpdateWorker = new();
-            TDBUpdateWorker.DoWork += TDBModule.UpdateTDBProducts;
+            TDBUpdateWorker.DoWork += (sender, e) => UploadSupplierProducts.UpdateProducts("TDB" ,sender, e);
             TDBUpdateWorker.RunWorkerCompleted += UpdateTDBWorkerOnComplete;
 
             progressBar.IsIndeterminate = true;
@@ -371,6 +333,11 @@ namespace Ikrito_Fulfillment_Platform.Pages
             ClearChangesListBoxes();
 
             TDBUpdateWorker.RunWorkerAsync();
+        }
+
+        private void UploadSupplier(object sender, DoWorkEventArgs e, object musicNote)
+        {
+            throw new NotImplementedException();
         }
 
         //method that opens new dialogue window that shows all changes made in database
