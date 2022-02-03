@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using static Ikrito_Fulfillment_Platform.Models.Product;
 
 namespace Ikrito_Fulfillment_Platform.Modules.Supplier.KotrynaGroup {
     static class KGModule {
@@ -281,39 +282,49 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.KotrynaGroup {
         private static Product BuildProduct(KGAssortmentProduct AP, KGProductInfo PI, KGProductMeasurements PM, KGProductPackaging PP) {
             Product newProduct = new();
 
-            //newProduct.title = SQLUtil.SQLSafeString(PI.title);
-            //newProduct.body_html = BuildDescription(PI.properties);
+            newProduct.title = SQLUtil.SQLSafeString(PI.title);
+            newProduct.body_html = BuildDescription(PI.properties);
 
-            //string newVendor = PI.brand;
-            //if (string.IsNullOrEmpty(newVendor)) {
-            //    newVendor = "NULL_ERROR";
-            //}
+            string newVendor = PI.brand;
+            if (string.IsNullOrEmpty(newVendor))
+            {
+                newVendor = "NULL_ERROR";
+            }
 
-            //newProduct.vendor = SQLUtil.SQLSafeString(newVendor);
-            //newProduct.product_type = "Not-Assigned";
-            //newProduct.price = AP.base_price;
-            //newProduct.sku = _SKUPrefix + AP.axapta_id;
-            //newProduct.stock = AP.qty;
-            //newProduct.barcode = AP.ean;
-            //newProduct.vendor_price = AP.price;
+            newProduct.vendor = SQLUtil.SQLSafeString(newVendor);
+            newProduct.productTypeID = 1.ToString();
+            newProduct.sku = _SKUPrefix + AP.axapta_id;
 
-            //newProduct.productTypeVendor = PI.vendorType;
+            newProduct.productTypeVendor = PI.vendorType;
 
-            //newProduct.images = PI.images;
-            ////no tags in new products;
+            newProduct.images = PI.images;
+            //no tags in new products;
 
-            ////getting the dimensions
-            //newProduct.weight = double.Parse(PM.net_weight);
-            //newProduct.height = (int)Math.Round(double.Parse(PM.gross_height) * 1000);
-            //newProduct.lenght = (int)Math.Round(double.Parse(PM.gross_depth) * 1000);
-            //newProduct.width = (int)Math.Round(double.Parse(PM.gross_width) * 1000);
+            //getting the dimensions
+            newProduct.weight = double.Parse(PM.net_weight);
+            newProduct.height = (int)Math.Round(double.Parse(PM.gross_height) * 1000);
+            newProduct.lenght = (int)Math.Round(double.Parse(PM.gross_depth) * 1000);
+            newProduct.width = (int)Math.Round(double.Parse(PM.gross_width) * 1000);
 
-            //if (newProduct.height == 0) newProduct.height = 1;
-            //if (newProduct.width == 0) newProduct.width = 1;
-            //if (newProduct.lenght == 0) newProduct.lenght = 1;
+            if (newProduct.height == 0) newProduct.height = 1;
+            if (newProduct.width == 0) newProduct.width = 1;
+            if (newProduct.lenght == 0) newProduct.lenght = 1;
 
-            ////adding product added timestamp
-            //newProduct.addedTimeStamp = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString();
+            //adding product added timestamp
+            newProduct.addedTimeStamp = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString();
+
+            //adding new Variant (only one cause no variants in KG)
+            ProductVariant newVariant = new();
+            newVariant.stock = AP.qty;
+            newVariant.barcode = AP.ean;
+            newVariant.vendor_price = AP.price;
+            newVariant.price = AP.base_price;
+            newProduct.productVariants.Add(newVariant);
+
+            //if properties arent empty add them
+            if (PI.properties.Count > 0) {
+                newProduct.productAttributtes = PI.properties;
+            }
 
             return newProduct;
         }
@@ -350,133 +361,6 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.KotrynaGroup {
             description = description.Replace("\"", $"\\\"");
 
             return description;
-        }
-
-
-        //
-        // Section for automatically updating and adding products to database
-        //
-
-        // method for updates KG Products
-        public static void UpdateKGProducts(object sender = null, DoWorkEventArgs e = null) {
-            //List<Product> DBProducts = ProductModule.GetKGProducts();
-            //List<Product> APIProducts = _ProductList;
-
-            //List<Product> ArchiveProducts = DBProducts.Where(p1 => APIProducts.All(p2 => p2.sku != p1.sku)).ToList();
-            //List<Product> NewProducts = APIProducts.Where(p1 => DBProducts.All(p2 => p2.sku != p1.sku)).ToList();
-            //List<Product> UpdateProducts = APIProducts.Where(p1 => NewProducts.All(p2 => p2.sku != p1.sku)).ToList();
-
-            ////remove dublicate skus from newProd list
-            //var a = NewProducts.GroupBy(x => x.sku.ToLower()).Where(x => x.LongCount() > 1).ToList();
-            //a.ForEach(x => NewProducts.RemoveAll(y => y.sku.ToLower() == x.Key));
-
-            //Dictionary<string, Dictionary<string, string>> appliedChanges = new();          //for updates
-            //List<Dictionary<string, string>> newChanges = new();                            //for new products
-            //List<Dictionary<string, string>> archivedChanges = new();                       //for archived Products                     
-
-            ////archiving products
-            //foreach (Product archiveProduct in ArchiveProducts) {
-            //    try {
-            //        ProductModule.ChangeProductStatus(archiveProduct.sku, ProductStatus.NeedsArchiving);
-
-            //        Dictionary<string, string> archiveChange = new();
-            //        archiveChange.Add("SKU", archiveProduct.sku);
-            //        archiveChange.Add("PriceVendor", archiveProduct.vendor_price.ToString());
-            //        archiveChange.Add("Stock", archiveProduct.stock.ToString());
-            //        archiveChange.Add("Barcode", archiveProduct.barcode);
-            //        archiveChange.Add("Vendor", archiveProduct.vendor);
-            //        archiveChange.Add("VendorType", archiveProduct.productTypeVendor);
-            //        archivedChanges.Add(archiveChange);
-            //    }
-            //    catch (Exception ex) {
-            //        MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.", "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
-            //    }
-            //}
-
-            //// adding new Products
-            //foreach (Product newProduct in NewProducts) {
-            //    ProductModule.AddProductToDB(newProduct);
-
-            //    Dictionary<string, string> newChange = new();
-            //    newChange.Add("SKU", newProduct.sku);
-            //    newChange.Add("PriceVendor", newProduct.vendor_price.ToString());
-            //    newChange.Add("Stock", newProduct.stock.ToString());
-            //    newChange.Add("Barcode", newProduct.barcode);
-            //    newChange.Add("Vendor", newProduct.vendor);
-            //    newChange.Add("VendorType", newProduct.productTypeVendor);
-            //    newChanges.Add(newChange);
-            //}
-
-            //DataBaseInterface db = new();
-
-            ////updating products
-            //foreach (Product updateProduct in UpdateProducts) {
-            //    Product oldProduct = DBProducts.Find(x => x.sku == updateProduct.sku);
-
-            //    //if no changes skip
-            //    if (updateProduct.stock == oldProduct.stock && updateProduct.vendor_price == oldProduct.vendor_price) {
-            //        continue;
-            //    } else {
-
-            //        appliedChanges.Add(oldProduct.sku, new Dictionary<string, string>() {
-            //            ["Stock"] = "",
-            //            ["PriceVendor"] = "",
-            //            ["Price"] = "",
-            //        });
-
-            //        //update stock
-            //        if (updateProduct.stock != oldProduct.stock) {
-            //            var stockUpdateData = new Dictionary<string, string> {
-            //                ["Stock"] = updateProduct.stock.ToString()
-            //            };
-            //            var stockWhereUpdate = new Dictionary<string, Dictionary<string, string>> {
-            //                ["SKU"] = new Dictionary<string, string> {
-            //                    ["="] = oldProduct.sku
-            //                }
-            //            };
-            //            db.Table("KG_Products").Where(stockWhereUpdate).Update(stockUpdateData);
-
-            //            //adding change to applied change list
-            //            appliedChanges[oldProduct.sku]["Stock"] = $"{oldProduct.stock} -> {updateProduct.stock}";
-            //        }
-
-            //        //update price
-            //        if (updateProduct.vendor_price != oldProduct.vendor_price) {
-            //            //updating price value
-            //            var priceUpdateData = new Dictionary<string, string> {
-            //                ["PriceVendor"] = updateProduct.vendor_price.ToString(),
-            //                ["Price"] = updateProduct.price.ToString()
-            //            };
-            //            var priceWhereUpdate = new Dictionary<string, Dictionary<string, string>> {
-            //                ["SKU"] = new Dictionary<string, string> {
-            //                    ["="] = oldProduct.sku
-            //                }
-            //            };
-            //            db.Table("KG_Products").Where(priceWhereUpdate).Update(priceUpdateData);
-
-            //            //adding change to applied change list
-            //            appliedChanges[oldProduct.sku]["PriceVendor"] = $"{oldProduct.vendor_price} -> {updateProduct.vendor_price}";
-            //            appliedChanges[oldProduct.sku]["Price"] = $"{oldProduct.price} -> {updateProduct.price}";
-            //        }
-
-            //        //updating product status
-            //        try {
-            //            ProductModule.ChangeProductStatus(oldProduct.sku, ProductStatus.WaitingShopSync);
-            //        }
-            //        catch (Exception ex) {
-            //            MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.", "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
-            //        }
-            //    }
-            //}
-
-            ////pass applied changes and pending changes to update on complete method
-            //Dictionary<string, object> changes = new();
-            //changes.Add("UpdatedProducts", appliedChanges);
-            //changes.Add("ArchivedProducts", archivedChanges);
-            //changes.Add("NewProducts", newChanges);
-            //if (e != null) {
-            //    e.Result = changes;
-            //}
         }
     }
 }

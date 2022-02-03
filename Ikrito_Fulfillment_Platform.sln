@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31515.178
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ikrito_Fulfillment_Platform", "Ikrito_Fulfillment_Platform.csproj", "{DBF1A754-CA24-486C-A19E-F37B9BBB85DB}"
 EndProject
@@ -19,8 +19,8 @@ Global
 		{DBF1A754-CA24-486C-A19E-F37B9BBB85DB}.Build+|Any CPU.Build.0 = Build+|Any CPU
 		{DBF1A754-CA24-486C-A19E-F37B9BBB85DB}.Build+|x64.ActiveCfg = Build+|x64
 		{DBF1A754-CA24-486C-A19E-F37B9BBB85DB}.Build+|x64.Build.0 = Build+|x64
-		{DBF1A754-CA24-486C-A19E-F37B9BBB85DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DBF1A754-CA24-486C-A19E-F37B9BBB85DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBF1A754-CA24-486C-A19E-F37B9BBB85DB}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{DBF1A754-CA24-486C-A19E-F37B9BBB85DB}.Debug|Any CPU.Build.0 = Debug|x64
 		{DBF1A754-CA24-486C-A19E-F37B9BBB85DB}.Debug|x64.ActiveCfg = Debug|x64
 		{DBF1A754-CA24-486C-A19E-F37B9BBB85DB}.Debug|x64.Build.0 = Debug|x64
 		{DBF1A754-CA24-486C-A19E-F37B9BBB85DB}.Release|Any CPU.ActiveCfg = Release|Any CPU

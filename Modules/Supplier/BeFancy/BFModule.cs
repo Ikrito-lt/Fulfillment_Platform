@@ -1,13 +1,10 @@
 ﻿using Ikrito_Fulfillment_Platform.Models;
 using Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy.Models;
 using Ikrito_Fulfillment_Platform.Utils;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
+using static Ikrito_Fulfillment_Platform.Models.Product;
 
 namespace Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy
 {
@@ -24,30 +21,25 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy
 
         private const string _SKUPrefix = "BF-";
 
-        //todo: ask why retards have products with out the ids
-
         // for getting the XML
         private static readonly Lazy<XmlDocument> _LazyVendorXML = new(() => GetVendorXML());
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
-        public static XmlDocument _VendorXML => _LazyVendorXML.Value;
+        private static XmlDocument _VendorXML => _LazyVendorXML.Value;
 
         //for extracting vendor products
         private static readonly Lazy<List<BFProduct>> _LazyVendorProductList = new(() => GetVendorProductList());
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
-        public static List<BFProduct> _VendorProductList => _LazyVendorProductList.Value;
+        private static List<BFProduct> _VendorProductList => _LazyVendorProductList.Value;
 
         //for extracting vendor products that have variants
         private static readonly Lazy<List<BFProductWithVariants>> _LazyVendorProductWithVariantsList = new(() => GetVendorProductWithVariantsList());
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
-        public static List<BFProductWithVariants> _VendorProductWithVariantsList => _LazyVendorProductWithVariantsList.Value;
+        private static List<BFProductWithVariants> _VendorProductWithVariantsList => _LazyVendorProductWithVariantsList.Value;
 
         private static readonly Lazy<List<Product>> _LazyProductList = new(() => BuildProductList());
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
-        private static List<Product> _ProductList => _LazyProductList.Value;
+        public static List<Product> ProductList => _LazyProductList.Value;
 
-        //private static readonly Lazy<List<Product>> _LazyProductWithVariantsList = new(() => BuildProductWithVariantsList());
-        //[System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
-        //private static List<Product> _ProductWithVariantsList => _LazyProductList.Value;
 
 
         //
@@ -149,7 +141,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy
                 }
                 else
                 {
-                    throw new Exception("BeFancy chnages their XML structure");
+                    throw new Exception("BeFancy changed their XML structure");
                 }
             }
 
@@ -188,13 +180,13 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy
                 bFProduct.attributes = attributes;
 
                 //adding variants
-                List<ProductVariant> variants = new();
+                List<BFProductVariant> variants = new();
                 foreach (XmlNode variant in product.SelectSingleNode("variants").ChildNodes)
                 {
                     var varName = variant.Attributes["group_title"];
                     if (varName != null)
                     {
-                        ProductVariant productVariant = new ProductVariant();
+                        BFProductVariant productVariant = new BFProductVariant();
                         productVariant.variantTitle = varName.Value;
                         productVariant.variantDescription = variant.SelectSingleNode("title").InnerText.Trim();
                         productVariant.barcode = variant.SelectSingleNode("barcode").InnerText.Trim();
@@ -214,257 +206,146 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy
         // Section for getting Product lists from BF product models
         //
 
-        // bulding List of basic products 
+        /// <summary>
+        /// bulding List of basic products 
+        /// </summary>
+        /// <returns></returns>
         public static List<Product> BuildProductList()
         {
             List<Product> pList = new();
+            //with one variant
             foreach (BFProduct product in _VendorProductList)
             {
                 //IMPORTANT: if product doesnt have an id we arent selling it. (it  doesnt get added to our database)
-                string ProductID = product.model;
+                string ProductID = product.id;
                 if (!string.IsNullOrEmpty(ProductID))
                 {
                     //add to list
-                    pList.Add(BuildProduct(product));
+                    pList.Add(BuildProductWithOutVariants(product));
                 }
                 else {
+                    continue;
+                }
+            }
+            //with multiple variants
+            foreach (BFProductWithVariants product in _VendorProductWithVariantsList)
+            {
+                //IMPORTANT: if product doesnt have an id we arent selling it. (it  doesnt get added to our database)
+                string ProductID = product.id;
+                if (!string.IsNullOrEmpty(ProductID))
+                {
+                    //add to list
+                    pList.Add(BuildProductWithVariants(product));
+                }
+                else
+                {
                     continue;
                 }
             }
             return pList;
         }
 
-        // method that builds Product form API data
-        public static Product BuildProduct(BFProduct bfProduct)
+        /// <summary>
+        /// builds Product with one variant from API data
+        /// </summary>
+        /// <param name="bfProduct"></param>
+        /// <returns></returns>
+        public static Product BuildProductWithOutVariants(BFProduct bfProduct)
         {
-            //Product newProduct = new();
+            Product newProduct = new();
 
-            //newProduct.title = SQLUtil.SQLSafeString(PI.title);
-            //newProduct.body_html = BuildDescription(PI.properties);
+            newProduct.title = SQLUtil.SQLSafeString(bfProduct.title);
+            newProduct.body_html = SQLUtil.SQLSafeString(bfProduct.description);
 
-            //string newVendor = PI.brand;
-            //if (string.IsNullOrEmpty(newVendor))
-            //{
-            //    newVendor = "NULL_ERROR";
-            //}
+            string newManufacturer = bfProduct.manufacturer;
+            if (string.IsNullOrEmpty(newManufacturer))
+            {
+                newManufacturer = "NULL_ERROR";
+            }
 
-            //newProduct.vendor = SQLUtil.SQLSafeString(newVendor);
-            //newProduct.product_type = "Not-Assigned";
-            //newProduct.price = AP.base_price;
-            //newProduct.sku = _SKUPrefix + AP.axapta_id;
-            //newProduct.stock = AP.qty;
-            //newProduct.barcode = AP.ean;
-            //newProduct.vendor_price = AP.price;
+            newProduct.sku = _SKUPrefix + bfProduct.id;
+            newProduct.vendor = SQLUtil.SQLSafeString(newManufacturer);
+            newProduct.productTypeID = 1.ToString();
+            newProduct.deliveryTime = bfProduct.deliveryTimeText;
 
-            //newProduct.productTypeVendor = PI.vendorType;
+            newProduct.productTypeVendor = bfProduct.category;
+            newProduct.images = bfProduct.imageURLs;
+            newProduct.productAttributtes = bfProduct.attributes;
 
-            //newProduct.images = PI.images;
-            ////no tags in new products;
+            //adding only one variant
+            ProductVariant productVariant = new ProductVariant();
+            productVariant.barcode = bfProduct.barcode;
+            productVariant.stock = bfProduct.stock;
+            productVariant.vendor_price = Math.Round(bfProduct.price, 2, MidpointRounding.AwayFromZero);
+            productVariant.price = Math.Round(PriceGenModule.GenNewPrice(productVariant.vendor_price), 2, MidpointRounding.AwayFromZero);
 
-            ////getting the dimensions
-            //newProduct.weight = double.Parse(PM.net_weight);
-            //newProduct.height = (int)Math.Round(double.Parse(PM.gross_height) * 1000);
-            //newProduct.lenght = (int)Math.Round(double.Parse(PM.gross_depth) * 1000);
-            //newProduct.width = (int)Math.Round(double.Parse(PM.gross_width) * 1000);
+            newProduct.productVariants.Add(productVariant);
 
-            //if (newProduct.height == 0) newProduct.height = 1;
-            //if (newProduct.width == 0) newProduct.width = 1;
-            //if (newProduct.lenght == 0) newProduct.lenght = 1;
+            //no tags in new products;
+            //BF doesnt give us dimensions or weight 
+            newProduct.height = 1;
+            newProduct.width = 1;
+            newProduct.lenght = 1;
+            newProduct.weight = 1;
 
-            ////adding product added timestamp
-            //newProduct.addedTimeStamp = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString();
+            //adding product added timestamp
+            newProduct.addedTimeStamp = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString();
 
-            return null;
+            return newProduct;
         }
 
-        //    //method that builds description for the product uisng datasheet KVP
-        //    private static string BuildDescription(Dictionary<string, string> prodDataKVP)
-        //    {
-        //        string description = "";
-        //        Dictionary<string, string> prodDataKVPNew = new();
+        // method that builds Product from API models containing multiple variants
+        public static Product BuildProductWithVariants(BFProductWithVariants bfProduct)
+        {
+            Product newProduct = new();
 
-        //        foreach (var pair in prodDataKVP)
-        //        {
-        //            if (pair.Key == pair.Value)
-        //            {
-        //                description += pair.Key + "<br><br>";
-        //            }
-        //            else
-        //            {
-        //                prodDataKVPNew.Add(pair.Key, pair.Value);
-        //            }
-        //        }
+            newProduct.title = SQLUtil.SQLSafeString(bfProduct.title);
+            newProduct.body_html = SQLUtil.SQLSafeString(bfProduct.description);
 
-        //        prodDataKVP = prodDataKVPNew;
+            string newManufacturer = bfProduct.manufacturer;
+            if (string.IsNullOrEmpty(newManufacturer))
+            {
+                newManufacturer = "NULL_ERROR";
+            }
 
-        //        StringBuilder sb = new();
-        //        using (HTMLTable table = new(sb))
-        //        {
-        //            foreach (var kvp in prodDataKVP)
-        //            {
-        //                using (HTMLRow row = table.AddRow())
-        //                {
-        //                    row.AddCell(kvp.Key);
-        //                    row.AddCell(kvp.Value);
-        //                }
-        //            }
-        //        }
+            newProduct.sku = _SKUPrefix + bfProduct.id;
+            newProduct.vendor = SQLUtil.SQLSafeString(newManufacturer);
+            newProduct.productTypeID = 1.ToString();
+            newProduct.deliveryTime = bfProduct.deliveryTimeText;
 
-        //        string finishedTable = sb.ToString();
-        //        description += finishedTable;
+            newProduct.productTypeVendor = bfProduct.category;
+            newProduct.images = bfProduct.imageURLs;
+            newProduct.productAttributtes = bfProduct.attributes;
 
-        //        description = description.Replace("\'", $"\\'");
-        //        description = description.Replace("\"", $"\\\"");
+            //BF has same prive for all variants
+            double vendorPrice = Math.Round(bfProduct.price, 2, MidpointRounding.AwayFromZero);
+            double ourPrice = Math.Round(PriceGenModule.GenNewPrice(vendorPrice), 2, MidpointRounding.AwayFromZero);
 
-        //        return description;
-        //    }
+            //adding multiple variants
+            foreach (BFProductVariant variant in bfProduct.variants) {
+                ProductVariant productVariant = new ProductVariant();
+                productVariant.barcode = variant.barcode;
+                productVariant.stock = variant.stock;
+                productVariant.VariantType = variant.variantTitle;
+                productVariant.VariantData = variant.variantDescription;
 
+                productVariant.vendor_price = vendorPrice;
+                productVariant.price = ourPrice;
 
-        //    //
-        //    // Section for automatically updating and adding products to database
-        //    //
+                newProduct.productVariants.Add(productVariant);
+            }
 
-        //    // method for updates KG Products
-        //    public static void UpdateKGProducts(object sender = null, DoWorkEventArgs e = null)
-        //    {
-        //        List<Product> DBProducts = ProductModule.GetKGProducts();
-        //        List<Product> APIProducts = _ProductList;
+            //no tags in new products;
+            //BF doesnt give us dimensions or weight 
+            newProduct.height = 1;
+            newProduct.width = 1;
+            newProduct.lenght = 1;
+            newProduct.weight = 1;
 
-        //        List<Product> ArchiveProducts = DBProducts.Where(p1 => APIProducts.All(p2 => p2.sku != p1.sku)).ToList();
-        //        List<Product> NewProducts = APIProducts.Where(p1 => DBProducts.All(p2 => p2.sku != p1.sku)).ToList();
-        //        List<Product> UpdateProducts = APIProducts.Where(p1 => NewProducts.All(p2 => p2.sku != p1.sku)).ToList();
+            //adding product added timestamp
+            newProduct.addedTimeStamp = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString();
 
-        //        //remove dublicate skus from newProd list
-        //        var a = NewProducts.GroupBy(x => x.sku.ToLower()).Where(x => x.LongCount() > 1).ToList();
-        //        a.ForEach(x => NewProducts.RemoveAll(y => y.sku.ToLower() == x.Key));
-
-        //        Dictionary<string, Dictionary<string, string>> appliedChanges = new();          //for updates
-        //        List<Dictionary<string, string>> newChanges = new();                            //for new products
-        //        List<Dictionary<string, string>> archivedChanges = new();                       //for archived Products                     
-
-        //        //archiving products
-        //        foreach (Product archiveProduct in ArchiveProducts)
-        //        {
-        //            try
-        //            {
-        //                ProductModule.ChangeProductStatus(archiveProduct.sku, ProductStatus.NeedsArchiving);
-
-        //                Dictionary<string, string> archiveChange = new();
-        //                archiveChange.Add("SKU", archiveProduct.sku);
-        //                archiveChange.Add("PriceVendor", archiveProduct.vendor_price.ToString());
-        //                archiveChange.Add("Stock", archiveProduct.stock.ToString());
-        //                archiveChange.Add("Barcode", archiveProduct.barcode);
-        //                archiveChange.Add("Vendor", archiveProduct.vendor);
-        //                archiveChange.Add("VendorType", archiveProduct.productTypeVendor);
-        //                archivedChanges.Add(archiveChange);
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.", "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
-        //            }
-        //        }
-
-        //        // adding new Products
-        //        foreach (Product newProduct in NewProducts)
-        //        {
-        //            ProductModule.AddProductToDB(newProduct);
-
-        //            Dictionary<string, string> newChange = new();
-        //            newChange.Add("SKU", newProduct.sku);
-        //            newChange.Add("PriceVendor", newProduct.vendor_price.ToString());
-        //            newChange.Add("Stock", newProduct.stock.ToString());
-        //            newChange.Add("Barcode", newProduct.barcode);
-        //            newChange.Add("Vendor", newProduct.vendor);
-        //            newChange.Add("VendorType", newProduct.productTypeVendor);
-        //            newChanges.Add(newChange);
-        //        }
-
-        //        DataBaseInterface db = new();
-
-        //        //updating products
-        //        foreach (Product updateProduct in UpdateProducts)
-        //        {
-        //            Product oldProduct = DBProducts.Find(x => x.sku == updateProduct.sku);
-
-        //            //if no changes skip
-        //            if (updateProduct.stock == oldProduct.stock && updateProduct.vendor_price == oldProduct.vendor_price)
-        //            {
-        //                continue;
-        //            }
-        //            else
-        //            {
-
-        //                appliedChanges.Add(oldProduct.sku, new Dictionary<string, string>()
-        //                {
-        //                    ["Stock"] = "",
-        //                    ["PriceVendor"] = "",
-        //                    ["Price"] = "",
-        //                });
-
-        //                //update stock
-        //                if (updateProduct.stock != oldProduct.stock)
-        //                {
-        //                    var stockUpdateData = new Dictionary<string, string>
-        //                    {
-        //                        ["Stock"] = updateProduct.stock.ToString()
-        //                    };
-        //                    var stockWhereUpdate = new Dictionary<string, Dictionary<string, string>>
-        //                    {
-        //                        ["SKU"] = new Dictionary<string, string>
-        //                        {
-        //                            ["="] = oldProduct.sku
-        //                        }
-        //                    };
-        //                    db.Table("KG_Products").Where(stockWhereUpdate).Update(stockUpdateData);
-
-        //                    //adding change to applied change list
-        //                    appliedChanges[oldProduct.sku]["Stock"] = $"{oldProduct.stock} -> {updateProduct.stock}";
-        //                }
-
-        //                //update price
-        //                if (updateProduct.vendor_price != oldProduct.vendor_price)
-        //                {
-        //                    //updating price value
-        //                    var priceUpdateData = new Dictionary<string, string>
-        //                    {
-        //                        ["PriceVendor"] = updateProduct.vendor_price.ToString(),
-        //                        ["Price"] = updateProduct.price.ToString()
-        //                    };
-        //                    var priceWhereUpdate = new Dictionary<string, Dictionary<string, string>>
-        //                    {
-        //                        ["SKU"] = new Dictionary<string, string>
-        //                        {
-        //                            ["="] = oldProduct.sku
-        //                        }
-        //                    };
-        //                    db.Table("KG_Products").Where(priceWhereUpdate).Update(priceUpdateData);
-
-        //                    //adding change to applied change list
-        //                    appliedChanges[oldProduct.sku]["PriceVendor"] = $"{oldProduct.vendor_price} -> {updateProduct.vendor_price}";
-        //                    appliedChanges[oldProduct.sku]["Price"] = $"{oldProduct.price} -> {updateProduct.price}";
-        //                }
-
-        //                //updating product status
-        //                try
-        //                {
-        //                    ProductModule.ChangeProductStatus(oldProduct.sku, ProductStatus.WaitingShopSync);
-        //                }
-        //                catch (Exception ex)
-        //                {
-        //                    MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.", "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
-        //                }
-        //            }
-        //        }
-
-        //        //pass applied changes and pending changes to update on complete method
-        //        Dictionary<string, object> changes = new();
-        //        changes.Add("UpdatedProducts", appliedChanges);
-        //        changes.Add("ArchivedProducts", archivedChanges);
-        //        changes.Add("NewProducts", newChanges);
-        //        if (e != null)
-        //        {
-        //            e.Result = changes;
-        //        }
-        //    }
+            return newProduct;
+        }
     }
 }
