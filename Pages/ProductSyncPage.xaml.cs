@@ -210,7 +210,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
         }
 
         //BGW load sync products onComplete
-        private void BGW__SetStock_Completed(object sender, RunWorkerCompletedEventArgs e)
+        private void BGW_SetStock_Completed(object sender, RunWorkerCompletedEventArgs e)
         {
             //changing loading bar state
             progressBar.Value = 0;
@@ -316,7 +316,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
 
 
         //
-        // update TDB Products section
+        // update Vendor Products section
         //
 
         //button that updates product from TDB
@@ -324,10 +324,12 @@ namespace Ikrito_Fulfillment_Platform.Pages
         {
             //running export products in background
             BackgroundWorker TDBUpdateWorker = new();
+            TDBUpdateWorker.WorkerReportsProgress = true;
             TDBUpdateWorker.DoWork += (sender, e) => UploadSupplierProducts.UpdateProducts("TDB" ,sender, e);
-            TDBUpdateWorker.RunWorkerCompleted += UpdateTDBWorkerOnComplete;
+            TDBUpdateWorker.RunWorkerCompleted += UpdateVendorProductsWorkerOnComplete;
+            TDBUpdateWorker.ProgressChanged += UpdateVendorProductsWorkerProgressChanged;
 
-            progressBar.IsIndeterminate = true;
+            RefreshButton.IsEnabled = false;
             progressBarLabel.Text = "Updating TDB products";
 
             ClearChangesListBoxes();
@@ -335,34 +337,17 @@ namespace Ikrito_Fulfillment_Platform.Pages
             TDBUpdateWorker.RunWorkerAsync();
         }
 
-        private void UploadSupplier(object sender, DoWorkEventArgs e, object musicNote)
-        {
-            throw new NotImplementedException();
-        }
-
-        //method that opens new dialogue window that shows all changes made in database
-        private void UpdateTDBWorkerOnComplete(object sender, RunWorkerCompletedEventArgs e)
-        {
-            progressBar.IsIndeterminate = false;
-            progressBarLabel.Text = "";
-
-            PopulateChangeListBoxes(e.Result);
-        }
-
-
-        //
-        // update KG Products section
-        //
-
         //button that updates product from KG
         private void UpdateKGButton_Click(object sender, RoutedEventArgs e)
         {
             //running export products in background
             BackgroundWorker KGUpdateWorker = new();
-            KGUpdateWorker.DoWork += KGModule.UpdateKGProducts;
-            KGUpdateWorker.RunWorkerCompleted += UpdateKGWorkerOnComplete;
+            KGUpdateWorker.WorkerReportsProgress = true;
+            KGUpdateWorker.DoWork += (sender, e) => UploadSupplierProducts.UpdateProducts("KG", sender, e);
+            KGUpdateWorker.RunWorkerCompleted += UpdateVendorProductsWorkerOnComplete;
+            KGUpdateWorker.ProgressChanged += UpdateVendorProductsWorkerProgressChanged;
 
-            progressBar.IsIndeterminate = true;
+            RefreshButton.IsEnabled = false;
             progressBarLabel.Text = "Updating KG products";
 
             ClearChangesListBoxes();
@@ -370,29 +355,17 @@ namespace Ikrito_Fulfillment_Platform.Pages
             KGUpdateWorker.RunWorkerAsync();
         }
 
-        //method that opens new dialogue window that shows all changes made in database
-        private void UpdateKGWorkerOnComplete(object sender, RunWorkerCompletedEventArgs e)
-        {
-            progressBar.IsIndeterminate = false;
-            progressBarLabel.Text = "";
-
-            PopulateChangeListBoxes(e.Result);
-        }
-
-
-        //
-        // update PD Products section
-        //
-
         //button that updates product from PD
         private void UpdatePDButton_Click(object sender, RoutedEventArgs e)
         {
             //running export products in background
             BackgroundWorker PDUpdateWorker = new();
-            PDUpdateWorker.DoWork += PDModule.UpdatePDProducts;
-            PDUpdateWorker.RunWorkerCompleted += UpdatePDWorkerOnComplete;
+            PDUpdateWorker.WorkerReportsProgress = true;
+            PDUpdateWorker.DoWork += (sender, e) => UploadSupplierProducts.UpdateProducts("PD", sender, e);
+            PDUpdateWorker.RunWorkerCompleted += UpdateVendorProductsWorkerOnComplete;
+            PDUpdateWorker.ProgressChanged += UpdateVendorProductsWorkerProgressChanged;
 
-            progressBar.IsIndeterminate = true;
+            RefreshButton.IsEnabled = false;
             progressBarLabel.Text = "Updating PD products";
 
             ClearChangesListBoxes();
@@ -400,15 +373,39 @@ namespace Ikrito_Fulfillment_Platform.Pages
             PDUpdateWorker.RunWorkerAsync();
         }
 
-        //method that opens new dialogue window that shows all changes made in database
-        private void UpdatePDWorkerOnComplete(object sender, RunWorkerCompletedEventArgs e)
+        //button that updates product from BF supplier
+        private void UpdateBFButton_Click(object sender, RoutedEventArgs e)
         {
-            progressBar.IsIndeterminate = false;
-            progressBarLabel.Text = "";
+            //running export products in background
+            BackgroundWorker PDUpdateWorker = new();
+            PDUpdateWorker.WorkerReportsProgress = true;
+            PDUpdateWorker.DoWork += (sender, e) => UploadSupplierProducts.UpdateProducts("BF", sender, e);
+            PDUpdateWorker.RunWorkerCompleted += UpdateVendorProductsWorkerOnComplete;
+            PDUpdateWorker.ProgressChanged += UpdateVendorProductsWorkerProgressChanged;
 
-            PopulateChangeListBoxes(e.Result);
+            RefreshButton.IsEnabled = false;
+            progressBarLabel.Text = "Updating BF products";
+
+            ClearChangesListBoxes();
+
+            PDUpdateWorker.RunWorkerAsync();
         }
 
+        //method that updates progress bar during product export
+        private void UpdateVendorProductsWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            int progress = e.ProgressPercentage;
+            progressBar.Value = progress;
+            progressBarLabel.Text = e.UserState as string;
+        }
 
+        //worker on complete method to updating vendor products (disables loading bar, populates listboxes)
+        private void UpdateVendorProductsWorkerOnComplete(object sender, RunWorkerCompletedEventArgs e)
+        {
+            progressBarLabel.Text = "";
+            RefreshButton.IsEnabled = true;
+            progressBar.Value = 0;
+            PopulateChangeListBoxes(e.Result);
+        }
     }
 }

@@ -20,15 +20,18 @@ namespace Ikrito_Fulfillment_Platform.Models {
         public string deliveryTime { set; get; }        //delivery time string
         public string addedTimeStamp { set; get; }      //timestamp of when product was created
         public string productTypeVendor { set; get; }   //for saving vendor product type to database.
-        public string status { set; get; }              //for product status as in sync Status
-
-        public string ProductTypeDisplayVal { set; get; }   // for saving category text val
 
         public List<string> tags = new();
         public List<string> images = new();
         public List<ProductVariant> productVariants = new();
 
         public Dictionary<string, string> productAttributtes = new();
+
+
+        //for util
+        public string status { set; get; }              //for product status as in sync Status
+        public string ProductTypeDisplayVal { set; get; }   // for saving category text val
+
 
         /// <summary>
         /// class for describing product variants

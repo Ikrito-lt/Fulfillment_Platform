@@ -13,7 +13,7 @@ namespace Ikrito_Fulfillment_Platform.Utils
         }
 
         public static void testBeFancyImport() {
-            var s = BFModule._VendorProductWithVariantsList;
+            var s = BFModule.ProductList;
         }
 
         private static void testTitles() {

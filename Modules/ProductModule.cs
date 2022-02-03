@@ -558,8 +558,8 @@ namespace Ikrito_Fulfillment_Platform.Modules
                 var insertData = new Dictionary<string, string>
                 {
                     ["SKU"] = p.sku,
-                    ["Name"] = attrKVP.Key,
-                    ["Data"] = attrKVP.Value
+                    ["Name"] = SQLUtil.SQLSafeString(attrKVP.Key),
+                    ["Data"] = SQLUtil.SQLSafeString(attrKVP.Value)
                 };
                 db.Table($"_{tablePrefix}_Attributes").Insert(insertData);
             }

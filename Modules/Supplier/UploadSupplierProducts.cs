@@ -8,8 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using static Ikrito_Fulfillment_Platform.Models.Product;
 
@@ -40,10 +38,9 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
                 pList.AddRange(PDModule.ProductList);
             }
             else if (TablePrefix == "BF")
-            { 
-                //pList.AddRange(BFModule.)
+            {
+                pList.AddRange(BFModule.ProductList);
             }
-
             return pList;
         }
 
@@ -56,23 +53,58 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
         /// <param name="e"></param>
         public static void UpdateProducts(string TablePrefix, object sender = null, DoWorkEventArgs e = null)
         {
-            List<Product> DBProducts = ProductModule.GetVendorProducts(TablePrefix);
-            List<Product> APIProducts =  GetSupplierProductList(TablePrefix);
+            BackgroundWorker worker = sender as BackgroundWorker;
 
-            List<Product> ArchiveProducts = DBProducts.Where(p1 => APIProducts.All(p2 => p2.sku != p1.sku)).ToList();
-            List<Product> NewProducts = APIProducts.Where(p1 => DBProducts.All(p2 => p2.sku != p1.sku)).ToList();
-            List<Product> UpdateProducts = APIProducts.Where(p1 => NewProducts.All(p2 => p2.sku != p1.sku)).ToList();
+            //getting DB Products
+            Dictionary<string, Product> DBProducts = new Dictionary<string, Product>();
+            foreach (Product DBProduct in ProductModule.GetVendorProducts(TablePrefix)) {
+                DBProducts.Add(DBProduct.sku, DBProduct);
+            }
 
-            //remove dublicate skus from newProd list
-            var a = NewProducts.GroupBy(x => x.sku.ToLower()).Where(x => x.LongCount() > 1).ToList();
-            a.ForEach(x => NewProducts.RemoveAll(y => y.sku.ToLower() == x.Key));
+            //getting API products
+            Dictionary<string, Product> APIProducts = new Dictionary<string, Product>();
+            foreach (Product APIProduct in GetSupplierProductList(TablePrefix)) {
+                APIProducts.Add(APIProduct.sku, APIProduct);
+            }
 
+            //sorting
+            List<string> ArchiveProductSKUs = DBProducts.Keys.Except(APIProducts.Keys).ToList();
+            List<string> UpdateProductSKUs = DBProducts.Keys.Intersect(APIProducts.Keys).ToList();
+            List<string> NewProductSKUs = APIProducts.Keys.Except(DBProducts.Keys).ToList();
+
+            List<Product> ArchiveProducts = DBProducts.Values.Where(x => ArchiveProductSKUs.Contains(x.sku)).ToList();
+            List<Product> UpdateProducts = APIProducts.Values.Where(x => UpdateProductSKUs.Contains(x.sku)).ToList();
+            List<Product> NewProducts = APIProducts.Values.Where(x => NewProductSKUs.Contains(x.sku)).ToList();
+
+
+
+
+            ////sorting
+            //List<KeyValuePair<string, Product>> ArchiveProducts = DBProducts.Where(p1 => APIProducts.All(p2 => p2.Key != p1.Key)).ToList();
+            //List<KeyValuePair<string, Product>> NewProducts = APIProducts.Where(p1 => DBProducts.All(p2 => p2.Key != p1.Key)).ToList();
+            //List<KeyValuePair<string, Product>> UpdateProducts = APIProducts.Where(p1 => NewProducts.All(p2 => p2.Key != p1.Key)).ToList();
+
+
+
+            //Dictionary<string, Product> ArchiveProducts = DBProducts.Where(p1 => APIProducts.All(p2 => p2.sku != p1.sku)).ToList();
+            //Dictionary<string, Product> NewProducts = APIProducts.Where(p1 => DBProducts.All(p2 => p2.sku != p1.sku)).ToList();
+            //Dictionary<string, Product> UpdateProducts = APIProducts.Where(p1 => NewProducts.All(p2 => p2.sku != p1.sku)).ToList();
+
+            //for remorting progress in listboxes
             List<ProductChangeRecord> appliedChanges = new();          //for updates
-            List<ProductChangeRecord> newChanges = new();                            //for new products
-            List<ProductChangeRecord> archivedChanges = new();                       //for archived Products                     
+            List<ProductChangeRecord> newChanges = new();              //for new products
+            List<ProductChangeRecord> archivedChanges = new();         //for archived Products                     
+
+            //todo: i need to see what products in updateProducts list i actually need to update to make this number exact
+            //for progress reporting
+            int archiveProductsLenght = ArchiveProducts.Count();
+            int newProductsLenght = NewProducts.Count();
+            int updateProductsLenght = UpdateProducts.Count();
+            int allProductsActionCount = archiveProductsLenght + updateProductsLenght + newProductsLenght;
+            int allProductsActionDone = 0;
 
             //archiving products
-            foreach (Product archiveProduct in ArchiveProducts)
+            foreach (var (archiveProduct, index) in ArchiveProducts.LoopIndex())
             {
                 try
                 {
@@ -101,10 +133,15 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
                     MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.",
                         "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+
+                //reporting progress
+                allProductsActionDone += 1;
+                int promiles = (allProductsActionDone * 1000) / allProductsActionCount;
+                worker.ReportProgress(promiles, $"Archiving {TablePrefix} Products ({index + 1}/{archiveProductsLenght}) - Total Actions ({allProductsActionDone}/{allProductsActionCount})");
             }
 
             // adding new Products
-            foreach (Product newProduct in NewProducts)
+            foreach (var (newProduct, index) in NewProducts.LoopIndex())
             {
                 ProductModule.AddProductToDB(newProduct);
 
@@ -126,13 +163,18 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
                 };
                 newChange.ChangesMade.Add("Added to Database");
                 newChanges.Add(newChange);
+
+                //reporting progress
+                allProductsActionDone += 1;
+                int promiles = (allProductsActionDone * 1000) / allProductsActionCount;
+                worker.ReportProgress(promiles, $"Adding New {TablePrefix} Products ({index + 1}/{newProductsLenght}) - Total Actions ({allProductsActionDone}/{allProductsActionCount})");
             }
 
             //updating products
             DataBaseInterface db = new();
-            foreach (Product updateProduct in UpdateProducts)
+            foreach (var (updateProduct, index) in UpdateProducts.LoopIndex())
             {
-                Product oldProduct = DBProducts.Find(x => x.sku == updateProduct.sku);
+                Product oldProduct = DBProducts[updateProduct.sku];
 
                 foreach (ProductVariant pVariant in updateProduct.productVariants) {
                     ProductVariant dbVariant = oldProduct.productVariants.Where(x => x.barcode == pVariant.barcode).FirstOrDefault();
@@ -226,7 +268,6 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
                             db.Table($"_{TablePrefix}_Variants").Where(variantWhereDelete).Delete();
                         }
 
-
                         // add new variant
                         var insertData = new Dictionary<string, string>
                         {
@@ -263,6 +304,11 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
                 {
                     MessageBox.Show("An exception just occurred:\n" + ex.Message + "\n\nSend screenshot you know where.", "Change Product Status Exception", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+
+                //reporting progress
+                allProductsActionDone += 1;
+                int promiles = (allProductsActionDone * 1000) / allProductsActionCount;
+                worker.ReportProgress(promiles, $"Updating {TablePrefix} Products ({index + 1}/{updateProductsLenght}) - Total Actions ({allProductsActionDone}/{allProductsActionCount})");
             }
 
             //pass applied changes and pending changes to update on complete method

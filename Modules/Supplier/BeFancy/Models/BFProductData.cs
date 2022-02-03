@@ -8,23 +8,23 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy.Models
 {
     internal class BFProduct
     {
-        public string id { get; set; }
-        public string model { get; set; }
-        public string category { get; set; }
-        public string title { get; set; }
-        public string description { get; set; }
-        public double price { get; set; }
+        public string id { get; set; }//
+        public string model { get; set; }// is empty
+        public string category { get; set; }//
+        public string title { get; set; }//
+        public string description { get; set; }//
+        public double price { get; set; }//
         public double oldPrice { get; set; }
-        public string manufacturer { get; set; }
-        public string deliveryTimeText { get; set; }
-        public List<string> imageURLs { get; set; }
-        public Dictionary<string, string> attributes { get; set; }
-        public string group { get; set; }
-        public int stock { set; get; }
-        public string barcode { set; get; }
+        public string manufacturer { get; set; }//
+        public string deliveryTimeText { get; set; }//
+        public List<string> imageURLs { get; set; }//
+        public Dictionary<string, string> attributes { get; set; }//
+        public string group { get; set; }//same as id
+        public int stock { set; get; }//
+        public string barcode { set; get; }//
     }
 
-    internal class ProductVariant
+    internal class BFProductVariant
     {
         public string variantTitle { get; set; }
         public string variantDescription { get; set; }
@@ -34,18 +34,18 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy.Models
 
     internal class BFProductWithVariants
     {
-        public string id { get; set; }
-        public string model { get; set; }
-        public string category { get; set; }
-        public string title { get; set; }
-        public string description { get; set; }
-        public double price { get; set; }
-        public double oldPrice { get; set; }
-        public string manufacturer { get; set; }
-        public string deliveryTimeText { get; set; }
-        public List<string> imageURLs { get; set; }
-        public Dictionary<string, string> attributes { get; set; }
-        public string group { get; set; }
-        public List<ProductVariant> variants { get; set; }
+        public string id { get; set; }//
+        public string model { get; set; }//is empty
+        public string category { get; set; }//
+        public string title { get; set; }//
+        public string description { get; set; }//
+        public double price { get; set; }//
+        public double oldPrice { get; set; }//
+        public string manufacturer { get; set; }//
+        public string deliveryTimeText { get; set; }//
+        public List<string> imageURLs { get; set; }//
+        public Dictionary<string, string> attributes { get; set; }//
+        public string group { get; set; }//same as id
+        public List<BFProductVariant> variants { get; set; }//
     }
 }
