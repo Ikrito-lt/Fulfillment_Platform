@@ -24,7 +24,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
         public DataBaseInterface() {
             String connectionQuery = "Server=" + Globals.DBServer + ";Database=" + Globals.DefaultDB
-               + ";port=" + Globals.DBServerPort + ";User Id=" + Globals.DBServerUsername + ";password=" + Globals.DBServerPassword + ";SslMode=none";
+               + ";port=" + Globals.DBServerPort + ";User Id=" + Globals.DBServerUsername + ";password=" + Globals.DBServerPassword + ";SslMode=none; default command timeout=150;";
 
             connection = new MySqlConnection(connectionQuery);
 
@@ -103,6 +103,42 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                     var fieldValue = new Dictionary<string, string>();
 
                     for (int col = 0; col < reader.FieldCount; col++) {
+                        fieldValue.Add(reader.GetName(col).ToString(), reader.GetValue(col).ToString());
+                    }
+
+                    result.Add(rowCol, fieldValue);
+                    rowCol++;
+                }
+
+            }
+
+            reader.Close();
+            ResetQuery();
+
+            return result;
+        }
+
+        public Dictionary<int, Dictionary<string, string>> ExecuteTextQuery(string q)
+        {
+            if (debug)
+            {
+                Console.WriteLine(query);
+            }
+
+            var cmd = new MySqlCommand(q, connection);
+            var reader = cmd.ExecuteReader();
+
+            var result = new Dictionary<int, Dictionary<string, string>>();
+
+            if (reader.HasRows)
+            {
+                int rowCol = 0;
+                while (reader.Read())
+                {
+                    var fieldValue = new Dictionary<string, string>();
+
+                    for (int col = 0; col < reader.FieldCount; col++)
+                    {
                         fieldValue.Add(reader.GetName(col).ToString(), reader.GetValue(col).ToString());
                     }
 

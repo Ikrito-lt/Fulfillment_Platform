@@ -11,7 +11,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
 {
     public partial class ProductBulkEditPage : Page
     {
-        private readonly List<Product> Products;
+        private readonly Dictionary<string, Product> Products;
         private readonly Page PreviousPage;
         private readonly Dictionary<string, string> CategoryKVP;
         private readonly List<string> PossibleTypes;
@@ -28,7 +28,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
             public bool Selected { get; set; }
         }
 
-        public ProductBulkEditPage(List<Product> products, Dictionary<string, string> categoryKVP, Page prevPage)
+        public ProductBulkEditPage(Dictionary<string, Product> products, Dictionary<string, string> categoryKVP, Page prevPage)
         {
             InitializeComponent();
             PreviousPage = prevPage;
@@ -66,10 +66,12 @@ namespace Ikrito_Fulfillment_Platform.Pages
         /// <returns>List of Possible vendor types</returns>
         private List<string> GetVendorTypes() {
             List<string> possibleVendorTypes = new();
-            Products.ForEach(x => {
-                if (!possibleVendorTypes.Contains(x.productTypeVendor)) {
-                    possibleVendorTypes.Add(x.productTypeVendor);
-                }});
+            foreach ((string sku, Product p) in Products) {
+                if (!possibleVendorTypes.Contains(p.productTypeVendor.Trim()))
+                {
+                    possibleVendorTypes.Add(p.productTypeVendor.Trim());
+                }
+            }
             return possibleVendorTypes;
         }
 
@@ -92,14 +94,14 @@ namespace Ikrito_Fulfillment_Platform.Pages
         }
 
         private void RefreshListBox() {
-            string productType = string.Empty;
+             string productType = string.Empty;
             string vendorProductType = string.Empty;
             if (TypeFilterCBox.SelectedItem != null) productType = TypeFilterCBox.SelectedItem.ToString();
             if (VendorTypeFilterCBox.SelectedItem != null) vendorProductType = VendorTypeFilterCBox.SelectedItem.ToString();
 
             ListBoxSource.Clear();
 
-            foreach (Product p in Products) {
+            foreach ((string sku, Product p) in Products) {
                 var TPlistboxitem = new TypeListBoxItem();
                 TPlistboxitem.VendorProductType = vendorProductType;
                 TPlistboxitem.ProductType = productType;
@@ -118,7 +120,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
                 bool checkVPT = TPlistboxitem.VendorProductType == string.Empty ? false : true;
                 if (checkVPT)
                 {
-                    if (p.productTypeVendor != vendorProductType) continue;
+                    if (p.productTypeVendor.Trim() != vendorProductType) continue;
                 }
                 else {
                     TPlistboxitem.VendorProductType = p.productTypeVendor;
@@ -150,12 +152,20 @@ namespace Ikrito_Fulfillment_Platform.Pages
             worker.DoWork += (object sender, DoWorkEventArgs e) =>
             {
                 string newTypeID = CategoryKVP.FirstOrDefault(x => x.Value == newType).Key;
-                for(int i = 0; i<ListBoxSource.Count; i++) {
-                    TypeListBoxItem t = (TypeListBoxItem)ListBoxSource[i];
-                    ProductModule.ChangeProductCategory(t.SKU, newTypeID);
-                    
-                    ListBoxSource[i].ProductType = newType;
-                    (sender as BackgroundWorker).ReportProgress(i);
+                Dictionary<string, TypeListBoxItem> changeList = ListBoxSource.Where(x => x.Selected == true).ToDictionary(v => v.SKU, v => v);
+                var i = 1;
+                var changesCount = changeList.Count;
+                foreach ((var sku, var t) in changeList) {
+                    ProductModule.ChangeProductCategory(sku, newTypeID);
+
+                    //changing category in products
+                    Products[sku].productTypeID = newTypeID;
+                    Products[sku].ProductTypeDisplayVal = newType;
+
+                    //changing category in listbox
+                    ListBoxSource.RemoveAll(x => x.SKU == sku);
+                    (sender as BackgroundWorker).ReportProgress(i, changesCount);
+                    i++;                
                 }
             };
 
@@ -164,20 +174,21 @@ namespace Ikrito_Fulfillment_Platform.Pages
                 BackButton.IsEnabled = true;
                 loadingbarLabel.Text = "";
                 loadingBar.Value = 0;
-                RefreshListBox();
+                ChangeTypeListBox.Items.Refresh();
             };
 
             worker.ProgressChanged += (object sender, ProgressChangedEventArgs e) =>
             {
                 int progress = e.ProgressPercentage;
+                int max = (int)e.UserState;
                 loadingBar.Value = progress;
-                loadingbarLabel.Text = $"Changing Product Types ({progress}/{ListBoxSource.Count})";
+                loadingBar.Maximum = max;
+                loadingbarLabel.Text = $"Changing Product Types ({progress}/{max})";
             };
 
             //blocking pre do work
             BackButton.IsEnabled = false;
             loadingbarLabel.Text = "Changing Product Types";
-            loadingBar.Maximum = ListBoxSource.Count;
             
             worker.RunWorkerAsync();
         }
@@ -194,7 +205,9 @@ namespace Ikrito_Fulfillment_Platform.Pages
         /// <param name="e"></param>
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow.Instance.mainFrame.Content = PreviousPage;
+            ProductBrowsePage.Instance.AllProducts = Products;
+            ProductBrowsePage.Instance.RefreshDataGrid();
+            MainWindow.Instance.mainFrame.Content = ProductBrowsePage.Instance;
         }
 
         /// <summary>

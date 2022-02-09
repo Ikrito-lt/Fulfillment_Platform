@@ -3,6 +3,7 @@ using Ikrito_Fulfillment_Platform.Utils;
 using System;
 using System.Collections.Generic;
 using System.Windows;
+using System.Linq;
 using static Ikrito_Fulfillment_Platform.Models.Product;
 
 namespace Ikrito_Fulfillment_Platform.Modules
@@ -27,7 +28,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
             //updating *_Products table
             var updateData = new Dictionary<string, string>
             {
-                ["ProductType"] = newCategoryID
+                ["ProductType_ID"] = newCategoryID
             };
             var whereUpdate = new Dictionary<string, Dictionary<string, string>>
             {
@@ -37,6 +38,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
                 }
             };
             db.Table($"_{tablePrefix}_Products").Where(whereUpdate).Update(updateData);
+            db.Table("Products").Where(whereUpdate).Update(updateData);
         }
 
         //gets Categories KVP from database
@@ -733,9 +735,9 @@ namespace Ikrito_Fulfillment_Platform.Modules
         //
 
         //method gets list of TDB products
-        public static List<Product> GetVendorProducts(string TablePrefix)
+        public static Dictionary<string, Product> GetVendorProducts(string TablePrefix)
         {
-            List<Product> products = new();
+            Dictionary<string, Product> productsKVP = new();
 
             //getting main product info
             DataBaseInterface db = new();
@@ -757,7 +759,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
                 NewProduct.addedTimeStamp = prod["AddedTimeStamp"];
                 NewProduct.productTypeVendor = prod["ProductTypeVendor"];
 
-                products.Add(NewProduct);
+                productsKVP.Add(prod["SKU"], NewProduct);
             }
 
             //getting images faster
@@ -768,7 +770,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
                 string sku = imgRow["SKU"];
                 string imageUrl = imgRow["ImgUrl"];
 
-                products.Find(x => x.sku == sku).images.Add(imageUrl);
+                productsKVP[sku].images.Add(imageUrl);
             }
 
             //getting tags faster
@@ -779,7 +781,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
                 string sku = tagRow["SKU"];
                 string tag = tagRow["Tag"];
 
-                products.Find(x => x.sku == sku).tags.Add(tag);
+                productsKVP[sku].tags.Add(tag);
             }
 
             //getting variants faster
@@ -797,7 +799,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
                 variant.VariantData = row["VariantData"];
                 variant.PermPrice = row["PermPrice"] == "1" ? true : false;
 
-                products.Find(x => x.sku == sku).productVariants.Add(variant);
+                productsKVP[sku].productVariants.Add(variant);
             }
 
             //getting attributes faster
@@ -808,40 +810,39 @@ namespace Ikrito_Fulfillment_Platform.Modules
                 string name = row["Name"];
                 string data = row["Data"];
 
-                products.Find(x => x.sku == sku).productAttributtes.Add(name, data);
+                productsKVP[sku].productAttributtes.Add(name, data);
             }
 
-            return products;
-        }
-
-        //method gets list of all Products in database
-        public static List<Product> GetAllProducts()
-        {
-            List<Product> p = new();
-
-            List<Product> TDBproducts = GetVendorProducts("TDB");
-            p.AddRange(TDBproducts);
-
-            List<Product> KGproducts = GetVendorProducts("KG");
-            p.AddRange(KGproducts);
-
-            List<Product> PDproducts = GetVendorProducts("PD");
-            p.AddRange(PDproducts);
-
-            //getting product statuses faster
-            DataBaseInterface db = new();
-            var result = db.Table("Products").Get();
+            //getting products statuses
+            result = db.ExecuteTextQuery($"SELECT SKU, Status FROM Products WHERE SKU LIKE \"{TablePrefix}%\";");
             foreach (var statusRow in result.Values)
             {
-
                 string sku = statusRow["SKU"];
                 string status = statusRow["Status"];
 
-                if (p.Exists(x => x.sku == sku))
-                {
-                    p.Find(x => x.sku == sku).status = status;
-                }
+                productsKVP[sku].status = status;
             }
+            return productsKVP;
+        }
+
+        //todo: this is slow
+        //method gets list of all Products in database
+        public static Dictionary<string,Product> GetAllProducts()
+        {
+            Dictionary<string, Product> p = new();
+
+            Dictionary<string, Product> TDBproducts = GetVendorProducts("TDB");
+            p.AddRange(TDBproducts);
+
+            Dictionary<string, Product> KGproducts = GetVendorProducts("KG");
+            p.AddRange(KGproducts);
+
+            Dictionary<string, Product> PDproducts = GetVendorProducts("PD");
+            p.AddRange(PDproducts);
+
+            //Dictionary<string, Product> BFproducts = GetVendorProducts("BF");
+            //p.AddRange(BFproducts);
+
             return p;
         }
     }

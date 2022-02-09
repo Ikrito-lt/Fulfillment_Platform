@@ -62,6 +62,35 @@ namespace Ikrito_Fulfillment_Platform.Utils {
             return dict.FirstOrDefault(entry =>
                 EqualityComparer<V>.Default.Equals(entry.Value, val)).Key;
         }
+
+        /// <summary>
+        /// used to add dictionary to dictionary
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="S"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="collection"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static void AddRange<T, S>(this Dictionary<T, S> source, Dictionary<T, S> collection)
+        {
+            if (collection == null)
+            {
+                throw new ArgumentNullException("Collection is null");
+            }
+
+            foreach (var item in collection)
+            {
+                if (!source.ContainsKey(item.Key))
+                {
+                    source.Add(item.Key, item.Value);
+                }
+                else
+                {
+                    // handle duplicate key issue here
+                    throw new Exception("Dublicate key in Dictionary.AddRange()");
+                }
+            }
+        }
     }
 
     public static class ListExt

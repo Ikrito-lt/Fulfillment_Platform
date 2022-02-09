@@ -182,11 +182,9 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         private void exitPage() {
             if (PreviousPage is ProductBrowsePage) {
                 var page = PreviousPage as ProductBrowsePage;
-                int index = page.AllProducts.FindIndex(x => x.sku == EditableProduct.sku);
-                
                 Product editedProduct = ProductModule.GetProduct(EditableProduct.sku);
 
-                page.AllProducts[index] = editedProduct;
+                page.AllProducts[editedProduct.sku] = editedProduct;
                 page.RefreshDataGrid();
                 MainWindow.Instance.mainFrame.Content = page;
             }
