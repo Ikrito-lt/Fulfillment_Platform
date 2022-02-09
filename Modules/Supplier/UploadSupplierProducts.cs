@@ -57,8 +57,8 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
 
             //getting DB Products
             Dictionary<string, Product> DBProducts = new Dictionary<string, Product>();
-            foreach (Product DBProduct in ProductModule.GetVendorProducts(TablePrefix)) {
-                DBProducts.Add(DBProduct.sku, DBProduct);
+            foreach ((string sku, Product DBProduct) in ProductModule.GetVendorProducts(TablePrefix)) {
+                DBProducts.Add(sku, DBProduct);
             }
 
             //getting API products
@@ -75,20 +75,6 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
             List<Product> ArchiveProducts = DBProducts.Values.Where(x => ArchiveProductSKUs.Contains(x.sku)).ToList();
             List<Product> UpdateProducts = APIProducts.Values.Where(x => UpdateProductSKUs.Contains(x.sku)).ToList();
             List<Product> NewProducts = APIProducts.Values.Where(x => NewProductSKUs.Contains(x.sku)).ToList();
-
-
-
-
-            ////sorting
-            //List<KeyValuePair<string, Product>> ArchiveProducts = DBProducts.Where(p1 => APIProducts.All(p2 => p2.Key != p1.Key)).ToList();
-            //List<KeyValuePair<string, Product>> NewProducts = APIProducts.Where(p1 => DBProducts.All(p2 => p2.Key != p1.Key)).ToList();
-            //List<KeyValuePair<string, Product>> UpdateProducts = APIProducts.Where(p1 => NewProducts.All(p2 => p2.Key != p1.Key)).ToList();
-
-
-
-            //Dictionary<string, Product> ArchiveProducts = DBProducts.Where(p1 => APIProducts.All(p2 => p2.sku != p1.sku)).ToList();
-            //Dictionary<string, Product> NewProducts = APIProducts.Where(p1 => DBProducts.All(p2 => p2.sku != p1.sku)).ToList();
-            //Dictionary<string, Product> UpdateProducts = APIProducts.Where(p1 => NewProducts.All(p2 => p2.sku != p1.sku)).ToList();
 
             //for remorting progress in listboxes
             List<ProductChangeRecord> appliedChanges = new();          //for updates

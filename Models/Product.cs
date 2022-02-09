@@ -27,11 +27,15 @@ namespace Ikrito_Fulfillment_Platform.Models {
 
         public Dictionary<string, string> productAttributtes = new();
 
-
         //for util
         public string status { set; get; }              //for product status as in sync Status
         public string ProductTypeDisplayVal { set; get; }   // for saving category text val
 
+        //for showing 
+        public string VariantCount => productVariants?.Count > 0 ? productVariants.Count.ToString() : "0";
+        public string FirstVariantStock => productVariants?.Count > 0 ? productVariants.First().stock.ToString() : "NaN";
+        public string FirstVariantPrice => productVariants?.Count > 0 ? productVariants.First().price.ToString() : "NaN";
+        public string FirstVariantVendorPrice => productVariants?.Count > 0 ? productVariants.First().vendor_price.ToString() : "NaN";
 
         /// <summary>
         /// class for describing product variants

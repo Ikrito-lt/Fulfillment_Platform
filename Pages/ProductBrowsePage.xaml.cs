@@ -1,10 +1,8 @@
 ﻿using Ikrito_Fulfillment_Platform.Models;
 using Ikrito_Fulfillment_Platform.Modules;
 using Ikrito_Fulfillment_Platform.UI;
-using Ikrito_Fulfillment_Platform.Utils;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -18,7 +16,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
     public partial class ProductBrowsePage : Page
     {
 
-        public List<Product> AllProducts;
+        public Dictionary<string, Product> AllProducts;
         private List<Product> StatusFilteredProducts;
         private List<Product> DateFilteredFilteredProducts;
         private List<Product> TextFilteredProducts;
@@ -72,8 +70,43 @@ namespace Ikrito_Fulfillment_Platform.Pages
         {
             BackgroundWorker worker = new();
             worker.WorkerReportsProgress = false;
-            worker.DoWork += BGW_PreloadAllProducts;
-            worker.RunWorkerCompleted += BGW_PreloadAllProductsCompleted;
+
+            worker.DoWork += (sender, e) => {
+                //to preload categories
+                _ = CategoryKVP;
+                //downloading products from database
+                Dictionary<string, Product> products = ProductModule.GetAllProducts();
+                e.Result = products;
+            };
+
+            // background Worker for loading all product on complete
+            worker.RunWorkerCompleted += (sender, e) => {
+                //getting category display names
+                var TempProductList = e.Result as Dictionary<string, Product>;
+                foreach ((string sku, Product TempProduct) in TempProductList)
+                {
+                    TempProduct.ProductTypeDisplayVal = CategoryKVP[TempProduct.productTypeID];
+                }
+
+                //putting products in their grids
+                AllProducts = TempProductList;
+                StatusFilteredProducts = AllProducts.Values.ToList();
+                DateFilteredFilteredProducts = AllProducts.Values.ToList();
+                TextFilteredProducts = AllProducts.Values.ToList();
+
+                //init DataGrid
+                productDG.ItemsSource = TextFilteredProducts;
+
+                //init label
+                ChangeCountLabel(TextFilteredProducts.Count);
+
+                //unblocking refresh button and unanimating loading bar
+                loadingbarLabel.Text = "";
+                loadingBar.IsIndeterminate = false;
+                RefreshButton.IsEnabled = true;
+                Debug.WriteLine("BGW_PreloadAllProducts Finished");
+                BulkCategoryEditButton.IsEnabled = true;
+            };
 
             //blocking refresh button and animating loading bar
             loadingBar.IsIndeterminate = true;
@@ -84,51 +117,13 @@ namespace Ikrito_Fulfillment_Platform.Pages
             worker.RunWorkerAsync();
         }
 
-        // backgroud worker for loading all products
-        private void BGW_PreloadAllProducts(object sender, DoWorkEventArgs e)
-        {
-            List<Product> products = ProductModule.GetAllProducts();
-            _ = CategoryKVP;
-            e.Result = products;
-        }
-
-        // background Worker for loading all product on complete
-        private void BGW_PreloadAllProductsCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            //getting category display names
-            var TempProductList = e.Result as List<Product>;
-            foreach (var TempProduct in TempProductList)
-            {
-                TempProduct.ProductTypeDisplayVal = CategoryKVP[TempProduct.productTypeID];
-            }
-
-            //putting products in their grids
-            AllProducts = TempProductList;
-            StatusFilteredProducts = AllProducts.ToList();
-            DateFilteredFilteredProducts = AllProducts.ToList();
-            TextFilteredProducts = AllProducts.ToList();
-
-            //init DataGrid
-            productDG.ItemsSource = TextFilteredProducts;
-
-            //init label
-            ChangeCountLabel(TextFilteredProducts.Count);
-
-            //unblocking refresh button and unanimating loading bar
-            loadingbarLabel.Text = "";
-            loadingBar.IsIndeterminate = false;
-            RefreshButton.IsEnabled = true;
-            Debug.WriteLine("BGW_PreloadAllProducts Finished");
-            BulkCategoryEditButton.IsEnabled = true;
-        }
-
         //refresh datagrid
         public void RefreshDataGrid()
         {
             //putting products in their grids
-            StatusFilteredProducts = AllProducts.ToList();
-            DateFilteredFilteredProducts = AllProducts.ToList();
-            TextFilteredProducts = AllProducts.ToList();
+            StatusFilteredProducts = AllProducts.Values.ToList();
+            DateFilteredFilteredProducts = AllProducts.Values.ToList();
+            TextFilteredProducts = AllProducts.Values.ToList();
 
             //init DataGrid
             productDG.ItemsSource = TextFilteredProducts;
@@ -217,7 +212,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
             {
                 if (status.IsSelected)
                 {
-                    StatusFilteredProducts.AddRange(AllProducts.ToList().FindAll(x => x.status == status.Name));
+                    StatusFilteredProducts.AddRange(AllProducts.ToList().FindAll(x => x.Value.status == status.Name).ToDictionary(x=> x.Key, x=> x.Value).Values.ToList());
                 }
             }
 
@@ -276,7 +271,6 @@ namespace Ikrito_Fulfillment_Platform.Pages
         {
             BeginDatePicker.SelectedDate = null;
             EndDatePicker.SelectedDate = null;
-
         }
 
 

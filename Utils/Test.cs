@@ -12,21 +12,21 @@ namespace Ikrito_Fulfillment_Platform.Utils
             //a();
         }
 
-        public static void testBeFancyImport() {
-            var s = BFModule.ProductList;
-        }
+        //public static void testBeFancyImport() {
+        //    var s = BFModule.ProductList;
+        //}
 
-        private static void testTitles() {
-            List<Product> pList = ProductModule.GetAllProducts();
-            List<Product> titleList = new();
+        //private static void testTitles() {
+        //    List<Product> pList = ProductModule.GetAllProducts();
+        //    List<Product> titleList = new();
 
-            foreach (Product p in pList) {
-                if (p.title.Length > 200) {
-                    titleList.Add(p);
-                }
-            }
+        //    foreach (Product p in pList) {
+        //        if (p.title.Length > 200) {
+        //            titleList.Add(p);
+        //        }
+        //    }
 
-            var a = titleList;
-        }
+        //    var a = titleList;
+        //}
     }
 }
