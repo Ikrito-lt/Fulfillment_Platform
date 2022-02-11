@@ -3,14 +3,17 @@
 namespace Ikrito_Fulfillment_Platform.Models {
     static class ProductStatus {
         //when adding new statuses update productMOdule ChangeProductStatus method
-
-        public static string WaitingShopSync = "Waiting Shop Sync";
+        
+        public static string Disabled = "Disabled";
+        public static string OutOfStock = "OutOfStock";
         public static string New = "New";
         public static string Ok = "Ok";
-        public static string NeedsArchiving = "Needs Archiving";
-        public static string NeedsUnArchiving = "Needs Un-Archiving";
         public static string Archived = "Archived";
 
+        //left from shopify
+        //public static string WaitingShopSync = "Waiting Shop Sync";
+        //public static string NeedsArchiving = "Needs Archiving";
+        //public static string NeedsUnArchiving = "Needs Un-Archiving";
 
         //method for getting list of values for all declared fields
         public static List<string> GetFields() {

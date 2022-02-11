@@ -41,7 +41,10 @@ namespace Ikrito_Fulfillment_Platform.Modules
             db.Table("Products").Where(whereUpdate).Update(updateData);
         }
 
-        //gets Categories KVP from database
+        /// <summary>
+        /// gets Categories KVP from database
+        /// </summary>
+        /// <returns></returns>
         public static Dictionary<string, string> GetCategoriesDictionary()
         {
             //getting category KVP from database
@@ -128,12 +131,15 @@ namespace Ikrito_Fulfillment_Platform.Modules
 
         }
 
-        //method that changes product status to one passed to it (with conflict control)
-        public static void ChangeProductStatus(string sku, string status)
+        /// <summary>
+        /// method that changes product status to one passed to it (with conflict control)
+        /// </summary>
+        /// <param name="sku"></param>
+        /// <param name="newStatus"></param>
+        /// <exception cref="Exception"></exception>
+        public static void ChangeProductStatus(string sku, string newStatus)
         {
-
-            //first we need to get product status and check if its "New"
-            //if its "New" we cant change that
+            //setting up database query to get current status
             DataBaseInterface db = new();
             var whereQ = new Dictionary<string, Dictionary<string, string>>
             {
@@ -143,12 +149,13 @@ namespace Ikrito_Fulfillment_Platform.Modules
                 }
             };
             var productStatusResult = db.Table("Products").Where(whereQ).Get();
-            string productStatus = productStatusResult[0]["Status"];
+            string currentStatus = productStatusResult[0]["Status"];
 
+            //changing current status to new status
             var updateData = new Dictionary<string, string>
             {
                 ["LastUpdateTime"] = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString(),
-                ["Status"] = status
+                ["Status"] = newStatus
             };
             var whereUpdate = new Dictionary<string, Dictionary<string, string>>
             {
@@ -157,184 +164,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
                     ["="] = sku
                 }
             };
-
-            if (productStatus == ProductStatus.New)
-            {
-                if (status == ProductStatus.Ok)
-                {
-                    updateData["Status"] = ProductStatus.Ok;
-                    db.Table("Products").Where(whereUpdate).Update(updateData);
-
-                }
-                else if (status == ProductStatus.WaitingShopSync)
-                {
-                    //edge case
-                    updateData["Status"] = ProductStatus.New;
-                    db.Table("Products").Where(whereUpdate).Update(updateData);
-
-                }
-                else if (status == ProductStatus.NeedsArchiving)
-                {
-                    //edge case
-                    DeleteProduct(sku);
-                }
-                else
-                {
-                    throw new Exception($"cant change product status {productStatus} -> {status}");
-                }
-
-            }
-            else if (productStatus == ProductStatus.Ok)
-            {
-
-                if (status == ProductStatus.NeedsArchiving)
-                {
-                    updateData["Status"] = ProductStatus.NeedsArchiving;
-                    db.Table("Products").Where(whereUpdate).Update(updateData);
-
-                }
-                else if (status == ProductStatus.WaitingShopSync)
-                {
-                    updateData["Status"] = ProductStatus.WaitingShopSync;
-                    db.Table("Products").Where(whereUpdate).Update(updateData);
-
-                }
-                else if (status == ProductStatus.NeedsArchiving)
-                {
-                    updateData["Status"] = ProductStatus.NeedsArchiving;
-                    db.Table("Products").Where(whereUpdate).Update(updateData);
-
-                }
-                else
-                {
-                    throw new Exception($"cant change product status {productStatus} -> {status}");
-                }
-
-            }
-            else if (productStatus == ProductStatus.NeedsArchiving)
-            {
-
-                if (status == ProductStatus.Archived)
-                {
-                    updateData["Status"] = ProductStatus.Archived;
-                    db.Table("Products").Where(whereUpdate).Update(updateData);
-
-                }
-                else if (status == ProductStatus.NeedsUnArchiving)
-                {
-                    //edge case
-                    updateData["Status"] = ProductStatus.WaitingShopSync;
-                    db.Table("Products").Where(whereUpdate).Update(updateData);
-
-                }
-                else if (status == ProductStatus.NeedsArchiving)
-                {
-                    updateData["Status"] = ProductStatus.NeedsArchiving;
-                    db.Table("Products").Where(whereUpdate).Update(updateData);
-
-                }
-                else if (status == ProductStatus.WaitingShopSync)
-                {
-                    updateData["Status"] = ProductStatus.WaitingShopSync;
-                    db.Table("Products").Where(whereUpdate).Update(updateData);
-
-                }
-                else
-                {
-                    throw new Exception($"cant change product status {productStatus} -> {status}");
-                }
-
-            }
-            else if (productStatus == ProductStatus.Archived)
-            {
-
-                if (status == ProductStatus.NeedsUnArchiving)
-                {
-                    updateData["Status"] = ProductStatus.NeedsUnArchiving;
-                    db.Table("Products").Where(whereUpdate).Update(updateData);
-
-                }
-                else if (status == ProductStatus.WaitingShopSync)
-                {
-                    //edge case
-                    updateData["Status"] = ProductStatus.NeedsUnArchiving;
-                    db.Table("Products").Where(whereUpdate).Update(updateData);
-
-                }
-                else if (status == ProductStatus.NeedsArchiving)
-                {
-                    //edge case
-                    updateData["Status"] = ProductStatus.Archived;
-                    db.Table("Products").Where(whereUpdate).Update(updateData);
-
-                }
-                else
-                {
-                    throw new Exception($"cant change product status {productStatus} -> {status}");
-                }
-
-            }
-            else if (productStatus == ProductStatus.WaitingShopSync)
-            {
-
-                if (status == ProductStatus.Ok)
-                {
-                    updateData["Status"] = ProductStatus.Ok;
-                    db.Table("Products").Where(whereUpdate).Update(updateData);
-                }
-                else if (status == ProductStatus.NeedsArchiving)
-                {
-                    updateData["Status"] = ProductStatus.NeedsArchiving;
-                    db.Table("Products").Where(whereUpdate).Update(updateData);
-                }
-                else if (status == ProductStatus.WaitingShopSync)
-                {
-                    updateData["Status"] = ProductStatus.WaitingShopSync;
-                    db.Table("Products").Where(whereUpdate).Update(updateData);
-                }
-                else
-                {
-                    throw new Exception($"cant change product status {productStatus} -> {status}");
-                }
-
-            }
-            else if (productStatus == ProductStatus.NeedsUnArchiving)
-            {
-
-                if (status == ProductStatus.WaitingShopSync)
-                {
-                    updateData["Status"] = ProductStatus.WaitingShopSync;
-                    db.Table("Products").Where(whereUpdate).Update(updateData);
-
-                }
-                else if (status == ProductStatus.NeedsArchiving)
-                {
-                    updateData["Status"] = ProductStatus.NeedsArchiving;
-                    db.Table("Products").Where(whereUpdate).Update(updateData);
-
-                }
-                else if (status == ProductStatus.WaitingShopSync)
-                {
-                    updateData["Status"] = ProductStatus.NeedsUnArchiving;
-                    db.Table("Products").Where(whereUpdate).Update(updateData);
-
-                }
-                else if (status == ProductStatus.Ok)
-                {
-                    updateData["Status"] = ProductStatus.NeedsUnArchiving;
-                    db.Table("Products").Where(whereUpdate).Update(updateData);
-
-                }
-                else
-                {
-                    throw new Exception($"cant change product status {productStatus} -> {status}");
-                }
-
-            }
-            else
-            {
-                throw new Exception($"cant change product status {productStatus} -> {status}");
-            }
+            db.Table("Products").Where(whereUpdate).Update(updateData);
         }
 
 
@@ -360,7 +190,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
 
         }
 
-        // method that gets product from database using its SKU
+        //method that gets product from database using its SKU 
         public static Product GetProduct(string sku)
         {
             Product prod = new();
@@ -840,8 +670,8 @@ namespace Ikrito_Fulfillment_Platform.Modules
             Dictionary<string, Product> PDproducts = GetVendorProducts("PD");
             p.AddRange(PDproducts);
 
-            //Dictionary<string, Product> BFproducts = GetVendorProducts("BF");
-            //p.AddRange(BFproducts);
+            Dictionary<string, Product> BFproducts = GetVendorProducts("BF");
+            p.AddRange(BFproducts);
 
             return p;
         }
