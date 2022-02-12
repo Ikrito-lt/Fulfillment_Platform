@@ -17,12 +17,12 @@ using System.Windows.Input;
 
 namespace Ikrito_Fulfillment_Platform.Pages
 {
-    public partial class ProductSyncPage : Page
+    public partial class ProductUpdatePage : Page
     {
 
         private readonly ProductSyncModule Sync;
-        private List<SyncProduct> SyncProducts;
-        private List<SyncProduct> FilteredSyncProducts;
+        private List<ProductState> SyncProducts;
+        private List<ProductState> FilteredSyncProducts;
 
         private int queryLenght = 0;
         private bool _clearFilters;
@@ -40,13 +40,13 @@ namespace Ikrito_Fulfillment_Platform.Pages
         }
 
         //shit makes it a singleton
-        public static ProductSyncPage Instance { get; private set; }
-        static ProductSyncPage()
+        public static ProductUpdatePage Instance { get; private set; }
+        static ProductUpdatePage()
         {
-            Instance = new ProductSyncPage();
+            Instance = new ProductUpdatePage();
         }
 
-        private ProductSyncPage()
+        private ProductUpdatePage()
         {
             InitializeComponent();
             //getting SyncProducts
@@ -150,7 +150,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
         //BGW load sync products
         private void BGW_PreloadSyncProducts(object sender, DoWorkEventArgs e)
         {
-            List<SyncProduct> products = ProductSyncModule.GetSyncProducts();
+            List<ProductState> products = ProductSyncModule.GetSyncProducts();
             e.Result = products;
         }
 
@@ -162,8 +162,8 @@ namespace Ikrito_Fulfillment_Platform.Pages
             progressBarLabel.Text = "";
 
 
-            SyncProducts = (List<SyncProduct>)e.Result;
-            Sync.syncProducts = (List<SyncProduct>)e.Result;
+            SyncProducts = (List<ProductState>)e.Result;
+            Sync.syncProducts = (List<ProductState>)e.Result;
             FilteredSyncProducts = SyncProducts;
 
             //init DataGrid
@@ -309,7 +309,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
             if (sender is ListBoxItem listboxItem)
             {
                 ProductChangeRecord productChange = listboxItem.Content as ProductChangeRecord;
-                Product editProduct = ProductModule.GetProduct(productChange.SKU);
+                FullProduct editProduct = ProductModule.GetProduct(productChange.SKU);
                 MainWindow.Instance.mainFrame.Content = new ProductEditPage(editProduct, this);
             }
         }

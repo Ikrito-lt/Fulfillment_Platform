@@ -11,7 +11,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using static Ikrito_Fulfillment_Platform.Models.Product;
+using static Ikrito_Fulfillment_Platform.Models.FullProduct;
 
 namespace Ikrito_Fulfillment_Platform.Modules.Supplier.KotrynaGroup {
     static class KGModule {
@@ -48,9 +48,9 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.KotrynaGroup {
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
         private static List<KGProductPackaging> _ProductPackagingList => _LazyProductPackagingList.Value;
 
-        private static readonly Lazy<List<Product>> _LazyProductList = new(() => BuildProductList());
+        private static readonly Lazy<List<FullProduct>> _LazyProductList = new(() => BuildProductList());
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
-        public static List<Product> ProductList => _LazyProductList.Value;
+        public static List<FullProduct> ProductList => _LazyProductList.Value;
 
 
         //
@@ -263,8 +263,8 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.KotrynaGroup {
         //
 
         // bulding List<Product> from KG api data
-        private static List<Product> BuildProductList() {
-            List<Product> pList = new();
+        private static List<FullProduct> BuildProductList() {
+            List<FullProduct> pList = new();
 
             foreach (KGAssortmentProduct AP in _AssortmentList) {
                 string ProductID = AP.axapta_id;
@@ -279,8 +279,8 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.KotrynaGroup {
         }
 
         // method that builds Product form API data
-        private static Product BuildProduct(KGAssortmentProduct AP, KGProductInfo PI, KGProductMeasurements PM, KGProductPackaging PP) {
-            Product newProduct = new();
+        private static FullProduct BuildProduct(KGAssortmentProduct AP, KGProductInfo PI, KGProductMeasurements PM, KGProductPackaging PP) {
+            FullProduct newProduct = new();
 
             newProduct.title = SQLUtil.SQLSafeString(PI.title);
             newProduct.body_html = BuildDescription(PI.properties);

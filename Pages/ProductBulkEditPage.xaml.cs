@@ -11,7 +11,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
 {
     public partial class ProductBulkEditPage : Page
     {
-        private readonly Dictionary<string, Product> Products;
+        private readonly Dictionary<string, FullProduct> Products;
         private readonly Page PreviousPage;
         private readonly Dictionary<string, string> CategoryKVP;
         private readonly List<string> PossibleTypes;
@@ -28,7 +28,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
             public bool Selected { get; set; }
         }
 
-        public ProductBulkEditPage(Dictionary<string, Product> products, Dictionary<string, string> categoryKVP, Page prevPage)
+        public ProductBulkEditPage(Dictionary<string, FullProduct> products, Dictionary<string, string> categoryKVP, Page prevPage)
         {
             InitializeComponent();
             PreviousPage = prevPage;
@@ -66,7 +66,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
         /// <returns>List of Possible vendor types</returns>
         private List<string> GetVendorTypes() {
             List<string> possibleVendorTypes = new();
-            foreach ((string sku, Product p) in Products) {
+            foreach ((string sku, FullProduct p) in Products) {
                 if (!possibleVendorTypes.Contains(p.productTypeVendor.Trim()))
                 {
                     possibleVendorTypes.Add(p.productTypeVendor.Trim());
@@ -101,7 +101,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
 
             ListBoxSource.Clear();
 
-            foreach ((string sku, Product p) in Products) {
+            foreach ((string sku, FullProduct p) in Products) {
                 var TPlistboxitem = new TypeListBoxItem();
                 TPlistboxitem.VendorProductType = vendorProductType;
                 TPlistboxitem.ProductType = productType;

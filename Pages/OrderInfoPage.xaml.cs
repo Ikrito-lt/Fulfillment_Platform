@@ -47,7 +47,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
             if (sender is ListBoxItem listboxItem) {
                 OrderProduct orderProduct= listboxItem.Content as OrderProduct;
-                Product viewProduct = ProductModule.GetProduct(orderProduct.sku);
+                FullProduct viewProduct = ProductModule.GetProduct(orderProduct.sku);
                 MainWindow.Instance.mainFrame.Content = new ProductEditPage(viewProduct, this, true);
             }
         }

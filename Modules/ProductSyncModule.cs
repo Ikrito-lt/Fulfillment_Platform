@@ -15,7 +15,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         private static string BaseUrl = "https://real-europe-corp.myshopify.com/admin/api/2021-10/";
         private static string ProductPath = "products.json";
 
-        public List<SyncProduct> syncProducts;
+        public List<ProductState> syncProducts;
         private readonly RESTClient ProductClient;
         private readonly Dictionary<string, string> mainHeaders = new(){
                 {"Authorization", Globals.getBase64ShopifyCreds()}
@@ -30,14 +30,14 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         //
 
         //method to refresh the list of sync products from database
-        public List<SyncProduct> RefreshSyncProducts() {
+        public List<ProductState> RefreshSyncProducts() {
             syncProducts = GetSyncProducts();
             return syncProducts;
         }
 
         //method to get list of sync product from database
-        public static List<SyncProduct> GetSyncProducts(string status = null) {
-            List<SyncProduct> p = new();
+        public static List<ProductState> GetSyncProducts(string status = null) {
+            List<ProductState> p = new();
             DataBaseInterface db = new();
             Dictionary<string, Dictionary<string, string>> whereCond;
 
@@ -58,7 +58,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             var result = db.Table("Products").Where(whereCond).Get();
 
             foreach (var row in result.Values) {
-                SyncProduct syncProduct = new();
+                ProductState syncProduct = new();
 
                 syncProduct.sku = row["SKU"];
                 syncProduct.productType_ID = row["ProductType_ID"];
@@ -89,12 +89,12 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         //method sets out of stock products as NeedsArchiving
         public void MarkOutOfStockNeedsArchival(object sender, DoWorkEventArgs e)
         {
-            List<SyncProduct> syncProducts = GetSyncProducts();
+            List<ProductState> syncProducts = GetSyncProducts();
             syncProducts.AddRange(GetSyncProducts(ProductStatus.Ok));
             int count = syncProducts.Count;
             for (int i = 0; i < count; i++)
             {
-                Product p = ProductModule.GetProduct(syncProducts[i].sku);
+                FullProduct p = ProductModule.GetProduct(syncProducts[i].sku);
                 if (p.productVariants.All(x => x.stock < 0))
                 {
                     ProductModule.ChangeProductStatus(syncProducts[i].sku, ProductStatus.NeedsArchiving);
@@ -113,7 +113,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         //method that is used by the Export sync product worker to send each product to ExportSyncProduct and track exporting progress
         public void ExportShopifyProducts(object sender, DoWorkEventArgs e)
         {
-            List<SyncProduct> syncProducts = GetSyncProducts();
+            List<ProductState> syncProducts = GetSyncProducts();
             int count = syncProducts.Count;
             for (int i = 0; i < count; i++)
             {
@@ -125,8 +125,8 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         }
 
         //method decides what to do with syncProduct
-        private void ExportShopifyProduct(SyncProduct sync) {
-            Product p = ProductModule.GetProduct(sync.sku);
+        private void ExportShopifyProduct(ProductState sync) {
+            FullProduct p = ProductModule.GetProduct(sync.sku);
 
             if (sync.status == ProductStatus.New) {
                 NewShopifyProduct(p, sync);
@@ -147,7 +147,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         //
 
         //method that Archives product in shopify web-store
-        private void UnArchiveShopifyProduct(SyncProduct sync) {
+        private void UnArchiveShopifyProduct(ProductState sync) {
             //archiving product in shopify
             string unArchiveRequestBody = $@"{{""product"": {{""id"": {sync.shopifyID},""status"": ""active""}}}}";
 
@@ -173,7 +173,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         }
 
         //method that Archives product in shopify web-store
-        private void ArchiveShopifyProduct(SyncProduct sync) {
+        private void ArchiveShopifyProduct(ProductState sync) {
             //archiving product in shopify
             string archiveRequestBody = $@"{{""product"": {{""id"": {sync.shopifyID},""status"": ""archived""}}}}";
 
@@ -200,7 +200,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         }
 
         //method that updates product in shopify web-store
-        private void UpdateShopifyProduct(Product p, SyncProduct sync) {
+        private void UpdateShopifyProduct(FullProduct p, ProductState sync) {
             //updating product in shopify
             IRestResponse updateRes = ProductClient.ExecPutProd($"products/{sync.shopifyID}.json", mainHeaders, p.GetImportJsonString());
             if (!updateRes.IsSuccessful) {
@@ -308,7 +308,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
         }
 
         //method that adds new product to shopify web-store
-        private void NewShopifyProduct(Product p, SyncProduct sync) {
+        private void NewShopifyProduct(FullProduct p, ProductState sync) {
 
             //adding product to shopify
             IRestResponse creationRes = ProductClient.ExecAddProd(ProductPath, mainHeaders, p.GetImportJsonString());

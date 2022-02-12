@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Linq;
-using static Ikrito_Fulfillment_Platform.Models.Product;
+using static Ikrito_Fulfillment_Platform.Models.FullProduct;
 
 namespace Ikrito_Fulfillment_Platform.Modules
 {
@@ -191,9 +191,9 @@ namespace Ikrito_Fulfillment_Platform.Modules
         }
 
         //method that gets product from database using its SKU 
-        public static Product GetProduct(string sku)
+        public static FullProduct GetProduct(string sku)
         {
-            Product prod = new();
+            FullProduct prod = new();
             string tablePrefix = sku.GetUntilOrEmpty();
 
             DataBaseInterface db = new();
@@ -310,14 +310,14 @@ namespace Ikrito_Fulfillment_Platform.Modules
         }
 
         // method that adds new product to database (decides what table to add to using SKU prefix)
-        public static void AddProductToDB(Product p)
+        public static void AddProductToDB(FullProduct p)
         {
             DataBaseInterface db = new();
-            //checing if product exists in database if yes unarchaving it
+            //checing if product exists in database if yes Changeits status to New
             if (CheckIfExistsInDB(p.sku))
             {
                 //unarchaiving
-                UpdateProductToDB(p, ProductStatus.NeedsUnArchiving);
+                UpdateProductToDB(p, ProductStatus.New);
                 return;
             }
 
@@ -398,7 +398,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
         }
 
         // method that updates data of existing product in the database, and the changes its status
-        public static void UpdateProductToDB(Product p, string status)
+        public static void UpdateProductToDB(FullProduct p, string status)
         {
             DataBaseInterface db = new();
             string tablePrefix = p.sku.GetUntilOrEmpty();
@@ -565,9 +565,9 @@ namespace Ikrito_Fulfillment_Platform.Modules
         //
 
         //method gets list of TDB products
-        public static Dictionary<string, Product> GetVendorProducts(string TablePrefix)
+        public static Dictionary<string, FullProduct> GetVendorProducts(string TablePrefix)
         {
-            Dictionary<string, Product> productsKVP = new();
+            Dictionary<string, FullProduct> productsKVP = new();
 
             //getting main product info
             DataBaseInterface db = new();
@@ -575,7 +575,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
             foreach (var prod in result.Values)
             {
 
-                Product NewProduct = new();
+                FullProduct NewProduct = new();
                 NewProduct.title = prod["Title"];
                 NewProduct.body_html = prod["Body"];
                 NewProduct.vendor = prod["Vendor"];
@@ -657,20 +657,20 @@ namespace Ikrito_Fulfillment_Platform.Modules
 
         //todo: this is slow
         //method gets list of all Products in database
-        public static Dictionary<string,Product> GetAllProducts()
+        public static Dictionary<string,FullProduct> GetAllProducts()
         {
-            Dictionary<string, Product> p = new();
+            Dictionary<string, FullProduct> p = new();
 
-            Dictionary<string, Product> TDBproducts = GetVendorProducts("TDB");
+            Dictionary<string, FullProduct> TDBproducts = GetVendorProducts("TDB");
             p.AddRange(TDBproducts);
 
-            Dictionary<string, Product> KGproducts = GetVendorProducts("KG");
+            Dictionary<string, FullProduct> KGproducts = GetVendorProducts("KG");
             p.AddRange(KGproducts);
 
-            Dictionary<string, Product> PDproducts = GetVendorProducts("PD");
+            Dictionary<string, FullProduct> PDproducts = GetVendorProducts("PD");
             p.AddRange(PDproducts);
 
-            Dictionary<string, Product> BFproducts = GetVendorProducts("BF");
+            Dictionary<string, FullProduct> BFproducts = GetVendorProducts("BF");
             p.AddRange(BFproducts);
 
             return p;

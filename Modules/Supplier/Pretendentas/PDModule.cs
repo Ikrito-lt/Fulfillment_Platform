@@ -9,7 +9,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Xml;
-using static Ikrito_Fulfillment_Platform.Models.Product;
+using static Ikrito_Fulfillment_Platform.Models.FullProduct;
 
 namespace Ikrito_Fulfillment_Platform.Modules.Supplier.Pretendentas
 {
@@ -36,9 +36,9 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.Pretendentas
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
         private static List<PDManufacturer> _ManufList => _LazyManufacturerList.Value;
 
-        private static readonly Lazy<List<Product>> _LazyProductList = new(() => BuildProductList());
+        private static readonly Lazy<List<FullProduct>> _LazyProductList = new(() => BuildProductList());
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
-        public static List<Product> ProductList => _LazyProductList.Value;
+        public static List<FullProduct> ProductList => _LazyProductList.Value;
 
 
         //
@@ -110,9 +110,9 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.Pretendentas
         }
 
         //lazy for building product list
-        private static List<Product> BuildProductList() {
+        private static List<FullProduct> BuildProductList() {
             List<PDCategory> CategoryList = _CategoriesXML;
-            List<Product> newProducts = new();
+            List<FullProduct> newProducts = new();
 
             foreach (PDCategory category in CategoryList) {
                 RESTClient restClient = new(_BaseUrl);
@@ -144,7 +144,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.Pretendentas
                     PDproduct.vandorType = vendorType;
 
                     //building product from PDProduct
-                    Product Product = BuildProduct(PDproduct);
+                    FullProduct Product = BuildProduct(PDproduct);
                     newProducts.Add(Product);
                 }
             }
@@ -153,13 +153,13 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.Pretendentas
             newProducts = newProducts.FindAll(x => x.images.Count > 0);
             
             //remoing product duplicates
-            List<Product> noDuplicates = newProducts.GroupBy(x => x.sku).Select(x => x.First()).ToList();
+            List<FullProduct> noDuplicates = newProducts.GroupBy(x => x.sku).Select(x => x.First()).ToList();
             return noDuplicates;
         }
 
         //for building product out of PDProduct
-        private static Product BuildProduct(PDProduct PDproduct) {
-            Product newProduct = new();
+        private static FullProduct BuildProduct(PDProduct PDproduct) {
+            FullProduct newProduct = new();
 
             newProduct.title = SQLUtil.SQLSafeString(PDproduct.title);
             newProduct.body_html = SQLUtil.SQLSafeString(PDproduct.descriptionHTML);

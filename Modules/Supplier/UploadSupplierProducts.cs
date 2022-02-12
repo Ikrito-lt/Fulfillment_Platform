@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
-using static Ikrito_Fulfillment_Platform.Models.Product;
+using static Ikrito_Fulfillment_Platform.Models.FullProduct;
 
 namespace Ikrito_Fulfillment_Platform.Modules.Supplier
 {
@@ -21,8 +21,8 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
         /// </summary>
         /// <param name="TablePrefix"></param>
         /// <returns></returns>
-        private static List<Product> GetSupplierProductList(string TablePrefix) {
-            List<Product> pList = new();
+        private static List<FullProduct> GetSupplierProductList(string TablePrefix) {
+            List<FullProduct> pList = new();
 
             //todo: redo
             if (TablePrefix == "TDB")
@@ -56,14 +56,14 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
             BackgroundWorker worker = sender as BackgroundWorker;
 
             //getting DB Products
-            Dictionary<string, Product> DBProducts = new Dictionary<string, Product>();
-            foreach ((string sku, Product DBProduct) in ProductModule.GetVendorProducts(TablePrefix)) {
+            Dictionary<string, FullProduct> DBProducts = new Dictionary<string, FullProduct>();
+            foreach ((string sku, FullProduct DBProduct) in ProductModule.GetVendorProducts(TablePrefix)) {
                 DBProducts.Add(sku, DBProduct);
             }
 
             //getting API products
-            Dictionary<string, Product> APIProducts = new Dictionary<string, Product>();
-            foreach (Product APIProduct in GetSupplierProductList(TablePrefix)) {
+            Dictionary<string, FullProduct> APIProducts = new Dictionary<string, FullProduct>();
+            foreach (FullProduct APIProduct in GetSupplierProductList(TablePrefix)) {
                 APIProducts.Add(APIProduct.sku, APIProduct);
             }
 
@@ -72,16 +72,17 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
             List<string> UpdateProductSKUs = DBProducts.Keys.Intersect(APIProducts.Keys).ToList();
             List<string> NewProductSKUs = APIProducts.Keys.Except(DBProducts.Keys).ToList();
 
-            List<Product> ArchiveProducts = DBProducts.Values.Where(x => ArchiveProductSKUs.Contains(x.sku)).ToList();
-            List<Product> UpdateProducts = APIProducts.Values.Where(x => UpdateProductSKUs.Contains(x.sku)).ToList();
-            List<Product> NewProducts = APIProducts.Values.Where(x => NewProductSKUs.Contains(x.sku)).ToList();
-
-            //for remorting progress in listboxes
+            List<FullProduct> ArchiveProducts = DBProducts.Values.Where(x => ArchiveProductSKUs.Contains(x.sku)).ToList();
+            List<FullProduct> NewProducts = APIProducts.Values.Where(x => NewProductSKUs.Contains(x.sku)).ToList();
+            
+            //todo: i need to see what products in updateProducts list i actually need to update to make this number exact
+            List<FullProduct> UpdateProducts = APIProducts.Values.Where(x => UpdateProductSKUs.Contains(x.sku)).ToList();
+            
+            //for reporting progress in listboxes
             List<ProductChangeRecord> appliedChanges = new();          //for updates
             List<ProductChangeRecord> newChanges = new();              //for new products
             List<ProductChangeRecord> archivedChanges = new();         //for archived Products                     
 
-            //todo: i need to see what products in updateProducts list i actually need to update to make this number exact
             //for progress reporting
             int archiveProductsLenght = ArchiveProducts.Count();
             int newProductsLenght = NewProducts.Count();
@@ -94,7 +95,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
             {
                 try
                 {
-                    ProductModule.ChangeProductStatus(archiveProduct.sku, ProductStatus.NeedsArchiving);
+                    ProductModule.ChangeProductStatus(archiveProduct.sku, ProductStatus.Archived);
                     ProductVariant firstVariant = archiveProduct.productVariants.First();
 
                     ProductChangeRecord archiveChange = new ProductChangeRecord {
@@ -160,7 +161,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
             DataBaseInterface db = new();
             foreach (var (updateProduct, index) in UpdateProducts.LoopIndex())
             {
-                Product oldProduct = DBProducts[updateProduct.sku];
+                FullProduct oldProduct = DBProducts[updateProduct.sku];
 
                 foreach (ProductVariant pVariant in updateProduct.productVariants) {
                     ProductVariant dbVariant = oldProduct.productVariants.Where(x => x.barcode == pVariant.barcode).FirstOrDefault();
@@ -281,10 +282,10 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
                     }
                 }
 
-                //updating product status
+                //updating product status ()
                 try
                 {
-                    ProductModule.ChangeProductStatus(oldProduct.sku, ProductStatus.WaitingShopSync);
+                    ProductModule.ChangeProductStatus(oldProduct.sku, ProductStatus.);
                 }
                 catch (Exception ex)
                 {
