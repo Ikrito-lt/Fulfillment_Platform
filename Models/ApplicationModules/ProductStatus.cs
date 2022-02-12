@@ -3,11 +3,11 @@
 namespace Ikrito_Fulfillment_Platform.Models {
     static class ProductStatus {
         //when adding new statuses update productMOdule ChangeProductStatus method
-        
-        public static string Disabled = "Disabled";
-        public static string OutOfStock = "OutOfStock";
+
         public static string New = "New";
         public static string Ok = "Ok";
+        public static string OutOfStock = "Out Of Stock";
+        public static string Disabled = "Disabled";
         public static string Archived = "Archived";
 
         //left from shopify

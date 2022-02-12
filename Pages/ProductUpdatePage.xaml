@@ -178,8 +178,7 @@
                         </StackPanel>
 
                         <StackPanel Grid.Row="0" Grid.Column="0" Width="250" HorizontalAlignment="Left">
-                            <Button x:Name="SyncProductsBtn" Click="SyncProducts_Click" Content="Sync Shopify Products" Padding="5" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
-                            <Button x:Name="Stock0ArchiveBtn" Click="Stock0ArchiveBtn_Click" Content="Send Stock 0 Products To Archival" Padding="5" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
+                            <Button x:Name="ChangeStatusByStockBtn" Click="ChangeStatusByStock_Click" Content="Change Status If Product Stock > 0" Padding="5" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
                         </StackPanel>
 
                     </Grid>

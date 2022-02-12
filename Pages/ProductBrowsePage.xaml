@@ -87,7 +87,6 @@
                     <CheckBox x:Name="CheckBox3" Margin="5" VerticalAlignment="Center" Content="{Binding Path=Name}" IsChecked="{Binding Path=IsSelected, Mode=TwoWay}" Click="CheckBox_Click"/>
                     <CheckBox x:Name="CheckBox4" Margin="5" VerticalAlignment="Center" Content="{Binding Path=Name}" IsChecked="{Binding Path=IsSelected, Mode=TwoWay}" Click="CheckBox_Click"/>
                     <CheckBox x:Name="CheckBox5" Margin="5" VerticalAlignment="Center" Content="{Binding Path=Name}" IsChecked="{Binding Path=IsSelected, Mode=TwoWay}" Click="CheckBox_Click"/>
-                    <CheckBox x:Name="CheckBox6" Margin="5" VerticalAlignment="Center" Content="{Binding Path=Name}" IsChecked="{Binding Path=IsSelected, Mode=TwoWay}" Click="CheckBox_Click"/>
                 </StackPanel>
             </Border>
 

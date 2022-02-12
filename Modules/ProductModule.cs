@@ -11,6 +11,23 @@ namespace Ikrito_Fulfillment_Platform.Modules
     static class ProductModule
     {
 
+        /// <summary>
+        /// method for checking if product is out  of stock (to set its status) (if atleast one of the variants is in stock method return true)
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        public static bool CheckIfProductOutOfStock(FullProduct p)
+        {
+            foreach (var variant in p.productVariants)
+            {
+                if (variant.stock > 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         //
         // section for product category manipulation
         //
@@ -137,8 +154,11 @@ namespace Ikrito_Fulfillment_Platform.Modules
         /// <param name="sku"></param>
         /// <param name="newStatus"></param>
         /// <exception cref="Exception"></exception>
-        public static void ChangeProductStatus(string sku, string newStatus)
+        public static void ChangeProductStatus(string sku, string newStatus, bool forceChangeNew)
         {
+            //first we need to get product status and check if its "New"
+            //if its "New" we cant change that unless method is called with force == true
+
             //setting up database query to get current status
             DataBaseInterface db = new();
             var whereQ = new Dictionary<string, Dictionary<string, string>>
@@ -151,20 +171,27 @@ namespace Ikrito_Fulfillment_Platform.Modules
             var productStatusResult = db.Table("Products").Where(whereQ).Get();
             string currentStatus = productStatusResult[0]["Status"];
 
-            //changing current status to new status
-            var updateData = new Dictionary<string, string>
+            if (currentStatus == ProductStatus.New && forceChangeNew == false)
             {
-                ["LastUpdateTime"] = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString(),
-                ["Status"] = newStatus
-            };
-            var whereUpdate = new Dictionary<string, Dictionary<string, string>>
+                throw new Exception($"Cant change product status {currentStatus} -> {newStatus}");
+            }
+            else
             {
-                ["SKU"] = new Dictionary<string, string>
+                //changing current status to newStatus
+                var updateData = new Dictionary<string, string>
                 {
-                    ["="] = sku
-                }
-            };
-            db.Table("Products").Where(whereUpdate).Update(updateData);
+                    ["LastUpdateTime"] = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString(),
+                    ["Status"] = newStatus
+                };
+                var whereUpdate = new Dictionary<string, Dictionary<string, string>>
+                {
+                    ["SKU"] = new Dictionary<string, string>
+                    {
+                        ["="] = sku
+                    }
+                };
+                db.Table("Products").Where(whereUpdate).Update(updateData);
+            }
         }
 
 
@@ -313,7 +340,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
         public static void AddProductToDB(FullProduct p)
         {
             DataBaseInterface db = new();
-            //checing if product exists in database if yes Changeits status to New
+            //checing if product exists in database if yes Change its status to New
             if (CheckIfExistsInDB(p.sku))
             {
                 //unarchaiving
@@ -397,7 +424,11 @@ namespace Ikrito_Fulfillment_Platform.Modules
             }
         }
 
-        // method that updates data of existing product in the database, and the changes its status
+        /// <summary>
+        /// method that updates data of existing product in the database, and changes its status (used in product edit page)
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="status"></param>
         public static void UpdateProductToDB(FullProduct p, string status)
         {
             DataBaseInterface db = new();
@@ -551,7 +582,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
 
             try
             {
-                ChangeProductStatus(p.sku, status);
+                ChangeProductStatus(p.sku, status, true);
             }
             catch (Exception ex)
             {
