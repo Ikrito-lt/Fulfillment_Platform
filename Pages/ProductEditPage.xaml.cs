@@ -168,7 +168,8 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             newProduct.addedTimeStamp = EditableProduct.addedTimeStamp;
             newProduct.productTypeVendor = EditableProduct.productTypeVendor;
 
-            ProductModule.UpdateProductToDB(newProduct, ProductStatus.WaitingShopSync);
+            //todo: change this and add manual product status change
+            ProductModule.UpdateProductToDB(newProduct, ProductStatus.Ok);
 
             return newProduct;
         }

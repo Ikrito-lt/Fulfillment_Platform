@@ -19,10 +19,8 @@ namespace Ikrito_Fulfillment_Platform.Pages
 {
     public partial class ProductUpdatePage : Page
     {
-
-        private readonly ProductSyncModule Sync;
-        private List<ProductState> SyncProducts;
-        private List<ProductState> FilteredSyncProducts;
+        private List<ProductState> UpdateProducts;
+        private List<ProductState> FilteredUpdateProducts;
 
         private int queryLenght = 0;
         private bool _clearFilters;
@@ -50,8 +48,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
         {
             InitializeComponent();
             //getting SyncProducts
-            LoadSyncProducts();
-            Sync = new();
+            LoadUpdateProducts();
         }
 
 
@@ -70,7 +67,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
         {
             SKUFilterSBox.Clear();
             queryLenght = 0;
-            FilteredSyncProducts = SyncProducts;
+            FilteredUpdateProducts = UpdateProducts;
         }
 
         //method for fitering by sku
@@ -92,23 +89,23 @@ namespace Ikrito_Fulfillment_Platform.Pages
             {
                 string query = textBox.Text.ToLower();
 
-                if (productSyncDG.ItemsSource == FilteredSyncProducts)
+                if (productSyncDG.ItemsSource == FilteredUpdateProducts)
                 {
-                    FilteredSyncProducts = FilteredSyncProducts.Where(p => p.sku.ToLower().Contains(query)).ToList();
-                    ChangeCountLabel(FilteredSyncProducts.Count);
-                    productSyncDG.ItemsSource = FilteredSyncProducts;
+                    FilteredUpdateProducts = FilteredUpdateProducts.Where(p => p.sku.ToLower().Contains(query)).ToList();
+                    ChangeCountLabel(FilteredUpdateProducts.Count);
+                    productSyncDG.ItemsSource = FilteredUpdateProducts;
                 }
                 else
                 {
-                    FilteredSyncProducts = SyncProducts.Where(p => p.sku.ToLower().Contains(query)).ToList();
-                    ChangeCountLabel(FilteredSyncProducts.Count);
-                    productSyncDG.ItemsSource = FilteredSyncProducts;
+                    FilteredUpdateProducts = UpdateProducts.Where(p => p.sku.ToLower().Contains(query)).ToList();
+                    ChangeCountLabel(FilteredUpdateProducts.Count);
+                    productSyncDG.ItemsSource = FilteredUpdateProducts;
                 }
             }
             else if (textBox.Text.Length == 0)
             {
-                ChangeCountLabel(SyncProducts.Count);
-                productSyncDG.ItemsSource = SyncProducts;
+                ChangeCountLabel(UpdateProducts.Count);
+                productSyncDG.ItemsSource = UpdateProducts;
             }
         }
 
@@ -122,7 +119,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
         private void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
             deleteFilters();
-            LoadSyncProducts();
+            LoadUpdateProducts();
         }
 
 
@@ -131,142 +128,84 @@ namespace Ikrito_Fulfillment_Platform.Pages
         //
 
         //method that creates BGW to load Sync products
-        private void LoadSyncProducts()
+        private void LoadUpdateProducts()
         {
             BackgroundWorker worker = new();
             worker.WorkerReportsProgress = false;
-            worker.DoWork += BGW_PreloadSyncProducts;
-            worker.RunWorkerCompleted += BGW_PreloadSyncProductsCompleted;
 
-            //blocking refresh button and animating loading bar
+            //blocking refresh button and animating loading bar pre lauching BGW
             progressBar.IsIndeterminate = true;
             RefreshButton.IsEnabled = false;
-
             progressBarLabel.Text = "Loading Sync Products from DataBase";
+
+            //BGW DoWork
+            worker.DoWork += (sender, e) => {
+                List<ProductState> products = ProductUpdateModule.GetSyncProducts();
+                e.Result = products;
+            };
+
+            // after BGW DoWork
+            worker.RunWorkerCompleted += (sender, e) => {
+                //changing loading bar state
+                progressBar.IsIndeterminate = false;
+                progressBarLabel.Text = "";
+
+                UpdateProducts = (List<ProductState>)e.Result;
+                FilteredUpdateProducts = UpdateProducts;
+
+                //init DataGrid
+                productSyncDG.ItemsSource = FilteredUpdateProducts;
+                //init label
+                ChangeCountLabel(FilteredUpdateProducts.Count);
+                //unblocking refresh button and unanimating loading bar
+                progressBar.IsIndeterminate = false;
+                RefreshButton.IsEnabled = true;
+                Debug.WriteLine("BGW_PreloadAllProducts Finished");
+            };
 
             worker.RunWorkerAsync();
         }
-
-        //BGW load sync products
-        private void BGW_PreloadSyncProducts(object sender, DoWorkEventArgs e)
-        {
-            List<ProductState> products = ProductSyncModule.GetSyncProducts();
-            e.Result = products;
-        }
-
-        //BGW load sync products onComplete
-        private void BGW_PreloadSyncProductsCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            //changing loading bar state
-            progressBar.IsIndeterminate = false;
-            progressBarLabel.Text = "";
-
-
-            SyncProducts = (List<ProductState>)e.Result;
-            Sync.syncProducts = (List<ProductState>)e.Result;
-            FilteredSyncProducts = SyncProducts;
-
-            //init DataGrid
-            productSyncDG.ItemsSource = FilteredSyncProducts;
-            //init label
-            ChangeCountLabel(FilteredSyncProducts.Count);
-            //unblocking refresh button and unanimating loading bar
-            progressBar.IsIndeterminate = false;
-            RefreshButton.IsEnabled = true;
-            Debug.WriteLine("BGW_PreloadAllProducts Finished");
-        }
-
         //
         // set stock 0 to archival
         //
 
-        private void Stock0ArchiveBtn_Click(object sender, RoutedEventArgs e)
+        public void ChangeStatusByStock_Click(object sender = null, RoutedEventArgs e = null)
         {
-            SetStock0Archival();
-        }
-
-        //method that creates BGW to load Sync products
-        private void SetStock0Archival()
-        {
+            //BGW setup 
             BackgroundWorker worker = new();
-            worker.WorkerReportsProgress = true;
-            worker.DoWork += Sync.MarkOutOfStockNeedsArchival;
-            worker.ProgressChanged += BGW_SetStock_ProgressChanged;
-            worker.RunWorkerCompleted += BGW_SyncProductsCompleted;
-
             RefreshButton.IsEnabled = false;
+            progressBar.Maximum = 1000;
+            progressBarLabel.Text = "Changing Product Status If Stock > 0";
 
-            progressBarLabel.Text = "Setting Stock 0 Products to Archival";
+            //BGW progress reporting
+            worker.WorkerReportsProgress = true;
+            worker.ProgressChanged += (sender, e) =>
+            {
+                (bool makeProgressBarIndeterminate, string barText) = (ValueTuple<bool, string>)e.UserState;
+                progressBar.IsIndeterminate = makeProgressBarIndeterminate;
+                progressBarLabel.Text = barText;
+
+                int progress = e.ProgressPercentage;
+                progressBar.Value = progress;
+
+            };
+
+            //BGW doWork
+            worker.DoWork += (sender, e) => ProductUpdateModule.ChangeStatusByStock(sender, e);
+
+            //BGW after DoWork
+            worker.RunWorkerCompleted += (sender, e) => {
+                //changing loading bar state
+                progressBar.Value = 0;
+                progressBar.Maximum = 100;
+                progressBarLabel.Text = "";
+
+                LoadUpdateProducts();
+            };
 
             worker.RunWorkerAsync();
         }
 
-        //method that updates progress bar during product export
-        private void BGW_SetStock_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            int progress = e.ProgressPercentage;
-            progressBar.Value = progress;
-            progressBarLabel.Text = $"Setting Stock 0 Products to Archival: {progress}‰";
-        }
-
-        //BGW load sync products onComplete
-        private void BGW_SetStock_Completed(object sender, RunWorkerCompletedEventArgs e)
-        {
-            //changing loading bar state
-            progressBar.Value = 0;
-            progressBarLabel.Text = "";
-
-            LoadSyncProducts();
-        }
-
-        //
-        // shopify sync section 
-        //
-
-        //button that starts shopify sync
-        private void SyncProducts_Click(object sender, RoutedEventArgs e)
-        {
-            //running export products in background
-            BackgroundWorker worker = new();
-            worker.WorkerReportsProgress = true;
-            worker.DoWork += Sync.ExportShopifyProducts;
-            worker.ProgressChanged += workerSync_ProgressChanged;
-            worker.RunWorkerCompleted += BGW_SyncProductsCompleted;
-
-            RefreshButton.IsEnabled = false;
-
-            progressBarLabel.Text = "Syncing Products To Shopify: 0‰";
-
-            worker.RunWorkerAsync();
-        }
-
-        //method that updates progress bar during product export
-        private void workerSync_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            int progress = e.ProgressPercentage;
-            progressBar.Value = progress;
-            progressBarLabel.Text = $"Syncing Products To Shopify: {progress}‰";
-
-        }
-
-        //BGW load sync products onComplete
-        private void BGW_SyncProductsCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            //changing loading bar state
-            progressBar.Value = 0;
-            progressBar.IsIndeterminate = false;
-            progressBarLabel.Text = "";
-
-            //init DataGrid
-            productSyncDG.ItemsSource = FilteredSyncProducts;
-            //init label
-            ChangeCountLabel(FilteredSyncProducts.Count);
-            //unblocking refresh button and unanimating loading bar
-            progressBar.IsIndeterminate = false;
-            RefreshButton.IsEnabled = true;
-            Debug.WriteLine("BGW_SyncProducts Finished");
-            LoadSyncProducts();
-        }
 
         //
         // Changes ListBoxes section
@@ -325,7 +264,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
             //running export products in background
             BackgroundWorker TDBUpdateWorker = new();
             TDBUpdateWorker.WorkerReportsProgress = true;
-            TDBUpdateWorker.DoWork += (sender, e) => UploadSupplierProducts.UpdateProducts("TDB" ,sender, e);
+            TDBUpdateWorker.DoWork += (sender, e) => DownloadSupplierProducts.UpdateProducts("TDB" ,sender, e);
             TDBUpdateWorker.RunWorkerCompleted += UpdateVendorProductsWorkerOnComplete;
             TDBUpdateWorker.ProgressChanged += UpdateVendorProductsWorkerProgressChanged;
 
@@ -343,7 +282,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
             //running export products in background
             BackgroundWorker KGUpdateWorker = new();
             KGUpdateWorker.WorkerReportsProgress = true;
-            KGUpdateWorker.DoWork += (sender, e) => UploadSupplierProducts.UpdateProducts("KG", sender, e);
+            KGUpdateWorker.DoWork += (sender, e) => DownloadSupplierProducts.UpdateProducts("KG", sender, e);
             KGUpdateWorker.RunWorkerCompleted += UpdateVendorProductsWorkerOnComplete;
             KGUpdateWorker.ProgressChanged += UpdateVendorProductsWorkerProgressChanged;
 
@@ -361,7 +300,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
             //running export products in background
             BackgroundWorker PDUpdateWorker = new();
             PDUpdateWorker.WorkerReportsProgress = true;
-            PDUpdateWorker.DoWork += (sender, e) => UploadSupplierProducts.UpdateProducts("PD", sender, e);
+            PDUpdateWorker.DoWork += (sender, e) => DownloadSupplierProducts.UpdateProducts("PD", sender, e);
             PDUpdateWorker.RunWorkerCompleted += UpdateVendorProductsWorkerOnComplete;
             PDUpdateWorker.ProgressChanged += UpdateVendorProductsWorkerProgressChanged;
 
@@ -379,7 +318,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
             //running export products in background
             BackgroundWorker PDUpdateWorker = new();
             PDUpdateWorker.WorkerReportsProgress = true;
-            PDUpdateWorker.DoWork += (sender, e) => UploadSupplierProducts.UpdateProducts("BF", sender, e);
+            PDUpdateWorker.DoWork += (sender, e) => DownloadSupplierProducts.UpdateProducts("BF", sender, e);
             PDUpdateWorker.RunWorkerCompleted += UpdateVendorProductsWorkerOnComplete;
             PDUpdateWorker.ProgressChanged += UpdateVendorProductsWorkerProgressChanged;
 

@@ -13,7 +13,7 @@ using static Ikrito_Fulfillment_Platform.Models.FullProduct;
 
 namespace Ikrito_Fulfillment_Platform.Modules.Supplier
 {
-    static class UploadSupplierProducts
+    static class DownloadSupplierProducts
     {
 
         /// <summary>
@@ -43,8 +43,6 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
             }
             return pList;
         }
-
-
 
         /// <summary>
         /// Updates product and then sends products that dont exist to addNewProduct method
@@ -95,7 +93,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
             {
                 try
                 {
-                    ProductModule.ChangeProductStatus(archiveProduct.sku, ProductStatus.Archived);
+                    ProductModule.ChangeProductStatus(archiveProduct.sku, ProductStatus.Archived, false);
                     ProductVariant firstVariant = archiveProduct.productVariants.First();
 
                     ProductChangeRecord archiveChange = new ProductChangeRecord {
@@ -161,6 +159,8 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
             DataBaseInterface db = new();
             foreach (var (updateProduct, index) in UpdateProducts.LoopIndex())
             {
+                //updating only product variants and prices not title description etc
+                //todo: maybe auto update images
                 FullProduct oldProduct = DBProducts[updateProduct.sku];
 
                 foreach (ProductVariant pVariant in updateProduct.productVariants) {
@@ -282,10 +282,20 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
                     }
                 }
 
-                //updating product status ()
+                //updating product status
                 try
                 {
-                    ProductModule.ChangeProductStatus(oldProduct.sku, ProductStatus.);
+                    //cause new status only changes by button
+                    if (oldProduct.status != ProductStatus.New)
+                    {
+                        //checking if product isn out of stock
+                        if (ProductModule.CheckIfProductOutOfStock(updateProduct)) {
+                            ProductModule.ChangeProductStatus(oldProduct.sku, ProductStatus.Ok, false);
+                        }
+                        else {
+                            ProductModule.ChangeProductStatus(oldProduct.sku, ProductStatus.OutOfStock, false);
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {

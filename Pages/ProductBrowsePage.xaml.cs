@@ -198,7 +198,6 @@ namespace Ikrito_Fulfillment_Platform.Pages
             CheckBox3.DataContext = StatusList[2];
             CheckBox4.DataContext = StatusList[3];
             CheckBox5.DataContext = StatusList[4];
-            CheckBox6.DataContext = StatusList[5];
         }
 
         //on status change filtering 

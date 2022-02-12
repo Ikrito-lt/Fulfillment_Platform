@@ -1,6 +1,7 @@
 ﻿using Ikrito_Fulfillment_Platform.Models;
 using Ikrito_Fulfillment_Platform.Modules;
 using Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy;
+using Ikrito_Fulfillment_Platform.Pages;
 using System.Collections.Generic;
 
 namespace Ikrito_Fulfillment_Platform.Utils
