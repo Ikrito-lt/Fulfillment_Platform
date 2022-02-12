@@ -4,7 +4,7 @@ using Ikrito_Fulfillment_Platform.Utils;
 using System;
 using System.Collections.Generic;
 using System.Xml;
-using static Ikrito_Fulfillment_Platform.Models.Product;
+using static Ikrito_Fulfillment_Platform.Models.FullProduct;
 
 namespace Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy
 {
@@ -36,9 +36,9 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
         private static List<BFProductWithVariants> _VendorProductWithVariantsList => _LazyVendorProductWithVariantsList.Value;
 
-        private static readonly Lazy<List<Product>> _LazyProductList = new(() => BuildProductList());
+        private static readonly Lazy<List<FullProduct>> _LazyProductList = new(() => BuildProductList());
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
-        public static List<Product> ProductList => _LazyProductList.Value;
+        public static List<FullProduct> ProductList => _LazyProductList.Value;
 
 
 
@@ -210,9 +210,9 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy
         /// bulding List of basic products 
         /// </summary>
         /// <returns></returns>
-        public static List<Product> BuildProductList()
+        public static List<FullProduct> BuildProductList()
         {
-            List<Product> pList = new();
+            List<FullProduct> pList = new();
             //with one variant
             foreach (BFProduct product in _VendorProductList)
             {
@@ -250,9 +250,9 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy
         /// </summary>
         /// <param name="bfProduct"></param>
         /// <returns></returns>
-        public static Product BuildProductWithOutVariants(BFProduct bfProduct)
+        public static FullProduct BuildProductWithOutVariants(BFProduct bfProduct)
         {
-            Product newProduct = new();
+            FullProduct newProduct = new();
 
             newProduct.title = SQLUtil.SQLSafeString(bfProduct.title);
             newProduct.body_html = SQLUtil.SQLSafeString(bfProduct.description);
@@ -295,9 +295,9 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy
         }
 
         // method that builds Product from API models containing multiple variants
-        public static Product BuildProductWithVariants(BFProductWithVariants bfProduct)
+        public static FullProduct BuildProductWithVariants(BFProductWithVariants bfProduct)
         {
-            Product newProduct = new();
+            FullProduct newProduct = new();
 
             newProduct.title = SQLUtil.SQLSafeString(bfProduct.title);
             newProduct.body_html = SQLUtil.SQLSafeString(bfProduct.description);

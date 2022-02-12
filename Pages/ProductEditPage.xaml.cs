@@ -12,7 +12,7 @@ using System.Windows.Input;
 namespace Ikrito_Fulfillment_Platform.Pages {
     public partial class ProductEditPage : Page {
 
-        private readonly Product EditableProduct;
+        private readonly FullProduct EditableProduct;
         private readonly Dictionary<string, string> CategoryKVP;
         private readonly Page PreviousPage;
         private readonly bool isReadOnly;
@@ -26,7 +26,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         private ObservableCollection<string> TagListBoxDataSource;
         public ICommand DeleteTagCommand { get; set; }
 
-        public ProductEditPage(Product product, Page prevPage, bool readOnly = false) {
+        public ProductEditPage(FullProduct product, Page prevPage, bool readOnly = false) {
             PreviousPage = prevPage;
             isReadOnly = readOnly;
 
@@ -133,8 +133,8 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         }
 
         //saves data to new product 
-        private Product saveProduct() {
-            Product newProduct = new();
+        private FullProduct saveProduct() {
+            FullProduct newProduct = new();
 
             //todo:repair this
 
@@ -182,7 +182,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         private void exitPage() {
             if (PreviousPage is ProductBrowsePage) {
                 var page = PreviousPage as ProductBrowsePage;
-                Product editedProduct = ProductModule.GetProduct(EditableProduct.sku);
+                FullProduct editedProduct = ProductModule.GetProduct(EditableProduct.sku);
 
                 page.AllProducts[editedProduct.sku] = editedProduct;
                 page.RefreshDataGrid();

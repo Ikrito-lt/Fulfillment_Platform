@@ -116,7 +116,7 @@ namespace Ikrito_Fulfillment_Platform {
 
         //opens sync page
         private void openSyncPage(object sender, RoutedEventArgs e) {
-            MainWindow.Instance.mainFrame.Content = ProductSyncPage.Instance;
+            MainWindow.Instance.mainFrame.Content = ProductUpdatePage.Instance;
         }
 
         //opens order Info page

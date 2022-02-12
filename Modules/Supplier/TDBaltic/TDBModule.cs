@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Xml;
-using static Ikrito_Fulfillment_Platform.Models.Product;
+using static Ikrito_Fulfillment_Platform.Models.FullProduct;
 
 namespace Ikrito_Fulfillment_Platform.Modules.Supplier.TDBaltic {
     static class TDBModule {
@@ -42,9 +42,9 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.TDBaltic {
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
         private static XmlDocument _CategoryXML => _LazyCategoryXML.Value;
 
-        private static readonly Lazy<List<Product>> _LazyProductList = new(() => BuildProductList());
+        private static readonly Lazy<List<FullProduct>> _LazyProductList = new(() => BuildProductList());
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
-        public static List<Product> ProductList => _LazyProductList.Value;
+        public static List<FullProduct> ProductList => _LazyProductList.Value;
 
 
         //
@@ -209,8 +209,8 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.TDBaltic {
         //}
 
         //method that builds product list from TDB API data
-        private static List<Product> BuildProductList() {
-            List<Product> NewProducts = new();
+        private static List<FullProduct> BuildProductList() {
+            List<FullProduct> NewProducts = new();
 
             var catalogueProducts = _CategoryXML.FirstChild.ChildNodes;
             foreach (XmlNode prodXML in catalogueProducts) {
@@ -234,7 +234,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.TDBaltic {
                     //since TDB has only one variant for one product we add only one variant
 
                     //init new product object
-                    Product newProduct = new();
+                    FullProduct newProduct = new();
                     ProductVariant newVariant = new(); 
 
                     string title = newProdDataKVP["ShortDesc"];

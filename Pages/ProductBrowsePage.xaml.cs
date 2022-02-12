@@ -16,11 +16,11 @@ namespace Ikrito_Fulfillment_Platform.Pages
     public partial class ProductBrowsePage : Page
     {
 
-        public Dictionary<string, Product> AllProducts;
-        private List<Product> StatusFilteredProducts;
-        private List<Product> DateFilteredFilteredProducts;
-        private List<Product> TextFilteredProducts;
-        private List<Product> DataGridSource;
+        public Dictionary<string, FullProduct> AllProducts;
+        private List<FullProduct> StatusFilteredProducts;
+        private List<FullProduct> DateFilteredFilteredProducts;
+        private List<FullProduct> TextFilteredProducts;
+        private List<FullProduct> DataGridSource;
 
         public List<CheckBoxListItem> StatusList;
 
@@ -75,15 +75,15 @@ namespace Ikrito_Fulfillment_Platform.Pages
                 //to preload categories
                 _ = CategoryKVP;
                 //downloading products from database
-                Dictionary<string, Product> products = ProductModule.GetAllProducts();
+                Dictionary<string, FullProduct> products = ProductModule.GetAllProducts();
                 e.Result = products;
             };
 
             // background Worker for loading all product on complete
             worker.RunWorkerCompleted += (sender, e) => {
                 //getting category display names
-                var TempProductList = e.Result as Dictionary<string, Product>;
-                foreach ((string sku, Product TempProduct) in TempProductList)
+                var TempProductList = e.Result as Dictionary<string, FullProduct>;
+                foreach ((string sku, FullProduct TempProduct) in TempProductList)
                 {
                     TempProduct.ProductTypeDisplayVal = CategoryKVP[TempProduct.productTypeID];
                 }
@@ -161,7 +161,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
         private void Row_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             DataGridRow row = sender as DataGridRow;
-            Product product = row.Item as Product;
+            FullProduct product = row.Item as FullProduct;
             MainWindow.Instance.mainFrame.Content = new ProductEditPage(product, this, false);
         }
 
