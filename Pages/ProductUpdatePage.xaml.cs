@@ -269,7 +269,6 @@ namespace Ikrito_Fulfillment_Platform.Pages
             TDBUpdateWorker.ProgressChanged += UpdateVendorProductsWorkerProgressChanged;
 
             RefreshButton.IsEnabled = false;
-            progressBarLabel.Text = "Updating TDB products";
 
             ClearChangesListBoxes();
 
@@ -287,7 +286,6 @@ namespace Ikrito_Fulfillment_Platform.Pages
             KGUpdateWorker.ProgressChanged += UpdateVendorProductsWorkerProgressChanged;
 
             RefreshButton.IsEnabled = false;
-            progressBarLabel.Text = "Updating KG products";
 
             ClearChangesListBoxes();
 
@@ -305,7 +303,6 @@ namespace Ikrito_Fulfillment_Platform.Pages
             PDUpdateWorker.ProgressChanged += UpdateVendorProductsWorkerProgressChanged;
 
             RefreshButton.IsEnabled = false;
-            progressBarLabel.Text = "Updating PD products";
 
             ClearChangesListBoxes();
 
@@ -323,7 +320,6 @@ namespace Ikrito_Fulfillment_Platform.Pages
             PDUpdateWorker.ProgressChanged += UpdateVendorProductsWorkerProgressChanged;
 
             RefreshButton.IsEnabled = false;
-            progressBarLabel.Text = "Updating BF products";
 
             ClearChangesListBoxes();
 
@@ -333,9 +329,12 @@ namespace Ikrito_Fulfillment_Platform.Pages
         //method that updates progress bar during product export
         private void UpdateVendorProductsWorkerProgressChanged(object sender, ProgressChangedEventArgs e)
         {
+            (bool makeProgressBarIndeterminate, string barText) = (ValueTuple<bool, string>)e.UserState;
+            progressBar.IsIndeterminate = makeProgressBarIndeterminate;
+            progressBarLabel.Text = barText;
+
             int progress = e.ProgressPercentage;
             progressBar.Value = progress;
-            progressBarLabel.Text = e.UserState as string;
         }
 
         //worker on complete method to updating vendor products (disables loading bar, populates listboxes)

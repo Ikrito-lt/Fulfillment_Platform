@@ -68,7 +68,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy
 
             foreach (XmlNode product in productList)
             {
-                int nodesCount = product.ChildNodes.Count;
+                int nodesCount = product.ChildNodes.Count; 
                 if (nodesCount == 14)
                 {
                     vendorProductsXMLNodes.Add(product);
