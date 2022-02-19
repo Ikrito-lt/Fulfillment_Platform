@@ -103,7 +103,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
         }
 
         /// <summary>
-        /// method that check if product is in database
+        /// method that check if product is in database (returns true if exists)
         /// </summary>
         /// <param name="sku"></param>
         public static bool CheckIfExistsInDB(string sku)
@@ -173,7 +173,25 @@ namespace Ikrito_Fulfillment_Platform.Modules
 
             if (currentStatus == ProductStatus.New && forceChangeNew == false)
             {
-                throw new Exception($"Cant change product status {currentStatus} -> {newStatus}");
+                if (newStatus == ProductStatus.Archived)
+                {
+                    var updateData = new Dictionary<string, string>
+                    {
+                        ["LastUpdateTime"] = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString(),
+                        ["Status"] = newStatus
+                    };
+                    var whereUpdate = new Dictionary<string, Dictionary<string, string>>
+                    {
+                        ["SKU"] = new Dictionary<string, string>
+                        {
+                            ["="] = sku
+                        }
+                    };
+                    db.Table("Products").Where(whereUpdate).Update(updateData);
+                }
+                else if (forceChangeNew == false) {
+                    throw new Exception($"Cant change product status {currentStatus} -> {newStatus}");
+                }
             }
             else
             {
@@ -241,7 +259,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
                 prod.title = row["Title"];
                 prod.body_html = row["Body"];
                 prod.vendor = row["Vendor"];
-                prod.productTypeID = row["ProductType"];
+                prod.productTypeID = row["ProductType_ID"];
                 prod.sku = row["SKU"];
                 prod.weight = double.Parse(row["Weight"]);
                 prod.height = int.Parse(row["Height"]);
@@ -305,7 +323,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
                     ["="] = sku
                 }
             };
-            result = db.Table("_" + tablePrefix + "Variants").Where(whereCond).Get();
+            result = db.Table("_" + tablePrefix + "_Variants").Where(whereCond).Get();
             foreach (var row in result.Values)
             {
                 ProductVariant pVariant = new();
@@ -327,7 +345,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
                     ["="] = sku
                 }
             };
-            result = db.Table("_" + tablePrefix + "Attributes").Where(whereCond).Get();
+            result = db.Table("_" + tablePrefix + "_Attributes").Where(whereCond).Get();
             foreach (var row in result.Values)
             {
                 prod.productAttributtes.Add(row["Name"], row["Data"]);

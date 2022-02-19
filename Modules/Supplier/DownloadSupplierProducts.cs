@@ -51,7 +51,10 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
         /// <param name="e"></param>
         public static void UpdateProducts(string TablePrefix, object sender = null, DoWorkEventArgs e = null)
         {
+            //for reporting
+            int promiles = 0;
             BackgroundWorker worker = sender as BackgroundWorker;
+            worker.ReportProgress(promiles, (true, $"Updating {TablePrefix} products"));
 
             //getting DB Products
             Dictionary<string, FullProduct> DBProducts = new Dictionary<string, FullProduct>();
@@ -121,8 +124,9 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
 
                 //reporting progress
                 allProductsActionDone += 1;
-                int promiles = (allProductsActionDone * 1000) / allProductsActionCount;
-                worker.ReportProgress(promiles, $"Archiving {TablePrefix} Products ({index + 1}/{archiveProductsLenght}) - Total Actions ({allProductsActionDone}/{allProductsActionCount})");
+                promiles = (allProductsActionDone * 1000) / allProductsActionCount;
+                int percents = promiles / 10;
+                worker.ReportProgress(promiles, (false, $"Archiving {TablePrefix} Products ({index + 1}/{archiveProductsLenght}) - Total Actions ({allProductsActionDone}/{allProductsActionCount}) {percents}%"));
             }
 
             // adding new Products
@@ -151,8 +155,9 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
 
                 //reporting progress
                 allProductsActionDone += 1;
-                int promiles = (allProductsActionDone * 1000) / allProductsActionCount;
-                worker.ReportProgress(promiles, $"Adding New {TablePrefix} Products ({index + 1}/{newProductsLenght}) - Total Actions ({allProductsActionDone}/{allProductsActionCount})");
+                promiles = (allProductsActionDone * 1000) / allProductsActionCount;
+                int percents = promiles / 10;
+                worker.ReportProgress(promiles, (false, $"Adding New {TablePrefix} Products ({index + 1}/{newProductsLenght}) - Total Actions ({allProductsActionDone}/{allProductsActionCount}) {percents}%"));
             }
 
             //updating products
@@ -304,8 +309,9 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
 
                 //reporting progress
                 allProductsActionDone += 1;
-                int promiles = (allProductsActionDone * 1000) / allProductsActionCount;
-                worker.ReportProgress(promiles, $"Updating {TablePrefix} Products ({index + 1}/{updateProductsLenght}) - Total Actions ({allProductsActionDone}/{allProductsActionCount})");
+                promiles = (allProductsActionDone * 1000) / allProductsActionCount;
+                int percents = promiles / 10;
+                worker.ReportProgress(promiles, (false, $"Updating {TablePrefix} Products ({index + 1}/{updateProductsLenght}) - Total Actions ({allProductsActionDone}/{allProductsActionCount}) {percents}%"));
             }
 
             //pass applied changes and pending changes to update on complete method

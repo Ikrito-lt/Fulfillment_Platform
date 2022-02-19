@@ -16,7 +16,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
         public DataBaseInterface(string hostname, string username, string password, string database, int port = 3306) {
             String connectionQuery = "Server=" + hostname + ";Database=" + database
-               + ";port=" + port + ";User Id=" + username + ";password=" + password + ";SslMode=none";
+               + ";port=" + port + ";User Id=" + username + ";password=" + password + ";SslMode=Required";
 
             connection = new MySqlConnection(connectionQuery);
             connection.Open();
@@ -24,7 +24,7 @@ namespace Ikrito_Fulfillment_Platform.Modules {
 
         public DataBaseInterface() {
             String connectionQuery = "Server=" + Globals.DBServer + ";Database=" + Globals.DefaultDB
-               + ";port=" + Globals.DBServerPort + ";User Id=" + Globals.DBServerUsername + ";password=" + Globals.DBServerPassword + ";SslMode=none; default command timeout=150;";
+               + ";port=" + Globals.DBServerPort + ";User Id=" + Globals.DBServerUsername + ";password=" + Globals.DBServerPassword + ";SslMode=Required; default command timeout=150;";
 
             connection = new MySqlConnection(connectionQuery);
 

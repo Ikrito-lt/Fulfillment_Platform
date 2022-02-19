@@ -31,6 +31,13 @@ namespace Ikrito_Fulfillment_Platform.Utils {
         //Pretendentas API Creds
         public const string PDApiKey = "390ad56b495968e4679e2be66ed507ad";
 
+        // AWS mySQL DB creds (old)
+        public const string oldDBHostname = "ikrito-db-v2.c175yaycfw7i.eu-central-1.rds.amazonaws.com";
+        public const string oldDBHostnamePort = "3306";
+        public const string oldDBUsername = "admin";
+        public const string oldDBPassword = "p3gD2Z5fbztX8Uh";
+        public const string oldDefaultDB = "main";
+
         // AWS mySQL DB creds (main)
         public const string DBServer = "ikrito-db-v3.c175yaycfw7i.eu-central-1.rds.amazonaws.com";
         public const string DBServerPort = "3306";
