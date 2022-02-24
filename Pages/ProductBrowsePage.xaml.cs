@@ -23,10 +23,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
         private List<FullProduct> DataGridSource;
 
         public List<CheckBoxListItem> StatusList;
-
-        private readonly Lazy<Dictionary<string, string>> _LazyCategoryKVP = new(() => ProductModule.GetCategoriesDictionary());
-        private Dictionary<string, string> CategoryKVP => _LazyCategoryKVP.Value;
-
+        private Dictionary<string, string> CategoryKVP = ProductCategoryModule.Instance.CategoryKVP;
 
         private bool _clearFilters;
         public bool clearFilters
@@ -72,8 +69,6 @@ namespace Ikrito_Fulfillment_Platform.Pages
             worker.WorkerReportsProgress = false;
 
             worker.DoWork += (sender, e) => {
-                //to preload categories
-                _ = CategoryKVP;
                 //downloading products from database
                 Dictionary<string, FullProduct> products = ProductModule.GetAllProducts();
                 e.Result = products;
@@ -85,7 +80,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
                 var TempProductList = e.Result as Dictionary<string, FullProduct>;
                 foreach ((string sku, FullProduct TempProduct) in TempProductList)
                 {
-                    TempProduct.ProductTypeDisplayVal = CategoryKVP[TempProduct.productTypeID];
+                    TempProduct.ProductTypeDisplayVal = CategoryKVP[TempProduct.ProductTypeID];
                 }
 
                 //putting products in their grids
@@ -125,6 +120,16 @@ namespace Ikrito_Fulfillment_Platform.Pages
             DateFilteredFilteredProducts = AllProducts.Values.ToList();
             TextFilteredProducts = AllProducts.Values.ToList();
 
+            //unmarking status checkboxes and date selectors 
+            StatusList.ForEach(x => x.IsSelected = true);
+            CheckBox1.IsChecked = true;
+            CheckBox2.IsChecked = true;
+            CheckBox3.IsChecked = true;
+            CheckBox4.IsChecked = true;
+            CheckBox5.IsChecked = true;
+            BeginDatePicker.SelectedDate = null;
+            EndDatePicker.SelectedDate = null;
+
             //init DataGrid
             productDG.ItemsSource = TextFilteredProducts;
 
@@ -162,7 +167,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
         {
             DataGridRow row = sender as DataGridRow;
             FullProduct product = row.Item as FullProduct;
-            MainWindow.Instance.mainFrame.Content = new ProductEditPage(product, this, false);
+            MainWindow.Instance.mainFrame.Content = new ProductEditPage(product, this, CategoryKVP, false);
         }
 
         /// <summary>
@@ -211,7 +216,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
             {
                 if (status.IsSelected)
                 {
-                    StatusFilteredProducts.AddRange(AllProducts.ToList().FindAll(x => x.Value.status == status.Name).ToDictionary(x=> x.Key, x=> x.Value).Values.ToList());
+                    StatusFilteredProducts.AddRange(AllProducts.ToList().FindAll(x => x.Value.Status == status.Name).ToDictionary(x=> x.Key, x=> x.Value).Values.ToList());
                 }
             }
 
@@ -254,7 +259,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
                 {
 
                     DateFilteredFilteredProducts.Clear();
-                    DateFilteredFilteredProducts.AddRange(StatusFilteredProducts.FindAll(x => beginTimeStamp <= long.Parse(x.addedTimeStamp) && long.Parse(x.addedTimeStamp) <= endTimeStamp));
+                    DateFilteredFilteredProducts.AddRange(StatusFilteredProducts.FindAll(x => beginTimeStamp <= long.Parse(x.AddedTimeStamp) && long.Parse(x.AddedTimeStamp) <= endTimeStamp));
 
                     TextFilteredProducts = DateFilteredFilteredProducts.ToList();
                     DataGridSource = TextFilteredProducts.ToList();
@@ -345,7 +350,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
             {
                 string query = textBox.Text.ToLower();
 
-                TextFilteredProducts = TextFilteredProducts.Where(p => p.vendor.ToLower().Contains(query)).ToList();
+                TextFilteredProducts = TextFilteredProducts.Where(p => p.Vendor.ToLower().Contains(query)).ToList();
                 ChangeCountLabel(TextFilteredProducts.Count);
                 DataGridSource = TextFilteredProducts;
                 productDG.ItemsSource = DataGridSource;
@@ -364,7 +369,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
             {
                 string query = textBox.Text.ToLower();
 
-                TextFilteredProducts = TextFilteredProducts.Where(p => p.sku.ToLower().Contains(query)).ToList();
+                TextFilteredProducts = TextFilteredProducts.Where(p => p.SKU.ToLower().Contains(query)).ToList();
                 ChangeCountLabel(TextFilteredProducts.Count);
                 DataGridSource = TextFilteredProducts;
                 productDG.ItemsSource = DataGridSource;
@@ -383,7 +388,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
             {
                 string query = textBox.Text.ToLower();
 
-                TextFilteredProducts = TextFilteredProducts.Where(p => p.title.ToLower().Contains(query)).ToList();
+                TextFilteredProducts = TextFilteredProducts.Where(p => p.Title.ToLower().Contains(query)).ToList();
                 ChangeCountLabel(TextFilteredProducts.Count);
                 DataGridSource = TextFilteredProducts;
                 productDG.ItemsSource = DataGridSource;

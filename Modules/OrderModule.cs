@@ -81,9 +81,9 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 //money stuff
                 newOrder.currency = order["Currency"];
                 newOrder.current_subtotal_price = double.Parse(order["Subtotal_Price"]);
-                newOrder.current_total_discounts = double.Parse(order["Total_Discounts"]);
+                newOrder.current_total_discounts = string.IsNullOrEmpty(order["Total_Discounts"]) ? .0 : double.Parse(order["Total_Discounts"]);
                 newOrder.current_total_price = double.Parse(order["Total_Price"]);
-                newOrder.current_total_tax = double.Parse(order["Total_Tax"]);
+                newOrder.current_total_tax = string.IsNullOrEmpty(order["Total_Tax"]) ? .0 : double.Parse(order["Total_Tax"]);
                 newOrder.financial_status = order["Finantial_Status"];
                 newOrder.name = order["Name"];
                 newOrder.note = order["Note"];

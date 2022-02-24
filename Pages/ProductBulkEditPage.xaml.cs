@@ -67,9 +67,9 @@ namespace Ikrito_Fulfillment_Platform.Pages
         private List<string> GetVendorTypes() {
             List<string> possibleVendorTypes = new();
             foreach ((string sku, FullProduct p) in Products) {
-                if (!possibleVendorTypes.Contains(p.productTypeVendor.Trim()))
+                if (!possibleVendorTypes.Contains(p.ProductTypeVendor.Trim()))
                 {
-                    possibleVendorTypes.Add(p.productTypeVendor.Trim());
+                    possibleVendorTypes.Add(p.ProductTypeVendor.Trim());
                 }
             }
             return possibleVendorTypes;
@@ -120,15 +120,15 @@ namespace Ikrito_Fulfillment_Platform.Pages
                 bool checkVPT = TPlistboxitem.VendorProductType == string.Empty ? false : true;
                 if (checkVPT)
                 {
-                    if (p.productTypeVendor.Trim() != vendorProductType) continue;
+                    if (p.ProductTypeVendor.Trim() != vendorProductType) continue;
                 }
                 else {
-                    TPlistboxitem.VendorProductType = p.productTypeVendor;
+                    TPlistboxitem.VendorProductType = p.ProductTypeVendor;
                 }
 
                 //if both checks passed, give TPlistboxitem - sku - title;
-                TPlistboxitem.SKU = p.sku;
-                TPlistboxitem.Title = p.title;
+                TPlistboxitem.SKU = p.SKU;
+                TPlistboxitem.Title = p.Title;
                 TPlistboxitem.Selected = false;
 
                 //adding it to list box source
@@ -156,10 +156,10 @@ namespace Ikrito_Fulfillment_Platform.Pages
                 var i = 1;
                 var changesCount = changeList.Count;
                 foreach ((var sku, var t) in changeList) {
-                    ProductModule.ChangeProductCategory(sku, newTypeID);
+                    ProductCategoryModule.ChangeProductCategory(sku, newTypeID);
 
                     //changing category in products
-                    Products[sku].productTypeID = newTypeID;
+                    Products[sku].ProductTypeID = newTypeID;
                     Products[sku].ProductTypeDisplayVal = newType;
 
                     //changing category in listbox

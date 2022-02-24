@@ -150,10 +150,10 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.Pretendentas
             }
 
             //removing products without images
-            newProducts = newProducts.FindAll(x => x.images.Count > 0);
+            newProducts = newProducts.FindAll(x => x.Images.Count > 0);
             
             //remoing product duplicates
-            List<FullProduct> noDuplicates = newProducts.GroupBy(x => x.sku).Select(x => x.First()).ToList();
+            List<FullProduct> noDuplicates = newProducts.GroupBy(x => x.SKU).Select(x => x.First()).ToList();
             return noDuplicates;
         }
 
@@ -161,38 +161,38 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.Pretendentas
         private static FullProduct BuildProduct(PDProduct PDproduct) {
             FullProduct newProduct = new();
 
-            newProduct.title = SQLUtil.SQLSafeString(PDproduct.title);
-            newProduct.body_html = SQLUtil.SQLSafeString(PDproduct.descriptionHTML);
+            newProduct.Title = SQLUtil.SQLSafeString(PDproduct.title);
+            newProduct.HTMLBody = SQLUtil.SQLSafeString(PDproduct.descriptionHTML);
 
             //getting vendor
             PDManufacturer ProdManuf = _ManufList.Find(x => x.id == PDproduct.manufacturer_id);
-            newProduct.vendor = SQLUtil.SQLSafeString(ProdManuf.title);
+            newProduct.Vendor = SQLUtil.SQLSafeString(ProdManuf.title);
 
-            newProduct.productTypeID = 1.ToString();
-            newProduct.sku = _SKUPrefix + PDproduct.artnum;
-            newProduct.productTypeVendor = PDproduct.vandorType;
+            newProduct.ProductTypeID = 1.ToString();
+            newProduct.SKU = _SKUPrefix + PDproduct.artnum;
+            newProduct.ProductTypeVendor = PDproduct.vandorType;
 
             //building Varinats
             ProductVariant newVariant = new ProductVariant();
-            newVariant.barcode = PDproduct.ean;
-            newVariant.price = PriceGenModule.GenNewPrice(PDproduct.price);
-            newVariant.vendor_price = PDproduct.price;
+            newVariant.Barcode = PDproduct.ean;
+            newVariant.Price = PriceGenModule.GenNewPrice(PDproduct.price);
+            newVariant.PriceVendor = PDproduct.price;
 
             //setting product variant stock
             if (PDproduct.stock.ContainsKey("type"))
             {
                 if (PDproduct.stock["type"] == "morethan" || PDproduct.stock["type"] == "total")
                 {
-                    newVariant.stock = int.Parse(PDproduct.stock["amount"]);
+                    newVariant.Stock = int.Parse(PDproduct.stock["amount"]);
                 }
                 else
                 {
-                    newVariant.stock = -1;
+                    newVariant.Stock = -1;
                 }
             }
             else
             {
-                newVariant.stock = int.Parse(PDproduct.stock["amount"]);
+                newVariant.Stock = int.Parse(PDproduct.stock["amount"]);
             }
 
             //adding images
@@ -203,26 +203,26 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.Pretendentas
                 foreach (dynamic img in imagesDynamic)
                 {
                     string imageURL = img.ToString();
-                    newProduct.images.Add(imageURL);
+                    newProduct.Images.Add(imageURL);
                 }
             }
             else if (imagesDynamic.Type == JTokenType.String)
             {
                 string imageURL = imagesDynamic.Value.ToString();
-                newProduct.images.Add(imageURL);
+                newProduct.Images.Add(imageURL);
             }
 
             //adding product added timestamp
-            newProduct.addedTimeStamp = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString();
+            newProduct.AddedTimeStamp = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString();
 
             //getting the dimensions (they dont give dims)
-            newProduct.weight = PDproduct.weight;
-            newProduct.height = 1;
-            newProduct.lenght = 1;
-            newProduct.width = 1;
+            newProduct.Weight = PDproduct.weight;
+            newProduct.Height = 1;
+            newProduct.Lenght = 1;
+            newProduct.Width = 1;
 
             //i can add paramethers but PD doesnt give any
-            newProduct.productVariants.Add(newVariant);
+            newProduct.ProductVariants.Add(newVariant);
             return newProduct;
         }
     }

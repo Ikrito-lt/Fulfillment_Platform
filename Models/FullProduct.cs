@@ -1,4 +1,5 @@
-﻿ using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,68 +11,75 @@ namespace Ikrito_Fulfillment_Platform.Models {
     /// class for storring full product module
     /// </summary>
     public class FullProduct {
-        public string title { set; get; }
-        public string body_html { set; get; }           //desc
-        public string vendor { set; get; }
-        public string productTypeID { set; get; }        //category ID
-        public string sku { set; get; }
-        public double weight { set; get; }              //in kg
-        public int height { set; get; }                 //in mm
-        public int lenght { set; get; }                 //in mm
-        public int width { set; get; }                  //in mm
-        public string deliveryTime { set; get; }        //delivery time string
-        public string addedTimeStamp { set; get; }      //timestamp of when product was created
-        public string productTypeVendor { set; get; }   //for saving vendor product type to database.
+        public string Title { set; get; }
+        public string HTMLBody { set; get; }           //desc
+        public string Vendor { set; get; }
+        public string ProductTypeID { set; get; }        //category ID
+        public string SKU { set; get; }
+        public double Weight { set; get; }              //in kg
+        public int Height { set; get; }                 //in mm
+        public int Lenght { set; get; }                 //in mm
+        public int Width { set; get; }                  //in mm
+        public string ProductTypeVendor { set; get; }   //for saving vendor product type to database.
+        public string DeliveryTime { set; get; }        //delivery time string
+        public string AddedTimeStamp { set; get; }      //timestamp of when product was created
+        public DateTime GetAddedTime() {
 
-        public List<string> tags = new();
-        public List<string> images = new();
-        public List<ProductVariant> productVariants = new();
+            DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            double timestamp = double.Parse(AddedTimeStamp);
+            dateTime = dateTime.AddSeconds(timestamp).ToLocalTime();
+            return dateTime;
+        }
 
-        public Dictionary<string, string> productAttributtes = new();
+        public List<string> Tags = new();
+        public List<string> Images = new();
+        public List<ProductVariant> ProductVariants = new();
+
+        public Dictionary<string, string> ProductAttributtes = new();
 
         //for util
-        public string status { set; get; }              //for product status as in sync Status
+        public string Status { set; get; }              //for product status as in sync Status
         public string ProductTypeDisplayVal { set; get; }   // for saving category text val
 
         //for showing 
-        public string VariantCount => productVariants?.Count > 0 ? productVariants.Count.ToString() : "0";
-        public string FirstVariantStock => productVariants?.Count > 0 ? productVariants.First().stock.ToString() : "NaN";
-        public string FirstVariantPrice => productVariants?.Count > 0 ? productVariants.First().price.ToString() : "NaN";
-        public string FirstVariantVendorPrice => productVariants?.Count > 0 ? productVariants.First().vendor_price.ToString() : "NaN";
+        public string VariantCount => ProductVariants?.Count > 0 ? ProductVariants.Count.ToString() : "0";
+        public string FirstVariantStock => ProductVariants?.Count > 0 ? ProductVariants.First().Stock.ToString() : "NaN";
+        public string FirstVariantPrice => ProductVariants?.Count > 0 ? ProductVariants.First().Price.ToString() : "NaN";
+        public string FirstVariantVendorPrice => ProductVariants?.Count > 0 ? ProductVariants.First().PriceVendor.ToString() : "NaN";
 
         /// <summary>
         /// class for describing product variants
         /// </summary>
         public class ProductVariant {
-            public int variantDBID { set; get; }
-            public double price { set; get; }
-            public int stock { set; get; }
-            public string barcode { set; get; }
-            public double vendor_price { set; get; }
+            public int VariantDBID { set; get; }
+            public double Price { set; get; }
+            public int Stock { set; get; }
+            public string Barcode { set; get; }
+            public double PriceVendor { set; get; }
             public string VariantType { set; get; }
             public string VariantData { set; get; }
             public bool PermPrice { set; get; }
 
             public bool isSame(ProductVariant other) {
-                if(barcode != other.barcode) return false;
-                if(vendor_price != other.vendor_price) return false;
-                if(stock != other.stock) return false;
+                if(Barcode != other.Barcode) return false;
+                if(PriceVendor != other.PriceVendor) return false;
+                if(Stock != other.Stock) return false;
                 return true;
             }
         }
 
         public FullProduct() {
             //to detect unassigned fields
-            title = "NULL";
-            body_html = "NULL";
-            vendor = "NULL";
-            productTypeID = "NULL";
-            sku = "NULL";
-            weight = 1;
-            height = 1;
-            lenght = 1;
-            width = 1;
-            deliveryTime = "";
+            Title = "NULL";
+            HTMLBody = "NULL";
+            Vendor = "NULL";
+            ProductTypeID = "NULL";
+            SKU = "NULL";
+            Weight = 0;
+            Height = 1;
+            Lenght = 1;
+            Width = 1;
+            DeliveryTime = "-";
         }
 
         //

@@ -48,7 +48,7 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             if (sender is ListBoxItem listboxItem) {
                 OrderProduct orderProduct= listboxItem.Content as OrderProduct;
                 FullProduct viewProduct = ProductModule.GetProduct(orderProduct.sku);
-                MainWindow.Instance.mainFrame.Content = new ProductEditPage(viewProduct, this, true);
+                MainWindow.Instance.mainFrame.Content = new ProductEditPage(viewProduct, this, ProductCategoryModule.Instance.CategoryKVP, true);
             }
         }
 

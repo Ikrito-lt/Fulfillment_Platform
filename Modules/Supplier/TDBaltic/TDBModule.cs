@@ -240,13 +240,13 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.TDBaltic {
                     string title = newProdDataKVP["ShortDesc"];
                     title = SQLUtil.SQLSafeString(title);
 
-                    newProduct.title = title;
-                    newProduct.vendor = vendorNode.InnerText;
-                    newProduct.productTypeID = 1.ToString();
-                    newProduct.sku = NewSKU;
-                    newVariant.stock = int.Parse(stockNode.InnerText);
-                    newVariant.barcode = barcodeNode.InnerText;
-                    newVariant.vendor_price = double.Parse(priceVendorNode.InnerText);
+                    newProduct.Title = title;
+                    newProduct.Vendor = vendorNode.InnerText;
+                    newProduct.ProductTypeID = 1.ToString();
+                    newProduct.SKU = NewSKU;
+                    newVariant.Stock = int.Parse(stockNode.InnerText);
+                    newVariant.Barcode = barcodeNode.InnerText;
+                    newVariant.PriceVendor = double.Parse(priceVendorNode.InnerText);
                     newVariant.PermPrice = false;
 
                     //getting weight
@@ -264,7 +264,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.TDBaltic {
                     if (!grossWeightConvSucceded) { grossWeight = .0; }
                     bool netWeightConvSucceded = double.TryParse(netWeightStr, out double netWeight);
                     if (!netWeightConvSucceded) { netWeight = .0; }
-                    newProduct.weight = Math.Max(grossWeight, netWeight);
+                    newProduct.Weight = Math.Max(grossWeight, netWeight);
 
                     //getting height
                     bool heightExists = newProdDataKVP.TryGetValue("Height", out string heightStr);
@@ -273,9 +273,9 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.TDBaltic {
                     heightStr = heightStr.Split(" ")[0];
                     bool heightConvSucceded = int.TryParse(heightStr, out int heightInt);
                     if (heightConvSucceded) {
-                        newProduct.height = heightInt;
+                        newProduct.Height = heightInt;
                     } else {
-                        newProduct.height = 0;
+                        newProduct.Height = 0;
                     }
 
                     //getting lenght
@@ -285,9 +285,9 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.TDBaltic {
                     lenghtStr = lenghtStr.Split(" ")[0];
                     bool lenghtConvSucceded = int.TryParse(lenghtStr, out int lenghtInt);
                     if (lenghtConvSucceded) {
-                        newProduct.lenght = lenghtInt;
+                        newProduct.Lenght = lenghtInt;
                     } else {
-                        newProduct.lenght = 0;
+                        newProduct.Lenght = 0;
                     }
 
                     //getting width
@@ -297,47 +297,47 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.TDBaltic {
                     widthStr = widthStr.Split(" ")[0];
                     bool widthConvSucceded = int.TryParse(widthStr, out int widthInt);
                     if (widthConvSucceded) {
-                        newProduct.width = widthInt;
+                        newProduct.Width = widthInt;
                     } else {
-                        newProduct.width = 0;
+                        newProduct.Width = 0;
                     }
 
                     //calculating newProduct price
-                    double NewSalePrice = PriceGenModule.GenNewPrice(newVariant.vendor_price);
-                    newVariant.price = NewSalePrice;
+                    double NewSalePrice = PriceGenModule.GenNewPrice(newVariant.PriceVendor);
+                    newVariant.Price = NewSalePrice;
 
                     //adding pictures
                     foreach (var pic in newProdDataKVP.Where(x => x.Key.Contains("Picture"))) {
                         if (!string.IsNullOrEmpty(pic.Value) || !string.IsNullOrWhiteSpace(pic.Value)) {
-                            newProduct.images.Add(pic.Value);
+                            newProduct.Images.Add(pic.Value);
                         }
                     }
 
                     //adding vendor product type
-                    newProduct.productTypeVendor = vendorTypeNode.InnerText;
+                    newProduct.ProductTypeVendor = vendorTypeNode.InnerText;
 
                     //adding product added timestamp
-                    newProduct.addedTimeStamp = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString();
+                    newProduct.AddedTimeStamp = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString();
 
                     //building Product description
-                    newProduct.body_html = BuildDescription(newProdDataKVP);
+                    newProduct.HTMLBody = BuildDescription(newProdDataKVP);
 
-                    if (newProduct.height == 0) newProduct.height = 1;
-                    if (newProduct.width == 0) newProduct.width = 1;
-                    if (newProduct.lenght == 0) newProduct.lenght = 1;
+                    if (newProduct.Height == 0) newProduct.Height = 1;
+                    if (newProduct.Width == 0) newProduct.Width = 1;
+                    if (newProduct.Lenght == 0) newProduct.Lenght = 1;
 
                     //adding variant and product attributes to the product model
                     foreach (KeyValuePair<string,string> pDataKVP in newProdDataKVP) {
-                        newProduct.productAttributtes.Add(pDataKVP.Key, SQLUtil.SQLSafeString(pDataKVP.Value));
+                        newProduct.ProductAttributtes.Add(pDataKVP.Key, SQLUtil.SQLSafeString(pDataKVP.Value));
                     }
 
-                    newProduct.productVariants.Add(newVariant);
+                    newProduct.ProductVariants.Add(newVariant);
                     NewProducts.Add(newProduct);
                 }
             }
 
             //removing blackilisted products from the list
-            NewProducts.RemoveAll(x => SKUBlackList.Contains(x.sku.ToLower()));
+            NewProducts.RemoveAll(x => SKUBlackList.Contains(x.SKU.ToLower()));
 
             return NewProducts;
         }

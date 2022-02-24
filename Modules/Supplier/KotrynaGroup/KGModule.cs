@@ -282,8 +282,8 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.KotrynaGroup {
         private static FullProduct BuildProduct(KGAssortmentProduct AP, KGProductInfo PI, KGProductMeasurements PM, KGProductPackaging PP) {
             FullProduct newProduct = new();
 
-            newProduct.title = SQLUtil.SQLSafeString(PI.title);
-            newProduct.body_html = BuildDescription(PI.properties);
+            newProduct.Title = SQLUtil.SQLSafeString(PI.title);
+            newProduct.HTMLBody = BuildDescription(PI.properties);
 
             string newVendor = PI.brand;
             if (string.IsNullOrEmpty(newVendor))
@@ -291,39 +291,39 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.KotrynaGroup {
                 newVendor = "NULL_ERROR";
             }
 
-            newProduct.vendor = SQLUtil.SQLSafeString(newVendor);
-            newProduct.productTypeID = 1.ToString();
-            newProduct.sku = _SKUPrefix + AP.axapta_id;
+            newProduct.Vendor = SQLUtil.SQLSafeString(newVendor);
+            newProduct.ProductTypeID = 1.ToString();
+            newProduct.SKU = _SKUPrefix + AP.axapta_id;
 
-            newProduct.productTypeVendor = PI.vendorType;
+            newProduct.ProductTypeVendor = PI.vendorType;
 
-            newProduct.images = PI.images;
+            newProduct.Images = PI.images;
             //no tags in new products;
 
             //getting the dimensions
-            newProduct.weight = double.Parse(PM.net_weight);
-            newProduct.height = (int)Math.Round(double.Parse(PM.gross_height) * 1000);
-            newProduct.lenght = (int)Math.Round(double.Parse(PM.gross_depth) * 1000);
-            newProduct.width = (int)Math.Round(double.Parse(PM.gross_width) * 1000);
+            newProduct.Weight = double.Parse(PM.net_weight);
+            newProduct.Height = (int)Math.Round(double.Parse(PM.gross_height) * 1000);
+            newProduct.Lenght = (int)Math.Round(double.Parse(PM.gross_depth) * 1000);
+            newProduct.Width = (int)Math.Round(double.Parse(PM.gross_width) * 1000);
 
-            if (newProduct.height == 0) newProduct.height = 1;
-            if (newProduct.width == 0) newProduct.width = 1;
-            if (newProduct.lenght == 0) newProduct.lenght = 1;
+            if (newProduct.Height == 0) newProduct.Height = 1;
+            if (newProduct.Width == 0) newProduct.Width = 1;
+            if (newProduct.Lenght == 0) newProduct.Lenght = 1;
 
             //adding product added timestamp
-            newProduct.addedTimeStamp = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString();
+            newProduct.AddedTimeStamp = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString();
 
             //adding new Variant (only one cause no variants in KG)
             ProductVariant newVariant = new();
-            newVariant.stock = AP.qty;
-            newVariant.barcode = AP.ean;
-            newVariant.vendor_price = AP.price;
-            newVariant.price = AP.base_price;
-            newProduct.productVariants.Add(newVariant);
+            newVariant.Stock = AP.qty;
+            newVariant.Barcode = AP.ean;
+            newVariant.PriceVendor = AP.price;
+            newVariant.Price = AP.base_price;
+            newProduct.ProductVariants.Add(newVariant);
 
             //if properties arent empty add them
             if (PI.properties.Count > 0) {
-                newProduct.productAttributtes = PI.properties;
+                newProduct.ProductAttributtes = PI.properties;
             }
 
             return newProduct;
