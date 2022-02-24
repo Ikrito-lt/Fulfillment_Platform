@@ -95,7 +95,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
                 worker.ReportProgress(promiles, (false, $"Changing Product Status If Stock > 0 ({index}/{productCount})"));
 
                 //cause new status only changes by button
-                if (product.status != ProductStatus.New)
+                if (product.Status != ProductStatus.New)
                 {
                     //checking if product isn out of stock
                     if (!ProductModule.CheckIfProductOutOfStock(product))

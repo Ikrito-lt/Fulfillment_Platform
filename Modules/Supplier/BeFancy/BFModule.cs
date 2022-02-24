@@ -254,8 +254,8 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy
         {
             FullProduct newProduct = new();
 
-            newProduct.title = SQLUtil.SQLSafeString(bfProduct.title);
-            newProduct.body_html = SQLUtil.SQLSafeString(bfProduct.description);
+            newProduct.Title = SQLUtil.SQLSafeString(bfProduct.title);
+            newProduct.HTMLBody = SQLUtil.SQLSafeString(bfProduct.description);
 
             string newManufacturer = bfProduct.manufacturer;
             if (string.IsNullOrEmpty(newManufacturer))
@@ -263,33 +263,33 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy
                 newManufacturer = "NULL_ERROR";
             }
 
-            newProduct.sku = _SKUPrefix + bfProduct.id;
-            newProduct.vendor = SQLUtil.SQLSafeString(newManufacturer);
-            newProduct.productTypeID = 1.ToString();
-            newProduct.deliveryTime = bfProduct.deliveryTimeText;
+            newProduct.SKU = _SKUPrefix + bfProduct.id;
+            newProduct.Vendor = SQLUtil.SQLSafeString(newManufacturer);
+            newProduct.ProductTypeID = 1.ToString();
+            newProduct.DeliveryTime = bfProduct.deliveryTimeText;
 
-            newProduct.productTypeVendor = bfProduct.category;
-            newProduct.images = bfProduct.imageURLs;
-            newProduct.productAttributtes = bfProduct.attributes;
+            newProduct.ProductTypeVendor = bfProduct.category;
+            newProduct.Images = bfProduct.imageURLs;
+            newProduct.ProductAttributtes = bfProduct.attributes;
 
             //adding only one variant
             ProductVariant productVariant = new ProductVariant();
-            productVariant.barcode = bfProduct.barcode;
-            productVariant.stock = bfProduct.stock;
-            productVariant.vendor_price = Math.Round(bfProduct.price, 2, MidpointRounding.AwayFromZero);
-            productVariant.price = Math.Round(PriceGenModule.GenNewPrice(productVariant.vendor_price), 2, MidpointRounding.AwayFromZero);
+            productVariant.Barcode = bfProduct.barcode;
+            productVariant.Stock = bfProduct.stock;
+            productVariant.PriceVendor = Math.Round(bfProduct.price, 2, MidpointRounding.AwayFromZero);
+            productVariant.Price = Math.Round(PriceGenModule.GenNewPrice(productVariant.PriceVendor), 2, MidpointRounding.AwayFromZero);
 
-            newProduct.productVariants.Add(productVariant);
+            newProduct.ProductVariants.Add(productVariant);
 
             //no tags in new products;
             //BF doesnt give us dimensions or weight 
-            newProduct.height = 1;
-            newProduct.width = 1;
-            newProduct.lenght = 1;
-            newProduct.weight = 1;
+            newProduct.Height = 1;
+            newProduct.Width = 1;
+            newProduct.Lenght = 1;
+            newProduct.Weight = 1;
 
             //adding product added timestamp
-            newProduct.addedTimeStamp = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString();
+            newProduct.AddedTimeStamp = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString();
 
             return newProduct;
         }
@@ -299,8 +299,8 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy
         {
             FullProduct newProduct = new();
 
-            newProduct.title = SQLUtil.SQLSafeString(bfProduct.title);
-            newProduct.body_html = SQLUtil.SQLSafeString(bfProduct.description);
+            newProduct.Title = SQLUtil.SQLSafeString(bfProduct.title);
+            newProduct.HTMLBody = SQLUtil.SQLSafeString(bfProduct.description);
 
             string newManufacturer = bfProduct.manufacturer;
             if (string.IsNullOrEmpty(newManufacturer))
@@ -308,14 +308,14 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy
                 newManufacturer = "NULL_ERROR";
             }
 
-            newProduct.sku = _SKUPrefix + bfProduct.id;
-            newProduct.vendor = SQLUtil.SQLSafeString(newManufacturer);
-            newProduct.productTypeID = 1.ToString();
-            newProduct.deliveryTime = bfProduct.deliveryTimeText;
+            newProduct.SKU = _SKUPrefix + bfProduct.id;
+            newProduct.Vendor = SQLUtil.SQLSafeString(newManufacturer);
+            newProduct.ProductTypeID = 1.ToString();
+            newProduct.DeliveryTime = bfProduct.deliveryTimeText;
 
-            newProduct.productTypeVendor = bfProduct.category;
-            newProduct.images = bfProduct.imageURLs;
-            newProduct.productAttributtes = bfProduct.attributes;
+            newProduct.ProductTypeVendor = bfProduct.category;
+            newProduct.Images = bfProduct.imageURLs;
+            newProduct.ProductAttributtes = bfProduct.attributes;
 
             //BF has same prive for all variants
             double vendorPrice = Math.Round(bfProduct.price, 2, MidpointRounding.AwayFromZero);
@@ -324,26 +324,26 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy
             //adding multiple variants
             foreach (BFProductVariant variant in bfProduct.variants) {
                 ProductVariant productVariant = new ProductVariant();
-                productVariant.barcode = variant.barcode;
-                productVariant.stock = variant.stock;
+                productVariant.Barcode = variant.barcode;
+                productVariant.Stock = variant.stock;
                 productVariant.VariantType = variant.variantTitle;
                 productVariant.VariantData = variant.variantDescription;
 
-                productVariant.vendor_price = vendorPrice;
-                productVariant.price = ourPrice;
+                productVariant.PriceVendor = vendorPrice;
+                productVariant.Price = ourPrice;
 
-                newProduct.productVariants.Add(productVariant);
+                newProduct.ProductVariants.Add(productVariant);
             }
 
             //no tags in new products;
             //BF doesnt give us dimensions or weight 
-            newProduct.height = 1;
-            newProduct.width = 1;
-            newProduct.lenght = 1;
-            newProduct.weight = 1;
+            newProduct.Height = 1;
+            newProduct.Width = 1;
+            newProduct.Lenght = 1;
+            newProduct.Weight = 1;
 
             //adding product added timestamp
-            newProduct.addedTimeStamp = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString();
+            newProduct.AddedTimeStamp = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString();
 
             return newProduct;
         }

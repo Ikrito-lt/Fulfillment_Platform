@@ -10,7 +10,6 @@ namespace Ikrito_Fulfillment_Platform.Modules
 {
     static class ProductModule
     {
-
         /// <summary>
         /// method for checking if product is out  of stock (to set its status) (if atleast one of the variants is in stock method return true)
         /// </summary>
@@ -18,68 +17,15 @@ namespace Ikrito_Fulfillment_Platform.Modules
         /// <returns></returns>
         public static bool CheckIfProductOutOfStock(FullProduct p)
         {
-            foreach (var variant in p.productVariants)
+            foreach (var variant in p.ProductVariants)
             {
-                if (variant.stock > 0)
+                if (variant.Stock > 0)
                 {
                     return true;
                 }
             }
             return false;
         }
-
-        //
-        // section for product category manipulation
-        //
-
-        /// <summary>
-        /// changes product category in the database
-        /// </summary> 
-        /// <param name="sku"></param>
-        /// <param name="newCategoryID"></param>
-        public static void ChangeProductCategory(string sku, string newCategoryID)
-        {
-            DataBaseInterface db = new();
-            string tablePrefix = sku.GetUntilOrEmpty();
-
-            //updating *_Products table
-            var updateData = new Dictionary<string, string>
-            {
-                ["ProductType_ID"] = newCategoryID
-            };
-            var whereUpdate = new Dictionary<string, Dictionary<string, string>>
-            {
-                ["SKU"] = new Dictionary<string, string>
-                {
-                    ["="] = sku
-                }
-            };
-            db.Table($"_{tablePrefix}_Products").Where(whereUpdate).Update(updateData);
-            db.Table("Products").Where(whereUpdate).Update(updateData);
-        }
-
-        /// <summary>
-        /// gets Categories KVP from database
-        /// </summary>
-        /// <returns></returns>
-        public static Dictionary<string, string> GetCategoriesDictionary()
-        {
-            //getting category KVP from database
-            Dictionary<string, string> categoriesKVP = new();
-            DataBaseInterface db = new();
-
-            var result = db.Table("ProductTypes").Get("ID, ProductType");
-            foreach (var cat in result.Values)
-            {
-
-                var id = cat["ID"];
-                var type = cat["ProductType"];
-
-                categoriesKVP.Add(id, type);
-            }
-            return categoriesKVP;
-        }
-
 
         //
         // Section with methods that are needed for product statuses
@@ -173,6 +119,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
 
             if (currentStatus == ProductStatus.New && forceChangeNew == false)
             {
+                //exception to the rule we can change status (New -> Archived)
                 if (newStatus == ProductStatus.Archived)
                 {
                     var updateData = new Dictionary<string, string>
@@ -256,17 +203,17 @@ namespace Ikrito_Fulfillment_Platform.Modules
             foreach (var row in result.Values)
             {
 
-                prod.title = row["Title"];
-                prod.body_html = row["Body"];
-                prod.vendor = row["Vendor"];
-                prod.productTypeID = row["ProductType_ID"];
-                prod.sku = row["SKU"];
-                prod.weight = double.Parse(row["Weight"]);
-                prod.height = int.Parse(row["Height"]);
-                prod.lenght = int.Parse(row["Lenght"]);
-                prod.width = int.Parse(row["Width"]);
-                prod.addedTimeStamp = row["AddedTimeStamp"];
-                prod.productTypeVendor = row["ProductTypeVendor"];
+                prod.Title = row["Title"];
+                prod.HTMLBody = row["Body"];
+                prod.Vendor = row["Vendor"];
+                prod.ProductTypeID = row["ProductType_ID"];
+                prod.SKU = row["SKU"];
+                prod.Weight = double.Parse(row["Weight"]);
+                prod.Height = int.Parse(row["Height"]);
+                prod.Lenght = int.Parse(row["Lenght"]);
+                prod.Width = int.Parse(row["Width"]);
+                prod.AddedTimeStamp = row["AddedTimeStamp"];
+                prod.ProductTypeVendor = row["ProductTypeVendor"];
             }
 
             //getting images faster
@@ -281,7 +228,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
             foreach (var imgRow in result.Values)
             {
                 string imageUrl = imgRow["ImgUrl"];
-                prod.images.Add(imageUrl);
+                prod.Images.Add(imageUrl);
             }
 
             //getting tags faster
@@ -297,12 +244,12 @@ namespace Ikrito_Fulfillment_Platform.Modules
             {
                 string tag = tagRow["Tag"];
 
-                prod.tags.Add(tag);
+                prod.Tags.Add(tag);
             }
 
             //getting category dicplay value
-            var catKVP = GetCategoriesDictionary();
-            prod.ProductTypeDisplayVal = catKVP[prod.productTypeID];
+            var catKVP = ProductCategoryModule.Instance.CategoryKVP;
+            prod.ProductTypeDisplayVal = catKVP[prod.ProductTypeID];
 
             //getting product status
             whereCond = new Dictionary<string, Dictionary<string, string>>
@@ -313,7 +260,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
                 }
             };
             result = db.Table("Products").Where(whereCond).Get();
-            prod.status = result[0]["Status"];
+            prod.Status = result[0]["Status"];
 
             //getting product variants
             whereCond = new Dictionary<string, Dictionary<string, string>>
@@ -327,14 +274,14 @@ namespace Ikrito_Fulfillment_Platform.Modules
             foreach (var row in result.Values)
             {
                 ProductVariant pVariant = new();
-                pVariant.barcode = row["Barcode"];
-                pVariant.stock = int.Parse(row["Stock"]);
-                pVariant.price = double.Parse(row["Price"]);
-                pVariant.vendor_price = double.Parse(row["PriceVendor"]);
+                pVariant.Barcode = row["Barcode"];
+                pVariant.Stock = int.Parse(row["Stock"]);
+                pVariant.Price = double.Parse(row["Price"]);
+                pVariant.PriceVendor = double.Parse(row["PriceVendor"]);
                 pVariant.VariantType = row["VariantData"];
                 pVariant.VariantData = row["VariantData"];
 
-                prod.productVariants.Add(pVariant);
+                prod.ProductVariants.Add(pVariant);
             }
 
             //getting product attributtes
@@ -348,7 +295,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
             result = db.Table("_" + tablePrefix + "_Attributes").Where(whereCond).Get();
             foreach (var row in result.Values)
             {
-                prod.productAttributtes.Add(row["Name"], row["Data"]);
+                prod.ProductAttributtes.Add(row["Name"], row["Data"]);
             }
 
             return prod;
@@ -359,7 +306,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
         {
             DataBaseInterface db = new();
             //checing if product exists in database if yes Change its status to New
-            if (CheckIfExistsInDB(p.sku))
+            if (CheckIfExistsInDB(p.SKU))
             {
                 //unarchaiving
                 UpdateProductToDB(p, ProductStatus.New);
@@ -367,61 +314,61 @@ namespace Ikrito_Fulfillment_Platform.Modules
             }
 
             //getting categories KVP
-            string tablePrefix = p.sku.GetUntilOrEmpty();
+            string tablePrefix = p.SKU.GetUntilOrEmpty();
 
             //adding product to Products table
-            MarkProductAsNew(p.sku, p.productTypeID);
+            MarkProductAsNew(p.SKU, p.ProductTypeID);
 
             //inserting to *_Products table
             var InsertData = new Dictionary<string, string>
             {
-                ["Title"] = p.title,
-                ["Body"] = p.body_html,
-                ["Vendor"] = p.vendor,
-                ["ProductType_ID"] = p.productTypeID,
-                ["SKU"] = p.sku,
-                ["Weight"] = p.weight.ToString(),
-                ["Height"] = p.height.ToString(),
-                ["Lenght"] = p.lenght.ToString(),
-                ["Width"] = p.width.ToString(),
-                ["AddedTimeStamp"] = p.addedTimeStamp,
-                ["ProductTypeVendor"] = p.productTypeVendor,
-                ["DeliveryTimeText"] = p.deliveryTime
+                ["Title"] = p.Title,
+                ["Body"] = p.HTMLBody,
+                ["Vendor"] = p.Vendor,
+                ["ProductType_ID"] = p.ProductTypeID,
+                ["SKU"] = p.SKU,
+                ["Weight"] = p.Weight.ToString(),
+                ["Height"] = p.Height.ToString(),
+                ["Lenght"] = p.Lenght.ToString(),
+                ["Width"] = p.Width.ToString(),
+                ["AddedTimeStamp"] = p.AddedTimeStamp,
+                ["ProductTypeVendor"] = p.ProductTypeVendor,
+                ["DeliveryTimeText"] = p.DeliveryTime
             };
             db.Table($"_{tablePrefix}_Products").Insert(InsertData);
 
             //add new Product images to DB
-            foreach (var img in p.images)
+            foreach (var img in p.Images)
             {
                 var insertData = new Dictionary<string, string>
                 {
-                    ["SKU"] = p.sku,
+                    ["SKU"] = p.SKU,
                     ["ImgUrl"] = img
                 };
                 db.Table($"_{tablePrefix}_Images").Insert(insertData);
             }
 
             //add new tags
-            foreach (var tag in p.tags)
+            foreach (var tag in p.Tags)
             {
                 var insertData = new Dictionary<string, string>
                 {
-                    ["SKU"] = p.sku,
+                    ["SKU"] = p.SKU,
                     ["Tag"] = tag
                 };
                 db.Table($"_{tablePrefix}_Tags").Insert(insertData);
             }
 
             //add new variants
-            foreach (ProductVariant productVariant in p.productVariants)
+            foreach (ProductVariant productVariant in p.ProductVariants)
             {
                 var insertData = new Dictionary<string, string>
                 {
-                    ["SKU"] = p.sku,
-                    ["Price"] = productVariant.price.ToString(),
-                    ["PriceVendor"] = productVariant.vendor_price.ToString(),
-                    ["Stock"] = productVariant.stock.ToString(),
-                    ["Barcode"] = productVariant.barcode,
+                    ["SKU"] = p.SKU,
+                    ["Price"] = productVariant.Price.ToString(),
+                    ["PriceVendor"] = productVariant.PriceVendor.ToString(),
+                    ["Stock"] = productVariant.Stock.ToString(),
+                    ["Barcode"] = productVariant.Barcode,
                     ["VariantType"] = productVariant.VariantType,
                     ["VariantData"] = productVariant.VariantData,
                     ["PermPrice"] = productVariant.PermPrice ? "1" : "0"
@@ -430,11 +377,11 @@ namespace Ikrito_Fulfillment_Platform.Modules
             }
 
             //add new attributes
-            foreach (var attrKVP in p.productAttributtes)
+            foreach (var attrKVP in p.ProductAttributtes)
             {
                 var insertData = new Dictionary<string, string>
                 {
-                    ["SKU"] = p.sku,
+                    ["SKU"] = p.SKU,
                     ["Name"] = SQLUtil.SQLSafeString(attrKVP.Key),
                     ["Data"] = SQLUtil.SQLSafeString(attrKVP.Value)
                 };
@@ -450,28 +397,28 @@ namespace Ikrito_Fulfillment_Platform.Modules
         public static void UpdateProductToDB(FullProduct p, string status)
         {
             DataBaseInterface db = new();
-            string tablePrefix = p.sku.GetUntilOrEmpty();
+            string tablePrefix = p.SKU.GetUntilOrEmpty();
 
             //updating *_Products table
             var updateData = new Dictionary<string, string>
             {
-                ["Title"] = p.title,
-                ["Body"] = p.body_html,
-                ["Vendor"] = p.vendor,
-                ["ProductType"] = p.productTypeID,
-                ["Weight"] = p.weight.ToString(),
-                ["Height"] = p.height.ToString(),
-                ["Lenght"] = p.lenght.ToString(),
-                ["Width"] = p.width.ToString(),
-                ["AddedTimeStamp"] = p.addedTimeStamp,
-                ["ProductTypeVendor"] = p.productTypeVendor
+                ["Title"] = p.Title,
+                ["Body"] = p.HTMLBody,
+                ["Vendor"] = p.Vendor,
+                ["ProductType_ID"] = p.ProductTypeID,
+                ["Weight"] = p.Weight.ToString(),
+                ["Height"] = p.Height.ToString(),
+                ["Lenght"] = p.Lenght.ToString(),
+                ["Width"] = p.Width.ToString(),
+                ["AddedTimeStamp"] = p.AddedTimeStamp,
+                ["ProductTypeVendor"] = p.ProductTypeVendor
 
             };
             var whereUpdate = new Dictionary<string, Dictionary<string, string>>
             {
                 ["SKU"] = new Dictionary<string, string>
                 {
-                    ["="] = p.sku
+                    ["="] = p.SKU
                 }
             };
             db.Table($"_{tablePrefix}_Products").Where(whereUpdate).Update(updateData);
@@ -481,7 +428,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
             {
                 ["SKU"] = new Dictionary<string, string>
                 {
-                    ["="] = p.sku
+                    ["="] = p.SKU
                 }
             };
             var oldImages = db.Table($"_{tablePrefix}_Images").Where(whereQ).Get();
@@ -500,11 +447,11 @@ namespace Ikrito_Fulfillment_Platform.Modules
             }
 
             //add new images
-            foreach (var img in p.images)
+            foreach (var img in p.Images)
             {
                 var insertData = new Dictionary<string, string>
                 {
-                    ["SKU"] = p.sku,
+                    ["SKU"] = p.SKU,
                     ["ImgUrl"] = img
                 };
                 db.Table($"_{tablePrefix}_Images").Insert(insertData);
@@ -527,11 +474,11 @@ namespace Ikrito_Fulfillment_Platform.Modules
             }
 
             //add new tags
-            foreach (var tag in p.tags)
+            foreach (var tag in p.Tags)
             {
                 var insertData = new Dictionary<string, string>
                 {
-                    ["SKU"] = p.sku,
+                    ["SKU"] = p.SKU,
                     ["Tag"] = tag
                 };
                 db.Table($"_{tablePrefix}_Tags").Insert(insertData);
@@ -554,15 +501,15 @@ namespace Ikrito_Fulfillment_Platform.Modules
             }
 
             //update variants
-            foreach (ProductVariant productVariant in p.productVariants)
+            foreach (ProductVariant productVariant in p.ProductVariants)
             {
                 var insertData = new Dictionary<string, string>
                 {
-                    ["SKU"] = p.sku,
-                    ["Price"] = productVariant.price.ToString(),
-                    ["PriceVendor"] = productVariant.vendor_price.ToString(),
-                    ["Stock"] = productVariant.stock.ToString(),
-                    ["Barcode"] = productVariant.barcode,
+                    ["SKU"] = p.SKU,
+                    ["Price"] = productVariant.Price.ToString(),
+                    ["PriceVendor"] = productVariant.PriceVendor.ToString(),
+                    ["Stock"] = productVariant.Stock.ToString(),
+                    ["Barcode"] = productVariant.Barcode,
                     ["VariantType"] = productVariant.VariantType,
                     ["VariantData"] = productVariant.VariantData,
                     ["PermPrice"] = productVariant.PermPrice ? "1" : "0"
@@ -583,24 +530,39 @@ namespace Ikrito_Fulfillment_Platform.Modules
                         ["="] = row["ID"]
                     }
                 };
-                db.Table($"_{tablePrefix}_Variants").Where(whereDelete).Delete();
+                db.Table($"_{tablePrefix}_Attributes").Where(whereDelete).Delete();
             }
 
             //add new attributes
-            foreach (var attrKVP in p.productAttributtes)
+            foreach (var attrKVP in p.ProductAttributtes)
             {
                 var insertData = new Dictionary<string, string>
                 {
-                    ["SKU"] = p.sku,
+                    ["SKU"] = p.SKU,
                     ["Name"] = attrKVP.Key,
                     ["Data"] = attrKVP.Value
                 };
-                db.Table($"_{tablePrefix}_Variants").Insert(insertData);
+                db.Table($"_{tablePrefix}_Attributes").Insert(insertData);
             }
 
+            //changing productTypeID in Products table
+            updateData = new Dictionary<string, string>
+            {
+                ["ProductType_ID"] = p.ProductTypeID
+            };
+            whereUpdate = new Dictionary<string, Dictionary<string, string>>
+            {
+                ["SKU"] = new Dictionary<string, string>
+                {
+                    ["="] = p.SKU
+                }
+            };
+            db.Table($"Products").Where(whereUpdate).Update(updateData);
+
+            //changing product status
             try
             {
-                ChangeProductStatus(p.sku, status, true);
+                ChangeProductStatus(p.SKU, status, true);
             }
             catch (Exception ex)
             {
@@ -625,18 +587,19 @@ namespace Ikrito_Fulfillment_Platform.Modules
             {
 
                 FullProduct NewProduct = new();
-                NewProduct.title = prod["Title"];
-                NewProduct.body_html = prod["Body"];
-                NewProduct.vendor = prod["Vendor"];
-                NewProduct.productTypeID = prod["ProductType_ID"];
-                NewProduct.sku = prod["SKU"];
-                NewProduct.weight = double.Parse(prod["Weight"]);
-                NewProduct.height = int.Parse(prod["Height"]);
-                NewProduct.lenght = int.Parse(prod["Lenght"]);
-                NewProduct.width = int.Parse(prod["Width"]);
+                NewProduct.Title = prod["Title"];
+                NewProduct.HTMLBody = prod["Body"];
+                NewProduct.Vendor = prod["Vendor"];
+                NewProduct.ProductTypeID = prod["ProductType_ID"];
+                NewProduct.SKU = prod["SKU"];
+                NewProduct.Weight = double.Parse(prod["Weight"]);
+                NewProduct.Height = int.Parse(prod["Height"]);
+                NewProduct.Lenght = int.Parse(prod["Lenght"]);
+                NewProduct.Width = int.Parse(prod["Width"]);
 
-                NewProduct.addedTimeStamp = prod["AddedTimeStamp"];
-                NewProduct.productTypeVendor = prod["ProductTypeVendor"];
+                NewProduct.AddedTimeStamp = prod["AddedTimeStamp"];
+                NewProduct.DeliveryTime = prod["DeliveryTimeText"];
+                NewProduct.ProductTypeVendor = prod["ProductTypeVendor"];
 
                 productsKVP.Add(prod["SKU"], NewProduct);
             }
@@ -649,7 +612,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
                 string sku = imgRow["SKU"];
                 string imageUrl = imgRow["ImgUrl"];
 
-                productsKVP[sku].images.Add(imageUrl);
+                productsKVP[sku].Images.Add(imageUrl);
             }
 
             //getting tags faster
@@ -660,7 +623,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
                 string sku = tagRow["SKU"];
                 string tag = tagRow["Tag"];
 
-                productsKVP[sku].tags.Add(tag);
+                productsKVP[sku].Tags.Add(tag);
             }
 
             //getting variants faster
@@ -669,16 +632,16 @@ namespace Ikrito_Fulfillment_Platform.Modules
             {
                 string sku = row["SKU"];
                 ProductVariant variant = new();
-                variant.variantDBID = int.Parse(row["ID"]);
-                variant.price = double.Parse(row["Price"]);
-                variant.vendor_price = double.Parse(row["PriceVendor"]);
-                variant.stock = int.Parse(row["Stock"]);
-                variant.barcode = row["Barcode"];
+                variant.VariantDBID = int.Parse(row["ID"]);
+                variant.Price = double.Parse(row["Price"]);
+                variant.PriceVendor = double.Parse(row["PriceVendor"]);
+                variant.Stock = int.Parse(row["Stock"]);
+                variant.Barcode = row["Barcode"];
                 variant.VariantType = row["VariantType"];
                 variant.VariantData = row["VariantData"];
-                variant.PermPrice = row["PermPrice"] == "1" ? true : false;
+                variant.PermPrice = row["PermPrice"] == "False" ? false : true;
 
-                productsKVP[sku].productVariants.Add(variant);
+                productsKVP[sku].ProductVariants.Add(variant);
             }
 
             //getting attributes faster
@@ -689,7 +652,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
                 string name = row["Name"];
                 string data = row["Data"];
 
-                productsKVP[sku].productAttributtes.Add(name, data);
+                productsKVP[sku].ProductAttributtes.Add(name, data);
             }
 
             //getting products statuses
@@ -699,7 +662,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
                 string sku = statusRow["SKU"];
                 string status = statusRow["Status"];
 
-                productsKVP[sku].status = status;
+                productsKVP[sku].Status = status;
             }
             return productsKVP;
         }
@@ -713,14 +676,14 @@ namespace Ikrito_Fulfillment_Platform.Modules
             Dictionary<string, FullProduct> TDBproducts = GetVendorProducts("TDB");
             p.AddRange(TDBproducts);
 
-            Dictionary<string, FullProduct> KGproducts = GetVendorProducts("KG");
-            p.AddRange(KGproducts);
+            //Dictionary<string, FullProduct> KGproducts = GetVendorProducts("KG");
+            //p.AddRange(KGproducts);
 
-            Dictionary<string, FullProduct> PDproducts = GetVendorProducts("PD");
-            p.AddRange(PDproducts);
+            //Dictionary<string, FullProduct> PDproducts = GetVendorProducts("PD");
+            //p.AddRange(PDproducts);
 
-            Dictionary<string, FullProduct> BFproducts = GetVendorProducts("BF");
-            p.AddRange(BFproducts);
+            //Dictionary<string, FullProduct> BFproducts = GetVendorProducts("BF");
+            //p.AddRange(BFproducts);
 
             return p;
         }

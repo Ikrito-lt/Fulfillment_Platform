@@ -32,8 +32,6 @@
         </Style>
     </Page.Resources>
 
-    
-    
     <Grid Margin="0" Background="WhiteSmoke">
 
         <Grid.RowDefinitions>
@@ -120,7 +118,7 @@
             </DataGrid.Resources>
 
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding sku}" Width="200" >
+                <DataGridTextColumn Binding="{Binding SKU}" Width="200" >
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="HorizontalAlignment" Value="Left" />
@@ -147,7 +145,7 @@
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Binding="{Binding title}" Width="850">
+                <DataGridTextColumn Binding="{Binding Title}" Width="850">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="HorizontalAlignment" Value="Left" />
@@ -174,7 +172,7 @@
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Header="Status" Binding="{Binding status}" Width="120">
+                <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="HorizontalAlignment" Value="Left" />
@@ -184,7 +182,7 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Binding="{Binding vendor}" Width="150">
+                <DataGridTextColumn Binding="{Binding Vendor}" Width="150">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="HorizontalAlignment" Value="Left" />

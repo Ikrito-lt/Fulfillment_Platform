@@ -17,7 +17,7 @@ namespace Ikrito_Fulfillment_Platform.Utils
             DataBaseInterface oldDB = new DataBaseInterface(Globals.oldDBHostname, Globals.oldDBUsername, Globals.oldDBPassword, Globals.oldDefaultDB);
             DataBaseInterface newDB = new DataBaseInterface();
 
-            var currentPTypes = ProductModule.GetCategoriesDictionary();
+            var currentPTypes = ProductCategoryModule.Instance.CategoryKVP;
             var oldPT = oldDB.Table("ProductTypes").Get();
             Dictionary<string, string> oldPTypes = new();
             foreach (var row in oldPT.Values) {
@@ -48,9 +48,9 @@ namespace Ikrito_Fulfillment_Platform.Utils
 
                     string newPTID = currentPTypes.GetFirstKeyByValue(oldPTSRT);
                     FullProduct p = ProductModule.GetProduct(osku);
-                    if (p.productTypeID == "1" && oldProductType != "97")
+                    if (p.ProductTypeID == "1" && oldProductType != "97")
                     {
-                        ProductModule.ChangeProductCategory(osku, newPTID);
+                        ProductCategoryModule.ChangeProductCategory(osku, newPTID);
                         System.Console.WriteLine($"{oldSKU.Key} / {osku} / {oldPTSRT}");
                     }
                     else { continue; }

@@ -249,7 +249,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
             {
                 ProductChangeRecord productChange = listboxItem.Content as ProductChangeRecord;
                 FullProduct editProduct = ProductModule.GetProduct(productChange.SKU);
-                MainWindow.Instance.mainFrame.Content = new ProductEditPage(editProduct, this);
+                MainWindow.Instance.mainFrame.Content = new ProductEditPage(editProduct, this, ProductCategoryModule.Instance.CategoryKVP);
             }
         }
 
