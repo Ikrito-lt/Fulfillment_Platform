@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Ikrito_Fulfillment_Platform.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="1080" d:DesignWidth="1920"
       Title="ProductBulkEditPage">
 
     <Grid Margin="0" Background="WhiteSmoke">
@@ -65,7 +65,7 @@
                     <ComboBox Grid.Column="1" Grid.Row="1" x:Name="VendorTypeFilterCBox" Visibility="Visible" VerticalAlignment="Center" StaysOpenOnEdit="True" IsTextSearchEnabled="True" IsEditable="True" SelectionChanged="ComboBox_SelectionChanged"/>
                     <Button x:Name="DeleteVendorTypeFilterButton" Grid.Column="2" Grid.Row="1" Click="DeleteVendorTypeFilterButton_Click" Content="X" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,5,0,5" VerticalContentAlignment="Center"/>
                     
-                    <ListBox Grid.ColumnSpan="3" Grid.Row="2" Name="ChangeTypeListBox" SelectionMode="Single" ItemsSource="{Binding}">
+                    <ListBox Grid.ColumnSpan="3" Grid.Row="2" Name="ChangeTypeListBox" SelectionMode="Single" ItemsSource="{Binding}" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionChanged="ChangeTypeListBox_SelectionChanged">
 
                         <ListBox.Resources>
                             <Style TargetType="ListBoxItem">
@@ -95,7 +95,17 @@
                                             <RowDefinition/>
                                         </Grid.RowDefinitions>
                                         <TextBlock Text="SKU:" Grid.Row="0" Grid.Column="1"/>
-                                        <TextBlock Text="{Binding SKU}" Grid.Row="0" Grid.Column="3"/>
+                                        <TextBox Text="{Binding SKU}" Grid.Row="0" Grid.Column="3">
+                                            <TextBox.Style>
+                                                <Style TargetType="TextBox">
+                                                    <Setter Property="Background" Value="GhostWhite"/>
+                                                    <Setter Property="IsReadOnly" Value="True" />
+                                                    <Setter Property="BorderThickness" Value="0" />
+                                                    <Setter Property="TextWrapping" Value="Wrap" />
+                                                </Style>
+                                            </TextBox.Style>
+                                        </TextBox>
+                                        <TextBlock />
 
                                         <TextBlock Text="Title:" Grid.Row="1" Grid.Column="1"/>
                                         <TextBlock Text="{Binding Title}" Grid.Row="1" Grid.Column="3" TextWrapping="Wrap"/>
@@ -141,9 +151,15 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="35"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                    <TextBox x:Name="ProductAttributtesLabel" Text="Product Attributtes" Grid.Row="0" VerticalAlignment="Top" HorizontalAlignment="Center">
+                    <TextBox x:Name="ProductAttributtesLabel" Text="Product Attributtes" Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <TextBox.Style>
                             <Style TargetType="TextBox">
                                 <Setter Property="IsReadOnly" Value="True" />
@@ -153,8 +169,8 @@
                         </TextBox.Style>
                     </TextBox>
 
-                    <DataGrid x:Name="productAttributesDG" Grid.Row="1" Margin="0" SelectionMode="Single" CanUserAddRows="False" HeadersVisibility="Column"
-                          VerticalAlignment="Stretch" AutoGenerateColumns="False">
+                    <DataGrid x:Name="productAttributesDG" Grid.Row="1" Grid.ColumnSpan="2" Margin="0" SelectionMode="Single" CanUserAddRows="False" HeadersVisibility="Column"
+                          VerticalAlignment="Stretch" AutoGenerateColumns="False" >
                         <DataGrid.Columns>
 
                             <DataGridTextColumn Binding="{Binding AttributeName}" Header="Attribute Name" Width="*">
@@ -192,6 +208,43 @@
                             </DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
+                    
+                    <TextBox x:Name="ProductImagesLabel" Text="Product Images" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <TextBox.Style>
+                            <Style TargetType="TextBox">
+                                <Setter Property="IsReadOnly" Value="True" />
+                                <Setter Property="BorderThickness" Value="0" />
+                                <Setter Property="TextWrapping" Value="Wrap" />
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+
+                    <ListBox Grid.Row="3" Name="ProductImagesListBox" SelectionMode="Single" ItemsSource="{Binding}">
+
+                        <ListBox.Resources>
+                            <Style TargetType="ListBoxItem">
+                                <!--<EventSetter Event="MouseDoubleClick" Handler="ChangeListBox_MouseDoubleClick"/>-->
+                                <!--<Setter Property="Template" Value="{StaticResource listControlTemplate}" />
+                                <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}, Path=ActualHeight}" />-->
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="ToolTip" Value="Double Click To Edit"/>
+                                <Setter Property="ToolTipService.InitialShowDelay" Value="5000"/>
+                                <Setter Property="ToolTipService.ShowDuration" Value="5000"/>
+                                <Setter Property="ToolTipService.BetweenShowDelay" Value="5000"/>
+                            </Style>
+                        </ListBox.Resources>
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="1" Padding="2" HorizontalAlignment="Stretch">
+                                    <Image Margin="5" Source="{Binding}" Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}, Path=ActualHeight}"
+                                           Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}, Path=ActualWidth}"/>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+
                 </Grid>
             </Border>
 

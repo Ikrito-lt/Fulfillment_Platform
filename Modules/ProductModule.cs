@@ -673,17 +673,17 @@ namespace Ikrito_Fulfillment_Platform.Modules
         {
             Dictionary<string, FullProduct> p = new();
 
-            Dictionary<string, FullProduct> TDBproducts = GetVendorProducts("TDB");
-            p.AddRange(TDBproducts);
+            //Dictionary<string, FullProduct> TDBproducts = GetVendorProducts("TDB");
+            //p.AddRange(TDBproducts);
 
             //Dictionary<string, FullProduct> KGproducts = GetVendorProducts("KG");
             //p.AddRange(KGproducts);
 
-            //Dictionary<string, FullProduct> PDproducts = GetVendorProducts("PD");
-            //p.AddRange(PDproducts);
+            Dictionary<string, FullProduct> PDproducts = GetVendorProducts("PD");
+            p.AddRange(PDproducts);
 
-            //Dictionary<string, FullProduct> BFproducts = GetVendorProducts("BF");
-            //p.AddRange(BFproducts);
+            Dictionary<string, FullProduct> BFproducts = GetVendorProducts("BF");
+            p.AddRange(BFproducts);
 
             return p;
         }
