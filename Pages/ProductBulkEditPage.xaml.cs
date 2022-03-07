@@ -231,7 +231,11 @@ namespace Ikrito_Fulfillment_Platform.Pages
             }
         }
 
-        //button that triggers type change on press
+        /// <summary>
+        /// /button that changes types 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ChangeTypesButton_Click(object sender, RoutedEventArgs e)
         {
             if (NewTypeCBox.SelectedItem != null) {
@@ -239,19 +243,57 @@ namespace Ikrito_Fulfillment_Platform.Pages
             }
         }
 
+        /// <summary>
+        /// deletes all product filters
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DeleteTypeFilterButton_Click(object sender, RoutedEventArgs e)
         {
             TypeFilterCBox.SelectedItem = null;
         }
 
+        /// <summary>
+        /// button that unselects vendortypeCboox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DeleteVendorTypeFilterButton_Click(object sender, RoutedEventArgs e)
         {
             VendorTypeFilterCBox.SelectedItem = null;
         }
 
+        /// <summary>
+        ///  button that unselects newtype CBox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DeleteNewTypeFilterButton_Click(object sender, RoutedEventArgs e)
         {
             NewTypeCBox.SelectedItem = null;
+        }
+
+        /// <summary>
+        /// Refreshes Product attribute dataGrid
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ChangeTypeListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListBox listBox = sender as ListBox;
+            TypeListBoxItem selectedItem = listBox.SelectedItem as TypeListBoxItem;
+            if (selectedItem != null)
+            {
+                //loading attributtes
+                string selectedSKU = selectedItem.SKU;
+                FullProduct selectedProduct = Products[selectedSKU];
+
+                var productAttributesArray = from row in selectedProduct.ProductAttributtes select new { AttributeName = row.Key, AttributeValue = row.Value };
+                productAttributesDG.ItemsSource = productAttributesArray.ToArray();
+
+                //loading images
+                ProductImagesListBox.ItemsSource = selectedProduct.Images;
+            }
         }
     }
 }

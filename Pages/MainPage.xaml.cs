@@ -64,7 +64,7 @@ namespace Ikrito_Fulfillment_Platform {
         // backgroud worker for loading all products
         private void BGW_LoadAllOrders(object sender, DoWorkEventArgs e) {
             Dictionary<string, List<Order>> result = new();
-            result.Add("newOrders", OrderModule.getNewOrders());
+            result.Add("newOrders", new List<Order>());
             result.Add("fulfilledOrders", OrderModule.getFulfilledOrders());
 
             e.Result = result;
