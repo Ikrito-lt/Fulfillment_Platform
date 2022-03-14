@@ -48,19 +48,21 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="130"/>
                     <ColumnDefinition Width="130"/>
+                    <ColumnDefinition Width="130"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="70"/>
                 </Grid.ColumnDefinitions>
 
                 <Button x:Name="browseProductButton" Content="Browse Products" Width="120" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="5" Grid.Column="0" Click="openBrowserPage"/>
-                <Button x:Name="SyncProductButton" Content="Sync Products" Width="120" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="5" Grid.Column="1" Click="openSyncPage"/>
+                <Button x:Name="SyncProductButton" Content="Sync Products" Width="120" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="5" Grid.Column="1" Click="openPiguIntegrationPage"/>
+                <Button x:Name="PiguIntegrationButton" Content="Pigu Integration" Width="120" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="5" Grid.Column="2" Click="openSyncPage"/>
 
-                <Grid Margin="0" Grid.Column="2">
+                <Grid Margin="0" Grid.Column="3">
                     <ProgressBar x:Name="loadingBar"  Minimum="0" Maximum="1000" Height="30" VerticalAlignment="Center" Visibility="Visible" IsEnabled="true" Margin="5,0,5,0"/>
                     <TextBlock x:Name="loadingbarLabel" Text="" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="5" Margin="5,0,5,0"/>
                 </Grid>
 
-                <Button x:Name="RefreshButton" Click="RefreshButton_Click" Content="Refresh" Width="60" Padding="5" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="3"/>
+                <Button x:Name="RefreshButton" Click="RefreshButton_Click" Content="Refresh" Width="60" Padding="5" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="4"/>
             </Grid>
         </Border>
 
