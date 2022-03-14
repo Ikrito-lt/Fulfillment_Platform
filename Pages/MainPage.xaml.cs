@@ -20,7 +20,6 @@ namespace Ikrito_Fulfillment_Platform {
         private MainPage()
         {
             InitializeComponent();
-            //openBrowserPage(new object(), new RoutedEventArgs());
             LoadAllOrders();
         }
 
@@ -31,22 +30,34 @@ namespace Ikrito_Fulfillment_Platform {
         // Data grid manipulation section
         //
 
-        //changes text to say howm much orders there is
+        /// <summary>
+        /// changes text to say how much orders there is
+        /// </summary>
+        /// <param name="count"></param>
         private void UpdateNewOrderLabel(int count) { 
             newOrderCountL.Content = $"Current Orders ({count})";
         }
 
-        //changes text to say howm much orders there is
+        /// <summary>
+        /// changes text to say howm much fulfilled orders there is
+        /// </summary>
+        /// <param name="count"></param>
         private void UpdateFulfilledOrderLabel(int count) {
             fulfilledCountL.Content = $"Fulfiled Orders ({count})";
         }
 
-        //on click method of refresh button
+        /// <summary>
+        /// on click method of refresh button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RefreshButton_Click(object sender, RoutedEventArgs e) {
             LoadAllOrders();
         }
 
-        //method for  loading products to datagrid
+        /// <summary>
+        /// method for  loading products to datagrid
+        /// </summary>
         public void LoadAllOrders() {
             BackgroundWorker OrderWorker = new();
             OrderWorker.WorkerReportsProgress = false;
@@ -61,7 +72,11 @@ namespace Ikrito_Fulfillment_Platform {
             OrderWorker.RunWorkerAsync();
         }
 
-        // backgroud worker for loading all products
+        /// <summary>
+        /// backgroud worker for loading all Orders
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BGW_LoadAllOrders(object sender, DoWorkEventArgs e) {
             Dictionary<string, List<Order>> result = new();
             result.Add("newOrders", new List<Order>());
@@ -70,7 +85,11 @@ namespace Ikrito_Fulfillment_Platform {
             e.Result = result;
         }
 
-        // background Worker for loading all product on complete
+        /// <summary>
+        /// background Worker for loading all orders on complete
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BGW_LoadAllOrdersCompleted(object sender, RunWorkerCompletedEventArgs e) {
             //refreshing datagrids
             var result = e.Result as Dictionary<string, List<Order>>;
@@ -84,7 +103,10 @@ namespace Ikrito_Fulfillment_Platform {
             Debug.WriteLine("BGW_LoadAllOrders Finished");
         }
 
-        //loads orders to order grid
+        /// <summary>
+        /// loads orders to order grid
+        /// </summary>
+        /// <param name="orders"></param>
         private void RefreshFulfilledOrderDG(List<Order> orders) {
             fulfilledOrderDG.ItemsSource = null;
             fulfilledOrders.Clear();
@@ -94,7 +116,10 @@ namespace Ikrito_Fulfillment_Platform {
             fulfilledOrderDG.ItemsSource = fulfilledOrders.ToList();
         }
 
-        //loads orders to order grid
+        /// <summary>
+        /// loads orders to order grid
+        /// </summary>
+        /// <param name="orders"></param>
         private void RefreshNewOrderDG(List<Order> orders) {
             newOrderDG.ItemsSource = null;
             newOrders.Clear();
@@ -109,24 +134,50 @@ namespace Ikrito_Fulfillment_Platform {
         // Page change section
         // 
 
-        //opens page with all products
+        /// <summary>
+        /// opens page with all products
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void openBrowserPage(object sender, RoutedEventArgs e) {
             MainWindow.Instance.mainFrame.Content = ProductBrowsePage.Instance;
         }
 
-        //opens sync page
+        /// <summary>
+        /// opens sync page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void openSyncPage(object sender, RoutedEventArgs e) {
             MainWindow.Instance.mainFrame.Content = ProductUpdatePage.Instance;
         }
 
-        //opens order Info page
+        /// <summary>
+        /// opens pigu integration page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void openPiguIntegrationPage(object sender, RoutedEventArgs e)
+        {
+            MainWindow.Instance.mainFrame.Content = PiguIntegrationPage.Instance;
+        }
+
+        /// <summary>
+        /// opens order Info page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Row_MouseDoubleClickCurrentOrder(object sender, MouseButtonEventArgs e) {
             DataGridRow row = sender as DataGridRow;
             Order order = row.Item as Order;
             MainWindow.Instance.mainFrame.Content = new OrderInfoPage(order, this);
         }
 
-        //opens order Info page
+        /// <summary>
+        /// opens order Info page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Row_MouseDoubleClickFulfilledOrder(object sender, MouseButtonEventArgs e) {
             DataGridRow row = sender as DataGridRow;
             Order order = row.Item as Order;
