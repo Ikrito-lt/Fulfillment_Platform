@@ -62,7 +62,9 @@ namespace Ikrito_Fulfillment_Platform.Pages
         // data grid manitulation section 
         //
 
-        //method for  loading products to datagrid
+        /// <summary>
+        /// method for  loading products to datagrid
+        /// </summary>
         private void LoadAllProducts()
         {
             BackgroundWorker worker = new();
@@ -101,6 +103,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
                 RefreshButton.IsEnabled = true;
                 Debug.WriteLine("BGW_PreloadAllProducts Finished");
                 BulkCategoryEditButton.IsEnabled = true;
+                PiguIntegrationButton.IsEnabled = true;
             };
 
             //blocking refresh button and animating loading bar
@@ -108,6 +111,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
             RefreshButton.IsEnabled = false;
             loadingbarLabel.Text = "Loading Products";
             BulkCategoryEditButton.IsEnabled = false;
+            PiguIntegrationButton.IsEnabled = false;
 
             worker.RunWorkerAsync();
         }
@@ -156,13 +160,21 @@ namespace Ikrito_Fulfillment_Platform.Pages
         // change pages section
         //
 
-        //goes back to main page
+        /// <summary>
+        /// goes back to main page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             MainWindow.Instance.mainFrame.Content = MainPage.Instance;
         }
 
-        //opens Product Edit page
+        /// <summary>
+        /// opens Product Edit page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Row_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             DataGridRow row = sender as DataGridRow;
@@ -178,6 +190,16 @@ namespace Ikrito_Fulfillment_Platform.Pages
         private void BulkCategoryEditButton_Click(object sender, RoutedEventArgs e)
         {
             MainWindow.Instance.mainFrame.Content = new ProductBulkEditPage(AllProducts, CategoryKVP, this);
+        }
+
+        /// <summary>
+        /// opens pigu integration page
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OpenPiguIntegrationPage(object sender, RoutedEventArgs e)
+        {
+            MainWindow.Instance.setFrame(new PiguIntegrationPage(AllProducts));
         }
 
 
