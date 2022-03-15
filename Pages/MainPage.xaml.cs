@@ -153,16 +153,6 @@ namespace Ikrito_Fulfillment_Platform {
         }
 
         /// <summary>
-        /// opens pigu integration page
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void openPiguIntegrationPage(object sender, RoutedEventArgs e)
-        {
-            MainWindow.Instance.mainFrame.Content = PiguIntegrationPage.Instance;
-        }
-
-        /// <summary>
         /// opens order Info page
         /// </summary>
         /// <param name="sender"></param>

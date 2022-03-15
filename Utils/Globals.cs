@@ -25,7 +25,7 @@ namespace Ikrito_Fulfillment_Platform.Utils {
         };
 
         //Kotryna Group Creds
-        public const string KGApi = "http://ws.kotrynagroup.com/api/";
+        public const string KGApi = "https://ws.kotrynagroup.com/api/";
         public const string KGApiKey = "ef364d8416ccbaf9f1ad1db3835e40c7064dd2b9";
 
         //Pretendentas API Creds

@@ -39,7 +39,7 @@
             <!--central section-->
             <RowDefinition Height="*"/>
             <!--bottom buttons-->
-            <RowDefinition Height="70"/>
+            <RowDefinition Height="75"/>
         </Grid.RowDefinitions>
 
         <!--loading bar-->
@@ -171,8 +171,8 @@
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Grid.Row="0" Grid.Column="1" Width="200" HorizontalAlignment="Right">
-                            <Button x:Name="UpdateTDBButton" Click="UpdateTDBButton_Click" Content="Update TDB Products" Padding="5" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
-                            <Button IsEnabled="false" x:Name="UpdateKGButton" Click="UpdateKGButton_Click" Content="Update KG Products" Padding="5" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
+                            <Button IsEnabled="false" x:Name="UpdateTDBButton" Click="UpdateTDBButton_Click" Content="Update TDB Products" Padding="5" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
+                            <Button x:Name="UpdateKGButton" Click="UpdateKGButton_Click" Content="Update KG Products" Padding="5" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
                             <Button x:Name="UpdatePDButton" Click="UpdatePDButton_Click" Content="Update PD Products" Padding="5" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
                             <Button x:Name="UpdateBFButton" Click="UpdateBFButton_Click" Content="Update BF Products" Padding="5" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5"/>
                         </StackPanel>

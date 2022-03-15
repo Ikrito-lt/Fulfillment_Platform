@@ -36,7 +36,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <!--bottom buttons-->
-            <RowDefinition Height="70"/>
+            <RowDefinition Height="75"/>
         </Grid.RowDefinitions>
 
         <!--screen grid-->
