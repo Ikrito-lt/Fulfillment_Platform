@@ -119,9 +119,11 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.KotrynaGroup {
                         pInfo.axapta_id = info.Name;
                         pInfo.kpn = info.First["additional"]["kpn"];
                         pInfo.coo = info.First["additional"]["coo"];
-                        pInfo.title = info.First["titles"]["lt"];
+                        pInfo.titleLT = info.First["titles"]["lt"];
+                        pInfo.titleLV = info.First["titles"]["lv"];
+                        pInfo.titleEE = info.First["titles"]["et"];
 
-                        if (pInfo.title == "null" || string.IsNullOrEmpty(pInfo.title)) {
+                        if (pInfo.titleLT == "null" || string.IsNullOrEmpty(pInfo.titleLT)) {
                             continue;
                         }
 
@@ -282,8 +284,11 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.KotrynaGroup {
         private static FullProduct BuildProduct(KGAssortmentProduct AP, KGProductInfo PI, KGProductMeasurements PM, KGProductPackaging PP) {
             FullProduct newProduct = new();
 
-            newProduct.Title = SQLUtil.SQLSafeString(PI.title);
-            newProduct.HTMLBody = BuildDescription(PI.properties);
+            newProduct.TitleLT = SQLUtil.SQLSafeString(PI.titleLT ?? "");
+            newProduct.TitleLV = SQLUtil.SQLSafeString(PI.titleLV ?? "");
+            newProduct.TitleEE = SQLUtil.SQLSafeString(PI.titleEE ?? "");
+
+            newProduct.DescLT = BuildDescription(PI.properties);
 
             string newVendor = PI.brand;
             if (string.IsNullOrEmpty(newVendor))

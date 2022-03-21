@@ -203,8 +203,16 @@ namespace Ikrito_Fulfillment_Platform.Modules
             foreach (var row in result.Values)
             {
 
-                prod.Title = row["Title"];
-                prod.HTMLBody = row["Body"];
+                prod.TitleLT = row["Title"];
+                prod.TitleLV = row["TitleLV"];
+                prod.TitleEE = row["TitleEE"];
+                prod.TitleRU = row["TitleRU"];
+
+                prod.DescLT = row["Body"];
+                prod.DescLV = row["BodyLV"];
+                prod.DescEE = row["BodyEE"];
+                prod.DescRU = row["BodyRU"];
+                
                 prod.Vendor = row["Vendor"];
                 prod.ProductTypeID = row["ProductType_ID"];
                 prod.SKU = row["SKU"];
@@ -322,8 +330,16 @@ namespace Ikrito_Fulfillment_Platform.Modules
             //inserting to *_Products table
             var InsertData = new Dictionary<string, string>
             {
-                ["Title"] = p.Title,
-                ["Body"] = p.HTMLBody,
+                ["Title"] = p.TitleLT,
+                ["TitleLV"] = p.TitleLV,
+                ["TitleEE"] = p.TitleEE,
+                ["TitleRU"] = p.TitleRU,
+
+                ["Body"] = p.DescLT,
+                ["BodyLV"] = p.DescLV,
+                ["BodyEE"] = p.DescEE,
+                ["BodyRU"] = p.DescRU,
+
                 ["Vendor"] = p.Vendor,
                 ["ProductType_ID"] = p.ProductTypeID,
                 ["SKU"] = p.SKU,
@@ -402,8 +418,16 @@ namespace Ikrito_Fulfillment_Platform.Modules
             //updating *_Products table
             var updateData = new Dictionary<string, string>
             {
-                ["Title"] = p.Title,
-                ["Body"] = p.HTMLBody,
+                ["Title"] = p.TitleLT,
+                ["TitleLV"] = p.TitleLV,
+                ["TitleEE"] = p.TitleEE,
+                ["TitleRU"] = p.TitleRU,
+
+                ["Body"] = p.DescLT,
+                ["BodyLV"] = p.DescLV,
+                ["BodyEE"] = p.DescEE,
+                ["BodyRU"] = p.DescRU,
+
                 ["Vendor"] = p.Vendor,
                 ["ProductType_ID"] = p.ProductTypeID,
                 ["Weight"] = p.Weight.ToString(),
@@ -587,8 +611,16 @@ namespace Ikrito_Fulfillment_Platform.Modules
             {
 
                 FullProduct NewProduct = new();
-                NewProduct.Title = prod["Title"];
-                NewProduct.HTMLBody = prod["Body"];
+                NewProduct.TitleLT = prod["Title"];
+                NewProduct.TitleLV = prod["TitleLV"];
+                NewProduct.TitleEE = prod["TitleEE"];
+                NewProduct.TitleRU = prod["TitleRU"];
+
+                NewProduct.DescLT = prod["Body"];
+                NewProduct.DescLV = prod["BodyLV"];
+                NewProduct.DescEE = prod["BodyEE"];
+                NewProduct.DescRU = prod["BodyRU"];
+
                 NewProduct.Vendor = prod["Vendor"];
                 NewProduct.ProductTypeID = prod["ProductType_ID"];
                 NewProduct.SKU = prod["SKU"];
@@ -676,8 +708,8 @@ namespace Ikrito_Fulfillment_Platform.Modules
             //Dictionary<string, FullProduct> TDBproducts = GetVendorProducts("TDB");
             //p.AddRange(TDBproducts);
 
-            //Dictionary<string, FullProduct> KGproducts = GetVendorProducts("KG");
-            //p.AddRange(KGproducts);
+            Dictionary<string, FullProduct> KGproducts = GetVendorProducts("KG");
+            p.AddRange(KGproducts);
 
             Dictionary<string, FullProduct> PDproducts = GetVendorProducts("PD");
             p.AddRange(PDproducts);

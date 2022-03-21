@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Ikrito_Fulfillment_Platform.Utils;
+using System;
 using System.Collections.Generic;
 
-namespace Ikrito_Fulfillment_Platform.Models {
+namespace Ikrito_Fulfillment_Platform.Models
+{
     public class Order {
         //shopify_ID
         public string id { set; get; }
@@ -25,7 +27,7 @@ namespace Ikrito_Fulfillment_Platform.Models {
         public string Created_date {
             get {
                 if (!string.IsNullOrEmpty(created_at)) {
-                    DateTime createdDate = DateTime.Parse(created_at);
+                    DateTime createdDate = created_at.UnixTimeToDateTime();
                     return createdDate.ToString("MM/dd/yyyy HH:mm");
                 } else {
                     return "---";
@@ -37,7 +39,7 @@ namespace Ikrito_Fulfillment_Platform.Models {
         public string Canceled_date {
             get {
                 if (!string.IsNullOrEmpty(cancelled_at)) {
-                    DateTime CanceledDate = DateTime.Parse(cancelled_at);
+                    DateTime CanceledDate = cancelled_at.UnixTimeToDateTime();
                     return CanceledDate.ToString("MM/dd/yyyy HH:mm");
                 } else {
                     return "Not Canceled";
@@ -49,7 +51,7 @@ namespace Ikrito_Fulfillment_Platform.Models {
         public string Closed_date {
             get {
                 if (!string.IsNullOrEmpty(closed_at)) {
-                    DateTime ClosedDate = DateTime.Parse(closed_at);
+                    DateTime ClosedDate = closed_at.UnixTimeToDateTime();
                     return ClosedDate.ToString("MM/dd/yyyy HH:mm");
                 } else {
                     return "Not Closed";

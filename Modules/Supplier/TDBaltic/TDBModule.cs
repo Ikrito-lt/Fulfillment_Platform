@@ -240,7 +240,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.TDBaltic {
                     string title = newProdDataKVP["ShortDesc"];
                     title = SQLUtil.SQLSafeString(title);
 
-                    newProduct.Title = title;
+                    newProduct.TitleLT = title;
                     newProduct.Vendor = vendorNode.InnerText;
                     newProduct.ProductTypeID = 1.ToString();
                     newProduct.SKU = NewSKU;
@@ -320,7 +320,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.TDBaltic {
                     newProduct.AddedTimeStamp = ((DateTimeOffset)DateTime.Now).ToUnixTimeSeconds().ToString();
 
                     //building Product description
-                    newProduct.HTMLBody = BuildDescription(newProdDataKVP);
+                    newProduct.DescLT = BuildDescription(newProdDataKVP);
 
                     if (newProduct.Height == 0) newProduct.Height = 1;
                     if (newProduct.Width == 0) newProduct.Width = 1;

@@ -40,7 +40,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            
+
             <!--left content border-->
             <Border Grid.Column="0" Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="2" Margin="10,10,10,0" Padding="10">
                 <Grid Margin="0">
@@ -56,7 +56,7 @@
                         <RowDefinition Height="35"/>
                         <RowDefinition Height="35"/>
                     </Grid.RowDefinitions>
-                    
+
                     <TextBlock Grid.Column="0" Text="Product Type" VerticalAlignment="Center"/>
                     <ComboBox Grid.Column="1" x:Name="TypeFilterCBox" Visibility="Visible" VerticalAlignment="Center" StaysOpenOnEdit="True" IsTextSearchEnabled="True" IsEditable="True" SelectionChanged="ComboBox_SelectionChanged"/>
                     <Button x:Name="DeleteTypeFilterButton" Grid.Column="2" Grid.Row="0" Click="DeleteTypeFilterButton_Click" Content="X" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,5,0,5" VerticalContentAlignment="Center"/>
@@ -64,8 +64,13 @@
                     <TextBlock Grid.Column="0" Grid.Row="1" Text="Vendor Product Type" VerticalAlignment="Center"/>
                     <ComboBox Grid.Column="1" Grid.Row="1" x:Name="VendorTypeFilterCBox" Visibility="Visible" VerticalAlignment="Center" StaysOpenOnEdit="True" IsTextSearchEnabled="True" IsEditable="True" SelectionChanged="ComboBox_SelectionChanged"/>
                     <Button x:Name="DeleteVendorTypeFilterButton" Grid.Column="2" Grid.Row="1" Click="DeleteVendorTypeFilterButton_Click" Content="X" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,5,0,5" VerticalContentAlignment="Center"/>
-                    
+
                     <ListBox Grid.ColumnSpan="3" Grid.Row="2" Name="ChangeTypeListBox" SelectionMode="Single" ItemsSource="{Binding}" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionChanged="ChangeTypeListBox_SelectionChanged">
+
+                        <ListBox.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding DataContext.SelectItemCommand, ElementName=KeyListBox}" 
+                                CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType=ListBox}}"/>
+                        </ListBox.InputBindings>
 
                         <ListBox.Resources>
                             <Style TargetType="ListBoxItem">
@@ -77,6 +82,12 @@
                                 <Setter Property="ToolTipService.BetweenShowDelay" Value="5000"/>
                             </Style>
                         </ListBox.Resources>
+
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <EventSetter Event="PreviewKeyDown" Handler="ListBoxItem_PreviewKeyDown" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
 
                         <ListBox.ItemTemplate>
                             <DataTemplate>
@@ -111,12 +122,12 @@
                                         <TextBlock Text="{Binding Title}" Grid.Row="1" Grid.Column="3" TextWrapping="Wrap"/>
 
                                         <TextBlock Text="Type:" Grid.Row="2" Grid.Column="1"/>
-                                        <TextBlock Text="{Binding ProductType}" Grid.Row="2" Grid.Column="3"/>
+                                        <TextBlock Text="{Binding ProductType}" Grid.Row="2" Grid.Column="3" TextWrapping="Wrap"/>
 
                                         <TextBlock Text="Vendor Type:" Grid.Row="3" Grid.Column="1"/>
-                                        <TextBlock Text="{Binding VendorProductType}" Grid.Row="3" Grid.Column="3"/>
+                                        <TextBlock Text="{Binding VendorProductType}" Grid.Row="3" Grid.Column="3" TextWrapping="Wrap"/>
 
-                                        <CheckBox IsChecked="{Binding Selected}" Grid.RowSpan="4" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        <CheckBox IsChecked="{Binding Selected, Mode=TwoWay}" Grid.RowSpan="4" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
                                     </Grid>
                                 </Border>
@@ -139,9 +150,9 @@
 
                         <Button x:Name="ChangeTypesButton" Click="ChangeTypesButton_Click" 
                                     Content="Change Product Types" Padding="5,5,5,5" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="1" Width="135" Margin="0,0,0,0"/>
-                       
+
                     </Grid>
-                    
+
                 </Grid>
             </Border>
 
@@ -159,7 +170,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBox x:Name="ProductAttributtesLabel" Text="Product Attributtes" Grid.Row="0" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <TextBox x:Name="ProductAttributtesLabel" Text="Product Attributtes" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <TextBox.Style>
                             <Style TargetType="TextBox">
                                 <Setter Property="IsReadOnly" Value="True" />
@@ -169,7 +180,7 @@
                         </TextBox.Style>
                     </TextBox>
 
-                    <DataGrid x:Name="productAttributesDG" Grid.Row="1" Grid.ColumnSpan="2" Margin="0" SelectionMode="Single" CanUserAddRows="False" HeadersVisibility="Column"
+                    <DataGrid x:Name="productAttributesDG" Grid.Row="3" Grid.Column="1" Margin="0" SelectionMode="Single" CanUserAddRows="False" HeadersVisibility="Column"
                           VerticalAlignment="Stretch" AutoGenerateColumns="False" >
                         <DataGrid.Columns>
 
@@ -208,7 +219,7 @@
                             </DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                    
+
                     <TextBox x:Name="ProductImagesLabel" Text="Product Images" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
                         <TextBox.Style>
                             <Style TargetType="TextBox">
@@ -243,7 +254,6 @@
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-
 
                 </Grid>
             </Border>

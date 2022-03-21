@@ -410,7 +410,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
             {
                 string query = textBox.Text.ToLower();
 
-                TextFilteredProducts = TextFilteredProducts.Where(p => p.Title.ToLower().Contains(query)).ToList();
+                TextFilteredProducts = TextFilteredProducts.Where(p => p.TitleLT.ToLower().Contains(query)).ToList();
                 ChangeCountLabel(TextFilteredProducts.Count);
                 DataGridSource = TextFilteredProducts;
                 productDG.ItemsSource = DataGridSource;

@@ -129,9 +129,9 @@ namespace Ikrito_Fulfillment_Platform.Modules {
                 orderProduct.name = op["Name"];
                 orderProduct.vendor = op["Vendor"];
                 orderProduct.quantity = int.Parse(op["Quantity"]);
-                orderProduct.price = double.Parse(op["Price"]);
-                orderProduct.total_discount = double.Parse(op["TotalDiscount"]);
-                orderProduct.grams = int.Parse(op["Grams"]);
+                orderProduct.price = string.IsNullOrEmpty(op["Price"]) ? .0 : double.Parse(op["Price"]);
+                orderProduct.total_discount = string.IsNullOrEmpty(op["TotalDiscount"]) ? .0 : double.Parse(op["TotalDiscount"]);
+                orderProduct.grams = string.IsNullOrEmpty(op["Weight"]) ? 0 : int.Parse(op["Weight"]);
                 orderProduct.product_exists = op["Taxable"] == "1";
                 orderProduct.taxable = op["ProductExists"] == "1";
 
@@ -200,9 +200,9 @@ namespace Ikrito_Fulfillment_Platform.Modules {
             customer.last_name = customerDB["LastName"];
             customer.created_at = customerDB["Created_At"];
             customer.updated_at = customerDB["Updated_At"];
-            customer.total_spent = double.Parse(customerDB["TotalSpent"]);
+            customer.total_spent = string.IsNullOrEmpty(customerDB["TotalSpent"]) ? .0 : double.Parse(customerDB["TotalSpent"]);
             customer.state = customerDB["State"];
-            customer.orders_count = int.Parse(customerDB["OrdersCount"]);
+            customer.orders_count = string.IsNullOrEmpty(customerDB["OrdersCount"]) ? 0 : int.Parse(customerDB["OrdersCount"]);
             customer.last_order_id = customerDB["LastOrder_ID"];
             customer.verified_email = customerDB["VerifiedEmail"] == "1";
             customer.note = customerDB["Note"];
