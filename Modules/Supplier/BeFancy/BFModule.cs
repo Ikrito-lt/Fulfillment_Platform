@@ -254,8 +254,8 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy
         {
             FullProduct newProduct = new();
 
-            newProduct.Title = SQLUtil.SQLSafeString(bfProduct.title);
-            newProduct.HTMLBody = SQLUtil.SQLSafeString(bfProduct.description);
+            newProduct.TitleLT = SQLUtil.SQLSafeString(bfProduct.title);
+            newProduct.DescLT = SQLUtil.SQLSafeString(bfProduct.description);
 
             string newManufacturer = bfProduct.manufacturer;
             if (string.IsNullOrEmpty(newManufacturer))
@@ -299,8 +299,8 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy
         {
             FullProduct newProduct = new();
 
-            newProduct.Title = SQLUtil.SQLSafeString(bfProduct.title);
-            newProduct.HTMLBody = SQLUtil.SQLSafeString(bfProduct.description);
+            newProduct.TitleLT = SQLUtil.SQLSafeString(bfProduct.title);
+            newProduct.DescLT = SQLUtil.SQLSafeString(bfProduct.description);
 
             string newManufacturer = bfProduct.manufacturer;
             if (string.IsNullOrEmpty(newManufacturer))

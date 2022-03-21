@@ -6,6 +6,9 @@ using System.Windows.Controls;
 using System.Linq;
 using System.Windows.Input;
 using System;
+using Microsoft.VisualStudio.PlatformUI;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace Ikrito_Fulfillment_Platform.Pages
 {
@@ -17,20 +20,51 @@ namespace Ikrito_Fulfillment_Platform.Pages
         public Dictionary<string, FullProduct> AllProducts;
         private Dictionary<string, string> CategoryKVP = ProductCategoryModule.Instance.CategoryKVP;
         private List<ProductListBoxItem> OurProductsLBSource = new();
-        private List<ProductListBoxItem> PiguProductLBSource = new();
+        private ObservableCollection<ProductListBoxItem> PiguProductsLBSource = new();
 
+        //is used to track that product is selected
+        private string SelectedProductSKU
+        {
+            get { return _SelectedProductSKU; }
+            set
+            {
+                if (!String.IsNullOrWhiteSpace(value))
+                {
+                    _SelectedProductSKU = value;
+                    UpdateSelectedProductUI(value);
+                }
+            }
+        }
+        private string _SelectedProductSKU;
+
+        //a command thats passed to PiguLB item to delete it from piguLB
+        public ICommand DeletePiguItemCommand { get; set; }
         class ProductListBoxItem
         {
-            public string SKU { get; set; }
+            public string SKU { get; set; } 
             public string Title { get; set; }
+            public string ProductType { get; set; }
+            public bool Selected { get; set; }
         }
 
+        ////shit that makes this a singelton
+        //public static PiguIntegrationPage Instance { get; private set; }
+        //static PiguIntegrationPage()
+        //{
+        //    Instance = new PiguIntegrationPage();
+        //}
+
+        //private constructor
         public PiguIntegrationPage(Dictionary<string, FullProduct> products)
         {
             InitializeComponent();
             AllProducts = products;
             OurProductTypeFilterCBox.ItemsSource = CategoryKVP.OrderBy(key => key.Value);
             OurProductsLB.ItemsSource = OurProductsLBSource;
+
+            //init piguLB item elete command
+            DataContext = this;
+            DeletePiguItemCommand = new DelegateCommand<object>(DeletePiguItem);
         }
 
         //
@@ -45,6 +79,16 @@ namespace Ikrito_Fulfillment_Platform.Pages
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
             MainWindow.Instance.setFrame(ProductBrowsePage.Instance);
+        }
+
+        private void GenerateXMLButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void EditProductButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
         //
@@ -78,134 +122,124 @@ namespace Ikrito_Fulfillment_Platform.Pages
             {
                 ProductListBoxItem item = new ProductListBoxItem();
                 item.SKU = val.SKU;
-                item.Title = val.Title;
+                item.Title = val.TitleLT;
+                item.ProductType = val.ProductTypeDisplayVal;
                 OurProductsLBSource.Add(item);
             }
+            //changing count label
+            OurProductsLabel.Content = $"Our Products ({OurProductsLBSource.Count})";
             OurProductsLB.Items.Refresh();
         }
 
-        //
-        // Listboxes Drag and drop section
-        //
 
-        Point OurLBStartMousePos;
-        Point PiguLBStartMousePos;
+        //
+        // Listboxes item transfer section
+        //
 
         /// <summary>
-        /// records starting mouse position when selecting item in our LB
+        /// Transfers items from pigu ListBox to our 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OurProductsLB_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+
+        private void ToPiguTransferBtn_Click(object sender, RoutedEventArgs e)
         {
-            OurLBStartMousePos = e.GetPosition(null);
-        }
-
-        private void OurProductsLB_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            Point mPos = e.GetPosition(null);
-
-            if (e.LeftButton == MouseButtonState.Pressed &&
-                Math.Abs(mPos.X) > SystemParameters.MinimumHorizontalDragDistance &&
-                Math.Abs(mPos.Y) > SystemParameters.MinimumVerticalDragDistance)
-            {
-                try
-                {
-                    // This gets the selected item
-                    ListBoxItem selectedItem = (ListBoxItem)OurProductsLB.SelectedItem;
-                    // You need to remove it before adding it to another listbox.
-                    // if  you dont, it throws an error (due to referencing between 2 listboxes)
-                    OurProductsLB.Items.Remove(selectedItem);
-
-                    // The actual dragdrop thingy
-                    // DragDropEffects.Copy... i dont think this matters but oh well.
-                    DragDrop.DoDragDrop(this, new DataObject(DataFormats.FileDrop, selectedItem), DragDropEffects.Copy);
-
-                    // This code will check if the listboxitem is inside a ListBox or not.
-                    // This will stop the ListBoxItem you dragged from vanishing if you dont
-                    // Drop it inside a listbox (drop it in the titlebar or something lol)
-
-                    // ListBoxItems are objects obviously, and objects are passed and moved by reference.
-                    // Any change to an object affects every reference. 'selectedItem' is a reference
-                    // To LB2.SelectedItem, and they both will NEVER be different :)
-
-                    if (selectedItem.Parent == null)
-                    {
-                        OurProductsLB.Items.Add(selectedItem);
-                    }
+            foreach (ProductListBoxItem item in OurProductsLBSource.Where(x => x.Selected == true)) {
+                //checking if item with this sku is in pigu list box
+                if (!PiguProductsLBSource.Any(x => x.SKU == item.SKU)) { 
+                    PiguProductsLBSource.Add(item);
                 }
-                catch { }
             }
+            PiguProductsLB.ItemsSource = PiguProductsLBSource;
+            //changing count label
+            PiguProductsLabel.Content = $"Pigu Products ({PiguProductsLBSource.Count})";
+            PiguProductsLB.Items.Refresh();
         }
-
-        private void OurProductsLB_Drop(object sender, DragEventArgs e)
-        {
-            // This casts 'e.Data.GetData()' as a ListBoxItem and if it isn't null
-            // then the code will "execute" sort of. basically, listItem will always be 
-            // a ListBoxItem (atleast i think it will)
-            if (e.Data.GetData(DataFormats.FileDrop) is ListBoxItem listItem)
-            {
-                OurProductsLB.Items.Add(listItem);
-            }
-        }
-
 
         /// <summary>
-        /// records starting mouse position when selecting item in pigu LB
+        /// unselects all items in our product listbox
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void PiguProductsLB_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void OurLBUnSelectButton_Click(object sender, RoutedEventArgs e)
         {
-            PiguLBStartMousePos = e.GetPosition(null);
+            OurProductsLBSource.ForEach(x => x.Selected = false);
+            OurProductsLB.ItemsSource = OurProductsLBSource;
+            OurProductsLB.Items.Refresh();
         }
 
-        private void PiguProductsLB_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        /// <summary>
+        /// this method gets passed into the PiguLB item to delete the item when pressing the delete button
+        /// </summary>
+        /// <param name="item"></param>
+        private void DeletePiguItem(object item)
         {
-            Point mPos = e.GetPosition(null);
+            PiguProductsLBSource.Remove(item as ProductListBoxItem);
+        }
 
-            if (e.LeftButton == MouseButtonState.Pressed &&
-                Math.Abs(mPos.X) > SystemParameters.MinimumHorizontalDragDistance &&
-                Math.Abs(mPos.Y) > SystemParameters.MinimumVerticalDragDistance)
+        /// <summary>
+        /// method that handles checkbox check by pressing enter
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OurProductsLB_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            var item = sender as ListBoxItem;
+            var selectedItemIndex = OurProductsLB.SelectedIndex;
+            var selectedData = item.DataContext as ProductListBoxItem;
+
+            if (selectedData != null && e.Key == Key.Enter)
             {
-                try
+                OurProductsLBSource.FirstOrDefault(x => x.SKU == selectedData.SKU).Selected ^= true;
+                OurProductsLB.Items.Refresh();
+
+                OurProductsLB.UpdateLayout(); // Pre-generates item containers 
+                var newFocusTarget = OurProductsLB.ItemContainerGenerator.ContainerFromIndex(selectedItemIndex) as ListBoxItem;
+                if (newFocusTarget != null)
                 {
-                    // This gets the selected item
-                    ListBoxItem selectedItem = (ListBoxItem)PiguProductsLB.SelectedItem;
-                    // You need to remove it before adding it to another listbox.
-                    // if  you dont, it throws an error (due to referencing between 2 listboxes)
-                    PiguProductsLB.Items.Remove(selectedItem);
-
-                    // The actual dragdrop thingy
-                    // DragDropEffects.Copy... i dont think this matters but oh well.
-                    DragDrop.DoDragDrop(this, new DataObject(DataFormats.FileDrop, selectedItem), DragDropEffects.Copy);
-
-                    // This code will check if the listboxitem is inside a ListBox or not.
-                    // This will stop the ListBoxItem you dragged from vanishing if you dont
-                    // Drop it inside a listbox (drop it in the titlebar or something lol)
-
-                    // ListBoxItems are objects obviously, and objects are passed and moved by reference.
-                    // Any change to an object affects every reference. 'selectedItem' is a reference
-                    // To LB2.SelectedItem, and they both will NEVER be different :)
-
-                    if (selectedItem.Parent == null)
-                    {
-                        PiguProductsLB.Items.Add(selectedItem);
-                    }
+                    newFocusTarget.Focus();
                 }
-                catch { }
             }
         }
 
-        private void PiguProductsLB_Drop(object sender, DragEventArgs e)
+        //
+        // ListBoxes Selection Changed
+        //
+
+        /// <summary>
+        /// changes SelectedProductSKU
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ProductsLB_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // This casts 'e.Data.GetData()' as a ListBoxItem and if it isn't null
-            // then the code will "execute" sort of. basically, listItem will always be 
-            // a ListBoxItem (atleast i think it will)
-            if (e.Data.GetData(DataFormats.FileDrop) is ListBoxItem listItem)
-            {
-                PiguProductsLB.Items.Add(listItem);
+            var lb = sender as ListBox;
+            var selectedItem = lb.SelectedItem as ProductListBoxItem;
+            if (selectedItem != null) { 
+                SelectedProductSKU = selectedItem.SKU;
             }
+        }
+
+        /// <summary>
+        /// method that displays products information when selecting a product
+        /// </summary>
+        /// <param name="sku"></param>
+        private void UpdateSelectedProductUI(string sku) {
+            Console.WriteLine( $"Pigu Integration Page Selected Product: {sku}");
+            var selectedProduct = AllProducts[sku];
+
+            //loading attributtes
+            var productAttributesArray = from row in selectedProduct.ProductAttributtes select new { AttributeName = row.Key, AttributeValue = row.Value };
+            productAttributesDG.ItemsSource = productAttributesArray.ToArray();
+
+            //loading images
+            ProductImagesLabel.Content = $"Product Images ({selectedProduct.Images.Count})";
+            ProductImagesListBox.ItemsSource = selectedProduct.Images;
+
+            //init product info section
+            ProductInfoLabel.Text = $"Product Info ({sku})";
+
+
         }
     }
 }

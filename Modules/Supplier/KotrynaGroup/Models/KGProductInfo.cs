@@ -10,7 +10,10 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.KotrynaGroup.Modules {
         public string kpn { set; get; }
         public string coo { set; get; }
 
-        public string title { set; get; }
+        public string titleLT { set; get; }
+        public string titleLV { set; get; }
+        public string titleEE { set; get; }
+        public string titleRU { set; get; }
         public string vendorType { set; get; }
         public string brand { set; get; }
 

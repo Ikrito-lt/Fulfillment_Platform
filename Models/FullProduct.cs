@@ -11,8 +11,14 @@ namespace Ikrito_Fulfillment_Platform.Models {
     /// class for storring full product module
     /// </summary>
     public class FullProduct {
-        public string Title { set; get; }
-        public string HTMLBody { set; get; }           //desc
+        public string TitleLT { set; get; }
+        public string TitleLV { set; get; }
+        public string TitleEE { set; get; }
+        public string TitleRU { set; get; }
+        public string DescLT { set; get; }
+        public string DescLV { set; get; }
+        public string DescEE { set; get; }
+        public string DescRU { set; get; }
         public string Vendor { set; get; }
         public string ProductTypeID { set; get; }        //category ID
         public string SKU { set; get; }
@@ -70,8 +76,8 @@ namespace Ikrito_Fulfillment_Platform.Models {
 
         public FullProduct() {
             //to detect unassigned fields
-            Title = "NULL";
-            HTMLBody = "NULL";
+            TitleLT = "NULL";
+            DescLT = "NULL";
             Vendor = "NULL";
             ProductTypeID = "NULL";
             SKU = "NULL";

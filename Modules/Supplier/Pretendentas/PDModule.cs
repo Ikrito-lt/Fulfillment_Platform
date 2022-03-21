@@ -161,8 +161,8 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.Pretendentas
         private static FullProduct BuildProduct(PDProduct PDproduct) {
             FullProduct newProduct = new();
 
-            newProduct.Title = SQLUtil.SQLSafeString(PDproduct.title);
-            newProduct.HTMLBody = SQLUtil.SQLSafeString(PDproduct.descriptionHTML);
+            newProduct.TitleLT = SQLUtil.SQLSafeString(PDproduct.title);
+            newProduct.DescLT = SQLUtil.SQLSafeString(PDproduct.descriptionHTML);
 
             //getting vendor
             PDManufacturer ProdManuf = _ManufList.Find(x => x.id == PDproduct.manufacturer_id);

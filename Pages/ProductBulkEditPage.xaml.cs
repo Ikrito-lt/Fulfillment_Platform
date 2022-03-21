@@ -6,6 +6,8 @@ using System.Linq;
 using System.ComponentModel;
 using System;
 using Ikrito_Fulfillment_Platform.Modules;
+using System.Windows.Input;
+using System.Collections.ObjectModel;
 
 namespace Ikrito_Fulfillment_Platform.Pages
 {
@@ -16,17 +18,8 @@ namespace Ikrito_Fulfillment_Platform.Pages
         private readonly Dictionary<string, string> CategoryKVP;
         private readonly List<string> PossibleTypes;
         private List<string> PossibleVendorTypes;
-        private List<TypeListBoxItem> ListBoxSource;
+        private ObservableCollection<TypeListBoxItem> ListBoxSource;
         private bool AllTypeChangeProductsSelected = false;
-
-        class TypeListBoxItem
-        {
-            public string SKU { get; set; }
-            public string Title { get; set; }
-            public string ProductType { get; set; }
-            public string VendorProductType { get; set; }
-            public bool Selected { get; set; }
-        }
 
         public ProductBulkEditPage(Dictionary<string, FullProduct> products, Dictionary<string, string> categoryKVP, Page prevPage)
         {
@@ -42,7 +35,22 @@ namespace Ikrito_Fulfillment_Platform.Pages
             PossibleVendorTypes.Sort();
             ListBoxSource = new();
 
+            DataContext = this;
+
             InitTypes();
+        }
+
+        //
+        // Classes
+        //
+
+        class TypeListBoxItem
+        {
+            public string SKU { get; set; }
+            public string Title { get; set; }
+            public string ProductType { get; set; }
+            public string VendorProductType { get; set; }
+            public bool Selected { get; set; }
         }
 
         //
@@ -128,7 +136,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
 
                 //if both checks passed, give TPlistboxitem - sku - title;
                 TPlistboxitem.SKU = p.SKU;
-                TPlistboxitem.Title = p.Title;
+                TPlistboxitem.Title = p.TitleLT;
                 TPlistboxitem.Selected = false;
 
                 //adding it to list box source
@@ -163,7 +171,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
                     Products[sku].ProductTypeDisplayVal = newType;
 
                     //changing category in listbox
-                    ListBoxSource.RemoveAll(x => x.SKU == sku);
+                    ListBoxSource.Remove(t);
                     (sender as BackgroundWorker).ReportProgress(i, changesCount);
                     i++;                
                 }
@@ -221,12 +229,17 @@ namespace Ikrito_Fulfillment_Platform.Pages
             if (AllTypeChangeProductsSelected)
             {
                 SelectAllProductsButton.Content = "Unselect all";
-                ListBoxSource.ForEach(x => x.Selected = true);
+                foreach (var item in ListBoxSource) {
+                    item.Selected = true;
+                }
                 ChangeTypeListBox.Items.Refresh();
             }
             else {
                 SelectAllProductsButton.Content = "SelectAll";
-                ListBoxSource.ForEach(x => x.Selected = false);
+                foreach (var item in ListBoxSource)
+                {
+                    item.Selected = false;
+                }
                 ChangeTypeListBox.Items.Refresh();
             }
         }
@@ -292,7 +305,32 @@ namespace Ikrito_Fulfillment_Platform.Pages
                 productAttributesDG.ItemsSource = productAttributesArray.ToArray();
 
                 //loading images
+                ProductImagesLabel.Text = $"Product Images ({selectedProduct.Images.Count})";
                 ProductImagesListBox.ItemsSource = selectedProduct.Images;
+            }
+        }
+
+        /// <summary>
+        /// for checking listbox checkboxes by pressing enter
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ListBoxItem_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            var item = sender as ListBoxItem;
+            var selectedItemIndex = ChangeTypeListBox.SelectedIndex;
+            var selectedData = item.DataContext as TypeListBoxItem;
+            
+            if (selectedData != null && e.Key == Key.Enter)
+            {
+                ListBoxSource.FirstOrDefault(x => x.SKU == selectedData.SKU).Selected ^= true;
+                ChangeTypeListBox.Items.Refresh();
+
+                ChangeTypeListBox.UpdateLayout(); // Pre-generates item containers 
+                var newFocusTarget = ChangeTypeListBox.ItemContainerGenerator.ContainerFromIndex(selectedItemIndex) as ListBoxItem;
+                if (newFocusTarget != null) {
+                    newFocusTarget.Focus();
+                }
             }
         }
     }

@@ -60,8 +60,16 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         /// method that makes page readonly todo:redo this
         /// </summary>
         private void MakePageReadonly() {
-            DescBox.IsReadOnly = true;
-            TitleBox.IsReadOnly = true;
+            DescBoxLT.IsReadOnly = true;
+            DescBoxLV.IsReadOnly = true;
+            DescBoxEE.IsReadOnly = true;
+            DescBoxRU.IsReadOnly = true;
+
+            TitleBoxLT.IsReadOnly = true;
+            TitleBoxLV.IsReadOnly = true;
+            TitleBoxEE.IsReadOnly = true;
+            TitleBoxRU.IsReadOnly = true;
+
             VendorBox.IsReadOnly = true;
             StockBox.IsReadOnly = true;
             PriceBox.IsReadOnly = true;
@@ -91,8 +99,16 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         /// </summary>
         private void ProductFieldInit() {
 
-            TitleBox.Text = EditableProduct.Title;
-            DescBox.Text = EditableProduct.HTMLBody;
+            TitleBoxLT.Text = EditableProduct.TitleLT;
+            TitleBoxLV.Text = EditableProduct.TitleLV;
+            TitleBoxEE.Text = EditableProduct.TitleEE;
+            TitleBoxRU.Text = EditableProduct.TitleRU;
+
+            DescBoxLT.Text = EditableProduct.DescLT;
+            DescBoxLV.Text = EditableProduct.DescLV;
+            DescBoxEE.Text = EditableProduct.DescEE;
+            DescBoxRU.Text = EditableProduct.DescRU;
+
             VendorBox.Text = EditableProduct.Vendor;
 
             AddedTimeLabel.Content = EditableProduct.GetAddedTime().ToString();
@@ -133,8 +149,16 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             InitVariants();
 
             // adding on change text flip product saved bool
-            TitleBox.TextChanged += SaveFlip_TextChanged;
-            DescBox.TextChanged += SaveFlip_TextChanged;
+            TitleBoxLT.TextChanged += SaveFlip_TextChanged;
+            TitleBoxLV.TextChanged += SaveFlip_TextChanged;
+            TitleBoxEE.TextChanged += SaveFlip_TextChanged;
+            TitleBoxRU.TextChanged += SaveFlip_TextChanged;
+            
+            DescBoxLT.TextChanged += SaveFlip_TextChanged;
+            DescBoxLV.TextChanged += SaveFlip_TextChanged;
+            DescBoxEE.TextChanged += SaveFlip_TextChanged;
+            DescBoxRU.TextChanged += SaveFlip_TextChanged;
+
             VendorBox.TextChanged += SaveFlip_TextChanged;
 
             WeightBox.TextChanged += SaveFlip_TextChanged;
@@ -232,8 +256,16 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         private FullProduct saveProduct() {
             FullProduct newProduct = new();
             //adding string values
-            newProduct.Title = TitleBox.Text;
-            newProduct.HTMLBody = DescBox.Text;
+            newProduct.TitleLT = TitleBoxLT.Text;
+            newProduct.TitleLV = TitleBoxLV.Text;
+            newProduct.TitleEE = TitleBoxEE.Text;
+            newProduct.TitleRU = TitleBoxRU.Text;
+
+            newProduct.DescLT = DescBoxLT.Text;
+            newProduct.DescLV = DescBoxLV.Text;
+            newProduct.DescEE = DescBoxEE.Text;
+            newProduct.DescRU = DescBoxRU.Text;
+
             newProduct.Vendor = VendorBox.Text;
             newProduct.SKU = EditableProduct.SKU;
 

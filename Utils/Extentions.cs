@@ -46,6 +46,19 @@ namespace Ikrito_Fulfillment_Platform.Utils {
             dateTime = dateTime.AddSeconds(int.Parse(unixTime)).ToLocalTime();
             return dateTime.ToString("MM/dd/yyyy HH:mm");
         }
+
+        /// <summary>
+        /// for getting dateTime from unix timestamp 
+        /// </summary>
+        /// <param name="unixTime"></param>
+        /// <returns></returns>
+        public static DateTime UnixTimeToDateTime(this string unixTime)
+        {
+
+            DateTime dateTime = new(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+            dateTime = dateTime.AddSeconds(double.Parse(unixTime)).ToLocalTime();
+            return dateTime;
+        }
     }
 
     public static class DictionaryExt{

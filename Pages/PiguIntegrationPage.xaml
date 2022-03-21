@@ -46,12 +46,8 @@
         <Border Grid.Row="0" Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="2" Margin="10,10,10,0" Padding="10">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="175"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-
-                <Label x:Name="productCountL" Content="Product Count: " HorizontalAlignment="Left" VerticalAlignment="Center"
-                       Grid.Column="0"/>
 
                 <Grid Margin="0" Grid.Column="1">
                     <ProgressBar x:Name="loadingBar"  Minimum="0" Maximum="1000" Height="30" VerticalAlignment="Center" Visibility="Visible" IsEnabled="true"/>
@@ -72,7 +68,7 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="50"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
@@ -81,26 +77,48 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <Label Content="Our Products" Grid.Column="0" Grid.Row="0"/>
-                    <Label Content="Pigu Products" Grid.Column="2" Grid.Row="0"/>
+                    <Grid Grid.Row="0" Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label x:Name="OurProductsLabel" Content="Our Products" Grid.Column="0"/>
+                        <Button x:Name="OurLBUnSelectButton" Content="Unselect all" Click="OurLBUnSelectButton_Click" Grid.Column="2"/>    
+                    </Grid>
 
+                    <Label x:Name="PiguProductsLabel" Content="Pigu Products" Grid.Column="2" Grid.Row="0"/>
+                    
                     <ComboBox Grid.Column="0" Grid.Row="1" x:Name="OurProductTypeFilterCBox" Visibility="Visible" VerticalAlignment="Center" 
                               StaysOpenOnEdit="True" IsTextSearchEnabled="True" IsEditable="True" SelectionChanged="OurProductTypeFilterCBox_SelectionChanged" SelectedValuePath="Key" DisplayMemberPath="Value"/>
                     
+                    <!--transfer buttons-->
+                    <Grid Grid.Column="1" Grid.RowSpan="3">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="150"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <Button x:Name="ToPiguTransferBtn" Content="→" FontSize="20" Grid.Row="1" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="ToPiguTransferBtn_Click"/>
+
+                    </Grid>
+                   
                     <!--OurProductsLB-->
-                    <ListBox Grid.Column="0" Grid.Row="2" Name="OurProductsLB" ItemsSource="{Binding}" d:ItemsSource="{d:SampleData ItemCount=5}"
-                             PreviewMouseLeftButtonDown="OurProductsLB_PreviewMouseLeftButtonDown" MouseMove="OurProductsLB_MouseMove" AllowDrop="True" Drop="OurProductsLB_Drop">
-                        <ListBox.Resources>
+                    <ListBox Grid.Column="0" Grid.Row="2" Name="OurProductsLB" ItemsSource="{Binding}" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionChanged="ProductsLB_SelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+
+                        <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
+                                <EventSetter Event="PreviewKeyDown" Handler="OurProductsLB_PreviewKeyDown"/>
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                             </Style>
-                        </ListBox.Resources>
+                        </ListBox.ItemContainerStyle>
 
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Border Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="1" Padding="2" HorizontalAlignment="Stretch">
+                                <Border Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="1" Padding="3">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="30"/>
                                             <ColumnDefinition Width="30"/>
                                             <ColumnDefinition Width="5"/>
                                             <ColumnDefinition Width="*"/>
@@ -109,32 +127,34 @@
                                             <RowDefinition/>
                                             <RowDefinition/>
                                         </Grid.RowDefinitions>
-                                        <TextBlock Text="SKU:" Grid.Row="0" Grid.Column="0"/>
-                                        <TextBox Text="{Binding SKU}" Grid.Row="0" Grid.Column="2">
+
+                                        <TextBlock Text="SKU:" Grid.Row="0" Grid.Column="1"/>
+                                        <TextBox Text="{Binding SKU}" Grid.Row="0" Grid.Column="3">
                                             <TextBox.Style>
                                                 <Style TargetType="TextBox">
                                                     <Setter Property="Background" Value="GhostWhite"/>
                                                     <Setter Property="IsReadOnly" Value="True" />
                                                     <Setter Property="BorderThickness" Value="0" />
                                                     <Setter Property="TextWrapping" Value="Wrap" />
+                                                    <Setter Property="HorizontalAlignment" Value="Left"/>
                                                 </Style>
                                             </TextBox.Style>
                                         </TextBox>
                                         <TextBlock />
 
-                                        <TextBlock Text="Title:" Grid.Row="1" Grid.Column="0"/>
-                                        <TextBlock Text="{Binding Title}" Grid.Row="1" Grid.Column="2" TextWrapping="Wrap"/>
+                                        <TextBlock Text="Title:" Grid.Row="1" Grid.Column="1"/>
+                                        <TextBlock Text="{Binding Title}" Grid.Row="1" Grid.Column="3" TextWrapping="Wrap"/>
+
+                                        <CheckBox IsChecked="{Binding Selected}" Grid.RowSpan="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
                                     </Grid>
                                 </Border>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
-                        <!--<ListBoxItem Content="as"/>-->
                     </ListBox>
 
                     <!--PiguProductsLB-->
-                    <ListBox Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" Name="PiguProductsLB" ItemsSource="{Binding}" d:ItemsSource="{d:SampleData ItemCount=5}"
-                             PreviewMouseLeftButtonDown="PiguProductsLB_PreviewMouseLeftButtonDown" MouseMove="PiguProductsLB_MouseMove" AllowDrop="True" Drop="PiguProductsLB_Drop">
+                    <ListBox Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" Name="PiguProductsLB" ItemsSource="{Binding}" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionChanged="ProductsLB_SelectionChanged">
                         <ListBox.Resources>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -143,14 +163,16 @@
 
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Border Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="1" Padding="2" HorizontalAlignment="Stretch">
+                                <Border Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="1" Padding="1" HorizontalAlignment="Stretch">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="30"/>
+                                            <ColumnDefinition Width="75"/>
                                             <ColumnDefinition Width="5"/>
                                             <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="50"/>
                                         </Grid.ColumnDefinitions>
                                         <Grid.RowDefinitions>
+                                            <RowDefinition/>
                                             <RowDefinition/>
                                             <RowDefinition/>
                                         </Grid.RowDefinitions>
@@ -169,12 +191,227 @@
 
                                         <TextBlock Text="Title:" Grid.Row="1" Grid.Column="0"/>
                                         <TextBlock Text="{Binding Title}" Grid.Row="1" Grid.Column="2" TextWrapping="Wrap"/>
+                                        
+                                        <TextBlock Text="ProductType:" Grid.Row="2" Grid.Column="0"/>
+                                        <TextBlock Text="{Binding ProductType}" Grid.Row="2" Grid.Column="2" TextWrapping="Wrap"/>
+
+                                        <Button Grid.Column="4" Grid.RowSpan="3" Content="[x]" Command="{Binding ElementName=PiguProductsLB, Path=DataContext.DeletePiguItemCommand}"
+                                        CommandParameter="{Binding}" Margin="5" Padding="3" VerticalContentAlignment="Center"/>
 
                                     </Grid>
                                 </Border>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
+                </Grid>
+            </Border>
+
+            <!--Product info Border-->
+            <Border Grid.Column="1" Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="2" Margin="0,10,10,0" Padding="10">
+
+                <Grid Margin="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!--Variants Border-->
+                    <Border Grid.Row="0" Grid.ColumnSpan="2" Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="2" Margin="0,10,10,0" Padding="10">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="35"/>
+                                <RowDefinition Height="35"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBox x:Name="ProductInfoLabel" Text="Product Info" Grid.Row="0" VerticalAlignment="Top" HorizontalAlignment="Center">
+                                <TextBox.Style>
+                                    <Style TargetType="TextBox">
+                                        <Setter Property="IsReadOnly" Value="True" />
+                                        <Setter Property="BorderThickness" Value="0" />
+                                        <Setter Property="TextWrapping" Value="Wrap" />
+                                    </Style>
+                                </TextBox.Style>
+                            </TextBox>
+
+                            <Grid Margin="0" Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Variant Barcode: " Margin="5" Padding="3"/>
+                                <ComboBox Grid.Column="1" x:Name="ProductVariantComboBox" Margin="0,5,0,5" ItemsSource="{Binding}" SelectedValuePath="Value" DisplayMemberPath="Key"/>
+                            </Grid>
+
+                            <Grid Margin="0" Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Variant Type: " Margin="5" Padding="3"/>
+                                <!--<TextBox Grid.Column="1" x:Name="VariantTypeBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" PreviewTextInput="IntPreviewTextInput"/>-->
+                            </Grid>
+
+                            <Grid Margin="0" Grid.Row="3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Variant Data: " Margin="3" Padding="3"/>
+                                <TextBox Grid.Column="1" x:Name="VariantDataBox" Visibility="Visible" VerticalAlignment="Center" Padding="3"/>
+                            </Grid>
+
+                            <Grid Margin="0" Grid.Row="4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Stock: " Margin="5" Padding="3"/>
+                                <!--<TextBox Grid.Column="1" x:Name="StockBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" PreviewTextInput="IntPreviewTextInput"/>-->
+                            </Grid>
+
+                            <Grid Margin="0" Grid.Row="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Price (€): " Margin="5" Padding="3"/>
+                                <!--<TextBox Grid.Column="1" x:Name="PriceBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" PreviewTextInput="DoublePreviewTextInput"/>-->
+
+                            </Grid>
+
+                            <Grid Margin="0" Grid.Row="6">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Vendor Price (€): " Margin="5" Padding="3"/>
+                                <!--<TextBox Grid.Column="1" x:Name="VendorPriceBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" PreviewTextInput="DoublePreviewTextInput" IsReadOnly="True"/>-->
+                            </Grid>
+
+                            <Grid Margin="0" Grid.Row="7">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <!--<CheckBox Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" x:Name="PermPriceCheckBox" Margin="5" VerticalAlignment="Center" Content="Make Product Price Permament"/>-->
+                            </Grid>
+
+                            <Grid Margin="0" Grid.Row="8">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <!--<Button x:Name="SaveVariantButton" Grid.Column="2" Click="SaveVariantButton_Click" Content="Save Variant" Padding="15,5,15,5" HorizontalAlignment="Center" VerticalAlignment="Center"/>-->
+                                <!--<emoji:TextBlock x:Name="SaveVariantLabel" Grid.Column="3" FontSize="12" Text="Variant Saved✅" VerticalAlignment="Center" Visibility="Collapsed"/>-->
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <!--productImage-->
+                    <Grid Grid.Row="1" Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Label Name="ProductImagesLabel" Content = "Product Images" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+                        <ListBox Grid.Row="1" Grid.Column="0" Name="ProductImagesListBox" SelectionMode="Single" ItemsSource="{Binding}">
+
+                            <ListBox.Resources>
+                                <Style TargetType="ListBoxItem">
+                                    <!--<EventSetter Event="MouseDoubleClick" Handler="ChangeListBox_MouseDoubleClick"/>-->
+                                    <Setter Property="Width" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}, Path=ActualWidth}" />
+                                    <Setter Property="Height" Value="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBox}}, Path=ActualHeight}" />
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="ToolTip" Value="Double Click To Edit"/>
+                                    <Setter Property="ToolTipService.InitialShowDelay" Value="5000"/>
+                                    <Setter Property="ToolTipService.ShowDuration" Value="5000"/>
+                                    <Setter Property="ToolTipService.BetweenShowDelay" Value="5000"/>
+                                </Style>
+                            </ListBox.Resources>
+
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="1" Padding="2" HorizontalAlignment="Stretch">
+                                        <Image Margin="5" Source="{Binding}" Stretch="Uniform" />
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                    
+                    <!--product Properties-->
+                    <Grid Grid.Row="1" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="35"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Label x:Name="ProductAttributtesLabel" Content="Product Attributtes" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                       
+                        <DataGrid x:Name="productAttributesDG" Grid.Row="1" Grid.Column="1" Margin="0" SelectionMode="Single" CanUserAddRows="False" HeadersVisibility="Column"
+                          VerticalAlignment="Stretch" AutoGenerateColumns="False" >
+                            <DataGrid.Columns>
+
+                                <DataGridTextColumn Binding="{Binding AttributeName}" Header="Attribute Name" Width="*">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Left" />
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="TextWrapping" Value="Wrap" />
+                                            <Setter Property="TextAlignment" Value="Left"/>
+                                            <Setter Property="Padding" Value="5"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Binding="{Binding AttributeValue}" Header="Attribute Value" Width="2*">
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment" Value="Left" />
+                                            <Setter Property="VerticalAlignment" Value="Center"/>
+                                            <Setter Property="TextWrapping" Value="Wrap" />
+                                            <Setter Property="TextAlignment" Value="Left"/>
+                                            <Setter Property="Padding" Value="5"/>
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                    <DataGridTextColumn.HeaderStyle>
+                                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                        </Style>
+                                    </DataGridTextColumn.HeaderStyle>
+                                </DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+
                 </Grid>
             </Border>
         </Grid>
@@ -186,9 +423,12 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="100"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="175"/>
+                    <ColumnDefinition Width="175"/>
                 </Grid.ColumnDefinitions>
                 <Button x:Name="BackButton" Click="BackButton_Click" Content="Back" Padding="15,5,15,5" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Column="0"/>
+                <Button x:Name="EditProductButton" Click="EditProductButton_Click" Content="Edit Selected Product" IsEnabled="False" Padding="15,5,15,5" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2"/>
+                <Button x:Name="GenerateXMLButton" Click="GenerateXMLButton_Click" Content="Generate and Upload XML" IsEnabled="False" Padding="15,5,15,5" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="3"/>
 
             </Grid>
         </Border>
