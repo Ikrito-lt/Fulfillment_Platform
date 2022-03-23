@@ -320,7 +320,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.KotrynaGroup {
 
             //adding new Variant (only one cause no variants in KG)
             ProductVariant newVariant = new();
-            newVariant.Stock = AP.qty;
+            newVariant.VendorStock = AP.qty;
             newVariant.Barcode = AP.ean;
             newVariant.PriceVendor = AP.price;
             newVariant.Price = AP.base_price;

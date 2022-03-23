@@ -244,7 +244,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.TDBaltic {
                     newProduct.Vendor = vendorNode.InnerText;
                     newProduct.ProductTypeID = 1.ToString();
                     newProduct.SKU = NewSKU;
-                    newVariant.Stock = int.Parse(stockNode.InnerText);
+                    newVariant.VendorStock = int.Parse(stockNode.InnerText);
                     newVariant.Barcode = barcodeNode.InnerText;
                     newVariant.PriceVendor = double.Parse(priceVendorNode.InnerText);
                     newVariant.PermPrice = false;

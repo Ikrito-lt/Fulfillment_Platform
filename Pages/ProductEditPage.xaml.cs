@@ -71,7 +71,6 @@ namespace Ikrito_Fulfillment_Platform.Pages {
             TitleBoxRU.IsReadOnly = true;
 
             VendorBox.IsReadOnly = true;
-            StockBox.IsReadOnly = true;
             PriceBox.IsReadOnly = true;
             VendorPriceBox.IsReadOnly = true;
             WeightBox.IsReadOnly = true;
@@ -88,6 +87,24 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
             TagListBox.IsEnabled = false;
             ImageListBox.IsEnabled = false;
+
+            //status
+            ProductStatusComboBox.IsEnabled = false;
+
+            //variants
+            if (!ProductVariantComboBox.Items.IsEmpty)
+            {
+                ProductVariantComboBox.SelectedIndex = 0;
+            }    
+            ProductVariantComboBox.IsEnabled = false;
+            VariantTypeBox.IsEnabled = false;
+            VariantDataBox.IsEnabled = false;
+            VendorStockBox.IsEnabled = false;
+            OurStockBox.IsEnabled = false;
+            PriceBox.IsEnabled = false;
+            VendorPriceBox.IsEnabled = false;
+            PermPriceCheckBox.IsEnabled = false;
+            SaveVariantButton.IsEnabled = false;
 
             //changing buttons
             SaveButton.Visibility = Visibility.Hidden;
@@ -193,7 +210,8 @@ namespace Ikrito_Fulfillment_Platform.Pages {
 
                     VariantTypeBox.Text = pv.VariantType;
                     VariantDataBox.Text = pv.VariantData;
-                    StockBox.Text = pv.Stock.ToString();
+                    VendorStockBox.Text = pv.VendorStock.ToString();
+                    OurStockBox.Text = pv.OurStock.ToString();
                     PriceBox.Text = pv.Price.ToString();
                     VendorPriceBox.Text = pv.PriceVendor.ToString();
                     PermPriceCheckBox.IsChecked = pv.PermPrice;
@@ -201,7 +219,8 @@ namespace Ikrito_Fulfillment_Platform.Pages {
                 else {
                     VariantTypeBox.Text = null;
                     VariantDataBox.Text = null;
-                    StockBox.Text = null;
+                    VendorStockBox.Text = null;
+                    OurStockBox.Text = null;
                     PriceBox.Text = null;
                     VendorPriceBox.Text = null;
                     PermPriceCheckBox.IsChecked = false;
@@ -325,7 +344,8 @@ namespace Ikrito_Fulfillment_Platform.Pages {
                 //saving product variant data
                 selectedVariant.VariantType = VariantTypeBox.Text;
                 selectedVariant.VariantData = VariantDataBox.Text;
-                selectedVariant.Stock = int.Parse(StockBox.Text);
+                selectedVariant.VendorStock = int.Parse(VendorStockBox.Text);
+                selectedVariant.OurStock = int.Parse(OurStockBox.Text);
                 selectedVariant.Price = double.Parse(PriceBox.Text);
                 selectedVariant.PriceVendor = double.Parse(VendorPriceBox.Text);
                 selectedVariant.PermPrice = PermPriceCheckBox.IsChecked == true;
@@ -368,6 +388,11 @@ namespace Ikrito_Fulfillment_Platform.Pages {
                 FullProduct editedProductDB = ProductModule.GetProduct(EditableProduct.SKU);
                 browsePage.AllProducts[editedProductDB.SKU] = editedProductDB;
                 browsePage.RefreshDataGrid();
+            }
+
+            //changing price in pigu inntegration page
+            if (PreviousPage is PiguIntegrationPage) { 
+                (PreviousPage as PiguIntegrationPage).AllProducts[EditableProduct.SKU] = ProductModule.GetProduct(EditableProduct.SKU);
             }
 
             //chnaging the page

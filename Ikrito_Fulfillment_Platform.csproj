@@ -37,6 +37,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Utilities" Version="17.1.32210.191" />
     <PackageReference Include="MySql.Data" Version="8.0.28" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
     <PackageReference Include="Prism.Core" Version="8.1.97" />
     <PackageReference Include="RestSharp" Version="106.12.0" />
   </ItemGroup>

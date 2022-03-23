@@ -183,16 +183,16 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.Pretendentas
             {
                 if (PDproduct.stock["type"] == "morethan" || PDproduct.stock["type"] == "total")
                 {
-                    newVariant.Stock = int.Parse(PDproduct.stock["amount"]);
+                    newVariant.VendorStock = int.Parse(PDproduct.stock["amount"]);
                 }
                 else
                 {
-                    newVariant.Stock = -1;
+                    newVariant.VendorStock = -1;
                 }
             }
             else
             {
-                newVariant.Stock = int.Parse(PDproduct.stock["amount"]);
+                newVariant.VendorStock = int.Parse(PDproduct.stock["amount"]);
             }
 
             //adding images

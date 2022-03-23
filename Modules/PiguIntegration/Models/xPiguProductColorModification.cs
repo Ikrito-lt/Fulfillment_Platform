@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Ikrito_Fulfillment_Platform.Modules.PiguIntegration.Models
+﻿namespace Ikrito_Fulfillment_Platform.Modules.PiguIntegration.Models
 {
-    internal class PiguProductColorModification
+    internal class xPiguProductColorModification
     {
         public string modificationTitle { get; set; }
         public string weight { get; set; }  //in kg

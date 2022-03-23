@@ -19,7 +19,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
         {
             foreach (var variant in p.ProductVariants)
             {
-                if (variant.Stock > 0)
+                if (variant.VendorStock > 0)
                 {
                     return true;
                 }
@@ -56,7 +56,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
         {
             DataBaseInterface db = new();
 
-            string tablePrefix = sku.GetUntilOrEmpty();
+            string tablePrefix = sku.GetBeginingOrEmpty();
             var whereGet = new Dictionary<string, Dictionary<string, string>>
             {
                 ["SKU"] = new Dictionary<string, string>
@@ -167,7 +167,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
         // method for deleting product form database 
         public static void DeleteProduct(string sku)
         {
-            string tablePrefix = sku.GetUntilOrEmpty();
+            string tablePrefix = sku.GetBeginingOrEmpty();
             DataBaseInterface db = new DataBaseInterface();
 
             //deleting from Products table
@@ -186,7 +186,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
         public static FullProduct GetProduct(string sku)
         {
             FullProduct prod = new();
-            string tablePrefix = sku.GetUntilOrEmpty();
+            string tablePrefix = sku.GetBeginingOrEmpty();
 
             DataBaseInterface db = new();
             Dictionary<string, Dictionary<string, string>> whereCond;
@@ -283,7 +283,8 @@ namespace Ikrito_Fulfillment_Platform.Modules
             {
                 ProductVariant pVariant = new();
                 pVariant.Barcode = row["Barcode"];
-                pVariant.Stock = int.Parse(row["Stock"]);
+                pVariant.VendorStock = int.Parse(row["VendorStock"]);
+                pVariant.OurStock = int.Parse(row["OurStock"]);
                 pVariant.Price = double.Parse(row["Price"]);
                 pVariant.PriceVendor = double.Parse(row["PriceVendor"]);
                 pVariant.VariantType = row["VariantData"];
@@ -322,7 +323,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
             }
 
             //getting categories KVP
-            string tablePrefix = p.SKU.GetUntilOrEmpty();
+            string tablePrefix = p.SKU.GetBeginingOrEmpty();
 
             //adding product to Products table
             MarkProductAsNew(p.SKU, p.ProductTypeID);
@@ -383,7 +384,8 @@ namespace Ikrito_Fulfillment_Platform.Modules
                     ["SKU"] = p.SKU,
                     ["Price"] = productVariant.Price.ToString(),
                     ["PriceVendor"] = productVariant.PriceVendor.ToString(),
-                    ["Stock"] = productVariant.Stock.ToString(),
+                    ["VendorStock"] = productVariant.VendorStock.ToString(),
+                    ["OurStock"] = productVariant.OurStock.ToString(),
                     ["Barcode"] = productVariant.Barcode,
                     ["VariantType"] = productVariant.VariantType,
                     ["VariantData"] = productVariant.VariantData,
@@ -413,7 +415,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
         public static void UpdateProductToDB(FullProduct p, string status)
         {
             DataBaseInterface db = new();
-            string tablePrefix = p.SKU.GetUntilOrEmpty();
+            string tablePrefix = p.SKU.GetBeginingOrEmpty();
 
             //updating *_Products table
             var updateData = new Dictionary<string, string>
@@ -532,7 +534,8 @@ namespace Ikrito_Fulfillment_Platform.Modules
                     ["SKU"] = p.SKU,
                     ["Price"] = productVariant.Price.ToString(),
                     ["PriceVendor"] = productVariant.PriceVendor.ToString(),
-                    ["Stock"] = productVariant.Stock.ToString(),
+                    ["VendorStock"] = productVariant.VendorStock.ToString(),
+                    ["OurStock"] = productVariant.OurStock.ToString(),
                     ["Barcode"] = productVariant.Barcode,
                     ["VariantType"] = productVariant.VariantType,
                     ["VariantData"] = productVariant.VariantData,
@@ -667,7 +670,8 @@ namespace Ikrito_Fulfillment_Platform.Modules
                 variant.VariantDBID = int.Parse(row["ID"]);
                 variant.Price = double.Parse(row["Price"]);
                 variant.PriceVendor = double.Parse(row["PriceVendor"]);
-                variant.Stock = int.Parse(row["Stock"]);
+                variant.VendorStock = int.Parse(row["VendorStock"]);
+                variant.OurStock = int.Parse(row["OurStock"]);
                 variant.Barcode = row["Barcode"];
                 variant.VariantType = row["VariantType"];
                 variant.VariantData = row["VariantData"];
