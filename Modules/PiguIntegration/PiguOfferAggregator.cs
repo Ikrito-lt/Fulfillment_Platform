@@ -1,8 +1,10 @@
-﻿using Ikrito_Fulfillment_Platform.Models;
+﻿using Ikrito_Fulfillment_Platform.AWS;
+using Ikrito_Fulfillment_Platform.Models;
 using Ikrito_Fulfillment_Platform.Modules.PiguIntegration.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -248,12 +250,23 @@ namespace Ikrito_Fulfillment_Platform.Modules.PiguIntegration
             XmlDocument xPiguProductStocksXml = new XmlDocument();
             xPiguProductStocksXml.LoadXml(pssb.ToString());
 
+            //todo: xml Validation
+            //uploading XMls to AWS
+            worker.ReportProgress(promiles, (true, $"Uploading XMLs to AWS Buckets"));
+            S3UploadXml("pigu-product-xml", "piguProductXml.xml", xPiguProductsXml);
+            S3UploadXml("pigu-stock-xml", "piguStockXml.xml", xPiguProductStocksXml);
+        }
 
+        private static async void S3UploadXml( string bucketName, string keyName, XmlDocument xml )
+        {
+            string path = Directory.GetCurrentDirectory();
+            var filePath = path = path + $"\\{keyName}";
+            xml.Save(filePath);
 
-
-
-
-
+            var aWS3Uploader = await AWS3Uploader.UploadFileAsync(bucketName, keyName, filePath);
+            if (aWS3Uploader.HttpStatusCode != System.Net.HttpStatusCode.OK) {
+                throw new Exception($"Failed to S3 Upload {filePath}");
+            }
         }
     }
 }

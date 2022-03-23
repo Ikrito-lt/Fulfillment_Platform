@@ -12,6 +12,16 @@
 	  <!--<Nullable>enable</Nullable>-->
   </PropertyGroup>
 
+	<!--<Target Name="CopyDLLs" AfterTargets="Build">
+		<Message Text="Executing CopyDLLs task" Importance="High" />
+
+		<Copy
+		  SourceFiles="$(TargetDir)$(ProjectName).dll;$(TargetDir)$(ProjectName).pdb"
+		  DestinationFolder="C:\Builds$(ProjectName)" />
+
+		<Message Text="Copied build files" Importance="High" />
+	</Target>-->
+	
   <ItemGroup>
     <Compile Remove="Files\**" />
     <EmbeddedResource Remove="Files\**" />

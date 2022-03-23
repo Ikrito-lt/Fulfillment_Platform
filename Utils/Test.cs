@@ -2,13 +2,20 @@
 using Ikrito_Fulfillment_Platform.Models;
 using Ikrito_Fulfillment_Platform.Modules;
 using Ikrito_Fulfillment_Platform.Utils;
+using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Ikrito_Fulfillment_Platform.Utils
 {
     class Test {
         public Test() {
             //S3UploadTest();
+            T();
+        }
+
+        private static void T() {
+            Console.WriteLine(Directory.GetCurrentDirectory());
         }
 
         private static async void S3UploadTest() {
