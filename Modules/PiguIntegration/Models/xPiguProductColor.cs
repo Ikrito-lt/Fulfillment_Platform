@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Ikrito_Fulfillment_Platform.Modules.PiguIntegration.Models
 {
-    internal class PiguProductColor
+    internal class xPiguProductColor
     {
         public string colorTitle { get; set; }
         public List<string> images = new List<string>();
-        public List<PiguProductColorModification> modifications = new List<PiguProductColorModification>();
+        public List<xPiguProductColorModification> modifications = new List<xPiguProductColorModification>();
 
         public string GetImagesXml()
         {
             string s = "";
             foreach (string url in images)
             {
-                s += $"<image><url>{url}</url></image>\n";
+                s += $"<image><![CDATA[<url>{url}</url>]]></image>\n";
             }
             return s;
         }
@@ -25,7 +21,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.PiguIntegration.Models
         public string GetModificationsXml()
         {
             string s = "";
-            foreach (PiguProductColorModification mod in modifications)
+            foreach (xPiguProductColorModification mod in modifications)
             {
                 s += $"{mod.GetXml()}\n";
             }

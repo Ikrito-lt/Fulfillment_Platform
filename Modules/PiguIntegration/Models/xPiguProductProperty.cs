@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Ikrito_Fulfillment_Platform.Modules.PiguIntegration.Models
 {
-    internal class PiguProductProperty
+    internal class xPiguProductProperty
     {
         public string IDstr { get; set; }
         public List<string> values = new List<string>();
@@ -25,9 +21,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.PiguIntegration.Models
                 $@"
                     <property>
                         <id><![CDATA[{IDstr}]]></id>
-                         <values>
-                             <value><![CDATA[{GetValuesXml()}]]></value>
-                         </values>
+                         <values>{GetValuesXml()}</values>
                      </property>
                 ";
             return s;

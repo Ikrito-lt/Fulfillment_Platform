@@ -23,13 +23,28 @@ namespace Ikrito_Fulfillment_Platform.Utils {
         /// <param name="text"></param>
         /// <param name="stopAt"></param>
         /// <returns></returns>
-        public static string GetUntilOrEmpty(this string text, string stopAt = "-") {
+        public static string GetBeginingOrEmpty(this string text, string stopAt = "-") {
             if (!String.IsNullOrWhiteSpace(text)) {
                 int charLocation = text.IndexOf(stopAt, StringComparison.Ordinal);
 
                 if (charLocation > 0) {
                     return text.Substring(0, charLocation);
                 }
+            }
+            return String.Empty;
+        }
+
+        /// <summary>
+        /// for getting ending of string from certain char (-)
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="stopAt"></param>
+        /// <returns></returns>
+        public static string GetEndingOrEmpty(this string text, string stopAt = "-")
+        {
+            if (!String.IsNullOrWhiteSpace(text))
+            {
+                return text.Substring(text.LastIndexOf(stopAt) + 1);
             }
             return String.Empty;
         }

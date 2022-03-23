@@ -232,7 +232,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="100"/>
-                <RowDefinition Height="345"/>
+                <RowDefinition Height="380"/>
             </Grid.RowDefinitions>
 
             <!--attributters border-->
@@ -338,6 +338,7 @@
                         <RowDefinition Height="35"/>
                         <RowDefinition Height="35"/>
                         <RowDefinition Height="35"/>
+                        <RowDefinition Height="35"/>
                     </Grid.RowDefinitions>
 
                     <TextBox x:Name="ProductVariantsLabel" Text="Product Attributtes" Grid.Row="0" VerticalAlignment="Top" HorizontalAlignment="Center">
@@ -373,7 +374,7 @@
                             <ColumnDefinition Width="100"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Variant Data: " Margin="3" Padding="3"/>
+                        <TextBlock Grid.Column="0" Text="Variant Data: " Margin="5" Padding="3"/>
                         <TextBox Grid.Column="1" x:Name="VariantDataBox" Visibility="Visible" VerticalAlignment="Center" Padding="3"/>
                     </Grid>
 
@@ -382,11 +383,20 @@
                             <ColumnDefinition Width="100"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Stock: " Margin="5" Padding="3"/>
-                        <TextBox Grid.Column="1" x:Name="StockBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" PreviewTextInput="IntPreviewTextInput"/>
+                        <TextBlock Grid.Column="0" Text="VendorStock: " Margin="5" Padding="3"/>
+                        <TextBox Grid.Column="1" x:Name="VendorStockBox" Visibility="Visible" IsReadOnly="True" VerticalAlignment="Center" Padding="3" PreviewTextInput="IntPreviewTextInput"/>
                     </Grid>
 
                     <Grid Margin="0" Grid.Row="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="OurStock: " Margin="5" Padding="3"/>
+                        <TextBox Grid.Column="1" x:Name="OurStockBox" Visibility="Visible"  VerticalAlignment="Center" Padding="3" PreviewTextInput="IntPreviewTextInput"/>
+                    </Grid>
+
+                    <Grid Margin="0" Grid.Row="6">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="100"/>
                             <ColumnDefinition Width="*"/>
@@ -396,7 +406,7 @@
 
                     </Grid>
 
-                    <Grid Margin="0" Grid.Row="6">
+                    <Grid Margin="0" Grid.Row="7">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="100"/>
                             <ColumnDefinition Width="*"/>
@@ -405,7 +415,7 @@
                         <TextBox Grid.Column="1" x:Name="VendorPriceBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" PreviewTextInput="DoublePreviewTextInput" IsReadOnly="True"/>
                     </Grid>
 
-                    <Grid Margin="0" Grid.Row="7">
+                    <Grid Margin="0" Grid.Row="8">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="100"/>
                             <ColumnDefinition Width="*"/>
@@ -413,17 +423,14 @@
                         <CheckBox Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" x:Name="PermPriceCheckBox" Margin="5" VerticalAlignment="Center" Content="Make Product Price Permament"/>
                     </Grid>
 
-                    <Grid Margin="0" Grid.Row="8">
+                    <Grid Margin="0" Grid.Row="9">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Button x:Name="SaveVariantButton" Grid.Column="2" Click="SaveVariantButton_Click" Content="Save Variant" Padding="15,5,15,5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <emoji:TextBlock x:Name="SaveVariantLabel" Grid.Column="3" FontSize="12" Text="Variant Saved✅" VerticalAlignment="Center" Visibility="Collapsed"/>
+                        <Button x:Name="SaveVariantButton" Grid.Column="0" Click="SaveVariantButton_Click" Content="Save Variant" Padding="15,5,15,5"  Width="120" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <emoji:TextBlock x:Name="SaveVariantLabel" Grid.Column="1" FontSize="12" Text="Variant Saved✅" VerticalAlignment="Center" Visibility="Collapsed"/>
                     </Grid>
                 </Grid>
             </Border>

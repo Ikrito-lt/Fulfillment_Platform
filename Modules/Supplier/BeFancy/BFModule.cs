@@ -275,7 +275,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy
             //adding only one variant
             ProductVariant productVariant = new ProductVariant();
             productVariant.Barcode = bfProduct.barcode;
-            productVariant.Stock = bfProduct.stock;
+            productVariant.VendorStock = bfProduct.stock;
             productVariant.PriceVendor = Math.Round(bfProduct.price, 2, MidpointRounding.AwayFromZero);
             productVariant.Price = Math.Round(PriceGenModule.GenNewPrice(productVariant.PriceVendor), 2, MidpointRounding.AwayFromZero);
 
@@ -325,7 +325,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy
             foreach (BFProductVariant variant in bfProduct.variants) {
                 ProductVariant productVariant = new ProductVariant();
                 productVariant.Barcode = variant.barcode;
-                productVariant.Stock = variant.stock;
+                productVariant.VendorStock = variant.stock;
                 productVariant.VariantType = variant.variantTitle;
                 productVariant.VariantData = variant.variantDescription;
 

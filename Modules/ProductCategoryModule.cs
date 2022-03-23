@@ -31,7 +31,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
         public static void ChangeProductCategory(string sku, string newCategoryID)
         {
             DataBaseInterface db = new();
-            string tablePrefix = sku.GetUntilOrEmpty();
+            string tablePrefix = sku.GetBeginingOrEmpty();
 
             //updating *_Products table
             var updateData = new Dictionary<string, string>

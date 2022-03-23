@@ -196,7 +196,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
                                 {
                                     ["Price"] = dbVariant.Price.ToString(),
                                     ["PriceVendor"] = pVariant.PriceVendor.ToString(),
-                                    ["Stock"] = pVariant.Stock.ToString(),
+                                    ["Stock"] = pVariant.VendorStock.ToString(),
                                     ["VariantType"] = pVariant.VariantType,
                                     ["VariantData"] = pVariant.VariantData,
                                 };
@@ -211,9 +211,9 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
 
                                 updateChange.Price = dbVariant.Price.ToString();
                                 updateChange.PriceVendor = pVariant.PriceVendor.ToString();
-                                updateChange.Stock = pVariant.Stock.ToString();
+                                updateChange.Stock = pVariant.VendorStock.ToString();
                                 updateChange.VariantData = $"{pVariant.VariantType} - {pVariant.VariantData}";
-                                updateChange.ChangesMade.Add($"Changed stock:\t\t{dbVariant.Stock} -> {pVariant.Stock}");
+                                updateChange.ChangesMade.Add($"Changed stock:\t\t{dbVariant.VendorStock} -> {pVariant.VendorStock}");
                                 updateChange.ChangesMade.Add($"Price is permament check profit!");
                                 updateChange.ChangesMade.Add($"Changed vendor price:\t\t{dbVariant.PriceVendor} -> {pVariant.PriceVendor}");
                             }
@@ -223,7 +223,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
                                 {
                                     ["Price"] = pVariant.Price.ToString(),
                                     ["PriceVendor"] = pVariant.PriceVendor.ToString(),
-                                    ["Stock"] = pVariant.Stock.ToString(),
+                                    ["Stock"] = pVariant.VendorStock.ToString(),
                                     ["VariantType"] = pVariant.VariantType,
                                     ["VariantData"] = pVariant.VariantData,
                                 };
@@ -238,9 +238,9 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
 
                                 updateChange.Price = dbVariant.Price.ToString();
                                 updateChange.PriceVendor = pVariant.PriceVendor.ToString();
-                                updateChange.Stock = pVariant.Stock.ToString();
+                                updateChange.Stock = pVariant.VendorStock.ToString();
                                 updateChange.VariantData = $"{pVariant.VariantType} - {pVariant.VariantData}";
-                                updateChange.ChangesMade.Add($"Changed stock:\t\t{dbVariant.Stock} -> {pVariant.Stock}");
+                                updateChange.ChangesMade.Add($"Changed stock:\t\t{dbVariant.VendorStock} -> {pVariant.VendorStock}");
                                 updateChange.ChangesMade.Add($"Changed price:\t\t{dbVariant.Price} -> {pVariant.Price}");
                                 updateChange.ChangesMade.Add($"Changed vendor price:\t\t{dbVariant.PriceVendor} -> {pVariant.PriceVendor}");
                             }
@@ -266,7 +266,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
                             ["SKU"] = updateProduct.SKU,
                             ["Price"] = pVariant.Price.ToString(),
                             ["PriceVendor"] = pVariant.PriceVendor.ToString(),
-                            ["Stock"] = pVariant.Stock.ToString(),
+                            ["Stock"] = pVariant.VendorStock.ToString(),
                             ["Barcode"] = pVariant.Barcode,
                             ["VariantType"] = pVariant.VariantType,
                             ["VariantData"] = pVariant.VariantData,
@@ -276,7 +276,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier
 
                         updateChange.Price = pVariant.Price.ToString();
                         updateChange.PriceVendor = pVariant.PriceVendor.ToString();
-                        updateChange.Stock = pVariant.Stock.ToString();
+                        updateChange.Stock = pVariant.VendorStock.ToString();
                         updateChange.VariantData = $"{pVariant.VariantType} - {pVariant.VariantData}";
                         updateChange.ChangesMade.Add($"Added Variant + Deleted Variants Without Barcode");
                     }

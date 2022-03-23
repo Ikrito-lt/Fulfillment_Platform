@@ -105,7 +105,7 @@
             </Border>
         </Grid>
 
-        <DataGrid x:Name="productDG" Grid.Row="2" Margin="10,10,10,0" SelectionMode="Single" CanUserAddRows="False" HeadersVisibility="Column" HorizontalAlignment="Stretch" VerticalAlignment="Top" AutoGenerateColumns="False" Style="{DynamicResource DataGridStyle1}" ItemsSource="{Binding}" IsReadOnly="True">
+        <DataGrid x:Name="productDG" Grid.Row="2" Margin="10,10,10,0" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionMode="Single" CanUserAddRows="False" HeadersVisibility="Column" HorizontalAlignment="Stretch" VerticalAlignment="Top" AutoGenerateColumns="False" Style="{DynamicResource DataGridStyle1}" ItemsSource="{Binding}" IsReadOnly="True">
 
             <DataGrid.Resources>
                 <Style TargetType="DataGridRow">
@@ -118,7 +118,7 @@
             </DataGrid.Resources>
 
             <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding SKU}" Width="200" >
+                <DataGridTextColumn Binding="{Binding SKU}" Width="150" >
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="HorizontalAlignment" Value="Left" />
@@ -136,7 +136,7 @@
                     <DataGridTextColumn.Header>
                         <Grid Margin="0">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="2*"/>
                                 <ColumnDefinition Width="5*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="SKU" Margin="3" Padding="1"/>
@@ -145,7 +145,7 @@
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Binding="{Binding TitleLT}" Width="850">
+                <DataGridTextColumn Binding="{Binding TitleLT}" Width="790">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="HorizontalAlignment" Value="Left" />
@@ -247,7 +247,17 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Header="FV Stock" Binding="{Binding FirstVariantStock}" Width="55">
+                <DataGridTextColumn Header="FV OurStock" Binding="{Binding FirstVariantOurStock}" Width="75">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                            <Setter Property="Padding" Value="5"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                
+                <DataGridTextColumn Header="FV VendorStock" Binding="{Binding FirstVariantVendorStock}" Width="95">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="HorizontalAlignment" Value="Center" />
