@@ -40,15 +40,12 @@
 
   <ItemGroup>
     <PackageReference Include="AWSSDK.S3" Version="3.7.8.10" />
-    <PackageReference Include="CalcBinding" Version="2.5.2" />
     <PackageReference Include="CsvHelper" Version="27.2.1" />
     <PackageReference Include="Emoji.Wpf" Version="0.3.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Utilities" Version="17.1.32210.191" />
     <PackageReference Include="MySql.Data" Version="8.0.28" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
-    <PackageReference Include="Prism.Core" Version="8.1.97" />
     <PackageReference Include="RestSharp" Version="106.12.0" />
   </ItemGroup>
 

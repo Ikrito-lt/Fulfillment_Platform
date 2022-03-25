@@ -15,8 +15,9 @@ namespace Ikrito_Fulfillment_Platform {
             Ikrito_Fulfillment_Platform.MainWindow.Instance.Show();
         }
 
-        private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e) {
-            MessageBox.Show("An exception just occurred:\n" + e.Exception.Message + 
+        private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            MessageBox.Show("An exception just occurred:\n" + e.Exception.Message +
                             "\n\nSend screenshot you know where.",
                             "Unhandled Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             e.Handled = true;

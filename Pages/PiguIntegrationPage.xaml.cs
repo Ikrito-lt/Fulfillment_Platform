@@ -2,6 +2,7 @@
 using Ikrito_Fulfillment_Platform.Modules;
 using Ikrito_Fulfillment_Platform.Modules.PiguIntegration;
 using Ikrito_Fulfillment_Platform.Modules.PiguIntegration.Models;
+using Ikrito_Fulfillment_Platform.Utils;
 using Microsoft.VisualStudio.PlatformUI;
 using System;
 using System.Collections.Generic;
@@ -151,6 +152,11 @@ namespace Ikrito_Fulfillment_Platform.Pages
                 BackButton.IsEnabled = true;
                 loadingBar.Value = 0;
                 loadingBar.IsIndeterminate = false;
+
+                Dictionary<string, string> uploadRes = e.Result as Dictionary<string, string>;
+                string message = $"ProductsXml: {uploadRes["productsXml"]}\nProductStockXml: {uploadRes["productStocksXml"]}";
+                var DialogOKBox = new DialogueOK(message);
+                DialogOKBox.ShowDialog();
             };
 
             piguOfferWorker.ProgressChanged += (sender, e) => {

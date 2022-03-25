@@ -5,12 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Ikrito_Fulfillment_Platform.Utils"
         mc:Ignorable="d"
-        Title="" Height="130" Width="250">
+        Title="" Height="auto" Width="auto">
 
     <Grid Margin="0"   Background="GhostWhite">
         <StackPanel Orientation="Vertical" Margin="15,15,15,0">
 
-            <Label x:Name="Label" Width="200" HorizontalAlignment="Center" HorizontalContentAlignment="Center" >
+            <Label x:Name="Label" Width="auto" HorizontalAlignment="Center" HorizontalContentAlignment="Center" >
                 <TextBlock x:Name="LabelText" TextWrapping="WrapWithOverflow" TextAlignment="Center" FontSize="16" Text="lol test text">
                 </TextBlock>
             </Label>
