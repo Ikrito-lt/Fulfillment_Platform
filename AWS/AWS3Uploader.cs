@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Model;
 
@@ -8,9 +9,10 @@ namespace Ikrito_Fulfillment_Platform.AWS
     internal static class AWS3Uploader
     {
 
-        public static async Task<PutObjectResponse> UploadFileAsync(string bucketName, string keyName, string filePath, string contentType = null)
+        public static async Task<string> UploadFileAsync(string bucketName, string keyName, string filePath, string contentType = null)
         {
-            var client = new AmazonS3Client(Amazon.RegionEndpoint.EUCentral1);
+            var creds = new BasicAWSCredentials("AKIASPWFMGKNZGZALSAP", "mphBwilxSC12+AKvKZDaVKaKAb7IWSrN6J9zB+02");
+            var client = new AmazonS3Client(creds, Amazon.RegionEndpoint.EUCentral1);
 
             try
             {
@@ -23,7 +25,8 @@ namespace Ikrito_Fulfillment_Platform.AWS
                 };
 
                 var response = await client.PutObjectAsync(putRequest);
-                return response;
+                var message = $"HttP {response.HttpStatusCode}\n {response.ResponseMetadata}\n{response.ContentLength}";
+                return message;
             }
             catch (AmazonS3Exception amazonS3Exception)
             {
@@ -32,11 +35,11 @@ namespace Ikrito_Fulfillment_Platform.AWS
                     ||
                     amazonS3Exception.ErrorCode.Equals("InvalidSecurity")))
                 {
-                    throw new Exception("Check the provided AWS Credentials.");
+                    return "Check the provided AWS Credentials.";
                 }
                 else
                 {
-                    throw new Exception("Error occurred: " + amazonS3Exception.Message);
+                    return "Error occurred: " + amazonS3Exception.Message;
                 }
             }
         }

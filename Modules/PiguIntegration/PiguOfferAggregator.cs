@@ -1,6 +1,8 @@
 ﻿using Ikrito_Fulfillment_Platform.AWS;
 using Ikrito_Fulfillment_Platform.Models;
 using Ikrito_Fulfillment_Platform.Modules.PiguIntegration.Models;
+using Ikrito_Fulfillment_Platform.Utils;
+using Microsoft.VisualStudio.Threading;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -265,20 +267,28 @@ namespace Ikrito_Fulfillment_Platform.Modules.PiguIntegration
             //todo: xml Validation
             //uploading XMls to AWS
             worker.ReportProgress(promiles, (true, $"Uploading XMLs to AWS Buckets"));
-            S3UploadXml("pigu-product-xml", "piguProductXml.xml", xPiguProductsXml);
-            S3UploadXml("pigu-stock-xml", "piguStockXml.xml", xPiguProductStocksXml);
+
+            //uploading product xml and passing results
+
+            Dictionary<string, string> uploadRes = new();
+            var productUploadTask = S3UploadXmlAsync("pigu-product-xml", "piguProductXml.xml", xPiguProductsXml);
+            uploadRes.Add("productsXml", productUploadTask.GetAwaiter().GetResult());
+            var productStockUploadTask = S3UploadXmlAsync("pigu-stock-xml", "piguStockXml.xml", xPiguProductStocksXml);
+            uploadRes.Add("productStocksXml", productStockUploadTask.GetAwaiter().GetResult());
+            e.Result = uploadRes;
         }
 
-        private static async void S3UploadXml( string bucketName, string keyName, XmlDocument xml )
+        private static Task<string> S3UploadXmlAsync( string bucketName, string keyName, XmlDocument xml )
         {
-            string path = Directory.GetCurrentDirectory();
-            var filePath = path + $"\\{keyName}";
-            xml.Save(filePath);
+            return Task.Run<string>(async () =>
+            {
+                string path = Directory.GetCurrentDirectory();
+                var filePath = path + $"\\{keyName}";
+                xml.Save(filePath);
 
-            var aWS3Uploader = await AWS3Uploader.UploadFileAsync(bucketName, keyName, filePath);
-            if (aWS3Uploader.HttpStatusCode != System.Net.HttpStatusCode.OK) {
-                throw new Exception($"Failed to S3 Upload {filePath}");
-            }
+                var aWS3UploaderMessage = await AWS3Uploader.UploadFileAsync(bucketName, keyName, filePath);
+                return aWS3UploaderMessage;
+            });
         }
     }
 }
