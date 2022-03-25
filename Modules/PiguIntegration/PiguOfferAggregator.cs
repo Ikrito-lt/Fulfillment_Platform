@@ -244,11 +244,23 @@ namespace Ikrito_Fulfillment_Platform.Modules.PiguIntegration
             xPiguProductStocks.ForEach(xpps => pssb.Append(xpps.GetXml()));
             pssb.Append("</products>");
 
+            //creating Porduct xml
             XmlDocument xPiguProductsXml = new XmlDocument();
             xPiguProductsXml.LoadXml(psb.ToString());
 
+            XmlDeclaration xmlProductDec;
+            xmlProductDec = xPiguProductsXml.CreateXmlDeclaration("1.0", "UTF-8", null);
+            XmlElement productRoot =xPiguProductsXml.DocumentElement;
+            xPiguProductsXml.InsertBefore(xmlProductDec, productRoot);
+
+            //creating product stock xml
             XmlDocument xPiguProductStocksXml = new XmlDocument();
             xPiguProductStocksXml.LoadXml(pssb.ToString());
+
+            XmlDeclaration xmlProductStockDec;
+            xmlProductStockDec = xPiguProductStocksXml.CreateXmlDeclaration("1.0", "UTF-8", null);
+            XmlElement productStockRoot = xPiguProductStocksXml.DocumentElement;
+            xPiguProductStocksXml.InsertBefore(xmlProductStockDec, productStockRoot);
 
             //todo: xml Validation
             //uploading XMls to AWS
@@ -260,7 +272,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.PiguIntegration
         private static async void S3UploadXml( string bucketName, string keyName, XmlDocument xml )
         {
             string path = Directory.GetCurrentDirectory();
-            var filePath = path = path + $"\\{keyName}";
+            var filePath = path + $"\\{keyName}";
             xml.Save(filePath);
 
             var aWS3Uploader = await AWS3Uploader.UploadFileAsync(bucketName, keyName, filePath);

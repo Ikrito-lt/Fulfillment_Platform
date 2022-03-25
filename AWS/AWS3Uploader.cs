@@ -8,7 +8,7 @@ namespace Ikrito_Fulfillment_Platform.AWS
     internal static class AWS3Uploader
     {
 
-        public static async Task<PutObjectResponse> UploadFileAsync(string bucketName, string keyName, string filePath)
+        public static async Task<PutObjectResponse> UploadFileAsync(string bucketName, string keyName, string filePath, string contentType = null)
         {
             var client = new AmazonS3Client(Amazon.RegionEndpoint.EUCentral1);
 
@@ -19,7 +19,7 @@ namespace Ikrito_Fulfillment_Platform.AWS
                     BucketName = bucketName,
                     Key = keyName,
                     FilePath = filePath,
-                    ContentType = "text/plain"
+                    ContentType = contentType
                 };
 
                 var response = await client.PutObjectAsync(putRequest);
