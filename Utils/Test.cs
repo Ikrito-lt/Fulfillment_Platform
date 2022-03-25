@@ -1,9 +1,4 @@
-﻿using Ikrito_Fulfillment_Platform.AWS;
-using Ikrito_Fulfillment_Platform.Models;
-using Ikrito_Fulfillment_Platform.Modules;
-using Ikrito_Fulfillment_Platform.Utils;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
 
 namespace Ikrito_Fulfillment_Platform.Utils
@@ -18,14 +13,14 @@ namespace Ikrito_Fulfillment_Platform.Utils
             Console.WriteLine(Directory.GetCurrentDirectory());
         }
 
-        private static async void S3UploadTest() {
+        //private static async void S3UploadTest() {
 
-            string bucketName = "pigu-xml";
-            string keyName = "file.xml";
-            string filePath = "C:\\Users\\Luke\\Desktop\\test_cat.xml";
+        //    string bucketName = "pigu-xml";
+        //    string keyName = "file.xml";
+        //    string filePath = "C:\\Users\\Luke\\Desktop\\test_cat.xml";
 
-            var aWS3Uploader = await AWS3Uploader.UploadFileAsync(bucketName, keyName, filePath);
-            var aws3uploader = await AWS3Uploader.UploadFileAsync(bucketName, keyName + "1", filePath);
-        }
+        //    var aWS3Uploader = await AWS3Uploader.UploadFileAsync(bucketName, keyName, filePath);
+        //    var aws3uploader = await AWS3Uploader.UploadFileAsync(bucketName, keyName + "1", filePath);
+        //}
     }
 }

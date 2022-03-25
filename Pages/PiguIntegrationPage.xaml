@@ -202,7 +202,7 @@
                                                     <Setter Property="IsReadOnly" Value="True" />
                                                     <Setter Property="BorderThickness" Value="0" />
                                                     <Setter Property="TextWrapping" Value="Wrap" />
-                                                </Style>
+                                                </Style>    
                                             </TextBox.Style>
                                         </TextBox>
                                         <TextBlock />
@@ -211,7 +211,7 @@
                                         <TextBlock Text="{Binding Title}" Grid.Row="1" Grid.Column="2" TextWrapping="Wrap"/>
 
                                         <TextBlock Text="ProductType:" Grid.Row="2" Grid.Column="0"/>
-                                        <TextBlock Text="{Binding ProductType}" Grid.Row="2" Grid.Column="2" TextWrapping="Wrap"/>
+                                        <TextBlock Text="{Binding ProductTypeVal}" Grid.Row="2" Grid.Column="2" TextWrapping="Wrap"/>
 
                                         <Button Grid.Column="4" Grid.RowSpan="3" Content="[x]" Command="{Binding ElementName=PiguProductOfferLB, Path=DataContext.DeletePiguItemCommand}"
                                         CommandParameter="{Binding}" Margin="5" Padding="3" VerticalContentAlignment="Center"/>
