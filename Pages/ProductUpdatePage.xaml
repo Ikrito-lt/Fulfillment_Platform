@@ -334,8 +334,8 @@
                                                 <TextBlock Text="VendorPrice:" Grid.Row="6" Grid.Column="0"/>
                                                 <TextBlock Text="{Binding PriceVendor}" Grid.Row="6" Grid.Column="2"/>
 
-                                                <TextBlock Text="Stock:" Grid.Row="7" Grid.Column="0"/>
-                                                <TextBlock Text="{Binding Stock}" Grid.Row="7" Grid.Column="2"/>
+                                                <TextBlock Text="VendorStock:" Grid.Row="7" Grid.Column="0"/>
+                                                <TextBlock Text="{Binding VendorStock}" Grid.Row="7" Grid.Column="2"/>
 
                                                 <TextBlock Grid.ColumnSpan="3" Text="{Binding getChangesMade}" Grid.Row="9" Grid.Column="0"/>
                                             </Grid>
