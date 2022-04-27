@@ -218,7 +218,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
                 CheckBoxListItem newItem = new(status);
                 StatusList.Add(newItem);
             }
-
+                
             //binding each checkbox to observable collection 
             CheckBox1.DataContext = StatusList[0];
             CheckBox2.DataContext = StatusList[1];

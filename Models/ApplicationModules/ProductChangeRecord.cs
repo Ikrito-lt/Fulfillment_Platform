@@ -12,7 +12,7 @@ namespace Ikrito_Fulfillment_Platform.Models
         public string SKU { get; init; }//
         public string PriceVendor { get; set; }//
         public string Price { get; set; }//
-        public string Stock { get; set; }//
+        public string VendorStock { get; set; }//
         public string Barcode { get; init; }//
         public string Vendor { get; init; }//
         public string VendorProductType { get; init; }//

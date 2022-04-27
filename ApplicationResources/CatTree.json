@@ -1,0 +1,4292 @@
+{
+    "CategoryTreeRoot": [
+        {
+            "CatName": "Vaikams ir kūdikiams",
+            "children": [
+                {
+                    "CatName": "Drabužiai, avalynė vaikams ir kūdikiams",
+                    "children": [
+                        {
+                            "CatID": 311,
+                            "CatName": "Drabužiai kūdikiams"
+                        },
+                        {
+                            "CatID": 312,
+                            "CatName": "Drabužiai mergaitėms"
+                        },
+                        {
+                            "CatID": 313,
+                            "CatName": "Drabužiai berniukams"
+                        },
+                        {
+                            "CatID": 314,
+                            "CatName": "Batai vaikams ir kūdikiams"
+                        },
+                        {
+                            "CatID": 219,
+                            "CatName": "Aksesuarai vaikams"
+                        },
+                        {
+                            "CatID": 218,
+                            "CatName": "Žiemos drabužiai vaikams"
+                        },
+                        {
+                            "CatID": 317,
+                            "CatName": "Šventinė apranga vaikams"
+                        },
+                        {
+                            "CatID": 318,
+                            "CatName": "Žieminiai batai vaikams"
+                        },
+                        {
+                            "CatID": 1200,
+                            "CatName": "Vaikiškos pižamos"
+                        },
+                        {
+                            "CatID": 1210,
+                            "CatName": "Maudymosi apranga vaikams"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Žаislai vаikams nuo 3 metų",
+                    "children": [
+                        {
+                            "CatID": 349,
+                            "CatName": "Konstruktoriai ir kaladėlės"
+                        },
+                        {
+                            "CatID": 350,
+                            "CatName": "Stalo žaidimai, galvosūkiai"
+                        },
+                        {
+                            "CatID": 351,
+                            "CatName": "Lavinamieji žaislai"
+                        },
+                        {
+                            "CatID": 352,
+                            "CatName": "Dėlionės (puzzle)"
+                        },
+                        {
+                            "CatID": 353,
+                            "CatName": "Minkšti (pliušiniai) žaislai"
+                        },
+                        {
+                            "CatID": 354,
+                            "CatName": "LEGO® žaidimai"
+                        },
+                        {
+                            "CatID": 355,
+                            "CatName": "Profesiniai žaislai"
+                        },
+                        {
+                            "CatID": 357,
+                            "CatName": "Lėlės, lėlių namai"
+                        },
+                        {
+                            "CatID": 358,
+                            "CatName": "Žaisliniai ginklai"
+                        },
+                        {
+                            "CatID": 359,
+                            "CatName": "Žaislinės mašinos, traukinukai, lėktuvai, laivai"
+                        },
+                        {
+                            "CatID": 360,
+                            "CatName": "Filmukų herojai, figūrėlės"
+                        },
+                        {
+                            "CatID": 361,
+                            "CatName": "Dinozaurai, gyvūnai"
+                        },
+                        {
+                            "CatID": 477,
+                            "CatName": "Klijuojami modeliai"
+                        },
+                        {
+                            "CatID": 480,
+                            "CatName": "Deimantinės mozaikos"
+                        },
+                        {
+                            "CatID": 481,
+                            "CatName": "Tapyba pagal skaičius"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Žaislai vaikams iki 3 metų",
+                    "children": [
+                        {
+                            "CatID": 374,
+                            "CatName": "Baseinai su kamuoliukais"
+                        },
+                        {
+                            "CatID": 375,
+                            "CatName": "Stumdukai, paspiriamos mašinėlės"
+                        },
+                        {
+                            "CatID": 376,
+                            "CatName": "Supamieji žaislai"
+                        },
+                        {
+                            "CatID": 1216,
+                            "CatName": "Minkšti (pliušiniai) žaislai"
+                        },
+                        {
+                            "CatID": 379,
+                            "CatName": "Edukaciniai žaislai"
+                        },
+                        {
+                            "CatID": 380,
+                            "CatName": "Muzikiniai žaislai"
+                        },
+                        {
+                            "CatID": 381,
+                            "CatName": "Barškučiai, kramtukai"
+                        },
+                        {
+                            "CatID": 382,
+                            "CatName": "Vonios žaislai"
+                        },
+                        {
+                            "CatID": 383,
+                            "CatName": "Mediniai žaislai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Kūdikių prekės",
+                    "children": [
+                        {
+                            "CatID": 334,
+                            "CatName": "Kūdikio priežiūrai"
+                        },
+                        {
+                            "CatID": 335,
+                            "CatName": "Autokėdutės ir jų priedai"
+                        },
+                        {
+                            "CatID": 336,
+                            "CatName": "Maitinimo priemonės"
+                        },
+                        {
+                            "CatID": 337,
+                            "CatName": "Vaikiški vežimėliai ir jų priedai"
+                        },
+                        {
+                            "CatID": 338,
+                            "CatName": "Prekės mamoms"
+                        },
+                        {
+                            "CatID": 339,
+                            "CatName": "Kūdikių ir vaikų maistas"
+                        },
+                        {
+                            "CatID": 284,
+                            "CatName": "Lovytės, maniežai kūdikiams"
+                        },
+                        {
+                            "CatID": 341,
+                            "CatName": "Gultukai ir sūpynės"
+                        },
+                        {
+                            "CatID": 342,
+                            "CatName": "Nešioklės"
+                        },
+                        {
+                            "CatID": 343,
+                            "CatName": "Vaikštynės"
+                        },
+                        {
+                            "CatID": 344,
+                            "CatName": "Sauskelnės"
+                        },
+                        {
+                            "CatID": 346,
+                            "CatName": "Čiužiniai kūdikiams"
+                        },
+                        {
+                            "CatID": 347,
+                            "CatName": "Patalynė kūdikiams"
+                        },
+                        {
+                            "CatID": 348,
+                            "CatName": "Saugos varteliai, apsaugos"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Lauko žaislai",
+                    "children": [
+                        {
+                            "CatID": 319,
+                            "CatName": "Paspirtukai vaikams"
+                        },
+                        {
+                            "CatID": 320,
+                            "CatName": "Vandens, smėlio ir paplūdimio žaislai"
+                        },
+                        {
+                            "CatID": 321,
+                            "CatName": "Vaikų žaidimų nameliai"
+                        },
+                        {
+                            "CatID": 322,
+                            "CatName": "Elektromobiliai vaikams"
+                        },
+                        {
+                            "CatID": 323,
+                            "CatName": "Sūpynės"
+                        },
+                        {
+                            "CatID": 324,
+                            "CatName": "Čiuožyklos, laipiojimo kopetėlės"
+                        },
+                        {
+                            "CatID": 325,
+                            "CatName": "Balansiniai dviratukai"
+                        },
+                        {
+                            "CatID": 231,
+                            "CatName": "Smėlio dėžės, smėlis"
+                        },
+                        {
+                            "CatID": 328,
+                            "CatName": "Triratukai"
+                        },
+                        {
+                            "CatID": 329,
+                            "CatName": "Batutai vaikams"
+                        },
+                        {
+                            "CatID": 333,
+                            "CatName": "Dviratukai vaikams"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Vaiko kambarys, šventinė atributika, knygos",
+                    "children": [
+                        {
+                            "CatID": 385,
+                            "CatName": "Patalynė vaikams"
+                        },
+                        {
+                            "CatID": 296,
+                            "CatName": "Vaikiški šviestuvai"
+                        },
+                        {
+                            "CatID": 389,
+                            "CatName": "Dekoracijos, indai vaikų šventėms"
+                        },
+                        {
+                            "CatID": 390,
+                            "CatName": "Karnavaliniai kostiumai vaikams"
+                        },
+                        {
+                            "CatID": 391,
+                            "CatName": "Kvepalai vaikams"
+                        },
+                        {
+                            "CatID": 392,
+                            "CatName": "Žaidimai vaikams"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CatName": "Baldai ir namų interjeras",
+            "children": [
+                {
+                    "CatName": "Kilimai, kilimėliai",
+                    "children": [
+                        {
+                            "CatID": 262,
+                            "CatName": "Kilimai"
+                        },
+                        {
+                            "CatID": 263,
+                            "CatName": "Durų kilimėliai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Namų interjeras",
+                    "children": [
+                        {
+                            "CatID": 297,
+                            "CatName": "Sieniniai laikrodžiai"
+                        },
+                        {
+                            "CatID": 298,
+                            "CatName": "Rėmeliai, nuotraukų albumai"
+                        },
+                        {
+                            "CatID": 299,
+                            "CatName": "Reprodukcijos, paveikslai"
+                        },
+                        {
+                            "CatID": 300,
+                            "CatName": "Žvakidės, žvakės"
+                        },
+                        {
+                            "CatID": 301,
+                            "CatName": "Interjero detalės"
+                        },
+                        {
+                            "CatID": 303,
+                            "CatName": "Vazos"
+                        },
+                        {
+                            "CatID": 304,
+                            "CatName": "Interjero lipdukai"
+                        },
+                        {
+                            "CatID": 305,
+                            "CatName": "Floristika"
+                        },
+                        {
+                            "CatID": 306,
+                            "CatName": "Veidrodžiai"
+                        },
+                        {
+                            "CatID": 307,
+                            "CatName": "Surenkamos lentynų sistemos"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Roletai, užuolaidos, karnizai",
+                    "children": [
+                        {
+                            "CatID": 264,
+                            "CatName": "Tinkleliai nuo vabzdžių"
+                        },
+                        {
+                            "CatID": 265,
+                            "CatName": "Užuolаidos"
+                        },
+                        {
+                            "CatID": 266,
+                            "CatName": "Roletai"
+                        },
+                        {
+                            "CatID": 267,
+                            "CatName": "Karnizai"
+                        },
+                        {
+                            "CatID": 268,
+                            "CatName": "Žaliuzės"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Svetainės baldai",
+                    "children": [
+                        {
+                            "CatID": 233,
+                            "CatName": "Sofos"
+                        },
+                        {
+                            "CatID": 234,
+                            "CatName": "Komodos"
+                        },
+                        {
+                            "CatID": 235,
+                            "CatName": "Minkšti kampai"
+                        },
+                        {
+                            "CatID": 236,
+                            "CatName": "Kavos staliukai"
+                        },
+                        {
+                            "CatID": 237,
+                            "CatName": "Lentynos"
+                        },
+                        {
+                            "CatID": 238,
+                            "CatName": "Svetainės stalai"
+                        },
+                        {
+                            "CatID": 239,
+                            "CatName": "Svetainės foteliai"
+                        },
+                        {
+                            "CatID": 240,
+                            "CatName": "Sėdmaišiai ir pufai"
+                        },
+                        {
+                            "CatID": 241,
+                            "CatName": "TV staliukai"
+                        },
+                        {
+                            "CatID": 242,
+                            "CatName": "Sekcijos"
+                        },
+                        {
+                            "CatID": 243,
+                            "CatName": "Vitrinos, indaujos"
+                        },
+                        {
+                            "CatID": 244,
+                            "CatName": "Svetainės spintelės"
+                        },
+                        {
+                            "CatID": 245,
+                            "CatName": "Stalai-konsolės"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Šviestuvai ir apšvietimo įranga",
+                    "children": [
+                        {
+                            "CatID": 290,
+                            "CatName": "Pakabinami šviestuvai"
+                        },
+                        {
+                            "CatID": 291,
+                            "CatName": "Lubiniai šviestuvai"
+                        },
+                        {
+                            "CatID": 292,
+                            "CatName": "Sieniniai šviestuvai"
+                        },
+                        {
+                            "CatID": 293,
+                            "CatName": "Staliniai šviestuvai"
+                        },
+                        {
+                            "CatID": 294,
+                            "CatName": "Toršerai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Lauko baldai",
+                    "children": [
+                        {
+                            "CatID": 220,
+                            "CatName": "Lauko kėdės, foteliai, pufai"
+                        },
+                        {
+                            "CatID": 805,
+                            "CatName": "Pašto dėžutės, namo numeriai"
+                        },
+                        {
+                            "CatID": 221,
+                            "CatName": "Lauko baldų komplektai"
+                        },
+                        {
+                            "CatID": 222,
+                            "CatName": "Pavėsinės"
+                        },
+                        {
+                            "CatID": 223,
+                            "CatName": "Lauko sūpynės"
+                        },
+                        {
+                            "CatID": 224,
+                            "CatName": "Gultai"
+                        },
+                        {
+                            "CatID": 225,
+                            "CatName": "Hamakai"
+                        },
+                        {
+                            "CatID": 226,
+                            "CatName": "Lauko stalai, staliukai"
+                        },
+                        {
+                            "CatID": 227,
+                            "CatName": "Lauko suolai"
+                        },
+                        {
+                            "CatID": 228,
+                            "CatName": "Skėčiai, markizės, stovai"
+                        },
+                        {
+                            "CatID": 412,
+                            "CatName": "Kepsninės, šašlykinės, rūkyklos"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Miegamojo baldai",
+                    "children": [
+                        {
+                            "CatID": 246,
+                            "CatName": "Spintos"
+                        },
+                        {
+                            "CatID": 248,
+                            "CatName": "Čiužiniai"
+                        },
+                        {
+                            "CatID": 249,
+                            "CatName": "Lovos"
+                        },
+                        {
+                            "CatID": 250,
+                            "CatName": "Spintelės prie lovos"
+                        },
+                        {
+                            "CatID": 251,
+                            "CatName": "Lovų grotelės"
+                        },
+                        {
+                            "CatID": 252,
+                            "CatName": "Antčiužiniai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Biuro baldai",
+                    "children": [
+                        {
+                            "CatID": 254,
+                            "CatName": "Biuro kėdės"
+                        },
+                        {
+                            "CatID": 255,
+                            "CatName": "Kompiuteriniai, rašomieji stalai"
+                        },
+                        {
+                            "CatID": 256,
+                            "CatName": "Biuro lentynos, spintelės"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Vonios kambario baldai",
+                    "children": [
+                        {
+                            "CatID": 274,
+                            "CatName": "Vonios spintelės"
+                        },
+                        {
+                            "CatID": 275,
+                            "CatName": "Vonios veidrodžiai"
+                        },
+                        {
+                            "CatID": 276,
+                            "CatName": "Vonios komplektai"
+                        },
+                        {
+                            "CatID": 277,
+                            "CatName": "Vonios lentynos"
+                        },
+                        {
+                            "CatID": 278,
+                            "CatName": "Vonios aksesuarai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Virtuvės baldai",
+                    "children": [
+                        {
+                            "CatID": 257,
+                            "CatName": "Virtuvės ir valgomojo kėdės"
+                        },
+                        {
+                            "CatID": 258,
+                            "CatName": "Virtuvinės spintelės"
+                        },
+                        {
+                            "CatID": 259,
+                            "CatName": "Virtuvės ir valgomojo stalai"
+                        },
+                        {
+                            "CatID": 260,
+                            "CatName": "Virtuvės stalviršiai"
+                        },
+                        {
+                            "CatID": 261,
+                            "CatName": "Virtuvės baldų priedai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Vaiko kambario baldai",
+                    "children": [
+                        {
+                            "CatID": 279,
+                            "CatName": "Vaikiškos lovos"
+                        },
+                        {
+                            "CatID": 280,
+                            "CatName": "Vaikiškos spintos"
+                        },
+                        {
+                            "CatID": 281,
+                            "CatName": "Vaikiškos komodos"
+                        },
+                        {
+                            "CatID": 282,
+                            "CatName": "Vaikiškos kėdutės ir staliukai"
+                        },
+                        {
+                            "CatID": 283,
+                            "CatName": "Vaikiškos lentynos"
+                        },
+                        {
+                            "CatID": 285,
+                            "CatName": "Vaikiški sėdmaišiai, foteliai, pufai"
+                        },
+                        {
+                            "CatID": 286,
+                            "CatName": "Vaikiškos spintelės"
+                        },
+                        {
+                            "CatID": 287,
+                            "CatName": "Vaikiški rašomieji stalai"
+                        },
+                        {
+                            "CatID": 288,
+                            "CatName": "Vaikiškos mokyklinės kėdės"
+                        },
+                        {
+                            "CatID": 289,
+                            "CatName": "Žaislų dėžės"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Prieškambario baldai",
+                    "children": [
+                        {
+                            "CatID": 269,
+                            "CatName": "Batų spintelės, lentynos ir suolai"
+                        },
+                        {
+                            "CatID": 270,
+                            "CatName": "Drabužių kabyklos"
+                        },
+                        {
+                            "CatID": 272,
+                            "CatName": "Prieškambario spintos"
+                        },
+                        {
+                            "CatID": 273,
+                            "CatName": "Prieškambario spintelės"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CatName": "Apranga, avalynė, aksesuarai",
+            "children": [
+                {
+                    "CatName": "Apatinis trikotažas vyrams",
+                    "children": [
+                        {
+                            "CatID": 212,
+                            "CatName": "Trumpikės"
+                        },
+                        {
+                            "CatID": 213,
+                            "CatName": "Vyriški chalatai, pižamos"
+                        },
+                        {
+                            "CatID": 214,
+                            "CatName": "Vyriški termo apatiniai"
+                        },
+                        {
+                            "CatID": 216,
+                            "CatName": "Apatiniai marškinėliai vyrams"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Aksesuarai vyrams",
+                    "children": [
+                        {
+                            "CatID": 201,
+                            "CatName": "Vyriški laikrodžiai"
+                        },
+                        {
+                            "CatID": 202,
+                            "CatName": "Vyriškos piniginės, kortelių dėklai"
+                        },
+                        {
+                            "CatID": 203,
+                            "CatName": "Vyriškos rankinės"
+                        },
+                        {
+                            "CatID": 204,
+                            "CatName": "Vyriški diržai"
+                        },
+                        {
+                            "CatID": 205,
+                            "CatName": "Vyriški šalikai, kepurės, pirštinės"
+                        },
+                        {
+                            "CatID": 206,
+                            "CatName": "Akiniai nuo saulės vyrams"
+                        },
+                        {
+                            "CatID": 207,
+                            "CatName": "Vyriški papuošalai"
+                        },
+                        {
+                            "CatID": 209,
+                            "CatName": "Kaklaraiščiai, peteliškės"
+                        },
+                        {
+                            "CatID": 1202,
+                            "CatName": "Kepurės vyrams"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Apatinis trikotažas moterims",
+                    "children": [
+                        {
+                            "CatID": 191,
+                            "CatName": "Liemenėlės"
+                        },
+                        {
+                            "CatID": 192,
+                            "CatName": "Chalatai moterims"
+                        },
+                        {
+                            "CatID": 193,
+                            "CatName": "Naktiniai, pižamos moterims"
+                        },
+                        {
+                            "CatID": 195,
+                            "CatName": "Liekninantys apatiniai"
+                        },
+                        {
+                            "CatID": 196,
+                            "CatName": "Kelnaitės"
+                        },
+                        {
+                            "CatID": 197,
+                            "CatName": "Apatiniai marškinėliai moterims"
+                        },
+                        {
+                            "CatID": 198,
+                            "CatName": "Apatinių komplektai"
+                        },
+                        {
+                            "CatID": 199,
+                            "CatName": "Termo apatiniai moterims"
+                        },
+                        {
+                            "CatID": 1195,
+                            "CatName": "Seksualus apatinis trikotažas"
+                        },
+                        {
+                            "CatID": 1208,
+                            "CatName": "Apatinio trikotažo aksesuarai"
+                        },
+                        {
+                            "CatID": 1194,
+                            "CatName": "Apatinis trikotažas nėsčiosioms"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Avalynė vyrams",
+                    "children": [
+                        {
+                            "CatID": 190,
+                            "CatName": "Vyriškos šlepetės, basutės"
+                        },
+                        {
+                            "CatID": 189,
+                            "CatName": "Vyriški batai"
+                        },
+                        {
+                            "CatID": 188,
+                            "CatName": "Kedai vyrams"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Aksesuarai moterims",
+                    "children": [
+                        {
+                            "CatID": 177,
+                            "CatName": "Moteriški laikrodžiai"
+                        },
+                        {
+                            "CatID": 178,
+                            "CatName": "Moteriškos rankinės"
+                        },
+                        {
+                            "CatID": 179,
+                            "CatName": "Piniginės, kortelių dėklai moterims"
+                        },
+                        {
+                            "CatID": 181,
+                            "CatName": "Akiniai nuo saulės moterims"
+                        },
+                        {
+                            "CatID": 183,
+                            "CatName": "Kepurės moterims"
+                        },
+                        {
+                            "CatID": 184,
+                            "CatName": "Moteriški diržai"
+                        },
+                        {
+                            "CatID": 185,
+                            "CatName": "Skarelės, šalikai moterims"
+                        },
+                        {
+                            "CatID": 182,
+                            "CatName": "Papuošalų dėžutės"
+                        },
+                        {
+                            "CatID": 186,
+                            "CatName": "Moteriškos pirštinės"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Avalynė moterims",
+                    "children": [
+                        {
+                            "CatID": 175,
+                            "CatName": "Aulinukai, ilgaauliai batai moterims"
+                        },
+                        {
+                            "CatID": 174,
+                            "CatName": "Guminiai batai moterims"
+                        },
+                        {
+                            "CatID": 173,
+                            "CatName": "Šlepetės moterims"
+                        },
+                        {
+                            "CatID": 171,
+                            "CatName": "Basutės moterims"
+                        },
+                        {
+                            "CatID": 1193,
+                            "CatName": "Aukštakulniai moterims"
+                        },
+                        {
+                            "CatID": 1203,
+                            "CatName": "Moteriški batai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Vyriški drabužiai",
+                    "children": [
+                        {
+                            "CatID": 155,
+                            "CatName": "Marškinėliai vyrams"
+                        },
+                        {
+                            "CatID": 156,
+                            "CatName": "Striukės vyrams "
+                        },
+                        {
+                            "CatID": 157,
+                            "CatName": "Džemperiai vyrams"
+                        },
+                        {
+                            "CatID": 158,
+                            "CatName": "Džinsai vyrams"
+                        },
+                        {
+                            "CatID": 159,
+                            "CatName": "Kojinės vyrams"
+                        },
+                        {
+                            "CatID": 160,
+                            "CatName": "Kelnės vyrams"
+                        },
+                        {
+                            "CatID": 161,
+                            "CatName": "Megztiniai vyrams"
+                        },
+                        {
+                            "CatID": 162,
+                            "CatName": "Liemenės vyrams"
+                        },
+                        {
+                            "CatID": 164,
+                            "CatName": "Šortai vyrams"
+                        },
+                        {
+                            "CatID": 165,
+                            "CatName": "Paltai vyrams"
+                        },
+                        {
+                            "CatID": 166,
+                            "CatName": "Švarkai vyrams"
+                        },
+                        {
+                            "CatID": 167,
+                            "CatName": "Kostiumai vyrams"
+                        },
+                        {
+                            "CatID": 1205,
+                            "CatName": "Vyriški lietpalčiai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Moteriški drabužiai",
+                    "children": [
+                        {
+                            "CatID": 133,
+                            "CatName": "Striukės moterims"
+                        },
+                        {
+                            "CatID": 134,
+                            "CatName": "Suknelės"
+                        },
+                        {
+                            "CatID": 135,
+                            "CatName": "Džemperiai moterims"
+                        },
+                        {
+                            "CatID": 136,
+                            "CatName": "Palaidinės, marškiniai moterims"
+                        },
+                        {
+                            "CatID": 137,
+                            "CatName": "Džinsai moterims"
+                        },
+                        {
+                            "CatID": 138,
+                            "CatName": "Megztiniai moterims"
+                        },
+                        {
+                            "CatID": 139,
+                            "CatName": "Marškinėliai moterims"
+                        },
+                        {
+                            "CatID": 140,
+                            "CatName": "Kelnės moterims"
+                        },
+                        {
+                            "CatID": 141,
+                            "CatName": "Paltai moterims"
+                        },
+                        {
+                            "CatID": 142,
+                            "CatName": "Kostiumėliai moterims"
+                        },
+                        {
+                            "CatID": 143,
+                            "CatName": "Pėdkelnės"
+                        },
+                        {
+                            "CatID": 144,
+                            "CatName": "Liemenės moterims"
+                        },
+                        {
+                            "CatID": 145,
+                            "CatName": "Tunikos"
+                        },
+                        {
+                            "CatID": 146,
+                            "CatName": "Sijonai"
+                        },
+                        {
+                            "CatID": 147,
+                            "CatName": "Švarkeliai moterims"
+                        },
+                        {
+                            "CatID": 148,
+                            "CatName": "Kombinezonai moterims"
+                        },
+                        {
+                            "CatID": 149,
+                            "CatName": "Šortai moterims"
+                        },
+                        {
+                            "CatID": 152,
+                            "CatName": "Kojinės moterims"
+                        },
+                        {
+                            "CatID": 1201,
+                            "CatName": "Kardiganai moterims"
+                        },
+                        {
+                            "CatID": 1204,
+                            "CatName": "Moteriški lietpalčiai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Unisex drabužiai",
+                    "children": []
+                },
+                {
+                    "CatName": "Unisex aksesuarai",
+                    "children": [
+                        {
+                            "CatID": 208,
+                            "CatName": "Skėčiai"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CatName": "Buitinė technika ir elektronika",
+            "children": [
+                {
+                    "CatName": "Namų technika",
+                    "children": [
+                        {
+                            "CatID": 602,
+                            "CatName": "Dulkių siurbliai-robotai"
+                        },
+                        {
+                            "CatID": 603,
+                            "CatName": "Dulkių siurbliai-šluotos"
+                        },
+                        {
+                            "CatID": 30,
+                            "CatName": "Dulkių siurbliai"
+                        },
+                        {
+                            "CatID": 605,
+                            "CatName": "Langų valytuvai"
+                        },
+                        {
+                            "CatID": 607,
+                            "CatName": "Svarstyklės (buitinės)"
+                        },
+                        {
+                            "CatID": 608,
+                            "CatName": "Siuvimo mašinos"
+                        },
+                        {
+                            "CatID": 35,
+                            "CatName": "Lygintuvai"
+                        },
+                        {
+                            "CatID": 610,
+                            "CatName": "Pūkų rinkikliai"
+                        },
+                        {
+                            "CatID": 611,
+                            "CatName": "Garais valantys prietaisai, grindų valytuvai"
+                        },
+                        {
+                            "CatID": 612,
+                            "CatName": "Lyginimo sistemos"
+                        },
+                        {
+                            "CatID": 613,
+                            "CatName": "Akumuliatoriai dulkių siurbliams"
+                        },
+                        {
+                            "CatID": 614,
+                            "CatName": "Dulkių siurblių priedai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Grožis, sveikata",
+                    "children": [
+                        {
+                            "CatID": 616,
+                            "CatName": "Elektriniai dantų šepetėliai"
+                        },
+                        {
+                            "CatID": 31,
+                            "CatName": "Epiliatoriai"
+                        },
+                        {
+                            "CatID": 618,
+                            "CatName": "Plaukų kirpimo mašinėlės"
+                        },
+                        {
+                            "CatID": 117,
+                            "CatName": "Masažuokliai"
+                        },
+                        {
+                            "CatID": 620,
+                            "CatName": "Barzdaskutės"
+                        },
+                        {
+                            "CatID": 23,
+                            "CatName": "Plaukų formavimo ir tiesinimo prietaisai"
+                        },
+                        {
+                            "CatID": 622,
+                            "CatName": "Elektrinių dantų šepetėlių antgaliai"
+                        },
+                        {
+                            "CatID": 115,
+                            "CatName": "Kraujospūdžio matuokliai"
+                        },
+                        {
+                            "CatID": 1220,
+                            "CatName": "Manikiūro, pedikiūro prietaisai"
+                        },
+                        {
+                            "CatID": 626,
+                            "CatName": "Plaukų džiovintuvai"
+                        },
+                        {
+                            "CatID": 628,
+                            "CatName": "Veido priežiūros prietaisai"
+                        },
+                        {
+                            "CatID": 629,
+                            "CatName": "Masažinės vonelės"
+                        },
+                        {
+                            "CatID": 114,
+                            "CatName": "Inhaliatoriai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Smulki virtuvės įranga",
+                    "children": [
+                        {
+                            "CatID": 26,
+                            "CatName": "Kavos aparatai"
+                        },
+                        {
+                            "CatID": 677,
+                            "CatName": "Priedai kavos aparatams"
+                        },
+                        {
+                            "CatID": 633,
+                            "CatName": "Virduliai"
+                        },
+                        {
+                            "CatID": 634,
+                            "CatName": "Garų puodai, daugiafunkciai puodai"
+                        },
+                        {
+                            "CatID": 635,
+                            "CatName": "Kokteilinės"
+                        },
+                        {
+                            "CatID": 636,
+                            "CatName": "Griliai, marinatoriai"
+                        },
+                        {
+                            "CatID": 637,
+                            "CatName": "Vaisių džiovintuvai, daigyklės"
+                        },
+                        {
+                            "CatID": 638,
+                            "CatName": "Trintuvai"
+                        },
+                        {
+                            "CatID": 639,
+                            "CatName": "Gruzdintuvės"
+                        },
+                        {
+                            "CatID": 640,
+                            "CatName": "Virtuviniai kombainai"
+                        },
+                        {
+                            "CatID": 641,
+                            "CatName": "Mėsmalės"
+                        },
+                        {
+                            "CatID": 643,
+                            "CatName": "Vaflinės, el. blynų keptuvės"
+                        },
+                        {
+                            "CatID": 644,
+                            "CatName": "Plakikliai"
+                        },
+                        {
+                            "CatID": 645,
+                            "CatName": "Svarstyklės (virtuvinės)"
+                        },
+                        {
+                            "CatID": 646,
+                            "CatName": "Sulčiaspaudės"
+                        },
+                        {
+                            "CatID": 647,
+                            "CatName": "Vakuumatoriai"
+                        },
+                        {
+                            "CatID": 648,
+                            "CatName": "Skrudintuvai"
+                        },
+                        {
+                            "CatID": 649,
+                            "CatName": "Sumuštinių keptuvės"
+                        },
+                        {
+                            "CatID": 650,
+                            "CatName": "Kavamalės"
+                        },
+                        {
+                            "CatID": 651,
+                            "CatName": "Pjaustyklės, peilių galąstuvai"
+                        },
+                        {
+                            "CatID": 652,
+                            "CatName": "Duonkepės"
+                        },
+                        {
+                            "CatID": 653,
+                            "CatName": "Vandens aparatai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Televizoriai ir jų priedai",
+                    "children": [
+                        {
+                            "CatID": 82,
+                            "CatName": "Televizoriai"
+                        },
+                        {
+                            "CatID": 656,
+                            "CatName": "TV kabeliai ir adapteriai"
+                        },
+                        {
+                            "CatID": 657,
+                            "CatName": "Multimedijos grotuvai"
+                        },
+                        {
+                            "CatID": 658,
+                            "CatName": "Televizorių laikikliai, tvirtinimai"
+                        },
+                        {
+                            "CatID": 660,
+                            "CatName": "TV antenos ir jų priedai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Virtuvės technika",
+                    "children": [
+                        {
+                            "CatID": 94,
+                            "CatName": "Gartraukiai"
+                        },
+                        {
+                            "CatID": 663,
+                            "CatName": "Dujinės viryklės"
+                        },
+                        {
+                            "CatID": 88,
+                            "CatName": "Indaplovės"
+                        },
+                        {
+                            "CatID": 78,
+                            "CatName": "Orkaitės"
+                        },
+                        {
+                            "CatID": 666,
+                            "CatName": "Elektrinės viryklės"
+                        },
+                        {
+                            "CatID": 667,
+                            "CatName": "Mini krosnelės"
+                        },
+                        {
+                            "CatID": 79,
+                            "CatName": "Mikrobangų krosnelės"
+                        },
+                        {
+                            "CatID": 669,
+                            "CatName": "Maisto atliekų smulkintuvai"
+                        },
+                        {
+                            "CatID": 670,
+                            "CatName": "Orkaitės ir kaitlentės komplektai"
+                        },
+                        {
+                            "CatID": 81,
+                            "CatName": "Kaitlentės"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Skalbimo mašinos, Džiovyklės",
+                    "children": [
+                        {
+                            "CatID": 95,
+                            "CatName": "Skalbimo mašinos"
+                        },
+                        {
+                            "CatID": 91,
+                            "CatName": "Džiovyklės"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Šaldytuvai, šaldikliai",
+                    "children": [
+                        {
+                            "CatID": 89,
+                            "CatName": "Šaldytuvai"
+                        },
+                        {
+                            "CatID": 43,
+                            "CatName": "Šaldikliai, šaldymo dėžės"
+                        },
+                        {
+                            "CatID": 674,
+                            "CatName": "Automobiliniai šaldytuvai"
+                        },
+                        {
+                            "CatID": 675,
+                            "CatName": "Vyno šaldytuvai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Buitinė Video ir Audio aparatūra",
+                    "children": [
+                        {
+                            "CatID": 682,
+                            "CatName": "Radijo imtuvai ir žadintuvai"
+                        },
+                        {
+                            "CatID": 683,
+                            "CatName": "Plokštelių grotuvai ir patefonai"
+                        },
+                        {
+                            "CatID": 73,
+                            "CatName": "Namų garso kolonėlės ir Soundbar sistemos"
+                        },
+                        {
+                            "CatID": 685,
+                            "CatName": "Vinilinės plokštelės, CD, DVD"
+                        },
+                        {
+                            "CatID": 686,
+                            "CatName": "Muzikiniai centrai"
+                        },
+                        {
+                            "CatID": 687,
+                            "CatName": "Magnetolos"
+                        },
+                        {
+                            "CatID": 689,
+                            "CatName": "Namų kino sistemos"
+                        },
+                        {
+                            "CatID": 681,
+                            "CatName": "Muzikos instrumentai ir priedai"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CatName": "Kompiuterinė technika",
+            "children": [
+                {
+                    "CatName": "Išoriniai kompiuterių aksesuarai",
+                    "children": [
+                        {
+                            "CatID": 12,
+                            "CatName": "Pelės"
+                        },
+                        {
+                            "CatID": 889,
+                            "CatName": "Klaviatūros žaidimams"
+                        },
+                        {
+                            "CatID": 890,
+                            "CatName": "Pelės žaidimams"
+                        },
+                        {
+                            "CatID": 70,
+                            "CatName": "Klaviatūros"
+                        },
+                        {
+                            "CatID": 860,
+                            "CatName": "Mikrofonai"
+                        },
+                        {
+                            "CatID": 84,
+                            "CatName": "Kompiuterio (WEB) kameros"
+                        },
+                        {
+                            "CatID": 862,
+                            "CatName": "Nepertraukiamo maitinimo šaltiniai (UPS)"
+                        },
+                        {
+                            "CatID": 80,
+                            "CatName": "Adapteriai, USB šakotuvai"
+                        },
+                        {
+                            "CatID": 919,
+                            "CatName": "Priežiūros priemonės kompiuteriams"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Nešiojami kompiuteriai, priedai",
+                    "children": [
+                        {
+                            "CatID": 92,
+                            "CatName": "Nešiojami kompiuteriai"
+                        },
+                        {
+                            "CatID": 887,
+                            "CatName": "Nešiojami kompiuteriai žaidimams"
+                        },
+                        {
+                            "CatID": 63,
+                            "CatName": "Krepšiai, kuprinės, dėklai kompiuteriams"
+                        },
+                        {
+                            "CatID": 64,
+                            "CatName": "Kompiuterių aušinimo ir kiti priedai"
+                        },
+                        {
+                            "CatID": 867,
+                            "CatName": "Akumuliatoriai nešiojamiems kompiuteriams"
+                        },
+                        {
+                            "CatID": 74,
+                            "CatName": "Įkrovikliai nešiojamiems kompiuteriams"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Stacionarūs kompiuteriai",
+                    "children": [
+                        {
+                            "CatID": 45,
+                            "CatName": "Stacionarūs kompiuteriai"
+                        },
+                        {
+                            "CatID": 888,
+                            "CatName": "Stacionarūs kompiuteriai žaidimams"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Planšetiniai kompiuteriai, el.skaityklės",
+                    "children": [
+                        {
+                            "CatID": 90,
+                            "CatName": "Planšetiniai kompiuteriai"
+                        },
+                        {
+                            "CatID": 870,
+                            "CatName": "Elektroninių knygų skaityklės"
+                        },
+                        {
+                            "CatID": 871,
+                            "CatName": "Planšečių, el. skaityklių dėklai"
+                        },
+                        {
+                            "CatID": 77,
+                            "CatName": "Planšečių, el. skaityklių priedai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Orgtechnika, priedai",
+                    "children": [
+                        {
+                            "CatID": 41,
+                            "CatName": "Projektoriai"
+                        },
+                        {
+                            "CatID": 11,
+                            "CatName": "Spausdintuvai"
+                        },
+                        {
+                            "CatID": 876,
+                            "CatName": "Popieriaus smulkintuvai"
+                        },
+                        {
+                            "CatID": 19,
+                            "CatName": "Projektorių ekranai"
+                        },
+                        {
+                            "CatID": 16,
+                            "CatName": "Spausdintuvų priedai"
+                        },
+                        {
+                            "CatID": 93,
+                            "CatName": "Interaktyvios lentos"
+                        },
+                        {
+                            "CatID": 85,
+                            "CatName": "Skeneriai"
+                        },
+                        {
+                            "CatID": 2,
+                            "CatName": "Kasetės lazeriniams spausdintuvams"
+                        },
+                        {
+                            "CatID": 66,
+                            "CatName": "Kasetės rašaliniams spausdintuvams"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Žaidimų kompiuteriai, priedai",
+                    "children": [
+                        {
+                            "CatID": 395,
+                            "CatName": "Žaidimų konsolės"
+                        },
+                        {
+                            "CatID": 882,
+                            "CatName": "Žaidimų kompiuterių priedai"
+                        },
+                        {
+                            "CatID": 394,
+                            "CatName": "Kompiuteriniai žaidimai"
+                        },
+                        {
+                            "CatID": 691,
+                            "CatName": "Konsolių žaidimai"
+                        },
+                        {
+                            "CatID": 886,
+                            "CatName": "Žaidimų kėdės"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Kompiuterių komponentai",
+                    "children": [
+                        {
+                            "CatID": 44,
+                            "CatName": "Operatyvioji atmintis (RAM)"
+                        },
+                        {
+                            "CatID": 893,
+                            "CatName": "Termo pastos"
+                        },
+                        {
+                            "CatID": 894,
+                            "CatName": "Procesoriai (CPU)"
+                        },
+                        {
+                            "CatID": 895,
+                            "CatName": "Vaizdo plokštės (GPU)"
+                        },
+                        {
+                            "CatID": 896,
+                            "CatName": "Pagrindinės plokštės"
+                        },
+                        {
+                            "CatID": 897,
+                            "CatName": "Optiniai įrenginiai"
+                        },
+                        {
+                            "CatID": 898,
+                            "CatName": "Kompiuterių ventiliatoriai"
+                        },
+                        {
+                            "CatID": 899,
+                            "CatName": "Korpusai"
+                        },
+                        {
+                            "CatID": 900,
+                            "CatName": "Maitinimo šaltiniai (PSU)"
+                        },
+                        {
+                            "CatID": 901,
+                            "CatName": "Garso plokštės"
+                        },
+                        {
+                            "CatID": 903,
+                            "CatName": "Procesorių aušintuvai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Monitoriai kompiuteriams ir laikikliai",
+                    "children": [
+                        {
+                            "CatID": 67,
+                            "CatName": "Monitoriai"
+                        },
+                        {
+                            "CatID": 911,
+                            "CatName": "Monitorių laikikliai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Duomenų laikmenos, priedai",
+                    "children": [
+                        {
+                            "CatID": 55,
+                            "CatName": "Išoriniai kietieji diskai (SSD, HDD)"
+                        },
+                        {
+                            "CatID": 912,
+                            "CatName": "USB laikmenos"
+                        },
+                        {
+                            "CatID": 914,
+                            "CatName": "Išorinių kietųjų diskų dėklai"
+                        },
+                        {
+                            "CatID": 940,
+                            "CatName": "Atminties kortelės (SD cards)"
+                        },
+                        {
+                            "CatID": 49,
+                            "CatName": "Vidiniai kietieji diskai (HDD, SSD, Hybrid)"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Tinklo įranga",
+                    "children": [
+                        {
+                            "CatID": 24,
+                            "CatName": "Maršrutizatoriai (routeriai)"
+                        },
+                        {
+                            "CatID": 33,
+                            "CatName": "Belaidės prieigos taškai (Access Points)"
+                        },
+                        {
+                            "CatID": 17,
+                            "CatName": "Komutatoriai (Switch)"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Programinė įranga",
+                    "children": [
+                        {
+                            "CatID": 922,
+                            "CatName": "Antivirusinės programos"
+                        },
+                        {
+                            "CatID": 76,
+                            "CatName": "Operacinės sistemos"
+                        },
+                        {
+                            "CatID": 924,
+                            "CatName": "Biuro programos"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CatName": "Virtuvės, buities, apyvokos prekės",
+            "children": [
+                {
+                    "CatName": "Virtuvės ir stalo reikmenys",
+                    "children": [
+                        {
+                            "CatID": 815,
+                            "CatName": "Virtuvės įrankiai"
+                        },
+                        {
+                            "CatID": 816,
+                            "CatName": "Puodai, greitpuodžiai"
+                        },
+                        {
+                            "CatID": 817,
+                            "CatName": "Taurės, puodeliai, ąsočiai"
+                        },
+                        {
+                            "CatID": 818,
+                            "CatName": "Keptuvės"
+                        },
+                        {
+                            "CatID": 819,
+                            "CatName": "Indai, lėkštės, pietų servizai"
+                        },
+                        {
+                            "CatID": 820,
+                            "CatName": "Peiliai ir jų priedai"
+                        },
+                        {
+                            "CatID": 821,
+                            "CatName": "Kavinukai, virduliai"
+                        },
+                        {
+                            "CatID": 822,
+                            "CatName": "Stalo įrankiai"
+                        },
+                        {
+                            "CatID": 823,
+                            "CatName": "Kepimo indai, popierius, formos"
+                        },
+                        {
+                            "CatID": 824,
+                            "CatName": "Maisto saugojimo indai"
+                        },
+                        {
+                            "CatID": 825,
+                            "CatName": "Termosai, termopuodeliai"
+                        },
+                        {
+                            "CatID": 826,
+                            "CatName": "Staltiesės, servetėlės"
+                        },
+                        {
+                            "CatID": 827,
+                            "CatName": "Pjaustymo lentelės"
+                        },
+                        {
+                            "CatID": 828,
+                            "CatName": "Prieskonių indeliai, malūnėliai"
+                        },
+                        {
+                            "CatID": 829,
+                            "CatName": "Konservavimo indai ir priedai"
+                        },
+                        {
+                            "CatID": 830,
+                            "CatName": "Virtuviniai rankšluosčiai, pirštinės, prijuostės"
+                        },
+                        {
+                            "CatID": 831,
+                            "CatName": "Prieskoniai, prieskonių rinkiniai"
+                        },
+                        {
+                            "CatID": 456,
+                            "CatName": "Gertuvės"
+                        },
+                        {
+                            "CatID": 833,
+                            "CatName": "Vienkartiniai indai"
+                        },
+                        {
+                            "CatID": 632,
+                            "CatName": "Vandens filtrai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Patalynė, patalai",
+                    "children": [
+                        {
+                            "CatID": 835,
+                            "CatName": "Patalynės komplektai"
+                        },
+                        {
+                            "CatID": 836,
+                            "CatName": "Antklodės"
+                        },
+                        {
+                            "CatID": 837,
+                            "CatName": "Patalynė kūdikiams, vaikams"
+                        },
+                        {
+                            "CatID": 838,
+                            "CatName": "Paklodės"
+                        },
+                        {
+                            "CatID": 839,
+                            "CatName": "Pagalvės"
+                        },
+                        {
+                            "CatID": 840,
+                            "CatName": "Lovatiesės ir pledai"
+                        },
+                        {
+                            "CatID": 841,
+                            "CatName": "Dekoratyvinės pagalvėlės ir užvalkalai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Buitinė chemija ir valymo priemonės",
+                    "children": [
+                        {
+                            "CatID": 842,
+                            "CatName": "Valikliai"
+                        },
+                        {
+                            "CatID": 843,
+                            "CatName": "Valymo reikmenys ir priedai"
+                        },
+                        {
+                            "CatID": 844,
+                            "CatName": "Oro gaivikliai"
+                        },
+                        {
+                            "CatID": 845,
+                            "CatName": "Skalbimo priemonės"
+                        },
+                        {
+                            "CatID": 846,
+                            "CatName": "Indų plovimo priemonės"
+                        },
+                        {
+                            "CatID": 847,
+                            "CatName": "Drabužių ir avalynės priežiūros priemonės"
+                        },
+                        {
+                            "CatID": 848,
+                            "CatName": "Šiukšlių maišai"
+                        },
+                        {
+                            "CatID": 849,
+                            "CatName": "Tualetinis popierius, popieriniai rankšluosčiai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Namų apyvokos reikmenys",
+                    "children": [
+                        {
+                            "CatID": 850,
+                            "CatName": "Daiktadėžės"
+                        },
+                        {
+                            "CatID": 851,
+                            "CatName": "Skalbinių džiovyklos ir aksesuarai"
+                        },
+                        {
+                            "CatID": 852,
+                            "CatName": "Pakabos, maišai drabužiams"
+                        },
+                        {
+                            "CatID": 853,
+                            "CatName": "Rankšluosčiai"
+                        },
+                        {
+                            "CatID": 854,
+                            "CatName": "Šiukšliadėžės"
+                        },
+                        {
+                            "CatID": 855,
+                            "CatName": "Lyginimo lentos"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CatName": "Dovanos, dekoracijos, gėlės",
+            "children": [
+                {
+                    "CatName": "Religinės prekės",
+                    "children": [
+                        {
+                            "CatID": 1128,
+                            "CatName": "Bažnytinės žvakės, žvakidės"
+                        },
+                        {
+                            "CatID": 1129,
+                            "CatName": "Bažnytiniai reikmenys"
+                        },
+                        {
+                            "CatID": 1130,
+                            "CatName": "Kalėdinės prekės"
+                        },
+                        {
+                            "CatID": 1131,
+                            "CatName": "Girliandos"
+                        },
+                        {
+                            "CatID": 1132,
+                            "CatName": "Eglutės, vainikai, stovai"
+                        },
+                        {
+                            "CatID": 1133,
+                            "CatName": "Eglutės žaisliukai, viršūnės"
+                        },
+                        {
+                            "CatID": 1134,
+                            "CatName": "Kalėdinės dekoracijos"
+                        },
+                        {
+                            "CatID": 1135,
+                            "CatName": "Gyvos eglutės"
+                        },
+                        {
+                            "CatID": 1104,
+                            "CatName": "Kapų žvakės"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Floristika",
+                    "children": [
+                        {
+                            "CatID": 1124,
+                            "CatName": "Miegančios rožės, stabilizuoti augalai"
+                        },
+                        {
+                            "CatID": 1125,
+                            "CatName": "Dirbtinės gėlės"
+                        },
+                        {
+                            "CatID": 1126,
+                            "CatName": "Floristikos reikmenys"
+                        },
+                        {
+                            "CatID": 1127,
+                            "CatName": "Gyvos gėlės"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Originali apranga",
+                    "children": [
+                        {
+                            "CatID": 1117,
+                            "CatName": "Originalūs marškinėliai"
+                        },
+                        {
+                            "CatID": 1118,
+                            "CatName": "Juokingos prijuostės"
+                        },
+                        {
+                            "CatID": 1119,
+                            "CatName": "Originalios kojinės"
+                        },
+                        {
+                            "CatID": 1120,
+                            "CatName": "Originalūs džemperiai"
+                        },
+                        {
+                            "CatID": 1121,
+                            "CatName": "Originalios kepurės"
+                        },
+                        {
+                            "CatID": 1122,
+                            "CatName": "Originalūs apatiniai"
+                        },
+                        {
+                            "CatID": 1123,
+                            "CatName": "Lietuviškos atributikos apranga"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Originalios dovanos",
+                    "children": [
+                        {
+                            "CatID": 1116,
+                            "CatName": "Vakarėliams ir šventėms"
+                        },
+                        {
+                            "CatID": 1115,
+                            "CatName": "Raktų pakabukai"
+                        },
+                        {
+                            "CatID": 1114,
+                            "CatName": "Originalios pagalvės, užvalkalai"
+                        },
+                        {
+                            "CatID": 1113,
+                            "CatName": "Originalios taupyklės"
+                        },
+                        {
+                            "CatID": 1112,
+                            "CatName": "Originalūs puodeliai"
+                        },
+                        {
+                            "CatID": 1111,
+                            "CatName": "Žemėlapiai"
+                        },
+                        {
+                            "CatID": 1137,
+                            "CatName": "Verslo dovanos"
+                        },
+                        {
+                            "CatID": 1138,
+                            "CatName": "Dovanų kuponai"
+                        },
+                        {
+                            "CatID": 1110,
+                            "CatName": "Kitos originalios dovanos"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Šventinė atributika",
+                    "children": [
+                        {
+                            "CatID": 1100,
+                            "CatName": "Dekoracijos šventėms"
+                        },
+                        {
+                            "CatID": 1101,
+                            "CatName": "Vienkartiniai indai šventėms"
+                        },
+                        {
+                            "CatID": 1102,
+                            "CatName": "Karnavaliniai kostiumai"
+                        },
+                        {
+                            "CatID": 1103,
+                            "CatName": "Balionai"
+                        },
+                        {
+                            "CatID": 1105,
+                            "CatName": "Vėliavos ir jų priedai"
+                        },
+                        {
+                            "CatID": 1107,
+                            "CatName": "Lietuviška sirgalių atributika"
+                        },
+                        {
+                            "CatID": 1108,
+                            "CatName": "Vokeliai, atvirukai"
+                        },
+                        {
+                            "CatID": 1106,
+                            "CatName": "Dovanų pakavimo priemonės"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CatName": "Knygos",
+            "children": [
+                {
+                    "CatName": "Knygos vaikams ir jaunimui",
+                    "children": [
+                        {
+                            "CatID": 388,
+                            "CatName": "Knygos vaikams"
+                        },
+                        {
+                            "CatID": 1069,
+                            "CatName": "Lavinamosios knygos"
+                        },
+                        {
+                            "CatID": 1070,
+                            "CatName": "Knygos paaugliams ir jaunimui"
+                        },
+                        {
+                            "CatID": 1071,
+                            "CatName": "Knygos mažiesiems"
+                        },
+                        {
+                            "CatID": 1072,
+                            "CatName": "Spalvinimo knygelės"
+                        },
+                        {
+                            "CatID": 1073,
+                            "CatName": "Pasakos"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Grožinė literatūra",
+                    "children": [
+                        {
+                            "CatID": 1074,
+                            "CatName": "Romanai"
+                        },
+                        {
+                            "CatID": 1075,
+                            "CatName": "Biografijos, autobiografijos, memuarai"
+                        },
+                        {
+                            "CatID": 1076,
+                            "CatName": "Fantastinės, mistinės knygos"
+                        },
+                        {
+                            "CatID": 1077,
+                            "CatName": "Klasika"
+                        },
+                        {
+                            "CatID": 1078,
+                            "CatName": "Apsakymai, novelės"
+                        },
+                        {
+                            "CatID": 1079,
+                            "CatName": "Poezija"
+                        },
+                        {
+                            "CatID": 1080,
+                            "CatName": "Komiksai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Asmeninio tobulėjimo knygos",
+                    "children": [
+                        {
+                            "CatID": 1081,
+                            "CatName": "Saviugdos knygos"
+                        },
+                        {
+                            "CatID": 1082,
+                            "CatName": "Knygos apie vaikų auklėjimą"
+                        },
+                        {
+                            "CatID": 1083,
+                            "CatName": "Knygos apie sveiką gyvenseną ir mitybą"
+                        },
+                        {
+                            "CatID": 1084,
+                            "CatName": "Dvasinės knygos"
+                        },
+                        {
+                            "CatID": 1085,
+                            "CatName": "Knygos apie santykius"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Dalykinė, mokslinė literatūra",
+                    "children": [
+                        {
+                            "CatID": 1086,
+                            "CatName": "Enciklopedijos ir žinynai"
+                        },
+                        {
+                            "CatID": 1087,
+                            "CatName": "Socialinių mokslų knygos"
+                        },
+                        {
+                            "CatID": 1088,
+                            "CatName": "Istorinės knygos"
+                        },
+                        {
+                            "CatID": 1089,
+                            "CatName": "Ekonomikos knygos"
+                        },
+                        {
+                            "CatID": 1090,
+                            "CatName": "Rinkodaros knygos"
+                        },
+                        {
+                            "CatID": 1091,
+                            "CatName": "Užsienio kalbos mokomoji medžiaga"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Pomėgiai",
+                    "children": [
+                        {
+                            "CatID": 1092,
+                            "CatName": "Receptų knygos"
+                        },
+                        {
+                            "CatID": 1093,
+                            "CatName": "Kelionių vadovai, aprašymai"
+                        },
+                        {
+                            "CatID": 1094,
+                            "CatName": "Knygos apie madą"
+                        },
+                        {
+                            "CatID": 1095,
+                            "CatName": "Fotografijos knygos"
+                        },
+                        {
+                            "CatID": 1096,
+                            "CatName": "Knygos apie meną"
+                        },
+                        {
+                            "CatID": 1097,
+                            "CatName": "Knygos apie sodininkystę"
+                        },
+                        {
+                            "CatID": 1098,
+                            "CatName": "Knygos apie architektūrą"
+                        },
+                        {
+                            "CatID": 1099,
+                            "CatName": "Knygų skirtukai"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CatName": "Maisto prekės",
+            "children": [
+                {
+                    "CatName": "Bakalėja",
+                    "children": [
+                        {
+                            "CatID": 1153,
+                            "CatName": "Sausi pusryčiai"
+                        },
+                        {
+                            "CatID": 1152,
+                            "CatName": "Prieskoniai"
+                        },
+                        {
+                            "CatID": 1151,
+                            "CatName": "Sriubos, sultiniai"
+                        },
+                        {
+                            "CatID": 1150,
+                            "CatName": "Makaronai"
+                        },
+                        {
+                            "CatID": 1149,
+                            "CatName": "Užkandžiai, traškučiai"
+                        },
+                        {
+                            "CatID": 1148,
+                            "CatName": "Padažai"
+                        },
+                        {
+                            "CatID": 1147,
+                            "CatName": "Kruopos, dribsniai, košės"
+                        },
+                        {
+                            "CatID": 1146,
+                            "CatName": "Miltai"
+                        },
+                        {
+                            "CatID": 1145,
+                            "CatName": "Riešutai, sėklos, džiovinti vaisiai"
+                        },
+                        {
+                            "CatID": 1144,
+                            "CatName": "Aliejus, actas"
+                        },
+                        {
+                            "CatID": 1143,
+                            "CatName": "Priedai maistui ruošti"
+                        },
+                        {
+                            "CatID": 1142,
+                            "CatName": "Konservuotas maistas"
+                        },
+                        {
+                            "CatID": 1141,
+                            "CatName": "Saldumynai"
+                        },
+                        {
+                            "CatID": 1140,
+                            "CatName": "Arbata"
+                        },
+                        {
+                            "CatID": 654,
+                            "CatName": "Kava, kakava"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Mėsa, žuvis",
+                    "children": [
+                        {
+                            "CatID": 1155,
+                            "CatName": "Mėsos gaminiai"
+                        },
+                        {
+                            "CatID": 1156,
+                            "CatName": "Ikrai"
+                        },
+                        {
+                            "CatID": 1157,
+                            "CatName": "Žuvies gaminiai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Gėrimai",
+                    "children": [
+                        {
+                            "CatID": 1158,
+                            "CatName": "Sultys, nektarai ir sulčių gėrimai"
+                        },
+                        {
+                            "CatID": 1159,
+                            "CatName": "Gaivieji gėrimai"
+                        },
+                        {
+                            "CatID": 1160,
+                            "CatName": "Vanduo"
+                        },
+                        {
+                            "CatID": 1161,
+                            "CatName": "Nealkoholiniai gėrimai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Kūdikių ir vaikų maistas",
+                    "children": [
+                        {
+                            "CatID": 1162,
+                            "CatName": "Košės"
+                        },
+                        {
+                            "CatID": 1163,
+                            "CatName": "Tyrelės"
+                        },
+                        {
+                            "CatID": 1164,
+                            "CatName": "Tolesnio maitinimo mišiniai"
+                        },
+                        {
+                            "CatID": 1165,
+                            "CatName": "Pradinio maitinimo ir specialios paskirties mišiniai"
+                        },
+                        {
+                            "CatID": 1166,
+                            "CatName": "Užkandžiai, arbatos"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Vitaminai, Maisto Papildai, Vaistažolės",
+                    "children": [
+                        {
+                            "CatID": 130,
+                            "CatName": "Vitaminai ir maisto papildai imunitetui"
+                        },
+                        {
+                            "CatID": 128,
+                            "CatName": "Vitaminai ir maisto papildai grožiui"
+                        },
+                        {
+                            "CatID": 129,
+                            "CatName": "Vitaminai ir maisto papildai gerai savijautai"
+                        },
+                        {
+                            "CatID": 131,
+                            "CatName": "Arbatos ir vaistažolės"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CatName": "Biurui, mokyklai, kūrybai",
+            "children": [
+                {
+                    "CatName": "Kanceliarinės prekės",
+                    "children": [
+                        {
+                            "CatID": 368,
+                            "CatName": "Sąsiuviniai ir popieriaus prekės"
+                        },
+                        {
+                            "CatID": 370,
+                            "CatName": "Rašymo priemonės"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Rankdarbių priemonės",
+                    "children": [
+                        {
+                            "CatID": 365,
+                            "CatName": "Piešimo, tapybos, lipdymo reikmenys"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Prekės mokyklai",
+                    "children": [
+                        {
+                            "CatID": 367,
+                            "CatName": "Kuprinės mokyklai, sportiniai maišeliai"
+                        },
+                        {
+                            "CatID": 371,
+                            "CatName": "Penalai"
+                        },
+                        {
+                            "CatID": 372,
+                            "CatName": "Pratybų sąsiuviniai"
+                        },
+                        {
+                            "CatID": 373,
+                            "CatName": "Vadovėliai"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CatName": "Kvepalai, kosmetika",
+            "children": [
+                {
+                    "CatName": "Kvepalai",
+                    "children": [
+                        {
+                            "CatID": 565,
+                            "CatName": "Populiariausi kvepalai"
+                        },
+                        {
+                            "CatID": 510,
+                            "CatName": "Kvepalai moterims"
+                        },
+                        {
+                            "CatID": 511,
+                            "CatName": "Kvepalai vyrams"
+                        },
+                        {
+                            "CatID": 514,
+                            "CatName": "Namų kvapai"
+                        },
+                        {
+                            "CatID": 515,
+                            "CatName": "Feromonai"
+                        },
+                        {
+                            "CatID": 517,
+                            "CatName": "Kvepalų rinkiniai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Plaukų priežiūrai",
+                    "children": [
+                        {
+                            "CatID": 520,
+                            "CatName": "Šampūnai"
+                        },
+                        {
+                            "CatID": 521,
+                            "CatName": "Priemonės plaukų stiprinimui"
+                        },
+                        {
+                            "CatID": 522,
+                            "CatName": "Balzamai, kondicionieriai"
+                        },
+                        {
+                            "CatID": 523,
+                            "CatName": "Plaukų formavimo priemonės"
+                        },
+                        {
+                            "CatID": 524,
+                            "CatName": "Plaukų aksesuarai"
+                        },
+                        {
+                            "CatID": 525,
+                            "CatName": "Plaukų dažai"
+                        },
+                        {
+                            "CatID": 526,
+                            "CatName": "Šepečiai, šukos, žirklės"
+                        },
+                        {
+                            "CatID": 527,
+                            "CatName": "Perukai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Kosmetika veidui",
+                    "children": [
+                        {
+                            "CatID": 528,
+                            "CatName": "Veido kremai"
+                        },
+                        {
+                            "CatID": 529,
+                            "CatName": "Veido aliejai, serumai"
+                        },
+                        {
+                            "CatID": 530,
+                            "CatName": "Veido kaukės, paakių kaukės"
+                        },
+                        {
+                            "CatID": 531,
+                            "CatName": "Veido prausikliai, valikliai"
+                        },
+                        {
+                            "CatID": 532,
+                            "CatName": "Veido masažuokliai"
+                        },
+                        {
+                            "CatID": 533,
+                            "CatName": "Paakių kremai, serumai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Dekoratyvinė kosmetika",
+                    "children": [
+                        {
+                            "CatID": 534,
+                            "CatName": "Akių šešėliai, pieštukai, blakstienų tušai, serumai"
+                        },
+                        {
+                            "CatID": 535,
+                            "CatName": "Makiažo pagrindai, pudros"
+                        },
+                        {
+                            "CatID": 536,
+                            "CatName": "Nagų lakai, stiprintojai"
+                        },
+                        {
+                            "CatID": 537,
+                            "CatName": "Manikiūro, pedikiūro priemonės"
+                        },
+                        {
+                            "CatID": 538,
+                            "CatName": "Makiažo šepetėliai, kempinėlės"
+                        },
+                        {
+                            "CatID": 539,
+                            "CatName": "Lūpų dažai, blizgiai, balzamai, vazelinai"
+                        },
+                        {
+                            "CatID": 540,
+                            "CatName": "Antakių dažai, pieštukai"
+                        },
+                        {
+                            "CatID": 541,
+                            "CatName": "Bronzantai, skaistalai"
+                        },
+                        {
+                            "CatID": 542,
+                            "CatName": "Kosmetinės, veidrodėliai"
+                        },
+                        {
+                            "CatID": 543,
+                            "CatName": "Priklijuojamos blakstienos, blakstienų rietikliai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Asmens higienai",
+                    "children": [
+                        {
+                            "CatID": 544,
+                            "CatName": "Skutimosi priemonės ir kosmetika"
+                        },
+                        {
+                            "CatID": 545,
+                            "CatName": "Lubrikantai"
+                        },
+                        {
+                            "CatID": 546,
+                            "CatName": "Dezodorantai"
+                        },
+                        {
+                            "CatID": 37,
+                            "CatName": "Dantų priežiūrai"
+                        },
+                        {
+                            "CatID": 548,
+                            "CatName": "Prezervatyvai"
+                        },
+                        {
+                            "CatID": 99,
+                            "CatName": "Vatos gaminiai, drėgnos servetėlės"
+                        },
+                        {
+                            "CatID": 550,
+                            "CatName": "Įklotai, tamponai, intymios higienos prausikliai"
+                        },
+                        {
+                            "CatID": 551,
+                            "CatName": "Depiliacijos priemonės"
+                        },
+                        {
+                            "CatID": 552,
+                            "CatName": "Dušo želė"
+                        },
+                        {
+                            "CatID": 104,
+                            "CatName": "Muilai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Kosmetika kūnui",
+                    "children": [
+                        {
+                            "CatID": 554,
+                            "CatName": "Kūno kremai, losjonai"
+                        },
+                        {
+                            "CatID": 105,
+                            "CatName": "Kremai nuo saulės"
+                        },
+                        {
+                            "CatID": 557,
+                            "CatName": "Eteriniai, kosmetiniai aliejai, hidrolatai"
+                        },
+                        {
+                            "CatID": 558,
+                            "CatName": "Soliariumo kremai"
+                        },
+                        {
+                            "CatID": 560,
+                            "CatName": "Anticeliulitinės, stangrinamosios priemonės"
+                        },
+                        {
+                            "CatID": 561,
+                            "CatName": "Kūno šveitikliai"
+                        },
+                        {
+                            "CatID": 562,
+                            "CatName": "Masažo aliejai"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CatName": "Sportas, laisvalaikis, turizmas",
+            "children": [
+                {
+                    "CatName": "Dviračiai, paspirtukai, riedučiai, riedlentės",
+                    "children": [
+                        {
+                            "CatID": 330,
+                            "CatName": "Riedučiai"
+                        },
+                        {
+                            "CatID": 331,
+                            "CatName": "Riedlentės"
+                        },
+                        {
+                            "CatID": 398,
+                            "CatName": "Elektriniai paspirtukai"
+                        },
+                        {
+                            "CatID": 400,
+                            "CatName": "Dviračiai"
+                        },
+                        {
+                            "CatID": 401,
+                            "CatName": "Dviračių priedai ir aksesuarai"
+                        },
+                        {
+                            "CatID": 403,
+                            "CatName": "Šalmai"
+                        },
+                        {
+                            "CatID": 405,
+                            "CatName": "Kūno apsaugos"
+                        },
+                        {
+                            "CatID": 406,
+                            "CatName": "Riedžiai"
+                        },
+                        {
+                            "CatID": 407,
+                            "CatName": "Paspirtukai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Sporto prekės",
+                    "children": [
+                        {
+                            "CatID": 449,
+                            "CatName": "Grindų ir žolės riedulys"
+                        },
+                        {
+                            "CatID": 448,
+                            "CatName": "Skvošas"
+                        },
+                        {
+                            "CatID": 447,
+                            "CatName": "Svoriai, svarmenys, grifai"
+                        },
+                        {
+                            "CatID": 445,
+                            "CatName": "Rankinis"
+                        },
+                        {
+                            "CatID": 444,
+                            "CatName": "Golfas"
+                        },
+                        {
+                            "CatID": 443,
+                            "CatName": "Beisbolas"
+                        },
+                        {
+                            "CatID": 442,
+                            "CatName": "Kamuolių pompos ir adatos"
+                        },
+                        {
+                            "CatID": 441,
+                            "CatName": "Biliardas"
+                        },
+                        {
+                            "CatID": 440,
+                            "CatName": "Žingsniamačiai, chronometrai, širdies ritmo monitoriai"
+                        },
+                        {
+                            "CatID": 439,
+                            "CatName": "Lauko tenisas"
+                        },
+                        {
+                            "CatID": 438,
+                            "CatName": "Nardymas"
+                        },
+                        {
+                            "CatID": 437,
+                            "CatName": "Smiginis"
+                        },
+                        {
+                            "CatID": 436,
+                            "CatName": "Badmintonas"
+                        },
+                        {
+                            "CatID": 435,
+                            "CatName": "Plaukimas"
+                        },
+                        {
+                            "CatID": 434,
+                            "CatName": "Tinklinis"
+                        },
+                        {
+                            "CatID": 433,
+                            "CatName": "Kovos menai"
+                        },
+                        {
+                            "CatID": 432,
+                            "CatName": "Stalo tenisas"
+                        },
+                        {
+                            "CatID": 431,
+                            "CatName": "Futbolas"
+                        },
+                        {
+                            "CatID": 430,
+                            "CatName": "Ėjimo lazdos"
+                        },
+                        {
+                            "CatID": 425,
+                            "CatName": "Krepšinis"
+                        },
+                        {
+                            "CatID": 420,
+                            "CatName": "Azartiniai žaidimai, pokeris"
+                        },
+                        {
+                            "CatID": 415,
+                            "CatName": "Žvejybos reikmenys"
+                        },
+                        {
+                            "CatID": 414,
+                            "CatName": "Valtys, baidarės ir jų priedai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Turizmas",
+                    "children": [
+                        {
+                            "CatID": 413,
+                            "CatName": "Pripučiamos ir paplūdimio prekės"
+                        },
+                        {
+                            "CatID": 452,
+                            "CatName": "Pripučiami čiužiniai ir baldai"
+                        },
+                        {
+                            "CatID": 453,
+                            "CatName": "Palapinės"
+                        },
+                        {
+                            "CatID": 454,
+                            "CatName": "Turistinis inventorius"
+                        },
+                        {
+                            "CatID": 455,
+                            "CatName": "Miegmaišiai"
+                        },
+                        {
+                            "CatID": 457,
+                            "CatName": "Turistiniai čiužiniai ir kilimėliai"
+                        },
+                        {
+                            "CatID": 458,
+                            "CatName": "Turistinio inventoriaus, drabužių ir avalynės priežiūros priemonės"
+                        },
+                        {
+                            "CatID": 459,
+                            "CatName": "Turistinės ir kelioninės kuprinės"
+                        },
+                        {
+                            "CatID": 416,
+                            "CatName": "Lagaminai, kelioniniai krepšiai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Žiemos sportas",
+                    "children": [
+                        {
+                            "CatID": 487,
+                            "CatName": "Kalnų slidinėjimas"
+                        },
+                        {
+                            "CatID": 485,
+                            "CatName": "Pačiūžos"
+                        },
+                        {
+                            "CatID": 484,
+                            "CatName": "Ledo ritulys"
+                        },
+                        {
+                            "CatID": 483,
+                            "CatName": "Lygumų slidinėjimas"
+                        },
+                        {
+                            "CatID": 332,
+                            "CatName": "Rogutės"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Treniruokliai",
+                    "children": [
+                        {
+                            "CatID": 466,
+                            "CatName": "Dviračiai treniruokliai"
+                        },
+                        {
+                            "CatID": 467,
+                            "CatName": "Bėgimo takeliai"
+                        },
+                        {
+                            "CatID": 468,
+                            "CatName": "Treniruočių suoliukai ir stovai"
+                        },
+                        {
+                            "CatID": 469,
+                            "CatName": "Elipsiniai treniruokliai"
+                        },
+                        {
+                            "CatID": 470,
+                            "CatName": "Daugiafunkciniai treniruokliai"
+                        },
+                        {
+                            "CatID": 471,
+                            "CatName": "Steperiai treniruokliai"
+                        },
+                        {
+                            "CatID": 472,
+                            "CatName": "Sportiniai batutai"
+                        },
+                        {
+                            "CatID": 475,
+                            "CatName": "Kiti treniruokliai"
+                        },
+                        {
+                            "CatID": 474,
+                            "CatName": "Irklavimo treniruokliai"
+                        },
+                        {
+                            "CatID": 473,
+                            "CatName": "Treniruoklių priedai ir aksesuarai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Sporto apranga ir avalynė",
+                    "children": [
+                        {
+                            "CatID": 1211,
+                            "CatName": "Sportiniai megztiniai vyrams"
+                        },
+                        {
+                            "CatID": 1213,
+                            "CatName": "Sportinės kelnės vyrams"
+                        },
+                        {
+                            "CatID": 1212,
+                            "CatName": "Sportiniai megztiniai moterims"
+                        },
+                        {
+                            "CatID": 1214,
+                            "CatName": "Sportinės kelnės moterims"
+                        },
+                        {
+                            "CatID": 215,
+                            "CatName": "Maudymosi šortai, glaudės"
+                        },
+                        {
+                            "CatID": 194,
+                            "CatName": "Maudymosi kostiumėliai moterims"
+                        },
+                        {
+                            "CatID": 169,
+                            "CatName": "Slidinėjimo apranga vyrams"
+                        },
+                        {
+                            "CatID": 150,
+                            "CatName": "Slidinėjimo apranga moterims"
+                        },
+                        {
+                            "CatID": 491,
+                            "CatName": "Sportbačiai vyrams"
+                        },
+                        {
+                            "CatID": 170,
+                            "CatName": "Sportiniai bateliai, kedai moterims"
+                        },
+                        {
+                            "CatID": 1175,
+                            "CatName": "Sporto ir laisvalaikio kuprinės"
+                        },
+                        {
+                            "CatID": 409,
+                            "CatName": "Sportiniai akiniai"
+                        },
+                        {
+                            "CatID": 200,
+                            "CatName": "Sportinės liemenėlės"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Maisto papildai, funkcinis maistas",
+                    "children": [
+                        {
+                            "CatID": 493,
+                            "CatName": "Aminorūgštys"
+                        },
+                        {
+                            "CatID": 494,
+                            "CatName": "Angliavandeniai"
+                        },
+                        {
+                            "CatID": 495,
+                            "CatName": "Baltymai"
+                        },
+                        {
+                            "CatID": 500,
+                            "CatName": "Glutaminas"
+                        },
+                        {
+                            "CatID": 501,
+                            "CatName": "Kreatinas"
+                        },
+                        {
+                            "CatID": 502,
+                            "CatName": "L-karnitinas"
+                        },
+                        {
+                            "CatID": 496,
+                            "CatName": "Batonėliai"
+                        },
+                        {
+                            "CatID": 497,
+                            "CatName": "Kiti papildai"
+                        },
+                        {
+                            "CatID": 503,
+                            "CatName": "Papildai masei auginti"
+                        },
+                        {
+                            "CatID": 504,
+                            "CatName": "Papildai sąnariams"
+                        },
+                        {
+                            "CatID": 507,
+                            "CatName": "Papildai lieknėjimui"
+                        },
+                        {
+                            "CatID": 508,
+                            "CatName": "Testosterono skatintojai"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CatName": "Sodo prekės",
+            "children": [
+                {
+                    "CatName": "Sodo technika",
+                    "children": [
+                        {
+                            "CatID": 566,
+                            "CatName": "Vejapjovės, žoliapjovės"
+                        },
+                        {
+                            "CatID": 567,
+                            "CatName": "Trimeriai (žoliapjovės), krūmapjovės"
+                        },
+                        {
+                            "CatID": 568,
+                            "CatName": "Gyvatvorių, žolės žirklės"
+                        },
+                        {
+                            "CatID": 569,
+                            "CatName": "Aeratoriai, Kultivatoriai"
+                        },
+                        {
+                            "CatID": 571,
+                            "CatName": "Lapų siurbliai, šakų smulkintuvai, trinkelių valytuvai"
+                        },
+                        {
+                            "CatID": 572,
+                            "CatName": "Sodo traktoriukai"
+                        },
+                        {
+                            "CatID": 573,
+                            "CatName": "Žoliapjovės, vejos robotai"
+                        },
+                        {
+                            "CatID": 574,
+                            "CatName": "Malkų skaldyklės"
+                        },
+                        {
+                            "CatID": 575,
+                            "CatName": "Drėgmės, temperatūros, pH, ORP matuokliai"
+                        },
+                        {
+                            "CatID": 576,
+                            "CatName": "Karučiai"
+                        },
+                        {
+                            "CatID": 577,
+                            "CatName": "Šlavimo mašinos"
+                        },
+                        {
+                            "CatID": 578,
+                            "CatName": "Žemės grąžtai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Priemonės nuo kenkėjų",
+                    "children": [
+                        {
+                            "CatID": 462,
+                            "CatName": "Priemonės nuo uodų, erkių"
+                        },
+                        {
+                            "CatID": 580,
+                            "CatName": "Vabzdžių naikinimas"
+                        },
+                        {
+                            "CatID": 579,
+                            "CatName": "Graužikų, kurmių naikinimas"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Trąšos",
+                    "children": [
+                        {
+                            "CatID": 582,
+                            "CatName": "Birios trąšos"
+                        },
+                        {
+                            "CatID": 583,
+                            "CatName": "Augalų priežiūros priemonės"
+                        },
+                        {
+                            "CatID": 584,
+                            "CatName": "Skystos trąšos"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Vazonai, lėkštutės",
+                    "children": [
+                        {
+                            "CatID": 585,
+                            "CatName": "Vazonai"
+                        },
+                        {
+                            "CatID": 586,
+                            "CatName": "Loveliai"
+                        },
+                        {
+                            "CatID": 587,
+                            "CatName": "Vazonėliai daiginimui ir persodinimui"
+                        },
+                        {
+                            "CatID": 588,
+                            "CatName": "Lėkštelės ir priedai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Sėklos",
+                    "children": [
+                        {
+                            "CatID": 589,
+                            "CatName": "Daržovių, uogų sėklos"
+                        },
+                        {
+                            "CatID": 590,
+                            "CatName": "Gėlių sėklos"
+                        },
+                        {
+                            "CatID": 591,
+                            "CatName": "Vejiniai žolių mišiniai"
+                        },
+                        {
+                            "CatID": 592,
+                            "CatName": "Prieskonių sėklos"
+                        },
+                        {
+                            "CatID": 593,
+                            "CatName": "Gėlių svogūnėliai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Gruntas, žemė, durpės, kompostas",
+                    "children": [
+                        {
+                            "CatID": 596,
+                            "CatName": "Mulčias, dekoratyvinė skalda"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Sodo baseinai, Batutai, Baldai",
+                    "children": [
+                        {
+                            "CatID": 1219,
+                            "CatName": "Baseinų priežiūros priemonės"
+                        },
+                        {
+                            "CatID": 594,
+                            "CatName": "Sodo baseinai"
+                        },
+                        {
+                            "CatID": 598,
+                            "CatName": "Sodo baldai"
+                        },
+                        {
+                            "CatID": 411,
+                            "CatName": "Batutai"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CatName": "Mobilieji telefonai, Foto, Video, nešiojamas Audio",
+            "children": [
+                {
+                    "CatName": "Mobilieji telefonai ir jų priedai",
+                    "children": [
+                        {
+                            "CatID": 973,
+                            "CatName": "Išmanieji telefonai"
+                        },
+                        {
+                            "CatID": 932,
+                            "CatName": "Mobilieji telefonai (Mygtukiniai)"
+                        },
+                        {
+                            "CatID": 68,
+                            "CatName": "Stacionarūs telefonai"
+                        },
+                        {
+                            "CatID": 943,
+                            "CatName": "Asmenukių lazdos (selfie sticks)"
+                        },
+                        {
+                            "CatID": 939,
+                            "CatName": "Priedai telefonams"
+                        },
+                        {
+                            "CatID": 938,
+                            "CatName": "Atsarginiai maitinimo šaltiniai (power bank)"
+                        },
+                        {
+                            "CatID": 936,
+                            "CatName": "Telefono laikikliai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Nešiojamas Audio",
+                    "children": [
+                        {
+                            "CatID": 1218,
+                            "CatName": "Belaidės ausinės"
+                        },
+                        {
+                            "CatID": 71,
+                            "CatName": "Laidinės ausinės"
+                        },
+                        {
+                            "CatID": 15,
+                            "CatName": "Belaidės garso kolonėlės"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Išmanieji laikrodžiai, apyrankės",
+                    "children": [
+                        {
+                            "CatID": 945,
+                            "CatName": "Išmanieji laikrodžiai (smartwatch)"
+                        },
+                        {
+                            "CatID": 946,
+                            "CatName": "Išmaniosios apyrankės (fitness tracker)"
+                        },
+                        {
+                            "CatID": 947,
+                            "CatName": "Išmaniųjų laikrodžių ir apyrankių priedai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Foto ir Video įranga",
+                    "children": [
+                        {
+                            "CatID": 949,
+                            "CatName": "Momentiniai fotoaparatai"
+                        },
+                        {
+                            "CatID": 950,
+                            "CatName": "Skaitmeniniai fotoaparatai"
+                        },
+                        {
+                            "CatID": 961,
+                            "CatName": "Veiksmo ir laisvalaikio kameros"
+                        },
+                        {
+                            "CatID": 964,
+                            "CatName": "Vaizdo kameros"
+                        },
+                        {
+                            "CatID": 948,
+                            "CatName": "Priedai fotoaparatams ir kameroms"
+                        },
+                        {
+                            "CatID": 952,
+                            "CatName": "Fotografijos apšvietimo įranga"
+                        },
+                        {
+                            "CatID": 953,
+                            "CatName": "Fotoaparato stovai"
+                        },
+                        {
+                            "CatID": 954,
+                            "CatName": "Objektyvai"
+                        },
+                        {
+                            "CatID": 956,
+                            "CatName": "Dėklai, krepšiai fotoaparatams ir objektyvams"
+                        },
+                        {
+                            "CatID": 959,
+                            "CatName": "Filtrai objektyvams"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "MP3 grotuvai, diktofonai",
+                    "children": [
+                        {
+                            "CatID": 970,
+                            "CatName": "MP3 grotuvai"
+                        },
+                        {
+                            "CatID": 971,
+                            "CatName": "Diktofonai"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CatName": "Santechnika, remontas, šildymas",
+            "children": [
+                {
+                    "CatName": "Vonios kambario įranga",
+                    "children": [
+                        {
+                            "CatID": 699,
+                            "CatName": "Dušo kabinos ir kita įranga"
+                        },
+                        {
+                            "CatID": 700,
+                            "CatName": "Vonios kambario aksesuarai"
+                        },
+                        {
+                            "CatID": 701,
+                            "CatName": "Klozetai"
+                        },
+                        {
+                            "CatID": 702,
+                            "CatName": "Vandens maišytuvai"
+                        },
+                        {
+                            "CatID": 704,
+                            "CatName": "Vonios"
+                        },
+                        {
+                            "CatID": 705,
+                            "CatName": "Praustuvai"
+                        },
+                        {
+                            "CatID": 706,
+                            "CatName": "Gyvatukai, vonios radiatoriai"
+                        },
+                        {
+                            "CatID": 707,
+                            "CatName": "Įranga žmonėms su specialiais poreikiais"
+                        },
+                        {
+                            "CatID": 708,
+                            "CatName": "Bidė"
+                        },
+                        {
+                            "CatID": 709,
+                            "CatName": "Pisuarai"
+                        },
+                        {
+                            "CatID": 696,
+                            "CatName": "Vonios ventiliatoriai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Įrankiai",
+                    "children": [
+                        {
+                            "CatID": 710,
+                            "CatName": "Mechaniniai įrankiai"
+                        },
+                        {
+                            "CatID": 711,
+                            "CatName": "Sandėliavimo lentynos"
+                        },
+                        {
+                            "CatID": 712,
+                            "CatName": "Buitinės kopėčios, rampos"
+                        },
+                        {
+                            "CatID": 713,
+                            "CatName": "Metalo detektoriai"
+                        },
+                        {
+                            "CatID": 714,
+                            "CatName": "Įrankių dėžės, laikikliai"
+                        },
+                        {
+                            "CatID": 715,
+                            "CatName": "Sniego kastuvai, valytuvai, stūmikliai"
+                        },
+                        {
+                            "CatID": 716,
+                            "CatName": "Sniego valytuvai"
+                        },
+                        {
+                            "CatID": 717,
+                            "CatName": "Pramoninės svarstyklės"
+                        },
+                        {
+                            "CatID": 719,
+                            "CatName": "Aukšto slėgio plovimo įranga"
+                        },
+                        {
+                            "CatID": 693,
+                            "CatName": "Kondicionieriai, šilumos siurbliai, rekuperatoriai"
+                        },
+                        {
+                            "CatID": 87,
+                            "CatName": "Oro drėkintuvai, valytuvai"
+                        },
+                        {
+                            "CatID": 692,
+                            "CatName": "Ventiliatoriai"
+                        },
+                        {
+                            "CatID": 615,
+                            "CatName": "Meteorologinės stotelės, termometrai"
+                        },
+                        {
+                            "CatID": 725,
+                            "CatName": "Oro sausintuvai, drėgmės sugėrikliai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Tvoros, vartų automatika",
+                    "children": [
+                        {
+                            "CatID": 597,
+                            "CatName": "Tvoros ir jų priedai"
+                        },
+                        {
+                            "CatID": 729,
+                            "CatName": "Vartų automatika ir priedai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Šildymo įranga",
+                    "children": [
+                        {
+                            "CatID": 730,
+                            "CatName": "Vandens šildytuvai"
+                        },
+                        {
+                            "CatID": 694,
+                            "CatName": "Šildytuvai"
+                        },
+                        {
+                            "CatID": 733,
+                            "CatName": "Radiatoriai, konvektoriai"
+                        },
+                        {
+                            "CatID": 734,
+                            "CatName": "Krosnelės"
+                        },
+                        {
+                            "CatID": 735,
+                            "CatName": "Šildymo katilai ir akumuliacinės talpos"
+                        },
+                        {
+                            "CatID": 736,
+                            "CatName": "Židiniai, ugniakurai"
+                        },
+                        {
+                            "CatID": 737,
+                            "CatName": "Išsiplėtimo indai"
+                        },
+                        {
+                            "CatID": 738,
+                            "CatName": "Kaminai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Virtuvės įranga, reikmenys",
+                    "children": [
+                        {
+                            "CatID": 739,
+                            "CatName": "Virtuvinės plautuvės"
+                        },
+                        {
+                            "CatID": 740,
+                            "CatName": "Virtuvės maišytuvai"
+                        },
+                        {
+                            "CatID": 741,
+                            "CatName": "Virtuvinių plautuvių ir maišytuvų priedai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Apšvietimo ir elektros prekės",
+                    "children": [
+                        {
+                            "CatID": 743,
+                            "CatName": "Prailgintuvai"
+                        },
+                        {
+                            "CatID": 744,
+                            "CatName": "Elektros lemputės"
+                        },
+                        {
+                            "CatID": 745,
+                            "CatName": "LED juostos"
+                        },
+                        {
+                            "CatID": 746,
+                            "CatName": "Elektros jungikliai, rozetės"
+                        },
+                        {
+                            "CatID": 747,
+                            "CatName": "Žibintuvėliai, prožektoriai"
+                        },
+                        {
+                            "CatID": 748,
+                            "CatName": "Elementų krovikliai"
+                        },
+                        {
+                            "CatID": 749,
+                            "CatName": "Tekstiliniai kabeliai ir elektros kaladėlės"
+                        },
+                        {
+                            "CatID": 750,
+                            "CatName": "Laikmačiai, termostatai"
+                        },
+                        {
+                            "CatID": 86,
+                            "CatName": "Maitinimo šaltiniai"
+                        },
+                        {
+                            "CatID": 295,
+                            "CatName": "Įmontuojami šviestuvai, LED panelės"
+                        },
+                        {
+                            "CatID": 753,
+                            "CatName": "Komponentai saulės jėgainėms"
+                        },
+                        {
+                            "CatID": 754,
+                            "CatName": "Dažnio keitikliai"
+                        },
+                        {
+                            "CatID": 958,
+                            "CatName": "Įkraunami elementai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Darbo apranga, saugos priemonės",
+                    "children": [
+                        {
+                            "CatID": 755,
+                            "CatName": "Galvos apsauga"
+                        },
+                        {
+                            "CatID": 756,
+                            "CatName": "Darbo batai ir kt. avalynė"
+                        },
+                        {
+                            "CatID": 757,
+                            "CatName": "Darbo rūbai"
+                        },
+                        {
+                            "CatID": 760,
+                            "CatName": "Darbo pirštinės"
+                        },
+                        {
+                            "CatID": 761,
+                            "CatName": "Antkeliai"
+                        },
+                        {
+                            "CatID": 759,
+                            "CatName": "Sodo apranga"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Vandens siurbliai, priedai",
+                    "children": [
+                        {
+                            "CatID": 766,
+                            "CatName": "Nešvaraus vandens siurbliai"
+                        },
+                        {
+                            "CatID": 767,
+                            "CatName": "Švaraus vandens siurbliai"
+                        },
+                        {
+                            "CatID": 768,
+                            "CatName": "Kanalizacijos šulinių dangčiai"
+                        },
+                        {
+                            "CatID": 769,
+                            "CatName": "Hidroforai"
+                        },
+                        {
+                            "CatID": 770,
+                            "CatName": "Sodo siurbliai"
+                        },
+                        {
+                            "CatID": 771,
+                            "CatName": "Benzininiai vandens siurbliai"
+                        },
+                        {
+                            "CatID": 595,
+                            "CatName": "Fontanų siurbliai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Namų apsauga",
+                    "children": [
+                        {
+                            "CatID": 773,
+                            "CatName": "Stebėjimo kameros"
+                        },
+                        {
+                            "CatID": 774,
+                            "CatName": "Dūmų, dujų detektoriai"
+                        },
+                        {
+                            "CatID": 775,
+                            "CatName": "Durų skambučiai, akutės"
+                        },
+                        {
+                            "CatID": 776,
+                            "CatName": "Apsaugos sistemos, valdikliai"
+                        },
+                        {
+                            "CatID": 777,
+                            "CatName": "Davikliai, jutikliai"
+                        },
+                        {
+                            "CatID": 778,
+                            "CatName": "Domofonai"
+                        },
+                        {
+                            "CatID": 780,
+                            "CatName": "Signalizacijos"
+                        },
+                        {
+                            "CatID": 781,
+                            "CatName": "Apsaugos sistemų priedai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Durys, stoglangiai, jų priedai",
+                    "children": [
+                        {
+                            "CatID": 782,
+                            "CatName": "Stogeliai virš durų"
+                        },
+                        {
+                            "CatID": 783,
+                            "CatName": "Lauko durys"
+                        },
+                        {
+                            "CatID": 784,
+                            "CatName": "Vidaus durys"
+                        },
+                        {
+                            "CatID": 785,
+                            "CatName": "Stoginės plėvelės"
+                        },
+                        {
+                            "CatID": 786,
+                            "CatName": "Spynos"
+                        },
+                        {
+                            "CatID": 787,
+                            "CatName": "Durų lankstai, priedai"
+                        },
+                        {
+                            "CatID": 788,
+                            "CatName": "Durų rankenos"
+                        },
+                        {
+                            "CatID": 789,
+                            "CatName": "Stoglangiai"
+                        },
+                        {
+                            "CatID": 790,
+                            "CatName": "Revizinės durelės, priedai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Sienų apdaila",
+                    "children": [
+                        {
+                            "CatID": 791,
+                            "CatName": "Lipnios plėvelės"
+                        },
+                        {
+                            "CatID": 792,
+                            "CatName": "Fototapetai"
+                        },
+                        {
+                            "CatID": 309,
+                            "CatName": "Dekoratyvinis akmuo"
+                        },
+                        {
+                            "CatID": 794,
+                            "CatName": "Tapetai"
+                        },
+                        {
+                            "CatID": 795,
+                            "CatName": "Plytelės sienoms"
+                        },
+                        {
+                            "CatID": 796,
+                            "CatName": "Lubų, sienų dekoro elementai"
+                        },
+                        {
+                            "CatID": 386,
+                            "CatName": "Vaikiški fototapetai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Dažai, klijai, gruntai, kt.",
+                    "children": [
+                        {
+                            "CatID": 798,
+                            "CatName": "Dažai"
+                        },
+                        {
+                            "CatID": 799,
+                            "CatName": "Sandarinimo medžiagos"
+                        },
+                        {
+                            "CatID": 800,
+                            "CatName": "Klijai"
+                        },
+                        {
+                            "CatID": 801,
+                            "CatName": "Gruntai, glaistai ir kt."
+                        },
+                        {
+                            "CatID": 802,
+                            "CatName": "Impregnantai, priežiūros priemonės"
+                        },
+                        {
+                            "CatID": 803,
+                            "CatName": "Dažymo įrankiai"
+                        },
+                        {
+                            "CatID": 804,
+                            "CatName": "Lakai, skiedikliai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Grindų dangos",
+                    "children": [
+                        {
+                            "CatID": 601,
+                            "CatName": "Terasos grindys"
+                        },
+                        {
+                            "CatID": 809,
+                            "CatName": "Laminuotos grindys"
+                        },
+                        {
+                            "CatID": 810,
+                            "CatName": "Medinės grindys"
+                        },
+                        {
+                            "CatID": 811,
+                            "CatName": "Grindų plytelės"
+                        },
+                        {
+                            "CatID": 812,
+                            "CatName": "Sujungimo profiliai"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CatName": "Autoprekės",
+            "children": [
+                {
+                    "CatName": "Automobilių dalys",
+                    "children": [
+                        {
+                            "CatID": 1065,
+                            "CatName": "Starteriai"
+                        },
+                        {
+                            "CatID": 1066,
+                            "CatName": "Guoliai"
+                        },
+                        {
+                            "CatID": 1067,
+                            "CatName": "Ratlankiai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Radijo ryšys",
+                    "children": [
+                        {
+                            "CatID": 1064,
+                            "CatName": "Radijo stotelės, racijos"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Padangos ",
+                    "children": [
+                        {
+                            "CatID": 1060,
+                            "CatName": "Vasarinės padangos"
+                        },
+                        {
+                            "CatID": 1061,
+                            "CatName": "Universalios padangos"
+                        },
+                        {
+                            "CatID": 1062,
+                            "CatName": "Žieminės padangos"
+                        },
+                        {
+                            "CatID": 1063,
+                            "CatName": "Žemės ūkio padangos"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Auto aksesuarai ir priedai",
+                    "children": [
+                        {
+                            "CatID": 1046,
+                            "CatName": "Langų tamsinimo plėvelės"
+                        },
+                        {
+                            "CatID": 1047,
+                            "CatName": "Valytuvai"
+                        },
+                        {
+                            "CatID": 1048,
+                            "CatName": "Ratų gaubtai"
+                        },
+                        {
+                            "CatID": 1049,
+                            "CatName": "Lemputės"
+                        },
+                        {
+                            "CatID": 1050,
+                            "CatName": "Duslintuvų antgaliai ir bakeliai"
+                        },
+                        {
+                            "CatID": 1051,
+                            "CatName": "Porankiai"
+                        },
+                        {
+                            "CatID": 1052,
+                            "CatName": "Vairų užvalkalai ir vairai"
+                        },
+                        {
+                            "CatID": 1053,
+                            "CatName": "Pavarų svirties antgaliai"
+                        },
+                        {
+                            "CatID": 1054,
+                            "CatName": "Vaizdo registratoriai"
+                        },
+                        {
+                            "CatID": 1055,
+                            "CatName": "Auto aparatūra"
+                        },
+                        {
+                            "CatID": 1056,
+                            "CatName": "Automagnetolos"
+                        },
+                        {
+                            "CatID": 1057,
+                            "CatName": "Automobiliniai garsiakalbiai"
+                        },
+                        {
+                            "CatID": 1058,
+                            "CatName": "Automobiliniai stiprintuvai"
+                        },
+                        {
+                            "CatID": 1059,
+                            "CatName": "USB adapteriai gamyklinei garso sistemai"
+                        },
+                        {
+                            "CatID": 966,
+                            "CatName": "Automobilinės vaizdo kameros (vaizdo registratoriai)"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Moto prekės",
+                    "children": [
+                        {
+                            "CatID": 1042,
+                            "CatName": "Moto apranga"
+                        },
+                        {
+                            "CatID": 1043,
+                            "CatName": "Moto akumuliatoriai"
+                        },
+                        {
+                            "CatID": 1044,
+                            "CatName": "Moto reikmenys"
+                        },
+                        {
+                            "CatID": 1045,
+                            "CatName": "Moto alyvos"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Akumuliatoriai ir jų krovikliai",
+                    "children": [
+                        {
+                            "CatID": 1040,
+                            "CatName": "Akumuliatoriai"
+                        },
+                        {
+                            "CatID": 1041,
+                            "CatName": "Akumuliatorių krovikliai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Automobiliniai tepalai",
+                    "children": [
+                        {
+                            "CatID": 1037,
+                            "CatName": "Variklinės alyvos"
+                        },
+                        {
+                            "CatID": 1038,
+                            "CatName": "Kitos alyvos"
+                        },
+                        {
+                            "CatID": 1039,
+                            "CatName": "Alyvos priedai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Aukšto slėgio plovimo įranga ir priedai",
+                    "children": [
+                        {
+                            "CatID": 1035,
+                            "CatName": "Plovimo įranga"
+                        },
+                        {
+                            "CatID": 1036,
+                            "CatName": "Plovimo įrangos priedai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Elektros įranga",
+                    "children": [
+                        {
+                            "CatID": 1029,
+                            "CatName": "FM moduliatoriai"
+                        },
+                        {
+                            "CatID": 1030,
+                            "CatName": "Automobilių 12V el. priedai"
+                        },
+                        {
+                            "CatID": 1031,
+                            "CatName": "Auto lemрutės"
+                        },
+                        {
+                            "CatID": 1032,
+                            "CatName": "Parkavimo sistemos"
+                        },
+                        {
+                            "CatID": 1033,
+                            "CatName": "Įtampos keitikliai"
+                        },
+                        {
+                            "CatID": 942,
+                            "CatName": "Аutomobilinė laisvų rankų įranga"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Autoturizmo reikmenys",
+                    "children": [
+                        {
+                            "CatID": 408,
+                            "CatName": "Dviračių laikikliai"
+                        },
+                        {
+                            "CatID": 1026,
+                            "CatName": "Stogo bagažinės"
+                        },
+                        {
+                            "CatID": 1027,
+                            "CatName": "Stogo skersiniai ir bagažinių atitvarai"
+                        },
+                        {
+                            "CatID": 1028,
+                            "CatName": "Autokėdutės"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Automobilinė chemija ir oro gaivikliai",
+                    "children": [
+                        {
+                            "CatID": 1020,
+                            "CatName": "Autochemija"
+                        },
+                        {
+                            "CatID": 1021,
+                            "CatName": "Salono oro gaivikliai"
+                        },
+                        {
+                            "CatID": 1022,
+                            "CatName": "Valymo šluostės, servetėlės"
+                        },
+                        {
+                            "CatID": 1023,
+                            "CatName": "Automobiliniai dažai"
+                        },
+                        {
+                            "CatID": 1024,
+                            "CatName": "Langų ir aušinimo skysčiai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Automobiliniai kilimėliai",
+                    "children": [
+                        {
+                            "CatID": 1016,
+                            "CatName": "Modeliniai guminiai kilimėliai"
+                        },
+                        {
+                            "CatID": 1017,
+                            "CatName": "Modeliniai bagažinių kilimėliai"
+                        },
+                        {
+                            "CatID": 1018,
+                            "CatName": "Modeliniai tekstiliniai kilimėliai"
+                        },
+                        {
+                            "CatID": 1019,
+                            "CatName": "Universalūs kilimėliai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Kitos auto prekės",
+                    "children": [
+                        {
+                            "CatID": 1010,
+                            "CatName": "Auto reikmenys"
+                        },
+                        {
+                            "CatID": 1011,
+                            "CatName": "Automobilio priežiūros priemonės žiemai"
+                        },
+                        {
+                            "CatID": 118,
+                            "CatName": "Alkotesteriai"
+                        },
+                        {
+                            "CatID": 1013,
+                            "CatName": "Sėdynių užvalkalai, priedai"
+                        },
+                        {
+                            "CatID": 1014,
+                            "CatName": "Saugos reikmenys"
+                        },
+                        {
+                            "CatID": 1015,
+                            "CatName": "Nano technologijos automobiliams"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CatName": "Gyvūnų prekės",
+            "children": [
+                {
+                    "CatName": "Šunims",
+                    "children": [
+                        {
+                            "CatID": 975,
+                            "CatName": "Sausas maistas šunims"
+                        },
+                        {
+                            "CatID": 977,
+                            "CatName": "Švaros reikmenys šunims"
+                        },
+                        {
+                            "CatID": 978,
+                            "CatName": "Transportavimo narvai, krepšiai Šunims"
+                        },
+                        {
+                            "CatID": 979,
+                            "CatName": "Pavadėliai, antkakliai, petnešos šunims"
+                        },
+                        {
+                            "CatID": 980,
+                            "CatName": "Konservai šunims"
+                        },
+                        {
+                            "CatID": 981,
+                            "CatName": "Dubenėliai, dėžės maistui"
+                        },
+                        {
+                            "CatID": 983,
+                            "CatName": "Vitaminai, papildai, antiparazitinės priemonės šunims"
+                        },
+                        {
+                            "CatID": 984,
+                            "CatName": "Žaislai šunims"
+                        },
+                        {
+                            "CatID": 985,
+                            "CatName": "Skanėstai šunims"
+                        },
+                        {
+                            "CatID": 986,
+                            "CatName": "Dresūros priemonės šunims"
+                        },
+                        {
+                            "CatID": 987,
+                            "CatName": "Drabužiai šunims"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Katėms",
+                    "children": [
+                        {
+                            "CatID": 988,
+                            "CatName": "Draskyklės"
+                        },
+                        {
+                            "CatID": 989,
+                            "CatName": "Sausas maistas katėms"
+                        },
+                        {
+                            "CatID": 990,
+                            "CatName": "Kraikas katėms"
+                        },
+                        {
+                            "CatID": 991,
+                            "CatName": "Kačių tualetai"
+                        },
+                        {
+                            "CatID": 992,
+                            "CatName": "Konservai katėms"
+                        },
+                        {
+                            "CatID": 993,
+                            "CatName": "Švaros reikmenys katėms"
+                        },
+                        {
+                            "CatID": 994,
+                            "CatName": "Žaislai katėms"
+                        },
+                        {
+                            "CatID": 995,
+                            "CatName": "Vitaminai, papildai, antiparazitinės priemonės katėms"
+                        },
+                        {
+                            "CatID": 996,
+                            "CatName": "Skanėstai katėms"
+                        },
+                        {
+                            "CatID": 997,
+                            "CatName": "Pavadėliai, antkakliai, petnešos katėms"
+                        },
+                        {
+                            "CatID": 1222,
+                            "CatName": "Transportavimo narvai, krepšiai katėms"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Graužikams",
+                    "children": [
+                        {
+                            "CatID": 1001,
+                            "CatName": "Maistas graužikams"
+                        },
+                        {
+                            "CatID": 1002,
+                            "CatName": "Narvai, jų priedai graužikams"
+                        },
+                        {
+                            "CatID": 1003,
+                            "CatName": "Kraikas, šienas graužikams"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Žuvims",
+                    "children": [
+                        {
+                            "CatID": 1004,
+                            "CatName": "Akvariumai ir jų įranga"
+                        },
+                        {
+                            "CatID": 1005,
+                            "CatName": "Maistas žuvims"
+                        },
+                        {
+                            "CatID": 1006,
+                            "CatName": "Dekoracijos akvariumams"
+                        },
+                        {
+                            "CatID": 1007,
+                            "CatName": "Ūkiniams gyvūnams"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Paukščiams",
+                    "children": [
+                        {
+                            "CatID": 1008,
+                            "CatName": "Lesalas paukščiams"
+                        },
+                        {
+                            "CatID": 1009,
+                            "CatName": "Inkilai, lesyklėlės, narvai"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "CatName": "Apsauginės, dezinfekcinės, medicininės prekės",
+            "children": [
+                {
+                    "CatName": "Specialios apsaugos priemonės",
+                    "children": [
+                        {
+                            "CatID": 120,
+                            "CatName": "Kaukės, respiratoriai"
+                        },
+                        {
+                            "CatID": 121,
+                            "CatName": "Apsauginės sienelės, dezinfekcinės stotelės"
+                        },
+                        {
+                            "CatID": 122,
+                            "CatName": "Dezinfekcinis skystis"
+                        },
+                        {
+                            "CatID": 123,
+                            "CatName": "Vienkartinės pirštinės"
+                        },
+                        {
+                            "CatID": 124,
+                            "CatName": "Dezinfekciniai valikliai"
+                        },
+                        {
+                            "CatID": 125,
+                            "CatName": "Apsauginiai skydeliai ir akiniai"
+                        }
+                    ]
+                },
+                {
+                    "CatName": "Medicininės prekės",
+                    "children": [
+                        {
+                            "CatID": 107,
+                            "CatName": "Pirmoji pagalba"
+                        },
+                        {
+                            "CatID": 1221,
+                            "CatName": "Kūno termometrai"
+                        },
+                        {
+                            "CatID": 110,
+                            "CatName": "Optika"
+                        },
+                        {
+                            "CatID": 111,
+                            "CatName": "Klausos aparatai"
+                        },
+                        {
+                            "CatID": 112,
+                            "CatName": "Medicininė apranga"
+                        },
+                        {
+                            "CatID": 113,
+                            "CatName": "Balzamai, tepalai"
+                        },
+                        {
+                            "CatID": 116,
+                            "CatName": "Įtvarai"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

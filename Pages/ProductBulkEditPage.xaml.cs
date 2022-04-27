@@ -18,7 +18,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
         private readonly Dictionary<string, string> CategoryKVP;
         private readonly List<string> PossibleTypes;
         private List<string> PossibleVendorTypes;
-        private ObservableCollection<TypeListBoxItem> ListBoxSource;
+        private List<TypeListBoxItem> ListBoxSource;
         private bool AllTypeChangeProductsSelected = false;
 
         public ProductBulkEditPage(Dictionary<string, FullProduct> products, Dictionary<string, string> categoryKVP, Page prevPage)
@@ -175,6 +175,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
                     (sender as BackgroundWorker).ReportProgress(i, changesCount);
                     i++;                
                 }
+
             };
 
             worker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) =>
