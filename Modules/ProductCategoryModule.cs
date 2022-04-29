@@ -15,7 +15,7 @@ namespace Ikrito_Fulfillment_Platform.Modules
 
         public static ProductCategoryModule Instance { get; private set; }
         static ProductCategoryModule()
-        {
+        {   
             Instance = new ProductCategoryModule();
         }
 

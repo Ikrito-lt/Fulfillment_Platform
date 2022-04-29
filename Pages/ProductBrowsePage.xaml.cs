@@ -17,27 +17,23 @@ namespace Ikrito_Fulfillment_Platform.Pages
     {
 
         public Dictionary<string, FullProduct> AllProducts;
-        private List<FullProduct> StatusFilteredProducts;
-        private List<FullProduct> DateFilteredFilteredProducts;
-        private List<FullProduct> TextFilteredProducts;
-        private List<FullProduct> DataGridSource;
-
-        public List<CheckBoxListItem> StatusList;
         private Dictionary<string, string> CategoryKVP = ProductCategoryModule.Instance.CategoryKVP;
 
-        private bool _clearFilters;
-        public bool clearFilters
-        {
-            get { return _clearFilters; }
-            set
-            {
-                _clearFilters = value;
-                if (value == true)
-                {
-                    ResetTextFilters();
-                }
-            }
-        }
+        //for saving product type filter state
+        (int?, string?) productTypeFilter = (null, null);
+        //for saving dates for date filtering 
+        (DateTime?, DateTime?) addedDateFilter = (null, null);
+        //for saving product status fiter state
+        List<CheckBoxListItem> StatusList;
+
+        //for saving text value filter queries
+        string? skuQuery = null;
+        string? titleQuery = null;
+        string? vendorQuery = null;
+
+        //data grid item source
+        private List<FullProduct> DataGridSource;
+
 
         //shit that makes this a singelton
         public static ProductBrowsePage Instance { get; private set; }
@@ -45,8 +41,6 @@ namespace Ikrito_Fulfillment_Platform.Pages
         {
             Instance = new ProductBrowsePage();
         }
-
-        //private constructor
         private ProductBrowsePage()
         {
             InitializeComponent();
@@ -54,7 +48,6 @@ namespace Ikrito_Fulfillment_Platform.Pages
             InitStatusListBox();
             InitDatePickers();
             LoadAllProducts();
-            InitTypeComboBox();
         }
 
 
@@ -85,17 +78,18 @@ namespace Ikrito_Fulfillment_Platform.Pages
                     TempProduct.ProductTypeDisplayVal = CategoryKVP[TempProduct.ProductTypeID];
                 }
 
+                //loading category tree
+                CategoryTreeModule categoryTreeModule = CategoryTreeModule.Instance;
+
                 //putting products in their grids
                 AllProducts = TempProductList;
-                StatusFilteredProducts = AllProducts.Values.ToList();
-                DateFilteredFilteredProducts = AllProducts.Values.ToList();
-                TextFilteredProducts = AllProducts.Values.ToList();
+                DataGridSource = AllProducts.Values.ToList();
 
                 //init DataGrid
-                productDG.ItemsSource = TextFilteredProducts;
+                productDG.ItemsSource = DataGridSource;
 
                 //init label
-                ChangeCountLabel(TextFilteredProducts.Count);
+                ChangeCountLabel(DataGridSource.Count);
 
                 //unblocking refresh button and unanimating loading bar
                 loadingbarLabel.Text = "";
@@ -104,6 +98,8 @@ namespace Ikrito_Fulfillment_Platform.Pages
                 Debug.WriteLine("BGW_PreloadAllProducts Finished");
                 BulkCategoryEditButton.IsEnabled = true;
                 PiguIntegrationButton.IsEnabled = true;
+                RemoveFilters.IsEnabled = true;
+                SelectCategoryButton.IsEnabled = true;
             };
 
             //blocking refresh button and animating loading bar
@@ -112,17 +108,19 @@ namespace Ikrito_Fulfillment_Platform.Pages
             loadingbarLabel.Text = "Loading Products";
             BulkCategoryEditButton.IsEnabled = false;
             PiguIntegrationButton.IsEnabled = false;
+            RemoveFilters.IsEnabled = false;
+            SelectCategoryButton.IsEnabled = false;
 
             worker.RunWorkerAsync();
         }
 
-        //refresh datagrid
+        /// <summary>
+        /// refreshes datagrid
+        /// </summary>
         public void RefreshDataGrid()
         {
             //putting products in their grids
-            StatusFilteredProducts = AllProducts.Values.ToList();
-            DateFilteredFilteredProducts = AllProducts.Values.ToList();
-            TextFilteredProducts = AllProducts.Values.ToList();
+            DataGridSource = AllProducts.Values.ToList();
 
             //unmarking status checkboxes and date selectors 
             StatusList.ForEach(x => x.IsSelected = true);
@@ -134,24 +132,34 @@ namespace Ikrito_Fulfillment_Platform.Pages
             BeginDatePicker.SelectedDate = null;
             EndDatePicker.SelectedDate = null;
 
+            //setting category to null
+            SelectCategoryButton.Content = "Select Category";
+            productTypeFilter = (null, null);
+
             //init DataGrid
-            productDG.ItemsSource = TextFilteredProducts;
+            productDG.ItemsSource = DataGridSource;
 
             //init label
-            ChangeCountLabel(TextFilteredProducts.Count);
+            ChangeCountLabel(DataGridSource.Count);
         }
 
-        //changes label to reflect product count in datagrid
+        /// <summary>
+        /// changes label to reflect product count in datagrid
+        /// </summary>
+        /// <param name="count"></param>
         private void ChangeCountLabel(int count)
         {
             productCountL.Content = "Product Count: " + count.ToString();
         }
 
-        //refreshes Product datagrid
+        /// <summary>
+        /// refreshes Product datagrid
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RefreshButton_Click(object sender, RoutedEventArgs e)
         {
-            ResetTextFilters();
-            ResetDateFilters();
+            RefreshDataGrid();
             LoadAllProducts();
         }
 
@@ -204,10 +212,68 @@ namespace Ikrito_Fulfillment_Platform.Pages
 
 
         //
+        // Product filtering logic 
+        //
+
+        /// <summary>
+        /// mehod that applies all filters to product data grid
+        /// </summary>
+        private void applyProductFilters() { 
+
+            List<FullProduct> tempList = new List<FullProduct>();
+
+            //filtering ty product type
+            if (productTypeFilter.Item1 != null && productTypeFilter.Item2 != null)
+            {
+                tempList = AllProducts.Values.ToList().Where(x => int.Parse(x.ProductTypeID) == productTypeFilter.Item1).ToList();
+            }
+            else { 
+                tempList = AllProducts.Values.ToList();
+            }
+
+            //assigning temp list to datagrid source
+            DataGridSource = tempList;
+            productDG.ItemsSource = DataGridSource;
+            ChangeCountLabel(DataGridSource.Count);
+        }
+
+
+        //
+        //Type filtering section (category tree)
+        //
+
+        /// <summary>
+        /// button should open popup with category tree
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SelectCategoryButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var categoryTreeSelector = new CategoryTreeSelectorWindow();
+            if (categoryTreeSelector.ShowDialog() == true)
+            {
+                (int, string) selectedCategory = categoryTreeSelector.selectionResult;
+                button.Content = selectedCategory.Item2;
+                productTypeFilter = selectedCategory;
+            }
+            else
+            {
+                button.Content = "Select Category";
+                productTypeFilter = (null, null);
+            }
+
+            applyProductFilters();
+        }
+
+
+        //
         //status filtering section
         //
 
-        //init status list box
+        /// <summary>
+        /// init status list box
+        /// </summary>
         private void InitStatusListBox()
         {
             //getting all possible statuses and ading them to observable collection
@@ -227,33 +293,14 @@ namespace Ikrito_Fulfillment_Platform.Pages
             CheckBox5.DataContext = StatusList[4];
         }
 
-        //on status change filtering 
-        private void FilterByStatus()
-        {
-            StatusFilteredProducts.Clear();
-            ResetDateFilters();
-            ResetTextFilters();
-
-            foreach (CheckBoxListItem status in StatusList)
-            {
-                if (status.IsSelected)
-                {
-                    StatusFilteredProducts.AddRange(AllProducts.ToList().FindAll(x => x.Value.Status == status.Name).ToDictionary(x=> x.Key, x=> x.Value).Values.ToList());
-                }
-            }
-
-            DateFilteredFilteredProducts = StatusFilteredProducts.ToList();
-            TextFilteredProducts = DateFilteredFilteredProducts.ToList();
-            DataGridSource = TextFilteredProducts.ToList();
-            productDG.ItemsSource = DataGridSource;
-            productDG.Items.Refresh();
-            ChangeCountLabel(TextFilteredProducts.Count);
-        }
-
-        // this method fires when checkbox was clicked ie selection changed
+        /// <summary>
+        /// this method fires when checkbox was clicked ie selection changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CheckBox_Click(object sender, RoutedEventArgs e)
         {
-            FilterByStatus();
+            applyProductFilters();
         }
 
 
@@ -261,7 +308,9 @@ namespace Ikrito_Fulfillment_Platform.Pages
         //Date filtering section
         //
 
-        //init status list box
+        /// <summary>
+        /// init status list box
+        /// </summary>
         private void InitDatePickers()
         {
             //setting begin and end date pickers
@@ -269,94 +318,34 @@ namespace Ikrito_Fulfillment_Platform.Pages
             EndDatePicker.DisplayDateStart = new DateTime(2021, 09, 01);
         }
 
-        //on selected date change
+        /// <summary>
+        /// on selected date change if both datepicker arent empty update filter values
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
 
             if (BeginDatePicker.SelectedDate.HasValue && EndDatePicker.SelectedDate.HasValue)
             {
-                long beginTimeStamp = ((DateTimeOffset)BeginDatePicker.SelectedDate.Value).ToUnixTimeSeconds();
-                long endTimeStamp = ((DateTimeOffset)EndDatePicker.SelectedDate.Value).ToUnixTimeSeconds();
-                if (beginTimeStamp <= endTimeStamp)
-                {
+                addedDateFilter = (BeginDatePicker.SelectedDate.Value, EndDatePicker.SelectedDate.Value);
+                applyProductFilters();
 
-                    DateFilteredFilteredProducts.Clear();
-                    DateFilteredFilteredProducts.AddRange(StatusFilteredProducts.FindAll(x => beginTimeStamp <= long.Parse(x.AddedTimeStamp) && long.Parse(x.AddedTimeStamp) <= endTimeStamp));
+                //long beginTimeStamp = ((DateTimeOffset)BeginDatePicker.SelectedDate.Value).ToUnixTimeSeconds();
+                //long endTimeStamp = ((DateTimeOffset)EndDatePicker.SelectedDate.Value).ToUnixTimeSeconds();
+                //if (beginTimeStamp <= endTimeStamp)
+                //{
 
-                    TextFilteredProducts = DateFilteredFilteredProducts.ToList();
-                    DataGridSource = TextFilteredProducts.ToList();
-                    productDG.ItemsSource = DataGridSource;
-                    productDG.Items.Refresh();
-                    ChangeCountLabel(TextFilteredProducts.Count);
-                }
+                //    DateFilteredFilteredProducts.Clear();
+                //    DateFilteredFilteredProducts.AddRange(StatusFilteredProducts.FindAll(x => beginTimeStamp <= long.Parse(x.AddedTimeStamp) && long.Parse(x.AddedTimeStamp) <= endTimeStamp));
+
+                //    TextFilteredProducts = DateFilteredFilteredProducts.ToList();
+                //    DataGridSource = TextFilteredProducts.ToList();
+                //    productDG.ItemsSource = DataGridSource;
+                //    productDG.Items.Refresh();
+                //    ChangeCountLabel(TextFilteredProducts.Count);
+                //}
             }
-        }
-
-        //remove / reset date filters
-        private void ResetDateFilters()
-        {
-            BeginDatePicker.SelectedDate = null;
-            EndDatePicker.SelectedDate = null;
-        }
-
-
-        //
-        //Type filtering section
-        //
-
-        /// <summary>
-        /// init for product type filter combo box in datagrids product type header
-        /// </summary>
-        private void InitTypeComboBox()
-        {
-            List<string> typeDisplayValList = CategoryKVP.Values.ToList();
-            typeDisplayValList.Sort();
-            TypeFilterCBox.ItemsSource = typeDisplayValList;
-        }
-
-        /// <summary>
-        /// On selection change for category filtering
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void TypeFilterCBox_KeyUp(object sender, KeyEventArgs e)
-        {
-            ComboBox comboBox = sender as ComboBox;
-            if (e.Key == Key.Enter)
-            {
-                string comboBoxSelection = comboBox.Text.ToLower();
-
-                TextFilteredProducts = TextFilteredProducts.Where(p => p.ProductTypeDisplayVal.ToLower() == comboBoxSelection).ToList();
-                ChangeCountLabel(TextFilteredProducts.Count);
-                DataGridSource = TextFilteredProducts;
-                productDG.ItemsSource = DataGridSource;
-            }
-            else if (comboBox.Text.Length == 0)
-            {
-                return;
-            }
-        }
-
-        /// <summary>
-        /// open dropdown on selection
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void TypeFilterCBox_GotFocus(object sender, RoutedEventArgs e)
-        {
-            ComboBox comboBox = sender as ComboBox;
-            comboBox.IsDropDownOpen = true;
-        }
-
-        /// <summary>
-        /// close dropdown on unselection
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void TypeFilterCBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
-        {
-            ComboBox comboBox = sender as ComboBox;
-            comboBox.IsDropDownOpen = false;
         }
 
 
@@ -364,82 +353,89 @@ namespace Ikrito_Fulfillment_Platform.Pages
         // Text Filtering section
         //
 
-        //method for filtering by vendor
+        /// <summary>
+        /// method for updating vendor filter query
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void VendorFilterSBox_KeyUp(object sender, KeyEventArgs e)
         {
             TextBox textBox = sender as TextBox;
             if (e.Key == Key.Enter)
             {
-                string query = textBox.Text.ToLower();
+                vendorQuery = textBox.Text.ToLower();
+                applyProductFilters();
 
-                TextFilteredProducts = TextFilteredProducts.Where(p => p.Vendor.ToLower().Contains(query)).ToList();
-                ChangeCountLabel(TextFilteredProducts.Count);
-                DataGridSource = TextFilteredProducts;
-                productDG.ItemsSource = DataGridSource;
+                //TextFilteredProducts = TextFilteredProducts.Where(p => p.Vendor.ToLower().Contains(query)).ToList();
+                //ChangeCountLabel(TextFilteredProducts.Count);
+                //DataGridSource = TextFilteredProducts;
+                //productDG.ItemsSource = DataGridSource;
             }
             else if (textBox.Text.Length == 0)
             {
-                return;
+                vendorQuery = null;
+                applyProductFilters();
             }
         }
 
-        //method for filtering by sku
+        /// <summary>
+        /// method for updating sku filter query
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SKUFilterSBox_KeyUp(object sender, KeyEventArgs e)
         {
             TextBox textBox = sender as TextBox;
             if (e.Key == Key.Enter)
             {
-                string query = textBox.Text.ToLower();
-
-                TextFilteredProducts = TextFilteredProducts.Where(p => p.SKU.ToLower().Contains(query)).ToList();
-                ChangeCountLabel(TextFilteredProducts.Count);
-                DataGridSource = TextFilteredProducts;
-                productDG.ItemsSource = DataGridSource;
+                skuQuery = textBox.Text.ToLower();
+                applyProductFilters();
+                //TextFilteredProducts = TextFilteredProducts.Where(p => p.SKU.ToLower().Contains(query)).ToList();
+                //ChangeCountLabel(TextFilteredProducts.Count);
+                //DataGridSource = TextFilteredProducts;
+                //productDG.ItemsSource = DataGridSource;
             }
             else if (textBox.Text.Length == 0)
             {
-                return;
+                skuQuery = null;
+                applyProductFilters();
             }
         }
 
-        //method for filtering by title
+        /// <summary>
+        /// method for updating title filter query
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TitleFilterSBox_KeyUp(object sender, KeyEventArgs e)
         {
             TextBox textBox = sender as TextBox;
             if (e.Key == Key.Enter)
             {
-                string query = textBox.Text.ToLower();
-
-                TextFilteredProducts = TextFilteredProducts.Where(p => p.TitleLT.ToLower().Contains(query)).ToList();
-                ChangeCountLabel(TextFilteredProducts.Count);
-                DataGridSource = TextFilteredProducts;
-                productDG.ItemsSource = DataGridSource;
+                titleQuery = textBox.Text.ToLower();
+                applyProductFilters();
+                //TextFilteredProducts = TextFilteredProducts.Where(p => p.TitleLT.ToLower().Contains(query)).ToList();
+                //ChangeCountLabel(TextFilteredProducts.Count);
+                //DataGridSource = TextFilteredProducts;
+                //productDG.ItemsSource = DataGridSource;
             }
             else if (textBox.Text.Length == 0)
             {
-                return;
+                titleQuery = null;
+                applyProductFilters();
             }
         }
 
-        //method for deleting deleting filters
-        private void ResetTextFilters()
+        /// <summary>
+        /// method that is triggered when clicking remove filters button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RemoveFilters_Click(object sender, RoutedEventArgs e)
         {
-            TypeFilterCBox.SelectedItem = null;
             TitleFilterSBox.Clear();
             SKUFilterSBox.Clear();
             VendorFilterSBox.Clear();
-
-            TextFilteredProducts = DateFilteredFilteredProducts.ToList();
-            DataGridSource = TextFilteredProducts;
-            productDG.ItemsSource = DataGridSource;
-            ChangeCountLabel(DataGridSource.Count);
-            productDG.Items.Refresh();
-        }
-
-        //method that is triggered when clicking remove filters button
-        private void RemoveFilters_Click(object sender, RoutedEventArgs e)
-        {
-            ResetTextFilters();
         }
     }
 }
