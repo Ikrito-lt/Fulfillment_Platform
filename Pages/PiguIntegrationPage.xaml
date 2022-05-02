@@ -100,7 +100,6 @@
                         </Grid.RowDefinitions>
 
                         <Button x:Name="ToPiguTransferBtn" Content="→" FontSize="20" Grid.Row="1" Margin="5" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Click="ToPiguTransferBtn_Click"/>
-
                     </Grid>
 
                     <!--OurProductsLB-->

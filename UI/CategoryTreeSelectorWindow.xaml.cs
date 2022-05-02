@@ -12,12 +12,13 @@ namespace Ikrito_Fulfillment_Platform.UI
     /// </summary>
     public partial class CategoryTreeSelectorWindow : Window
     {
-        public (int, string) selectionResult;
+        public Tuple<int?, string> selectionResult;
 
-        public CategoryTreeSelectorWindow()
+        public CategoryTreeSelectorWindow(string windowTitle)
         {
             InitializeComponent();
             Owner = Application.Current.MainWindow;
+            Title = windowTitle;
             windowInit();
         }
 
@@ -31,7 +32,7 @@ namespace Ikrito_Fulfillment_Platform.UI
             var selectedItem = s.SelectedItem as CategoryTree;
             if (selectedItem.CatID != null) {
 
-                selectionResult = ((int)selectedItem.CatID, selectedItem.CatName);
+                selectionResult = new(selectedItem.CatID, selectedItem.CatName);
                 DialogResult = true;
                 Close();
             }
