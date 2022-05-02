@@ -17,19 +17,19 @@ namespace Ikrito_Fulfillment_Platform.Pages
     {
 
         public Dictionary<string, FullProduct> AllProducts;
-        private Dictionary<string, string> CategoryKVP = ProductCategoryModule.Instance.CategoryKVP;
+        private readonly Dictionary<string, string> CategoryKVP = ProductCategoryModule.Instance.CategoryKVP;
 
-        //for saving product type filter state
-        (int?, string?) productTypeFilter = (null, null);
-        //for saving dates for date filtering 
-        (DateTime?, DateTime?) addedDateFilter = (null, null);
         //for saving product status fiter state
         List<CheckBoxListItem> StatusList;
+        //for saving product type filter state
+        (int?, string) productTypeFilter = (null, null);
+        //for saving dates for date filtering 
+        (DateTime?, DateTime?) addedDateFilter = (null, null);
 
         //for saving text value filter queries
-        string? skuQuery = null;
-        string? titleQuery = null;
-        string? vendorQuery = null;
+        string skuQuery = null;
+        string titleQuery = null;
+        string vendorQuery = null;
 
         //data grid item source
         private List<FullProduct> DataGridSource;
@@ -63,14 +63,16 @@ namespace Ikrito_Fulfillment_Platform.Pages
             BackgroundWorker worker = new();
             worker.WorkerReportsProgress = false;
 
-            worker.DoWork += (sender, e) => {
+            worker.DoWork += (sender, e) =>
+            {
                 //downloading products from database
                 Dictionary<string, FullProduct> products = ProductModule.GetAllProducts();
                 e.Result = products;
             };
 
             // background Worker for loading all product on complete
-            worker.RunWorkerCompleted += (sender, e) => {
+            worker.RunWorkerCompleted += (sender, e) =>
+            {
                 //getting category display names
                 var TempProductList = e.Result as Dictionary<string, FullProduct>;
                 foreach ((string sku, FullProduct TempProduct) in TempProductList)
@@ -95,11 +97,11 @@ namespace Ikrito_Fulfillment_Platform.Pages
                 loadingbarLabel.Text = "";
                 loadingBar.IsIndeterminate = false;
                 RefreshButton.IsEnabled = true;
-                Debug.WriteLine("BGW_PreloadAllProducts Finished");
                 BulkCategoryEditButton.IsEnabled = true;
                 PiguIntegrationButton.IsEnabled = true;
                 RemoveFilters.IsEnabled = true;
                 SelectCategoryButton.IsEnabled = true;
+                Debug.WriteLine("BGW_PreloadAllProducts Finished");
             };
 
             //blocking refresh button and animating loading bar
@@ -216,25 +218,110 @@ namespace Ikrito_Fulfillment_Platform.Pages
         //
 
         /// <summary>
-        /// mehod that applies all filters to product data grid
+        /// method that applies status, type, date added filters to product data grid
         /// </summary>
-        private void applyProductFilters() { 
+        private void applyProductFilters()
+        {
+            List<FullProduct> tempList = new();
 
-            List<FullProduct> tempList = new List<FullProduct>();
+            //filtering by the product status (first because status filter is always active)
+            foreach (CheckBoxListItem status in StatusList)
+            {
+                if (status.IsSelected)
+                {
+                    tempList.AddRange(AllProducts.ToList().FindAll(x => x.Value.Status == status.Name).ToDictionary(x => x.Key, x => x.Value).Values.ToList());
+                }
+            }
 
             //filtering ty product type
             if (productTypeFilter.Item1 != null && productTypeFilter.Item2 != null)
             {
-                tempList = AllProducts.Values.ToList().Where(x => int.Parse(x.ProductTypeID) == productTypeFilter.Item1).ToList();
+                tempList = tempList.Where(x => int.Parse(x.ProductTypeID) == productTypeFilter.Item1).ToList();
             }
-            else { 
-                tempList = AllProducts.Values.ToList();
+
+            //filtering products by the added date
+            if (addedDateFilter.Item1 != null && addedDateFilter.Item2 != null)
+            {
+                long beginTimeStamp = ((DateTimeOffset)addedDateFilter.Item1).ToUnixTimeSeconds();
+                long endTimeStamp = ((DateTimeOffset)addedDateFilter.Item2).ToUnixTimeSeconds();
+                if (beginTimeStamp <= endTimeStamp)
+                {
+                    tempList = tempList.Where((x => beginTimeStamp <= long.Parse(x.AddedTimeStamp) && long.Parse(x.AddedTimeStamp) <= endTimeStamp)).ToList();
+                }
             }
 
             //assigning temp list to datagrid source
             DataGridSource = tempList;
             productDG.ItemsSource = DataGridSource;
             ChangeCountLabel(DataGridSource.Count);
+        }
+
+        /// <summary>
+        /// method that applies sku, title, vendor filters to product data grid
+        /// </summary>
+        private void applyProductTextFilters()
+        {
+            List<FullProduct> tempList = new();
+            applyProductFilters();
+            tempList = DataGridSource;
+
+            //sku filter
+            if (skuQuery != null)
+            {
+                tempList = tempList.Where(p => p.SKU.ToLower().Contains(skuQuery)).ToList();
+            }
+
+            //title filter
+            if (titleQuery != null)
+            {
+                tempList = tempList.Where(p => p.TitleLT.ToLower().Contains(titleQuery)).ToList();
+            }
+
+            //vendor filter
+            if (vendorQuery != null)
+            {
+                tempList = tempList.Where(p => p.Vendor.ToLower().Contains(vendorQuery)).ToList();
+            }
+
+            DataGridSource = tempList;
+            productDG.ItemsSource = DataGridSource;
+            ChangeCountLabel(DataGridSource.Count);
+        }
+
+        /// <summary>
+        /// method that is triggered when clicking remove filters button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RemoveFilters_Click(object sender, RoutedEventArgs e)
+        {
+            //deleting text filters
+            SKUFilterSBox.Clear();
+            TitleFilterSBox.Clear();
+            VendorFilterSBox.Clear();
+
+            skuQuery = null;
+            titleQuery = null;
+            vendorQuery = null;
+
+            //deleting typpe filters
+            SelectCategoryButton.Content = "Select Category";
+            productTypeFilter = (null, null);
+
+            //deleting added date filters
+            BeginDatePicker.SelectedDate = null;
+            EndDatePicker.SelectedDate = null;
+            addedDateFilter = (null, null);
+
+            //deleting product status filters
+            StatusList.ForEach(x => { x.IsSelected = true; });
+            CheckBox1.IsChecked = true;
+            CheckBox2.IsChecked = true;
+            CheckBox3.IsChecked = true;
+            CheckBox4.IsChecked = true;
+            CheckBox5.IsChecked = true;
+
+            applyProductFilters();
         }
 
 
@@ -262,7 +349,6 @@ namespace Ikrito_Fulfillment_Platform.Pages
                 button.Content = "Select Category";
                 productTypeFilter = (null, null);
             }
-
             applyProductFilters();
         }
 
@@ -284,7 +370,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
                 CheckBoxListItem newItem = new(status);
                 StatusList.Add(newItem);
             }
-                
+
             //binding each checkbox to observable collection 
             CheckBox1.DataContext = StatusList[0];
             CheckBox2.DataContext = StatusList[1];
@@ -330,21 +416,6 @@ namespace Ikrito_Fulfillment_Platform.Pages
             {
                 addedDateFilter = (BeginDatePicker.SelectedDate.Value, EndDatePicker.SelectedDate.Value);
                 applyProductFilters();
-
-                //long beginTimeStamp = ((DateTimeOffset)BeginDatePicker.SelectedDate.Value).ToUnixTimeSeconds();
-                //long endTimeStamp = ((DateTimeOffset)EndDatePicker.SelectedDate.Value).ToUnixTimeSeconds();
-                //if (beginTimeStamp <= endTimeStamp)
-                //{
-
-                //    DateFilteredFilteredProducts.Clear();
-                //    DateFilteredFilteredProducts.AddRange(StatusFilteredProducts.FindAll(x => beginTimeStamp <= long.Parse(x.AddedTimeStamp) && long.Parse(x.AddedTimeStamp) <= endTimeStamp));
-
-                //    TextFilteredProducts = DateFilteredFilteredProducts.ToList();
-                //    DataGridSource = TextFilteredProducts.ToList();
-                //    productDG.ItemsSource = DataGridSource;
-                //    productDG.Items.Refresh();
-                //    ChangeCountLabel(TextFilteredProducts.Count);
-                //}
             }
         }
 
@@ -361,20 +432,15 @@ namespace Ikrito_Fulfillment_Platform.Pages
         private void VendorFilterSBox_KeyUp(object sender, KeyEventArgs e)
         {
             TextBox textBox = sender as TextBox;
-            if (e.Key == Key.Enter)
+            if (textBox.Text.Length > 0 && e.Key == Key.Enter)
             {
                 vendorQuery = textBox.Text.ToLower();
-                applyProductFilters();
-
-                //TextFilteredProducts = TextFilteredProducts.Where(p => p.Vendor.ToLower().Contains(query)).ToList();
-                //ChangeCountLabel(TextFilteredProducts.Count);
-                //DataGridSource = TextFilteredProducts;
-                //productDG.ItemsSource = DataGridSource;
+                applyProductTextFilters();
             }
-            else if (textBox.Text.Length == 0)
+            else if (textBox.Text.Length == 0 && e.Key == Key.Enter)
             {
                 vendorQuery = null;
-                applyProductFilters();
+                applyProductTextFilters();
             }
         }
 
@@ -386,19 +452,15 @@ namespace Ikrito_Fulfillment_Platform.Pages
         private void SKUFilterSBox_KeyUp(object sender, KeyEventArgs e)
         {
             TextBox textBox = sender as TextBox;
-            if (e.Key == Key.Enter)
+            if (textBox.Text.Length > 0 && e.Key == Key.Enter)
             {
                 skuQuery = textBox.Text.ToLower();
-                applyProductFilters();
-                //TextFilteredProducts = TextFilteredProducts.Where(p => p.SKU.ToLower().Contains(query)).ToList();
-                //ChangeCountLabel(TextFilteredProducts.Count);
-                //DataGridSource = TextFilteredProducts;
-                //productDG.ItemsSource = DataGridSource;
+                applyProductTextFilters();
             }
-            else if (textBox.Text.Length == 0)
+            else if(textBox.Text.Length == 0 && e.Key == Key.Enter)
             {
                 skuQuery = null;
-                applyProductFilters();
+                applyProductTextFilters();
             }
         }
 
@@ -410,32 +472,16 @@ namespace Ikrito_Fulfillment_Platform.Pages
         private void TitleFilterSBox_KeyUp(object sender, KeyEventArgs e)
         {
             TextBox textBox = sender as TextBox;
-            if (e.Key == Key.Enter)
+            if (textBox.Text.Length > 0 && e.Key == Key.Enter)
             {
                 titleQuery = textBox.Text.ToLower();
-                applyProductFilters();
-                //TextFilteredProducts = TextFilteredProducts.Where(p => p.TitleLT.ToLower().Contains(query)).ToList();
-                //ChangeCountLabel(TextFilteredProducts.Count);
-                //DataGridSource = TextFilteredProducts;
-                //productDG.ItemsSource = DataGridSource;
+                applyProductTextFilters();
             }
-            else if (textBox.Text.Length == 0)
+            else if (textBox.Text.Length == 0 && e.Key == Key.Enter)
             {
                 titleQuery = null;
-                applyProductFilters();
+                applyProductTextFilters();
             }
-        }
-
-        /// <summary>
-        /// method that is triggered when clicking remove filters button
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void RemoveFilters_Click(object sender, RoutedEventArgs e)
-        {
-            TitleFilterSBox.Clear();
-            SKUFilterSBox.Clear();
-            VendorFilterSBox.Clear();
         }
     }
 }
