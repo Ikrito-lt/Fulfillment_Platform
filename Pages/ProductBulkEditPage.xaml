@@ -3,7 +3,6 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Ikrito_Fulfillment_Platform.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="1080" d:DesignWidth="1920"
       Title="ProductBulkEditPage">
@@ -17,9 +16,9 @@
             <RowDefinition Height="*"/>
             <!--bottom buttons-->
             <RowDefinition Height="75"/>
-
         </Grid.RowDefinitions>
 
+        <!--loading bar-->
         <Border Grid.Row="0" Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="2" Margin="10,10,10,0" Padding="10">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -50,22 +49,27 @@
                         <ColumnDefinition Width="30"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
                         <RowDefinition Height="35"/>
                         <RowDefinition Height="*"/>
-                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="40"/>
                         <RowDefinition Height="35"/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Column="0" Text="Product Type" VerticalAlignment="Center"/>
-                    <ComboBox Grid.Column="1" x:Name="TypeFilterCBox" Visibility="Visible" VerticalAlignment="Center" StaysOpenOnEdit="True" IsTextSearchEnabled="True" IsEditable="True" SelectionChanged="ComboBox_SelectionChanged"/>
-                    <Button x:Name="DeleteTypeFilterButton" Grid.Column="2" Grid.Row="0" Click="DeleteTypeFilterButton_Click" Content="X" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,5,0,5" VerticalContentAlignment="Center"/>
+                    <!--current product type selection-->
+                    <TextBlock Grid.Column="0" Text="Current Product Type" VerticalAlignment="Center"/>
+                    <Button Grid.Column="1" Grid.ColumnSpan="2" x:Name="SelectCurrentCategoryButton" Click="SelectCurrentCategoryButton_Click" Content="Select Current Category" Padding="5" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
 
+                    <!--vendor product type selection--> 
                     <TextBlock Grid.Column="0" Grid.Row="1" Text="Vendor Product Type" VerticalAlignment="Center"/>
-                    <ComboBox Grid.Column="1" Grid.Row="1" x:Name="VendorTypeFilterCBox" Visibility="Visible" VerticalAlignment="Center" StaysOpenOnEdit="True" IsTextSearchEnabled="True" IsEditable="True" SelectionChanged="ComboBox_SelectionChanged"/>
+                    <ComboBox Grid.Column="1" Grid.Row="1" x:Name="VendorTypeFilterCBox" Visibility="Visible" VerticalAlignment="Center" StaysOpenOnEdit="True" IsTextSearchEnabled="True" IsEditable="True"/>
                     <Button x:Name="DeleteVendorTypeFilterButton" Grid.Column="2" Grid.Row="1" Click="DeleteVendorTypeFilterButton_Click" Content="X" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,5,0,5" VerticalContentAlignment="Center"/>
 
-                    <ListBox Grid.ColumnSpan="3" Grid.Row="2" Name="ChangeTypeListBox" SelectionMode="Single" ItemsSource="{Binding}" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionChanged="ChangeTypeListBox_SelectionChanged">
+                    <!--update listbox button-->
+                    <Button Grid.ColumnSpan="3" Grid.Row="2" Width="135" x:Name="RefreshProductListBoxButton" Click="RefreshProductListBoxButton_Click" Content="↓↓↓↓↓" Padding="5" HorizontalAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center"/>    
+                    
+                    <ListBox Grid.ColumnSpan="3" Grid.Row="3" Name="ChangeTypeListBox" SelectionMode="Single" ItemsSource="{Binding}" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionChanged="ChangeTypeListBox_SelectionChanged">
 
                         <ListBox.InputBindings>
                             <KeyBinding Key="Enter" Command="{Binding DataContext.SelectItemCommand, ElementName=KeyListBox}" 
@@ -135,24 +139,20 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
 
-                    <TextBlock Grid.Column="0" Grid.Row="3" Text="New Product Type" VerticalAlignment="Center"/>
-                    <ComboBox Grid.Column="1" Grid.Row="3" x:Name="NewTypeCBox" Visibility="Visible" VerticalAlignment="Center" StaysOpenOnEdit="True" IsTextSearchEnabled="True" IsEditable="True"/>
-                    <Button x:Name="DeleteNewTypeFilterButton" Grid.Column="2" Grid.Row="3" Click="DeleteNewTypeFilterButton_Click" Content="X" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,5,0,5" VerticalContentAlignment="Center"/>
-
-                    <Grid Grid.ColumnSpan="3" Grid.Row="4">
+                    <!--new product type selection-->
+                    <TextBlock Grid.Column="0" Grid.Row="4" Text="New Product Type" VerticalAlignment="Center"/>
+                    <Button Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="4" x:Name="SelectNewCategoryButton" Click="SelectNewCategoryButton_Click" Content="Select New Category" Padding="5" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                    
+                    <Grid Grid.ColumnSpan="3" Grid.Row="5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
 
-                        <Button x:Name="SelectAllProductsButton" Click="SelectAllProductsButton_Click" 
-                                    Content="Select All" Padding="5,5,5,5" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="0" Width="135" Margin="0,0,0,0"/>
-
-                        <Button x:Name="ChangeTypesButton" Click="ChangeTypesButton_Click" 
-                                    Content="Change Product Types" Padding="5,5,5,5" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="1" Width="135" Margin="0,0,0,0"/>
+                        <Button x:Name="SelectAllProductsButton" Click="SelectAllProductsButton_Click" Content="Select All" Padding="5,5,5,5" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0" Width="135" Margin="0,0,0,0"/>
+                        <Button x:Name="ChangeTypesButton" Click="ChangeTypesButton_Click" Content="Change Product Types" Padding="5,5,5,5" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Width="135" Margin="0,0,0,0"/>
 
                     </Grid>
-
                 </Grid>
             </Border>
 

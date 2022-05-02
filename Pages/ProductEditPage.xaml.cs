@@ -226,6 +226,8 @@ namespace Ikrito_Fulfillment_Platform.Pages {
                     PermPriceCheckBox.IsChecked = false;
                 }
             };
+            //selectiong first variant
+            ProductVariantComboBox.SelectedIndex = 0;
         }
 
         /// <summary>
@@ -324,8 +326,8 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         }
 
 
-        // Buttons section
         //
+        // Buttons section
         //
 
         /// <summary>
@@ -506,8 +508,8 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         }
 
 
-        //section for flipping ProductSaved bool and input validation of double and int inputs
         //
+        //section for flipping ProductSaved bool and input validation of double and int inputs
         //
 
         /// <summary>

@@ -1,25 +1,33 @@
 ﻿using Ikrito_Fulfillment_Platform.Models;
+using Ikrito_Fulfillment_Platform.Modules;
+using Ikrito_Fulfillment_Platform.UI;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Linq;
-using System.ComponentModel;
-using System;
-using Ikrito_Fulfillment_Platform.Modules;
 using System.Windows.Input;
-using System.Collections.ObjectModel;
 
 namespace Ikrito_Fulfillment_Platform.Pages
 {
     public partial class ProductBulkEditPage : Page
     {
-        private readonly Dictionary<string, FullProduct> Products;
         private readonly Page PreviousPage;
+
+        private readonly Dictionary<string, FullProduct> Products;
         private readonly Dictionary<string, string> CategoryKVP;
-        private readonly List<string> PossibleTypes;
+
         private List<string> PossibleVendorTypes;
+        //for saving selected current product type
+        Tuple<int?, string> currentProductType = new(null, null);
+        //for saving selected new product type
+        Tuple<int?, string> newProductType = new(null, null);
+
+
         private List<TypeListBoxItem> ListBoxSource;
         private bool AllTypeChangeProductsSelected = false;
+
 
         public ProductBulkEditPage(Dictionary<string, FullProduct> products, Dictionary<string, string> categoryKVP, Page prevPage)
         {
@@ -28,10 +36,8 @@ namespace Ikrito_Fulfillment_Platform.Pages
             Products = products;
             CategoryKVP = categoryKVP;
 
-            //sorting lists
-            PossibleTypes = CategoryKVP.Values.ToList();
-            PossibleTypes.Sort();
-            PossibleVendorTypes = GetVendorTypes().ToList();
+            //sorting possible vendor product types
+            PossibleVendorTypes = GetVendorTypes();
             PossibleVendorTypes.Sort();
             ListBoxSource = new();
 
@@ -40,10 +46,9 @@ namespace Ikrito_Fulfillment_Platform.Pages
             InitTypes();
         }
 
-        //
-        // Classes
-        //
-
+        /// <summary>
+        /// Class that defines data displayed in listbox item
+        /// </summary>
         class TypeListBoxItem
         {
             public string SKU { get; set; }
@@ -58,13 +63,10 @@ namespace Ikrito_Fulfillment_Platform.Pages
         // 
 
         /// <summary>
-        /// 
+        /// this method initialises possible vendor product types combobox
         /// </summary>
         private void InitTypes() {
-            TypeFilterCBox.ItemsSource = PossibleTypes;
             VendorTypeFilterCBox.ItemsSource = PossibleVendorTypes;
-            NewTypeCBox.ItemsSource = PossibleTypes;
-
             ChangeTypeListBox.ItemsSource = ListBoxSource;
         }
 
@@ -74,7 +76,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
         /// <returns>List of Possible vendor types</returns>
         private List<string> GetVendorTypes() {
             List<string> possibleVendorTypes = new();
-            foreach ((string sku, FullProduct p) in Products) {
+            foreach ((_, FullProduct p) in Products) {
                 if (!possibleVendorTypes.Contains(p.ProductTypeVendor.Trim()))
                 {
                     possibleVendorTypes.Add(p.ProductTypeVendor.Trim());
@@ -83,56 +85,88 @@ namespace Ikrito_Fulfillment_Platform.Pages
             return possibleVendorTypes;
         }
 
+
         //
-        // on change section
+        // selecting new and current product types
         //
 
         /// <summary>
-        /// Combo box selection chnaged we are doing list box filtration
+        /// method that saves state of current product type for list box filtration
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void SelectCurrentCategoryButton_Click(object sender, RoutedEventArgs e)
         {
-            ComboBox senderCB = (sender as ComboBox);
-            if (senderCB.Name == "TypeFilterCBox" || senderCB.Name == "VendorTypeFilterCBox")
+            var button = sender as Button;
+            var categoryTreeSelector = new CategoryTreeSelectorWindow("Select Current Category From CategoryTree");
+            if (categoryTreeSelector.ShowDialog() == true)
             {
-                RefreshListBox();
+                var selectedCategoryTuple = categoryTreeSelector.selectionResult;
+                button.Content = selectedCategoryTuple.Item2;
+                currentProductType = selectedCategoryTuple;
+            }
+            else
+            {
+                button.Content = "Select Current Category";
+                currentProductType = new(null, null);
             }
         }
 
-        private void RefreshListBox() {
-             string productType = string.Empty;
-            string vendorProductType = string.Empty;
-            if (TypeFilterCBox.SelectedItem != null) productType = TypeFilterCBox.SelectedItem.ToString();
-            if (VendorTypeFilterCBox.SelectedItem != null) vendorProductType = VendorTypeFilterCBox.SelectedItem.ToString();
+        /// <summary>
+        /// method that saves state of new product type for list box filtration
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SelectNewCategoryButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var categoryTreeSelector = new CategoryTreeSelectorWindow("Select New Category From CategoryTree");
+            if (categoryTreeSelector.ShowDialog() == true)
+            {
+                var selectedCategory = categoryTreeSelector.selectionResult;
+                button.Content = selectedCategory.Item2;
+                newProductType = selectedCategory;
+            }
+            else
+            {
+                button.Content = "Select New Category";
+                newProductType = new(null, null);
+            }
+        }
 
+
+        //
+        // refreshing product list box section
+        //
+
+        /// <summary>
+        /// method that is responsible for loading products in product list box
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RefreshProductListBoxButton_Click(object sender, RoutedEventArgs e)
+        {
+            //if vendor type combo box is empty or current product type isnt selected, return
+            if (VendorTypeFilterCBox.SelectedItem == null || currentProductType.Item1 == null || currentProductType.Item2 == null)
+            {
+                return;
+            }
+
+            //compiling new ListBoxSource with selected product types
+            string vendorProductType = VendorTypeFilterCBox.SelectedItem.ToString();
+            string productType = currentProductType.Item2;
             ListBoxSource.Clear();
 
-            foreach ((string sku, FullProduct p) in Products) {
+            foreach ((_, FullProduct p) in Products)
+            {
                 var TPlistboxitem = new TypeListBoxItem();
                 TPlistboxitem.VendorProductType = vendorProductType;
                 TPlistboxitem.ProductType = productType;
 
-                //check if need to check product type, if check fails loop continues
-                bool checkPT = productType == string.Empty ? false : true;
-                if (checkPT)
-                {
-                    if (p.ProductTypeDisplayVal != productType) continue;
-                }
-                else {
-                    TPlistboxitem.ProductType = p.ProductTypeDisplayVal;
-                }
-
-                //check if need to check vendor product type, if check fails loop continues
-                bool checkVPT = TPlistboxitem.VendorProductType == string.Empty ? false : true;
-                if (checkVPT)
-                {
-                    if (p.ProductTypeVendor.Trim() != vendorProductType) continue;
-                }
-                else {
-                    TPlistboxitem.VendorProductType = p.ProductTypeVendor;
-                }
+                //check if product has required product type, if check fails loop continues
+                if (p.ProductTypeDisplayVal != productType) continue;
+                //check if product has required vendor product type, if check fails loop continues
+                if (p.ProductTypeVendor.Trim() != vendorProductType) continue;
 
                 //if both checks passed, give TPlistboxitem - sku - title;
                 TPlistboxitem.SKU = p.SKU;
@@ -142,64 +176,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
                 //adding it to list box source
                 ListBoxSource.Add(TPlistboxitem);
             }
-
             ChangeTypeListBox.Items.Refresh();
-        }
-
-
-        //
-        // change products types logic section
-        //
-
-        //method for  loading products to datagrid
-        private void ChangeTypes(string newType)
-        {
-            BackgroundWorker worker = new();
-            worker.WorkerReportsProgress = true;
-
-            worker.DoWork += (object sender, DoWorkEventArgs e) =>
-            {
-                string newTypeID = CategoryKVP.FirstOrDefault(x => x.Value == newType).Key;
-                Dictionary<string, TypeListBoxItem> changeList = ListBoxSource.Where(x => x.Selected == true).ToDictionary(v => v.SKU, v => v);
-                var i = 1;
-                var changesCount = changeList.Count;
-                foreach ((var sku, var t) in changeList) {
-                    ProductCategoryModule.ChangeProductCategory(sku, newTypeID);
-
-                    //changing category in products
-                    Products[sku].ProductTypeID = newTypeID;
-                    Products[sku].ProductTypeDisplayVal = newType;
-
-                    //changing category in listbox
-                    ListBoxSource.Remove(t);
-                    (sender as BackgroundWorker).ReportProgress(i, changesCount);
-                    i++;                
-                }
-
-            };
-
-            worker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) =>
-            {
-                BackButton.IsEnabled = true;
-                loadingbarLabel.Text = "";
-                loadingBar.Value = 0;
-                ChangeTypeListBox.Items.Refresh();
-            };
-
-            worker.ProgressChanged += (object sender, ProgressChangedEventArgs e) =>
-            {
-                int progress = e.ProgressPercentage;
-                int max = (int)e.UserState;
-                loadingBar.Value = progress;
-                loadingBar.Maximum = max;
-                loadingbarLabel.Text = $"Changing Product Types ({progress}/{max})";
-            };
-
-            //blocking pre do work
-            BackButton.IsEnabled = false;
-            loadingbarLabel.Text = "Changing Product Types";
-            
-            worker.RunWorkerAsync();
         }
 
        
@@ -246,28 +223,6 @@ namespace Ikrito_Fulfillment_Platform.Pages
         }
 
         /// <summary>
-        /// /button that changes types 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ChangeTypesButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (NewTypeCBox.SelectedItem != null) {
-                ChangeTypes(NewTypeCBox.SelectedItem.ToString());
-            }
-        }
-
-        /// <summary>
-        /// deletes all product filters
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void DeleteTypeFilterButton_Click(object sender, RoutedEventArgs e)
-        {
-            TypeFilterCBox.SelectedItem = null;
-        }
-
-        /// <summary>
         /// button that unselects vendortypeCboox
         /// </summary>
         /// <param name="sender"></param>
@@ -277,18 +232,13 @@ namespace Ikrito_Fulfillment_Platform.Pages
             VendorTypeFilterCBox.SelectedItem = null;
         }
 
-        /// <summary>
-        ///  button that unselects newtype CBox
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void DeleteNewTypeFilterButton_Click(object sender, RoutedEventArgs e)
-        {
-            NewTypeCBox.SelectedItem = null;
-        }
+
+        //
+        // List box item interaction section
+        //
 
         /// <summary>
-        /// Refreshes Product attribute dataGrid
+        /// Refreshes Product attributes section
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -333,6 +283,80 @@ namespace Ikrito_Fulfillment_Platform.Pages
                     newFocusTarget.Focus();
                 }
             }
+        }
+
+
+        //
+        // change products types logic section
+        //
+
+        /// <summary>
+        /// /button that changes types 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ChangeTypesButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (newProductType.Item1 != null && newProductType.Item2 != null)
+            {
+                ChangeTypes(newProductType);
+            }
+        }
+
+        /// <summary>
+        /// method for  loading products to datagrid
+        /// </summary>
+        /// <param name="newType"></param>
+        private void ChangeTypes(Tuple<int?, string> newType)
+        {
+            string newTypeID = newType.Item1.ToString();
+            string newTypeName = newType.Item2;
+
+            BackgroundWorker worker = new();
+            worker.WorkerReportsProgress = true;
+            worker.DoWork += (object sender, DoWorkEventArgs e) =>
+            {
+                Dictionary<string, TypeListBoxItem> changeList = ListBoxSource.Where(x => x.Selected == true).ToDictionary(v => v.SKU, v => v);
+                var i = 1;
+                var changesCount = changeList.Count;
+                foreach ((var sku, var t) in changeList)
+                {
+                    ProductCategoryModule.ChangeProductCategory(sku, newTypeID);
+
+                    //changing category in products
+                    Products[sku].ProductTypeID = newTypeID;
+                    Products[sku].ProductTypeDisplayVal = newTypeName;
+
+                    //changing category in listbox
+                    ListBoxSource.Remove(t);
+                    (sender as BackgroundWorker).ReportProgress(i, changesCount);
+                    i++;
+                }
+
+            };
+
+            worker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) =>
+            {
+                BackButton.IsEnabled = true;
+                loadingbarLabel.Text = "";
+                loadingBar.Value = 0;
+                ChangeTypeListBox.Items.Refresh();
+            };
+
+            worker.ProgressChanged += (object sender, ProgressChangedEventArgs e) =>
+            {
+                int progress = e.ProgressPercentage;
+                int max = (int)e.UserState;
+                loadingBar.Value = progress;
+                loadingBar.Maximum = max;
+                loadingbarLabel.Text = $"Changing Product Types ({progress}/{max})";
+            };
+
+            //blocking pre do work
+            BackButton.IsEnabled = false;
+            loadingbarLabel.Text = "Changing Product Types";
+
+            worker.RunWorkerAsync();
         }
     }
 }

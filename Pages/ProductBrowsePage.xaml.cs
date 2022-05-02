@@ -22,9 +22,9 @@ namespace Ikrito_Fulfillment_Platform.Pages
         //for saving product status fiter state
         List<CheckBoxListItem> StatusList;
         //for saving product type filter state
-        (int?, string) productTypeFilter = (null, null);
+        Tuple<int?, string> productTypeFilter = new(null, null);
         //for saving dates for date filtering 
-        (DateTime?, DateTime?) addedDateFilter = (null, null);
+        Tuple<DateTime?, DateTime?> addedDateFilter = new(null, null);
 
         //for saving text value filter queries
         string skuQuery = null;
@@ -136,7 +136,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
 
             //setting category to null
             SelectCategoryButton.Content = "Select Category";
-            productTypeFilter = (null, null);
+            productTypeFilter = new(null, null);
 
             //init DataGrid
             productDG.ItemsSource = DataGridSource;
@@ -306,12 +306,12 @@ namespace Ikrito_Fulfillment_Platform.Pages
 
             //deleting typpe filters
             SelectCategoryButton.Content = "Select Category";
-            productTypeFilter = (null, null);
+            productTypeFilter = new(null, null);
 
             //deleting added date filters
             BeginDatePicker.SelectedDate = null;
             EndDatePicker.SelectedDate = null;
-            addedDateFilter = (null, null);
+            addedDateFilter = new(null, null);
 
             //deleting product status filters
             StatusList.ForEach(x => { x.IsSelected = true; });
@@ -337,17 +337,17 @@ namespace Ikrito_Fulfillment_Platform.Pages
         private void SelectCategoryButton_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
-            var categoryTreeSelector = new CategoryTreeSelectorWindow();
+            var categoryTreeSelector = new CategoryTreeSelectorWindow("Select Category From CategoryTree");
             if (categoryTreeSelector.ShowDialog() == true)
             {
-                (int, string) selectedCategory = categoryTreeSelector.selectionResult;
-                button.Content = selectedCategory.Item2;
-                productTypeFilter = selectedCategory;
+                var selectedCategoryTuple = categoryTreeSelector.selectionResult;
+                button.Content = selectedCategoryTuple.Item2;
+                productTypeFilter = selectedCategoryTuple;
             }
             else
             {
                 button.Content = "Select Category";
-                productTypeFilter = (null, null);
+                productTypeFilter = new(null, null);
             }
             applyProductFilters();
         }
@@ -414,7 +414,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
 
             if (BeginDatePicker.SelectedDate.HasValue && EndDatePicker.SelectedDate.HasValue)
             {
-                addedDateFilter = (BeginDatePicker.SelectedDate.Value, EndDatePicker.SelectedDate.Value);
+                addedDateFilter = new(BeginDatePicker.SelectedDate.Value, EndDatePicker.SelectedDate.Value);
                 applyProductFilters();
             }
         }
