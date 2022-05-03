@@ -14,8 +14,8 @@ namespace Ikrito_Fulfillment_Platform.Modules.PiguIntegration.Models
         public string Barcode { get; set; }
         public string VariantName { get; set; }
         public string PiguSupplierCode { get; set; }
-        public string PriceBDiscount { get; set; }
-        public string PriceADiscount { get; set; }
+        public string PriceBDiscount { get; set; }      //price before discount
+        public string PriceADiscount { get; set; }      //price after discount
         public string OurStock { get; set; }
         public bool IsEnabled { get; set; }
         public string OfferCreatedUnixStamp { get; set; }

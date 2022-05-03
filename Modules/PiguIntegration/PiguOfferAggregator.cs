@@ -278,6 +278,13 @@ namespace Ikrito_Fulfillment_Platform.Modules.PiguIntegration
             e.Result = uploadRes;
         }
 
+        /// <summary>
+        ///  method that is used to upload xml file to 
+        /// </summary>
+        /// <param name="bucketName"></param>
+        /// <param name="keyName"></param>
+        /// <param name="xml"></param>
+        /// <returns></returns>
         private static Task<string> S3UploadXmlAsync( string bucketName, string keyName, XmlDocument xml )
         {
             return Task.Run<string>(async () =>

@@ -31,7 +31,11 @@ namespace Ikrito_Fulfillment_Platform.Modules
         // Section with methods that are needed for product statuses
         //
 
-        // method taht gets product tatus for DB using product SKU
+        /// <summary>
+        /// method taht gets product tatus for DB using product SKU
+        /// </summary>
+        /// <param name="sku"></param>
+        /// <returns></returns>
         public static string GetProductStatus(string sku)
         {
             DataBaseInterface db = new();
@@ -164,7 +168,10 @@ namespace Ikrito_Fulfillment_Platform.Modules
         // Section of methods that are responsible for managign individual products in database
         //
 
-        // method for deleting product form database 
+        /// <summary>
+        /// method for deleting product form database 
+        /// </summary>
+        /// <param name="sku"></param>
         public static void DeleteProduct(string sku)
         {
             string tablePrefix = sku.GetBeginingOrEmpty();
@@ -182,7 +189,11 @@ namespace Ikrito_Fulfillment_Platform.Modules
 
         }
 
-        //method that gets product from database using its SKU 
+        /// <summary>
+        /// method that gets product from database using its SKU 
+        /// </summary>
+        /// <param name="sku"></param>
+        /// <returns></returns>
         public static FullProduct GetProduct(string sku)
         {
             FullProduct prod = new();
@@ -310,7 +321,10 @@ namespace Ikrito_Fulfillment_Platform.Modules
             return prod;
         }
 
-        // method that adds new product to database (decides what table to add to using SKU prefix)
+        /// <summary>
+        /// method that adds new product to database (decides what table to add to using SKU prefix)
+        /// </summary>
+        /// <param name="p"></param>
         public static void AddProductToDB(FullProduct p)
         {
             DataBaseInterface db = new();
@@ -602,7 +616,11 @@ namespace Ikrito_Fulfillment_Platform.Modules
         // Section for getting product lists from database
         //
 
-        //method gets list of TDB products
+        /// <summary>
+        /// method gets list of {Vendor} products
+        /// </summary>
+        /// <param name="TablePrefix"></param>
+        /// <returns></returns>
         public static Dictionary<string, FullProduct> GetVendorProducts(string TablePrefix)
         {
             Dictionary<string, FullProduct> productsKVP = new();
@@ -703,8 +721,11 @@ namespace Ikrito_Fulfillment_Platform.Modules
             return productsKVP;
         }
 
-        //todo: this is slow
-        //method gets list of all Products in database
+        //todo: this is slow consider multithreading
+        /// <summary>
+        /// method gets list of all Products in database
+        /// </summary>
+        /// <returns></returns>
         public static Dictionary<string,FullProduct> GetAllProducts()
         {
             Dictionary<string, FullProduct> p = new();

@@ -2,6 +2,7 @@
 using Ikrito_Fulfillment_Platform.Modules;
 using Ikrito_Fulfillment_Platform.Modules.PiguIntegration;
 using Ikrito_Fulfillment_Platform.Modules.PiguIntegration.Models;
+using Ikrito_Fulfillment_Platform.UI;
 using Ikrito_Fulfillment_Platform.Utils;
 using Microsoft.VisualStudio.PlatformUI;
 using System;
@@ -22,12 +23,20 @@ namespace Ikrito_Fulfillment_Platform.Pages
     public partial class PiguIntegrationPage : Page
     {
         public Dictionary<string, FullProduct> AllProducts;
-        private Dictionary<string, string> CategoryKVP = ProductCategoryModule.Instance.CategoryKVP;
-        private List<PiguProductOffer> OurProductsLBSource = new();
-        private List<PiguProductOffer> PiguProductOfferLBSource = new();
+        private readonly Dictionary<string, string> CategoryKVP;
+
+        //for saving selected current product type
+        private Tuple<int?, string> currentProductType = new(null, null);
+
+        //for selectin all items in our product listbox
+        private bool ourListBoxAllItemsSelected = false;
+
         private Dictionary<string,PiguVariantOffer> SelectedProductVariantOffersKVP = new();
 
-        //used to detemrine if any productOffers have Variant Offers enabled
+        private List<PiguProductOffer> OurProductsLBSource = new();
+        private List<PiguProductOffer> PiguProductOfferLBSource = new();
+
+        //used to determine if any productOffers have Variant Offers enabled
         private bool AnyOffersPlaced
         {
             get { return _AnyOffersPlaced; }
@@ -60,24 +69,32 @@ namespace Ikrito_Fulfillment_Platform.Pages
         //a command thats passed to PiguLB item to delete it from piguLB
         public ICommand DeletePiguItemCommand { get; set; }
 
-        //private constructor
-        public PiguIntegrationPage(Dictionary<string, FullProduct> products)
+        //constructor
+        public PiguIntegrationPage(Dictionary<string, FullProduct> products, Dictionary<string, string> categoryKVP)
         {
             InitializeComponent();
             AllProducts = products;
-            OurProductTypeFilterCBox.ItemsSource = CategoryKVP.OrderBy(key => key.Value);
             OurProductsLB.ItemsSource = OurProductsLBSource;
 
-            //init piguLB item elete command
+            //assigning category kvp
+            CategoryKVP = categoryKVP;
+
+            //init piguLB item delete command
             DeletePiguItemCommand = new DelegateCommand<object>(DeletePiguItem);
             DataContext = this;
 
-            //loaign pigu product from database
+            //loading pigu product offers from database
             LoadPiguProductOffersDB();
-
         }
 
 
+        //
+        // Loading pigu product offers from database
+        //
+
+        /// <summary>
+        /// method taht loads pigu product offers from database
+        /// </summary>
         private void LoadPiguProductOffersDB() {
             //blocking exit button 
             BackButton.IsEnabled = false;
@@ -128,6 +145,11 @@ namespace Ikrito_Fulfillment_Platform.Pages
             MainWindow.Instance.setFrame(ProductBrowsePage.Instance);
         }
 
+        /// <summary>
+        /// button that generates and uploads xml with pigu product offers 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void GenerateXMLButton_Click(object sender, RoutedEventArgs e)
         {
             //blocking exit button 
@@ -171,62 +193,85 @@ namespace Ikrito_Fulfillment_Platform.Pages
             piguOfferWorker.RunWorkerAsync();
         }
 
+        /// <summary>
+        /// button that opens product edit page for selected product
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void EditProductButton_Click(object sender, RoutedEventArgs e)
         {
             MainWindow.Instance.setFrame(new ProductEditPage(AllProducts[SelectedProductSKU], this, CategoryKVP, true));
         }
+
 
         //
         // Filtering our list box section
         //
 
         /// <summary>
-        /// On combo box selection change reload our list box
+        /// method that updates currently selected product type state
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OurProductTypeFilterCBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void SelectCategoryButton_Click(object sender, RoutedEventArgs e)
         {
-            ComboBox senderCB = (sender as ComboBox);
-            if (senderCB.SelectedItem != null)
+            var button = sender as Button;
+            var categoryTreeSelector = new CategoryTreeSelectorWindow("Select Current Category From CategoryTree");
+            if (categoryTreeSelector.ShowDialog() == true)
             {
-                KeyValuePair<string, string> kvp = (KeyValuePair<string, string>)senderCB.SelectedItem;
-                PopulateOurListBox(kvp.Key);
+                var selectedCategoryTuple = categoryTreeSelector.selectionResult;
+                button.Content = selectedCategoryTuple.Item2;
+                currentProductType = selectedCategoryTuple;
             }
+            else
+            {
+                button.Content = "Select Current Category";
+                currentProductType = new(null, null);
+            }
+
+            //populating our product list box
+            PopulateOurListBox();
         }
 
         /// <summary>
-        /// reloads our products list box
+        /// reloads our products list box using current producttyp state
         /// </summary>
-        /// <param name="catID"></param>
-        private void PopulateOurListBox(string catID)
+        private void PopulateOurListBox()
         {
             OurProductsLBSource.Clear();
-            var pList = AllProducts.Where(p => p.Value.ProductTypeID == catID);
+
+            //check if current product type is null, return
+            if (currentProductType.Item1 == null || currentProductType.Item2 == null) {
+                return;
+            }
+
+            //populating our product list box if current product type is null
+            string currentTypeID = currentProductType.Item1.ToString();
+            var pList = AllProducts.Where(p => p.Value.ProductTypeID == currentTypeID);
             foreach ((var key, var val) in pList)
             {
-                PiguProductOffer item = new PiguProductOffer();
-                item.SKU = val.SKU;
+                PiguProductOffer item = new();
+                item.SKU = key;
                 item.Title = val.TitleLT;
                 item.ProductTypeVal = val.ProductTypeDisplayVal;
                 item.ProductTypeID = val.ProductTypeID;
                 OurProductsLBSource.Add(item);
             }
+
             //changing count label
             OurProductsLabel.Content = $"Our Products ({OurProductsLBSource.Count})";
             OurProductsLB.Items.Refresh();
         }
 
         //
-        // Listboxes item transfer section
+        // Listboxes item transfer, selection section
         //
 
         /// <summary>
-        /// Transfers items from pigu ListBox to our 
+        /// Transfers items from our product listbox to pigu
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-
         private void ToPiguTransferBtn_Click(object sender, RoutedEventArgs e)
         {
             foreach (PiguProductOffer item in OurProductsLBSource.Where(x => x.Selected == true))
@@ -250,11 +295,28 @@ namespace Ikrito_Fulfillment_Platform.Pages
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OurLBUnSelectButton_Click(object sender, RoutedEventArgs e)
+        private void OurLBSelectButton_Click(object sender, RoutedEventArgs e)
         {
-            OurProductsLBSource.ForEach(x => x.Selected = false);
-            OurProductsLB.ItemsSource = OurProductsLBSource;
-            OurProductsLB.Items.Refresh();
+
+            ourListBoxAllItemsSelected = !ourListBoxAllItemsSelected;
+            if (ourListBoxAllItemsSelected)
+            {
+                OurLBSelectButton.Content = "Unselect all";
+                foreach (var item in OurProductsLBSource)
+                {
+                    item.Selected = true;
+                }
+                OurProductsLB.Items.Refresh();
+            }
+            else
+            {
+                OurLBSelectButton.Content = "Select All";
+                foreach (var item in OurProductsLBSource)
+                {
+                    item.Selected = false;
+                }
+                OurProductsLB.Items.Refresh();
+            }
         }
 
         /// <summary>
@@ -292,12 +354,13 @@ namespace Ikrito_Fulfillment_Platform.Pages
             }
         }
 
+
         //
         // ListBoxes Selection Changed
         //
 
         /// <summary>
-        /// changes SelectedProductSKU
+        /// changes Selected SKU and offer info
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -358,15 +421,16 @@ namespace Ikrito_Fulfillment_Platform.Pages
             //populating variant supplier code combo box
             SelectedProductVariantOffersKVP.Clear();
             
-            //creatign new piguvariantoffers
+            //creating new piguvariantoffers
             foreach (var variant in selectedProduct.ProductVariants)
             {
                 if (string.IsNullOrEmpty(variant.Barcode)) continue;
-                string newPiguOfferVariantName = $"{variant.VariantType}: {variant.VariantData}";
+                string newPiguOfferVariantName = $"{variant.VariantType}: {variant.VariantData} ({variant.Barcode})";
                 var newPiguSellOffer = new PiguVariantOffer(sku, variant.Barcode, newPiguOfferVariantName, variant.Price, variant.OurStock);
                 SelectedProductVariantOffersKVP.Add(newPiguSellOffer.VariantName, newPiguSellOffer);
             }
 
+            //disabling the variant offer info UI if there are no valid variants in the offer
             if (SelectedProductVariantOffersKVP.Count == 0)
             {
                 //if product offer doesnt have any barcodes
@@ -377,10 +441,18 @@ namespace Ikrito_Fulfillment_Platform.Pages
 
                 //since there is not barcodes making info filds not editable and deleting info
                 ProductVariantComboBox.IsEnabled = false;
-                OurPriceBox.IsEnabled = false;
-                DiscountPriceBox.IsEnabled = false;
                 SavePiguSellOfferBtn.IsEnabled = false;
-                //deleting info from them
+
+                OurPriceBox.IsEnabled = false;
+                OurPriceBox.Text = null;
+                
+                DiscountPriceBox.IsEnabled = false;
+                DiscountPriceBox.Text = null;
+
+                OurStockBox.IsEnabled = false;
+                OurStockBox.Text = null;
+
+                //deleting info from them all the rest text blocks
                 TitleLTLabel.Text = null;
                 TitleLVLabel.Text = null;
                 TitleEELabel.Text = null;
@@ -388,10 +460,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
 
                 BarcodeBlock.Text = null;
                 VendorStockBlock.Text = null;
-                OurStockBlock.Text = null;
                 VendorPriceBlock.Text = null;
-                OurPriceBox.Text = null;
-                ProfitPerUnitSoldBlock.Text = null;
             }
             else
             {
@@ -413,6 +482,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
                 ProductVariantComboBox.SelectedIndex = 0;
             }
         }
+
 
         //
         // Variants (PiguSellOffers) section
@@ -439,23 +509,14 @@ namespace Ikrito_Fulfillment_Platform.Pages
                 TitleLVLabel.Text = product.TitleLV;
                 TitleEELabel.Text = product.TitleEE;
                 TitleRULabel.Text = product.TitleRU;
-
-                BarcodeBlock.Text = piguVariantOffer.Barcode;
-                VendorStockBlock.Text = pVariant?.VendorStock.ToString();
-                OurStockBlock.Text = pVariant?.OurStock.ToString();
-                VendorPriceBlock.Text = pVariant?.PriceVendor.ToString();
+                
+                OurStockBox.Text = pVariant?.OurStock.ToString();
                 OurPriceBox.Text = pVariant?.Price.ToString();
                 DiscountPriceBox.Text = piguVariantOffer.PriceADiscount;
 
-                if (piguVariantOffer.IsEnabled && piguVariantOffer.PriceADiscount != "0")
-                {
-                    ProfitPerUnitSoldBlock.Text = Math.Round(piguVariantOffer.PriceADiscoutDouble - pVariant.PriceVendor, 2).ToString();
-                }
-                else {
-                    
-                    ProfitPerUnitSoldBlock.Text = Math.Round(pVariant.Price - pVariant.PriceVendor, 2).ToString();
-                }
-                
+                BarcodeBlock.Text = piguVariantOffer.Barcode;
+                VendorStockBlock.Text = pVariant?.VendorStock.ToString();
+                VendorPriceBlock.Text = pVariant?.PriceVendor.ToString();
 
                 //handles emanbling and disabling controls
                 if (PiguProductOfferLBSource.Where(x => x.SKU == SelectedProductSKU).Count() > 0)
@@ -463,26 +524,20 @@ namespace Ikrito_Fulfillment_Platform.Pages
                     ProductVariantComboBox.IsEnabled = true;
                     DiscountPriceBox.IsEnabled = true;
                     SavePiguSellOfferBtn.IsEnabled = true;
+                    OurStockBox.IsEnabled = true;
+                    OurPriceBox.IsEnabled = true;
                 }
                 else
                 {
                     ProductVariantComboBox.IsEnabled = false;
                     DiscountPriceBox.IsEnabled = false;
                     SavePiguSellOfferBtn.IsEnabled = false;
+                    OurStockBox.IsEnabled = false;
+                    OurPriceBox.IsEnabled = false;
                 }
             }
         }
 
-        /// <summary>
-        /// allows only double to be entered (numbers and .)
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void DoublePreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            Regex DoubleRegex = new(@"[^0-9.]+");
-            e.Handled = DoubleRegex.IsMatch(e.Text);
-        }
 
         /// <summary>
         /// button that saves and enables pigu
@@ -492,11 +547,18 @@ namespace Ikrito_Fulfillment_Platform.Pages
         private void SavePiguSellOfferBtn_Click(object sender, RoutedEventArgs e)
         {
             var oldVariantOfferIndex = ProductVariantComboBox.SelectedIndex;
-            //edititng offer info
+            //editing offer info
             var offerKey = ((KeyValuePair<string, PiguVariantOffer>)ProductVariantComboBox.SelectedItem).Key;
             var offer = SelectedProductVariantOffersKVP[offerKey];
             var newOfferKey = offer.VariantName + " (Enabled)";
             offer.IsEnabled = true;
+
+            //updating variant offer ourStock and ourPrice
+            var currentOfferStock = OurStockBox.Text;
+            var currentOfferPriceBDiscount = OurPriceBox.Text;
+            if (currentOfferStock != offer.OurStock || currentOfferPriceBDiscount != offer.PriceBDiscount) {
+                offer = updateProductStockAndPrice(offer);
+            }
 
             //changing offer in offers kvp
             SelectedProductVariantOffersKVP.Remove(offerKey);
@@ -505,55 +567,83 @@ namespace Ikrito_Fulfillment_Platform.Pages
             PiguProductOfferLBSource.Where((x) => x.SKU == SelectedProductSKU).FirstOrDefault().PiguVariantOffers = SelectedProductVariantOffersKVP.Values.ToList();
             PiguProductOfferLB.Items.Refresh();
 
-            //changign selection
+            //changing selection
             ProductVariantComboBox.Items.Refresh();
             ProductVariantComboBox.SelectedIndex = oldVariantOfferIndex;
             SavePiguSellOfferLabel.Visibility = Visibility.Visible;
         }
 
         /// <summary>
-        /// calculates the PPUS
+        /// if variant offer stock or baseprice is changed this method changes it in the database and then in the offer itself
+        /// </summary>
+        /// <param name="offer"></param>
+        /// <returns></returns>
+        private PiguVariantOffer updateProductStockAndPrice(PiguVariantOffer offer) {
+            var currentOfferStock = OurStockBox.Text;
+            var currentOfferPriceBDiscount = OurPriceBox.Text;
+
+            //changing stock and price in database
+            string tablePrefix = offer.SKU.GetBeginingOrEmpty();
+
+            DataBaseInterface db = new();
+            var updateData = new Dictionary<string, string>
+            {
+                ["OurStock"] = currentOfferStock,
+                ["Price"] = currentOfferPriceBDiscount
+            };
+            var whereUpdate = new Dictionary<string, Dictionary<string, string>>
+            {
+                ["SKU"] = new Dictionary<string, string>
+                {
+                    ["="] = offer.SKU
+                },
+                ["Barcode"] = new Dictionary<string, string>
+                {
+                    ["="] = offer.Barcode
+                }
+            };
+            db.Table($"_{tablePrefix}_Variants").Where(whereUpdate).Update(updateData);
+
+            //changing stock and price in the offer
+            offer.OurStock = currentOfferStock;
+            offer.PriceBDiscount = currentOfferPriceBDiscount;
+
+            return offer;
+        }
+
+
+        //
+        // int and double preview text input section
+        //
+
+        /// <summary>
+        /// allows only double to be entered (numbers and .)
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void DiscountPriceBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void DoublePreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            var s = (sender as TextBox);
-            var text = s.Text;
-            double discountPrice;
+            //matching if value can be parsed as double
+            var textBox = sender as TextBox;
+            string updatedText = textBox.Text + e.Text;
+            bool doubleParsable = !double.TryParse(updatedText, out _);
 
-            if(ProductVariantComboBox.SelectedItem != null)
-            {
-                if (Double.TryParse(text, out discountPrice))
-                {
-                    //calc ppus
-                    if (discountPrice <= 0) {
-                        DiscountPriceBox.Background = new SolidColorBrush(Colors.White);
-                        var offer = ((KeyValuePair<string, PiguVariantOffer>)ProductVariantComboBox.SelectedItem).Value;
-                        offer.PriceADiscount = "0";
+            e.Handled = doubleParsable;
+        }
 
-                        var pVariant = AllProducts[offer.SKU].ProductVariants.Where(x => x.Barcode == offer.Barcode).FirstOrDefault();
-                        ProfitPerUnitSoldBlock.Text = Math.Round(pVariant.Price - pVariant.PriceVendor, 2).ToString();
+        /// <summary>
+        /// allows only int to be entered (numbers)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void IntPreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            //matching if value can be parsed as int
+            var textBox = sender as TextBox;
+            string updatedText = textBox.Text + e.Text;
+            bool intParsable = !int.TryParse(updatedText, out _);
 
-                    }
-                    else
-                    {
-                        discountPrice = Math.Round(discountPrice, 2);
-                        DiscountPriceBox.Background = new SolidColorBrush(Colors.White);
-                        var offer = ((KeyValuePair<string, PiguVariantOffer>)ProductVariantComboBox.SelectedItem).Value;
-                        offer.PriceADiscount = text;
-
-                        var vendorPrice = AllProducts[offer.SKU].ProductVariants.Where(x => x.Barcode == offer.Barcode).FirstOrDefault().PriceVendor;
-
-                        ProfitPerUnitSoldBlock.Text = Math.Round(discountPrice - vendorPrice, 2).ToString();
-                    }
-                    
-                }
-                else
-                {
-                    DiscountPriceBox.Background = new SolidColorBrush(Colors.Red);
-                }
-            }
+            e.Handled = intParsable;
         }
     }
 }

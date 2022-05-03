@@ -73,7 +73,7 @@
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="30"/>
-                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="40"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
@@ -83,13 +83,14 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Label x:Name="OurProductsLabel" Content="Our Products" Grid.Column="0"/>
-                        <Button x:Name="OurLBUnSelectButton" Content="Unselect all" Click="OurLBUnSelectButton_Click" Grid.Column="2"/>
+                        <Button x:Name="OurLBSelectButton" Content="Select all" Click="OurLBSelectButton_Click" Grid.Column="2"/>
                     </Grid>
 
                     <Label x:Name="PiguProductsLabel" Content="Pigu Products" Grid.Column="2" Grid.Row="0"/>
+                    <Button Grid.Column="0" Grid.Row="1" x:Name="SelectCategoryButton" Click="SelectCategoryButton_Click" Content="Select Category" Padding="5" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
 
-                    <ComboBox Grid.Column="0" Grid.Row="1" x:Name="OurProductTypeFilterCBox" Visibility="Visible" VerticalAlignment="Center" 
-                              StaysOpenOnEdit="True" IsTextSearchEnabled="True" IsEditable="True" SelectionChanged="OurProductTypeFilterCBox_SelectionChanged" SelectedValuePath="Key" DisplayMemberPath="Value"/>
+                    <!--<ComboBox Grid.Column="0" Grid.Row="1" x:Name="OurProductTypeFilterCBox" Visibility="Visible" VerticalAlignment="Center" 
+                              StaysOpenOnEdit="True" IsTextSearchEnabled="True" IsEditable="True" SelectionChanged="OurProductTypeFilterCBox_SelectionChanged" SelectedValuePath="Key" DisplayMemberPath="Value"/>-->
 
                     <!--transfer buttons-->
                     <Grid Grid.Column="1" Grid.RowSpan="3">
@@ -201,13 +202,14 @@
                                                     <Setter Property="IsReadOnly" Value="True" />
                                                     <Setter Property="BorderThickness" Value="0" />
                                                     <Setter Property="TextWrapping" Value="Wrap" />
-                                                </Style>    
+                                                </Style>
                                             </TextBox.Style>
                                         </TextBox>
                                         <TextBlock />
 
                                         <TextBlock Text="Title:" Grid.Row="1" Grid.Column="0"/>
                                         <TextBlock Text="{Binding Title}" Grid.Row="1" Grid.Column="2" TextWrapping="Wrap"/>
+                                        
 
                                         <TextBlock Text="ProductType:" Grid.Row="2" Grid.Column="0"/>
                                         <TextBlock Text="{Binding ProductTypeVal}" Grid.Row="2" Grid.Column="2" TextWrapping="Wrap"/>
@@ -232,8 +234,8 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="4*"/>
+                        <RowDefinition Height="5*"/>
                     </Grid.RowDefinitions>
 
                     <!--Variants Grid-->
@@ -242,7 +244,6 @@
                             <RowDefinition Height="20"/>
                             <RowDefinition Height="35"/>
                             <RowDefinition Height="50"/>
-                            <RowDefinition Height="35"/>
                             <RowDefinition Height="35"/>
                             <RowDefinition Height="35"/>
                             <RowDefinition Height="35"/>
@@ -271,21 +272,6 @@
 
                             <ComboBox Grid.Column="1" x:Name="ProductVariantComboBox" Margin="0,5,0,5" ItemsSource="{Binding}"
                                       SelectedValuePath="Value" DisplayMemberPath="Key" SelectionChanged="ProductVariantComboBox_SelectionChanged">
-
-                                <!--<ComboBox.ItemContainerStyle>
-                                    <Style TargetType="{x:Type ComboBoxItem}">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Path=Value.IsEnabled}" Value="True">
-                                                <Setter Property="Background" Value="Green"/>
-                                                <Setter Property="Foreground" Value="White"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding Path=Value.IsEnabled}" Value="False">
-                                                <Setter Property="Background" Value="White"/>
-                                                <Setter Property="Foreground" Value="Black"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </ComboBox.ItemContainerStyle>-->
                             </ComboBox>
 
                         </Grid>
@@ -302,25 +288,57 @@
                                     <TabItem.Header>
                                         <TextBlock Text="LT" Foreground="Blue" FontSize="10"/>
                                     </TabItem.Header>
-                                    <TextBlock  x:Name="TitleLTLabel" Visibility="Visible" VerticalAlignment="Center" Padding="3"/>
+                                    <TextBox x:Name="TitleLTLabel" Visibility="Visible" VerticalAlignment="Center" Padding="3">
+                                        <TextBox.Style>
+                                            <Style TargetType="TextBox">
+                                                <Setter Property="IsReadOnly" Value="True" />
+                                                <Setter Property="BorderThickness" Value="0" />
+                                                <Setter Property="TextWrapping" Value="Wrap" />
+                                            </Style>
+                                        </TextBox.Style>
+                                    </TextBox>
                                 </TabItem>
                                 <TabItem>
                                     <TabItem.Header>
                                         <TextBlock Text="LV" Foreground="Blue" FontSize="10"/>
                                     </TabItem.Header>
-                                    <TextBlock  x:Name="TitleLVLabel" Visibility="Visible" VerticalAlignment="Center" Padding="3"/>
+                                    <TextBox x:Name="TitleLVLabel" Visibility="Visible" VerticalAlignment="Center" Padding="3">
+                                        <TextBox.Style>
+                                            <Style TargetType="TextBox">
+                                                <Setter Property="IsReadOnly" Value="True" />
+                                                <Setter Property="BorderThickness" Value="0" />
+                                                <Setter Property="TextWrapping" Value="Wrap" />
+                                            </Style>
+                                        </TextBox.Style>
+                                    </TextBox>
                                 </TabItem>
                                 <TabItem>
                                     <TabItem.Header>
                                         <TextBlock Text="EE" Foreground="Blue" FontSize="10"/>
                                     </TabItem.Header>
-                                    <TextBlock  x:Name="TitleEELabel" Visibility="Visible" VerticalAlignment="Center" Padding="3"/>
+                                    <TextBox x:Name="TitleEELabel" Visibility="Visible" VerticalAlignment="Center" Padding="3">
+                                        <TextBox.Style>
+                                            <Style TargetType="TextBox">
+                                                <Setter Property="IsReadOnly" Value="True" />
+                                                <Setter Property="BorderThickness" Value="0" />
+                                                <Setter Property="TextWrapping" Value="Wrap" />
+                                            </Style>
+                                        </TextBox.Style>
+                                    </TextBox>
                                 </TabItem>
                                 <TabItem>
                                     <TabItem.Header>
                                         <TextBlock Text="RU" Foreground="Blue" FontSize="10"/>
                                     </TabItem.Header>
-                                    <TextBlock x:Name="TitleRULabel" Visibility="Visible" VerticalAlignment="Center" Padding="3"/>
+                                    <TextBox x:Name="TitleRULabel" Visibility="Visible" VerticalAlignment="Center" Padding="3">
+                                        <TextBox.Style>
+                                            <Style TargetType="TextBox">
+                                                <Setter Property="IsReadOnly" Value="True" />
+                                                <Setter Property="BorderThickness" Value="0" />
+                                                <Setter Property="TextWrapping" Value="Wrap" />
+                                            </Style>
+                                        </TextBox.Style>
+                                    </TextBox>
                                 </TabItem>
                             </TabControl>
                         </Grid>
@@ -349,7 +367,8 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="OurStock: " Margin="5" Padding="3"/>
-                            <TextBlock Grid.Column="1" x:Name="OurStockBlock" Visibility="Visible" VerticalAlignment="Center" Padding="3"/>
+                            <TextBox Grid.Column="1" x:Name="OurStockBox" Visibility="Visible" VerticalAlignment="Center" Padding="3"
+                                     PreviewTextInput="IntPreviewTextInput"/>
                         </Grid>
 
                         <Grid Margin="0" Grid.Row="6">
@@ -367,7 +386,8 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="Our Price (€): " Margin="5" Padding="3"/>
-                            <TextBlock Grid.Column="1" x:Name="OurPriceBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" />
+                            <TextBox Grid.Column="1" x:Name="OurPriceBox" Visibility="Visible" VerticalAlignment="Center" Padding="3"
+                                     PreviewTextInput="DoublePreviewTextInput"/>
                         </Grid>
 
                         <Grid Margin="0" Grid.Row="8">
@@ -376,24 +396,16 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0" Text="Our Price wDicount (€): " Margin="5" Padding="3"/>
-                            <TextBox Grid.Column="1" x:Name="DiscountPriceBox" Visibility="Visible" VerticalAlignment="Center" Padding="3" TextChanged="DiscountPriceBox_TextChanged" PreviewTextInput="DoublePreviewTextInput"/>
+                            <TextBox Grid.Column="1" x:Name="DiscountPriceBox" Visibility="Visible" VerticalAlignment="Center" Padding="3"
+                                     PreviewTextInput="DoublePreviewTextInput"/>
                         </Grid>
 
                         <Grid Margin="0" Grid.Row="9">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="135"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" Text="PPUS (€): " Margin="5" Padding="3"/>
-                            <TextBlock Grid.Column="1" x:Name="ProfitPerUnitSoldBlock" Visibility="Visible" VerticalAlignment="Center" Padding="3" />
-                        </Grid>
-
-                        <Grid Margin="0" Grid.Row="10">
-                            <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <Button x:Name="SavePiguSellOfferBtn" Grid.Column="0" IsEnabled="False" Click="SavePiguSellOfferBtn_Click" Content="Save Variant" Padding="15,5,15,5" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Button x:Name="SavePiguSellOfferBtn" IsEnabled="False" Click="SavePiguSellOfferBtn_Click" Content="Save Variant" Padding="15,5,15,5" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,4"/>
                             <emoji:TextBlock x:Name="SavePiguSellOfferLabel" Grid.Column="1" FontSize="12" Text="Variant Saved✅" VerticalAlignment="Center" Visibility="Collapsed"/>
                         </Grid>
                     </Grid>
