@@ -54,7 +54,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
         //
         // data grid manitulation section 
         //
-
+        
         /// <summary>
         /// method for  loading products to datagrid
         /// </summary>
@@ -199,7 +199,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
         /// <param name="e"></param>
         private void BulkCategoryEditButton_Click(object sender, RoutedEventArgs e)
         {
-            MainWindow.Instance.mainFrame.Content = new ProductBulkEditPage(AllProducts, CategoryKVP, this);
+            MainWindow.Instance.mainFrame.Content = new ProductBulkEditPage(AllProducts, this);
         }
 
         /// <summary>
@@ -209,7 +209,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
         /// <param name="e"></param>
         private void OpenPiguIntegrationPage(object sender, RoutedEventArgs e)
         {
-            MainWindow.Instance.setFrame(new PiguIntegrationPage(AllProducts));
+            MainWindow.Instance.setFrame(new PiguIntegrationPage(AllProducts, CategoryKVP));
         }
 
 

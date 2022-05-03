@@ -518,8 +518,12 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void DoublePreviewTextInput(object sender, TextCompositionEventArgs e) {
-            Regex DoubleRegex = new("[^0-9.]+");
-            e.Handled = DoubleRegex.IsMatch(e.Text);
+            //matching if value can be parsed as double
+            var textBox = sender as TextBox;
+            string updatedText = textBox.Text + e.Text;
+            bool doubleParsable = !double.TryParse(updatedText, out _);
+
+            e.Handled = doubleParsable;
         }
 
         /// <summary>
@@ -528,8 +532,12 @@ namespace Ikrito_Fulfillment_Platform.Pages {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void IntPreviewTextInput(object sender, TextCompositionEventArgs e) {
-            Regex IntRegex = new("[^0-9]+");
-            e.Handled = IntRegex.IsMatch(e.Text);
+            //matching if value can be parsed as int
+            var textBox = sender as TextBox;
+            string updatedText = textBox.Text + e.Text;
+            bool intParsable = !int.TryParse(updatedText, out _);
+
+            e.Handled = intParsable;
         }
 
         /// <summary>

@@ -13,10 +13,10 @@ namespace Ikrito_Fulfillment_Platform.Pages
 {
     public partial class ProductBulkEditPage : Page
     {
+        //todo: i kinda dont need it
         private readonly Page PreviousPage;
 
         private readonly Dictionary<string, FullProduct> Products;
-        private readonly Dictionary<string, string> CategoryKVP;
 
         private List<string> PossibleVendorTypes;
         //for saving selected current product type
@@ -29,12 +29,11 @@ namespace Ikrito_Fulfillment_Platform.Pages
         private bool AllTypeChangeProductsSelected = false;
 
 
-        public ProductBulkEditPage(Dictionary<string, FullProduct> products, Dictionary<string, string> categoryKVP, Page prevPage)
+        public ProductBulkEditPage(Dictionary<string, FullProduct> products, Page prevPage)
         {
             InitializeComponent();
             PreviousPage = prevPage;
             Products = products;
-            CategoryKVP = categoryKVP;
 
             //sorting possible vendor product types
             PossibleVendorTypes = GetVendorTypes();
