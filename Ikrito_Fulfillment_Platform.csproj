@@ -1,14 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows7.0</TargetFramework>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>Cash_icon.ico</ApplicationIcon>
     <StartupObject />
-    <Configurations>Debug;Release;Build+</Configurations>
+    <Configurations>Debug;Release</Configurations>
     <Platforms>AnyCPU;x64</Platforms>
     <UserSecretsId>19b393f6-a8d9-4b31-bdf3-bf89fa480c60</UserSecretsId>
+    <ApplicationIcon>Cash_icon.ico</ApplicationIcon>
+    <SignAssembly>False</SignAssembly>
+    <AssemblyName>IFP</AssemblyName>
 	  <!--<Nullable>enable</Nullable>-->
   </PropertyGroup>
 
@@ -40,13 +42,13 @@
 
   <ItemGroup>
     <PackageReference Include="AWSSDK.S3" Version="3.7.8.10" />
-    <PackageReference Include="CsvHelper" Version="27.2.1" />
     <PackageReference Include="Emoji.Wpf" Version="0.3.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Utilities" Version="17.1.32210.191" />
     <PackageReference Include="MySql.Data" Version="8.0.28" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="RestSharp" Version="106.12.0" />
+    <PackageReference Include="squirrel.windows" Version="1.9.0" />
   </ItemGroup>
 
   <ItemGroup>

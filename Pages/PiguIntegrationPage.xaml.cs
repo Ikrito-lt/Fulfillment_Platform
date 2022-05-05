@@ -9,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -85,11 +84,12 @@ namespace Ikrito_Fulfillment_Platform.Pages
 
             //loading pigu product offers from database
             LoadPiguProductOffersDB();
+            GetLastGeneratedXmlTimestamp();
         }
 
 
         //
-        // Loading pigu product offers from database
+        // Loading pigu product offers from database and updating last xml generated timestamp
         //
 
         /// <summary>
@@ -130,6 +130,46 @@ namespace Ikrito_Fulfillment_Platform.Pages
             getPiguProductOffersWorker.RunWorkerAsync();
         }
 
+        /// <summary>
+        /// method that updates last generated xml timestamp in database
+        /// </summary>
+        private void UpdateLastGeneratedXmlTimestamp() { 
+            var now = DateTime.Now;
+            var nowStr = now.ToString();
+
+            //updating value in the database
+            DataBaseInterface db = new();
+            var updateData = new Dictionary<string, string>
+            {
+                ["LastUpdatedDate"] = nowStr,
+            };
+            var whereUpdate = new Dictionary<string, Dictionary<string, string>>
+            {
+                ["ID"] = new Dictionary<string, string>
+                {
+                    ["="] = "1"
+                }
+            };
+            db.Table("PiguIntegrationMetadata").Where(whereUpdate).Update(updateData);
+        }
+
+        /// <summary>
+        /// method thta fetches last generated xml timestamp from database and updates UI
+        /// </summary>
+        private void GetLastGeneratedXmlTimestamp() {
+            DataBaseInterface db = new();
+            var where = new Dictionary<string, Dictionary<string, string>>
+            {
+                ["ID"] = new Dictionary<string, string>
+                {
+                    ["="] = "1"
+                }
+            };
+            var r = db.Table("PiguIntegrationMetadata").Where(where).Get();
+            var lastGenTimeStr = DateTime.Parse(r[0]["LastUpdatedDate"]);
+            LastXmlGenTimeTB.Text = $"Last Xml Generation Time: {lastGenTimeStr}";
+        }
+
 
         //
         // Buttons Section
@@ -142,6 +182,7 @@ namespace Ikrito_Fulfillment_Platform.Pages
         /// <param name="e"></param>
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
+            ProductBrowsePage.Instance.AllProducts = AllProducts;
             MainWindow.Instance.setFrame(ProductBrowsePage.Instance);
         }
 
@@ -174,6 +215,9 @@ namespace Ikrito_Fulfillment_Platform.Pages
                 BackButton.IsEnabled = true;
                 loadingBar.Value = 0;
                 loadingBar.IsIndeterminate = false;
+
+                UpdateLastGeneratedXmlTimestamp();
+                GetLastGeneratedXmlTimestamp();
 
                 Dictionary<string, string> uploadRes = e.Result as Dictionary<string, string>;
                 string message = $"ProductsXml: {uploadRes["productsXml"]}\nProductStockXml: {uploadRes["productStocksXml"]}";
@@ -607,6 +651,13 @@ namespace Ikrito_Fulfillment_Platform.Pages
             //changing stock and price in the offer
             offer.OurStock = currentOfferStock;
             offer.PriceBDiscount = currentOfferPriceBDiscount;
+
+            //change stock and price in application memory
+            var updateVariant = AllProducts[offer.SKU].ProductVariants.Where(v=> v.Barcode == offer.Barcode).FirstOrDefault();
+            if (updateVariant != null) {
+                updateVariant.OurStock = int.Parse(currentOfferStock);
+                updateVariant.Price = double.Parse(currentOfferPriceBDiscount);
+            }
 
             return offer;
         }
