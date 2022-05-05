@@ -1,16 +1,5 @@
-﻿using CsvHelper;
-using CsvHelper.Configuration;
-using Ikrito_Fulfillment_Platform.Models;
-using Ikrito_Fulfillment_Platform.Utils;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Windows;
-
-namespace Ikrito_Fulfillment_Platform.Modules {
+﻿namespace Ikrito_Fulfillment_Platform.Modules
+{
     class CSVModule {
 
         //this was used to add tags to database
