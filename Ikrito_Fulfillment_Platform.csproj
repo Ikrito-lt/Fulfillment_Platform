@@ -42,7 +42,7 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="RestSharp" Version="106.12.0" />
-		<PackageReference Include="squirrel.windows" Version="2.0.1" />
+		<PackageReference Include="squirrel.windows" Version="1.9.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -69,8 +69,7 @@
 		<NugetTools>$(PkgNuGet_CommandLine)\tools</NugetTools>
 		<SquirrelTools>$(Pkgsquirrel_windows)\tools</SquirrelTools>
 
-		<Version>1.0.1</Version>
-
+		<Version>1.0.2</Version>
 		<NuspecFile>$(SolutionDir)\ReleaseSpec.nuspec</NuspecFile>
 	</PropertyGroup>
 
