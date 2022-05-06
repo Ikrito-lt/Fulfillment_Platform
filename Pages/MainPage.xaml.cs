@@ -140,7 +140,7 @@ namespace Ikrito_Fulfillment_Platform {
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void openBrowserPage(object sender, RoutedEventArgs e) {
-            MainWindow.Instance.mainFrame.Content = ProductBrowsePage.Instance;
+            MainWindow.Instance.setFrame(ProductBrowsePage.Instance);
         }
 
         /// <summary>
@@ -174,5 +174,9 @@ namespace Ikrito_Fulfillment_Platform {
             MainWindow.Instance.mainFrame.Content = new OrderInfoPage(order, this, false);
         }
 
+        private void SettingsButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainWindow.Instance.setFrame(SettingsPage.Instance);
+        }
     }
 }

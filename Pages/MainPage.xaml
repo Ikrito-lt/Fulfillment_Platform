@@ -50,6 +50,7 @@
                     <ColumnDefinition Width="130"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="70"/>
                 </Grid.ColumnDefinitions>
 
                 <Button x:Name="browseProductButton" Content="Browse Products" Width="120" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="5" Grid.Column="0" Click="openBrowserPage"/>
@@ -61,6 +62,7 @@
                 </Grid>
 
                 <Button x:Name="RefreshButton" Click="RefreshButton_Click" Content="Refresh" Width="60" Padding="5" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="3"/>
+                <Button x:Name="SettingsButton" Click="SettingsButton_Click" Content="Settings" Width="60" Padding="5" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="4"/>
             </Grid>
         </Border>
 
