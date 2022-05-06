@@ -5,5 +5,4 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Usage", "VSTHRD012:Provide JoinableTaskFactory where allowed", Justification = "<Pending>", Scope = "member", Target = "~M:Ikrito_Fulfillment_Platform.Pages.PiguIntegrationPage.#ctor(System.Collections.Generic.Dictionary{System.String,Ikrito_Fulfillment_Platform.Models.FullProduct})")]
 [assembly: SuppressMessage("Usage", "VSTHRD012:Provide JoinableTaskFactory where allowed", Justification = "<Pending>", Scope = "member", Target = "~M:Ikrito_Fulfillment_Platform.Pages.ProductEditPage.ProductFieldInit")]

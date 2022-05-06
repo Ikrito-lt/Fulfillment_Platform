@@ -1,73 +1,87 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows7.0</TargetFramework>
-    <UseWPF>true</UseWPF>
-    <StartupObject />
-    <Configurations>Debug;Release</Configurations>
-    <Platforms>AnyCPU;x64</Platforms>
-    <UserSecretsId>19b393f6-a8d9-4b31-bdf3-bf89fa480c60</UserSecretsId>
-    <ApplicationIcon>Cash_icon.ico</ApplicationIcon>
-    <SignAssembly>False</SignAssembly>
-    <AssemblyName>IFP</AssemblyName>
-	  <!--<Nullable>enable</Nullable>-->
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net5.0-windows</TargetFramework>
+		<UseWPF>true</UseWPF>
+		<StartupObject />
+		<Configurations>Debug;Release</Configurations>
+		<Platforms>AnyCPU;x64</Platforms>
+		<UserSecretsId>19b393f6-a8d9-4b31-bdf3-bf89fa480c60</UserSecretsId>
+		<ApplicationIcon>Cash_icon.ico</ApplicationIcon>
+		<SignAssembly>False</SignAssembly>
+		<AssemblyName>IFP</AssemblyName>
+		<!--<Nullable>enable</Nullable>-->
+	</PropertyGroup>
 
-	<!--<Target Name="CopyDLLs" AfterTargets="Build">
-		<Message Text="Executing CopyDLLs task" Importance="High" />
+	<ItemGroup>
+		<Compile Remove="Files\**" />
+		<EmbeddedResource Remove="Files\**" />
+		<None Remove="Files\**" />
+		<Page Remove="Files\**" />
+	</ItemGroup>
 
-		<Copy
-		  SourceFiles="$(TargetDir)$(ProjectName).dll;$(TargetDir)$(ProjectName).pdb"
-		  DestinationFolder="C:\Builds$(ProjectName)" />
+	<ItemGroup>
+		<Compile Remove="Modules\Supplier\KotrynaGroup\dinamic.cs" />
+	</ItemGroup>
 
-		<Message Text="Copied build files" Importance="High" />
-	</Target>-->
+	<ItemGroup>
+		<None Remove="ikritoDB.db-journal" />
+		<None Remove="Modules\Supplier\BeFancy\Models\ikritolt_products_2021-12-30_09_42.xml" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AWSSDK.S3" Version="3.7.8.10" />
+		<PackageReference Include="Emoji.Wpf" Version="0.3.3" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
+		<PackageReference Include="Microsoft.VisualStudio.Utilities" Version="17.1.32210.191" />
+		<PackageReference Include="MySql.Data" Version="8.0.28" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="NuGet.CommandLine" Version="6.1.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="RestSharp" Version="106.12.0" />
+		<PackageReference Include="squirrel.windows" Version="2.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="UI\DialogueOK.xaml.cs">
+			<SubType>Code</SubType>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="Cash_icon.ico">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Page Update="UI\DialogueOK.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+			<SubType>Designer</SubType>
+		</Page>
+	</ItemGroup>
 	
-  <ItemGroup>
-    <Compile Remove="Files\**" />
-    <EmbeddedResource Remove="Files\**" />
-    <None Remove="Files\**" />
-    <Page Remove="Files\**" />
-  </ItemGroup>
+	<!--added from squirel tutorial-->
+	<PropertyGroup>
+		<NugetTools>$(PkgNuGet_CommandLine)\tools</NugetTools>
+		<SquirrelTools>$(Pkgsquirrel_windows)\tools</SquirrelTools>
 
-  <ItemGroup>
-    <Compile Remove="Modules\Supplier\KotrynaGroup\dinamic.cs" />
-  </ItemGroup>
+		<Version>1.0.1</Version>
 
-  <ItemGroup>
-    <None Remove="ikritoDB.db-journal" />
-    <None Remove="Modules\Supplier\BeFancy\Models\ikritolt_products_2021-12-30_09_42.xml" />
-  </ItemGroup>
+		<NuspecFile>$(SolutionDir)\ReleaseSpec.nuspec</NuspecFile>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AWSSDK.S3" Version="3.7.8.10" />
-    <PackageReference Include="Emoji.Wpf" Version="0.3.3" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
-    <PackageReference Include="Microsoft.VisualStudio.Utilities" Version="17.1.32210.191" />
-    <PackageReference Include="MySql.Data" Version="8.0.28" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="RestSharp" Version="106.12.0" />
-    <PackageReference Include="squirrel.windows" Version="1.9.0" />
-  </ItemGroup>
+	<Target Name="GenerateRelease" AfterTargets="AfterBuild" Condition="$(Configuration) == Release">
+		<XmlPeek XmlInputPath="$(NuspecFile)" Query="/package/metadata/id/text()">
+			<Output TaskParameter="Result" ItemName="ID" />
+		</XmlPeek>
 
-  <ItemGroup>
-    <Compile Update="UI\DialogueOK.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-  </ItemGroup>
+		<Exec Command="$(NugetTools)\NuGet.exe pack $(NuspecFile) -Version $(Version) -Properties Configuration=Release -OutputDirectory $(SolutionDir)Deployment\GeneratedNugets" />
 
-  <ItemGroup>
-    <None Update="Cash_icon.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Update="UI\DialogueOK.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-      <SubType>Designer</SubType>
-    </Page>
-  </ItemGroup>
+		<Exec Command="$(SquirrelTools)\Squirrel.exe -releasify $(SolutionDir)Deployment\GeneratedNugets\@(ID).$(Version).nupkg -releaseDir=$(SolutionDir)Deployment\Releases" />
+	</Target>
 
 </Project>
