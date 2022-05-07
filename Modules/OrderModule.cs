@@ -7,7 +7,9 @@ using System.Collections.Generic;
 
 namespace Ikrito_Fulfillment_Platform.Modules {
     static class OrderModule {
+        
         private const string getOrdersEndPoint = Globals.getOrdersEndPoint;
+        
         //
         // getting orders from Shopyfi API
         //
