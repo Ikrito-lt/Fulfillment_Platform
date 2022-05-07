@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Model;
+using Ikrito_Fulfillment_Platform.Utils;
 
 namespace Ikrito_Fulfillment_Platform.AWS
 {
@@ -11,7 +12,7 @@ namespace Ikrito_Fulfillment_Platform.AWS
 
         public static async Task<string> UploadFileAsync(string bucketName, string keyName, string filePath, string contentType = null)
         {
-            var creds = new BasicAWSCredentials("AKIASPWFMGKNZGZALSAP", "mphBwilxSC12+AKvKZDaVKaKAb7IWSrN6J9zB+02");
+            var creds = new BasicAWSCredentials(Globals.AWSAccessKeyID, Globals.AWSSecretAccessKey);
             var client = new AmazonS3Client(creds, Amazon.RegionEndpoint.EUCentral1);
 
             try

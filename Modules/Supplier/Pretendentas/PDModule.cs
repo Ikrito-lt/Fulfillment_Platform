@@ -5,9 +5,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Windows;
 using System.Xml;
 using static Ikrito_Fulfillment_Platform.Models.FullProduct;
 
@@ -22,7 +20,7 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.Pretendentas
             { "api_key",  PDApiKey},
         };
 
-        private const string _BaseUrl = "https://api.pretendentas.lt:443/v1/";
+        private const string _BaseUrl = Globals.PDApi;
         private const string _CategoriesPath = "categories";
         private const string _ManufacturerPath = "manufacturers";
 

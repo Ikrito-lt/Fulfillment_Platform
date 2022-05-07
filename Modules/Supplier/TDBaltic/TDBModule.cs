@@ -2,19 +2,18 @@
 using Ikrito_Fulfillment_Platform.Utils;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using System.Windows;
 using System.Xml;
 using static Ikrito_Fulfillment_Platform.Models.FullProduct;
 
-namespace Ikrito_Fulfillment_Platform.Modules.Supplier.TDBaltic {
+namespace Ikrito_Fulfillment_Platform.Modules.Supplier.TDBaltic
+{
     static class TDBModule {
 
-        private static readonly Dictionary<string, string> _APIParams = Globals._TDBAPIParams;
+        private static readonly Dictionary<string, string> _APIParams = Globals.TDBAPIParams;
 
-        private const string _BaseUrl = "http://tdonline.tdbaltic.net/pls/PROD/";
+        private const string _BaseUrl = Globals.TDBApi;
         private const string _CataloguePath = "ixml.ProdCatExt";
         private const string _DataSheetsPath = "ixml.DSheets";
 

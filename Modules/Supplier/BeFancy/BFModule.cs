@@ -10,15 +10,6 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy
 {
     static class BFModule
     {
-        //private const string KGApi = Globals.KGApi;
-        //private const string KGApiKey = Globals.KGApiKey;
-
-        //private const string _BaseUrl = KGApi + "data/";
-        //private static readonly Dictionary<string, string> _APIHeader = new Dictionary<string, string>()
-        //{
-        //    { "API-KEY", KGApiKey },
-        //};
-
         private const string _SKUPrefix = "BF-";
 
         // for getting the XML
@@ -48,14 +39,13 @@ namespace Ikrito_Fulfillment_Platform.Modules.Supplier.BeFancy
 
         //gets the product XML from supplier
         private static XmlDocument GetVendorXML() {
-            //this will be used to download the xml in the future
-            //RESTClient restClient = new(_BaseUrl);
-            //string assortmentJson = restClient.ExecGetParams(_CataloguePath, _APIHeader);
-            //dynamic assortmentResponse = JsonConvert.DeserializeObject<dynamic>(assortmentJson);
+            //Downloading the xml
+            RESTClient restClient = new(Globals.BeFancyAPILink);
+            string productXMLStr = restClient.ExecGetParams("", new Dictionary<string, string>());
 
             //loading the xml
             XmlDocument productXML = new();
-            productXML.Load(@"C:\Users\Luke\Desktop\Ikrito_Fulfillment_Platform\Modules\Supplier\BeFancy\Models\ikritolt_products_2021-12-30_09_42.xml");
+            productXML.LoadXml(productXMLStr);
             return productXML;
         }
 

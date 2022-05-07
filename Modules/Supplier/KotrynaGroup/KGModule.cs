@@ -15,6 +15,7 @@ using static Ikrito_Fulfillment_Platform.Models.FullProduct;
 
 namespace Ikrito_Fulfillment_Platform.Modules.Supplier.KotrynaGroup {
     static class KGModule {
+
         private const string KGApi = Globals.KGApi;
         private const string KGApiKey = Globals.KGApiKey;
 

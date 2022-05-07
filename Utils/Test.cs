@@ -14,8 +14,7 @@ namespace Ikrito_Fulfillment_Platform.Utils
         }
 
         private static void uploadJsonToDB() {
-            //CategoryTreeModule c = new();
-            //var a = c.fetchCategoryTree();
+
         }
     }
 }
