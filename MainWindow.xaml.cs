@@ -45,7 +45,5 @@ namespace Ikrito_Fulfillment_Platform {
         public static void test() {
             Test t = new();
         }
-
-
     }
 }

@@ -13,6 +13,5 @@ namespace Ikrito_Fulfillment_Platform.Utils {
             input = input.Replace("\"", $"\\\"");
             return input;
         }
-
     }
 }
